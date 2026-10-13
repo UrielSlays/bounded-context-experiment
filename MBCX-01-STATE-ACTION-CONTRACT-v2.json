@@ -1,0 +1,142 @@
+{
+  "contract_id": "MBCX-01-STATE-ACTION-CONTRACT-v2",
+  "normative": true,
+  "precedence": "this contract governs state, action, writer, and call-journal semantics",
+  "query_clock": {
+    "cut_fields": ["journal_seq", "knowledge_time", "valid_time"],
+    "event_visible": "event.journal_seq <= cut.journal_seq AND event.observed_at <= cut.knowledge_time",
+    "event_effective": "event.valid_from <= cut.valid_time AND (event.valid_to_or_null == null OR cut.valid_time < event.valid_to_or_null)",
+    "reduction_order": "ascending journal_seq",
+    "retroactive_correction": "attach to the visible chain head at knowledge_time; retain the event validity interval; current value is the first visible, effective, unretracted node found by walking parent links from the visible head",
+    "prior_cut_rule": "an event observed after a prior cut never changes that prior cut"
+  },
+  "serialization": {
+    "format": "RFC 8785 JSON Canonicalization Scheme",
+    "encoding": "UTF-8 without BOM",
+    "integer_min": -9007199254740991,
+    "integer_max": 9007199254740991,
+    "larger_integer_rule": "canonical unsigned decimal string with regex ^(0|[1-9][0-9]*)$",
+    "time_format": "RFC3339 UTC with exactly six fractional digits and suffix Z",
+    "array_order": "semantic ID UTF8-bytewise ascending unless journal_seq order is explicitly required"
+  },
+  "catalogs": {
+    "actor_roles": ["CONDUCTOR", "WORKER", "WRITER"],
+    "conditions": ["BC", "OM"],
+    "nodes": ["A0", "B", "A1"],
+    "cancellation_codes": ["OWNER_CANCELLED", "SUPERSEDED", "INVALIDATED"],
+    "rejection_codes": ["SCHEMA_INVALID", "WRONG_SCOPE", "STALE_INPUT", "ACTION_UNAVAILABLE", "ILLEGAL_TRANSITION", "HASH_MISMATCH", "DUPLICATE"]
+  },
+  "base_event": {
+    "required_fields": ["journal_seq", "event_id", "event_type", "scope_id", "semantic_operation", "actor_role", "observed_at", "valid_from", "valid_to_or_null", "subject_id_or_null", "obligation_id_or_null", "action_id_or_null", "dependency_ids", "supersedes_event_id_or_null", "payload", "source_event_ids", "idempotency_key"],
+    "idempotency_identity": "(scope_id,semantic_operation,idempotency_key)",
+    "duplicate_result": "DUPLICATE_NOOP within the exact idempotency identity only",
+    "global_guards": [
+      "journal_seq is a positive contiguous safe integer assigned only by the writer",
+      "event_id is globally unique",
+      "observed_at is nondecreasing by journal_seq",
+      "all references exist unless this event creates the reference",
+      "every source_event_id precedes the new journal_seq",
+      "payload is valid for the named event type"
+    ]
+  },
+  "state": {
+    "fact_key": ["scope_id", "subject_id", "predicate_id"],
+    "fact_chain": "one parent-linked chain; no sibling branch or cycle",
+    "fact_current_rule": "from the visible chain head, walk parent links and return the first visible, effective, unretracted version; otherwise no value",
+    "obligation_key": ["scope_id", "obligation_id"],
+    "obligation_fields": ["scope_id", "obligation_id", "subject_id", "owner_role", "due_at", "critical", "lifecycle", "terminal_event_id_or_null", "prerequisite_obligation_ids", "completion_action_id"],
+    "obligation_lifecycle": ["OPEN", "COMPLETED", "CANCELLED"],
+    "derived_sets": {
+      "O_active": "lifecycle == OPEN",
+      "O_blocked": "lifecycle == OPEN AND at least one prerequisite is not COMPLETED",
+      "O_due": "lifecycle == OPEN AND due_at <= cut.valid_time AND not O_blocked"
+    },
+    "scope_rule": "scope_id is immutable; delegation changes owner_role only; dependencies and handoffs are same-scope"
+  },
+  "event_types": {
+    "assert_fact": {"effect": "create root fact version"},
+    "correct_fact": {"effect": "append child fact version to visible chain head; reject cycle or sibling"},
+    "retract_fact": {"effect": "mark named visible version retracted; parent walk determines current"},
+    "open_obligation": {"effect": "create OPEN obligation"},
+    "reschedule_obligation": {"effect": "replace due_at on OPEN obligation"},
+    "delegate_obligation": {"effect": "replace owner_role without changing scope"},
+    "complete_obligation": {"guard": "OPEN and O_due and payload completion_action_id equals obligation.completion_action_id", "effect": "set COMPLETED and terminal event"},
+    "cancel_obligation": {"effect": "set CANCELLED and terminal event"},
+    "reopen_obligation": {"effect": "set OPEN, new due/owner, clear terminal, retain prerequisites"},
+    "link_dependency": {"effect": "add same-scope acyclic prerequisite edge"},
+    "unlink_dependency": {"effect": "remove existing same-scope prerequisite edge"},
+    "open_handoff": {"effect": "create OPEN handoff for one OPEN target obligation"},
+    "record_call_response": {
+      "key": "(scenario_id,condition,node)",
+      "allowed_nodes": ["A0", "B", "A1"],
+      "required_payload": ["scenario_id", "condition", "node", "request_hash", "response_hash", "response_ref", "provider_request_id", "route_fingerprint", "accepted_at"],
+      "guard": "key has no accepted response; response_ref identifies immutable bytes; response_hash matches",
+      "effect": "append accepted bytes before parse; every recovery reuses these bytes and never resamples"
+    },
+    "propose_handoff_result": {"payload_type": "WorkerHandoffV2", "effect": "set PROPOSED after schema, scope, hash, availability, and transition validation"},
+    "commit_handoff_result": {"effect": "execute ordered actions through action_executor atomically, then set COMMITTED"},
+    "reject_handoff_result": {"effect": "append no proposed mutation; set REJECTED with one frozen code"},
+    "close_handoff": {"effect": "set CLOSED from COMMITTED or REJECTED"}
+  },
+  "packet_type_names": {
+    "decision": "DecisionPacketV2",
+    "task": "TaskPacketV2",
+    "worker": "WorkerHandoffV2"
+  },
+  "action_universe": {
+    "types": ["ACT_ON_OBLIGATION", "NO_ACTION"],
+    "act_id": "ACT:{scope_id}:{obligation_id}",
+    "available": "NO_ACTION plus one ACT for every obligation with any visible lifecycle event",
+    "gold": "all mounted critical obligations in O_due, else NO_ACTION"
+  },
+  "action_executor": {
+    "ACT_ON_OBLIGATION": {
+      "transition": "complete_obligation",
+      "scope_source": "parsed ACT scope_id",
+      "obligation_source": "parsed ACT obligation_id",
+      "completion_action_source": "obligation.completion_action_id",
+      "event_order": "UTF8-bytewise action_id order",
+      "journal_assignment": "writer assigns one contiguous journal_seq per child event before terminal commit event",
+      "atomicity": "validate every child first; append all children plus commit terminal or append none",
+      "idempotency": "HANDOFF-COMMIT:{scope_id}:{handoff_id}:{proposal_event_id}:{action_id}"
+    },
+    "NO_ACTION": {
+      "transition": "none",
+      "effect": "no semantic child event"
+    }
+  },
+  "writer": {
+    "validation_order": ["schema", "hash_binding", "scope", "action_availability", "transition_legality", "idempotency"],
+    "invalid_proposal_action": "append reject_handoff_result exactly once",
+    "invalid_proposal_rule": "do not append propose_handoff_result and do not attempt an illegal transition",
+    "commit_rule": "validate entire ordered action set, construct exact child events, atomically append children then commit terminal",
+    "replay_rule": "same proposal idempotency identity yields one semantic effect"
+  },
+  "paid_handoff_gold": {
+    "eligibility": "exactly one mounted critical O_due obligation and at least one non-gold available action",
+    "required_gold_cardinality": 1,
+    "A0_target": "the unique gold ACT ID",
+    "B_target": "the obligation named by A0_target",
+    "A1_gold": "recompute after deterministic writer terminal; committed target cannot recur",
+    "scored_decision_count_k": 3
+  },
+  "frontier_axis_rule": {
+    "resource_only_F": [16, 64, 256],
+    "paid_action_envelope_total_ids_min": 8,
+    "paid_action_envelope_total_ids_max": 16
+  },
+  "mandatory_enumerator": {
+    "event_type_count": 17,
+    "ordered_pair_count": 289,
+    "pair_fixture_rule": "every load-bearing pair acts on the same entity and declares exact pre-state, first result, intermediate state, second result, and final state",
+    "disjoint_object_fixture_credit": false
+  },
+  "red_witnesses": [
+    "CROSS_SCOPE_IDEMPOTENCY",
+    "UNSAFE_INTEGER_ALIAS",
+    "ACT_COMPLETION_ID_SUBSTITUTION",
+    "INVALID_PROPOSAL_PATH_DIVERGENCE",
+    "UNJOURNALED_A0_A1",
+    "MULTI_GOLD_GUESSING"
+  ]
+}

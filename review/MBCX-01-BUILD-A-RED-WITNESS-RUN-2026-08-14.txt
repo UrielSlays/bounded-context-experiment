@@ -1,0 +1,478 @@
+MBCX-01 BUILD A - RED WITNESS RUN (TDD red stage, no green implementation)
+Date: 2026-08-14
+Worktree: <repo>-build
+Branch: codex/mbcx01-production-build  HEAD: c25e355281b318706b7ea9252b0feca455b7cc0f
+Python: Python 3.11.9  Node: v24.17.0
+
+Every test_ba## witness below is expected to FAIL or ERROR on these pre-implementation
+bytes. The single deliberate exception is test_ba25 (frozen-suite compatibility), which
+is green by construction - a red there would mean the frozen r13.2 suite was broken.
+
+=== COMMAND: python -m unittest test_mbcx01_build_state -v ===
+
+test_ba01_positive_production_transition_discharges_only_the_named_sentinel (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba01_positive_production_transition_discharges_only_the_named_sentinel)
+Invariant: store commit -> independent readback -> V2 receipt is the ONLY way ... ERROR
+test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged)
+Invariant: a fixture `StateAuthorityReceiptV1` can never express production ... FAIL
+test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root)
+Invariant: a cryptographically valid signature from a key absent from the ... FAIL
+test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself)
+Invariant: a trust root named only by the receipt envelope is self-authored; ... FAIL
+test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics)
+Invariant: the signature covers the whole receipt content; a repaired inner ... FAIL
+test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint)
+Invariant (I13): the signing-key custodian cannot edit or approve the trust ... FAIL
+test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused)
+Invariant: relabeling fixture evidence never creates production authority — ... FAIL
+test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority)
+Invariant: validity window and revocation list are enforced at verification ... FAIL
+test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence)
+Invariant (r13.2 Opus residual): postcommit authority requires an independently ... FAIL
+test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected)
+Invariant: store id, namespace, namespace version, and the transaction commit ... 
+  test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected) (override={'store_id': 'STORE.MBCX01.OTHER'})
+Invariant: store id, namespace, namespace version, and the transaction commit ... FAIL
+  test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected) (override={'namespace': 'MBCX01.OTHER.NAMESPACE'})
+Invariant: store id, namespace, namespace version, and the transaction commit ... FAIL
+  test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected) (override={'namespace_version': 2})
+Invariant: store id, namespace, namespace version, and the transaction commit ... FAIL
+  test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected) (override='transaction_commit_id')
+Invariant: store id, namespace, namespace version, and the transaction commit ... FAIL
+test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected)
+Invariant: the readback cut must be the exact `current_cut` of the readback ... FAIL
+test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught)
+Invariant: a substituted applied child with every attacker-controlled hash and ... FAIL
+test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught)
+Invariant: the proposal must be the exact event persisted in the read prestate ... FAIL
+test_ba14_adversarial_next_sequence_substitution_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba14_adversarial_next_sequence_substitution_is_caught)
+Invariant: `applied_child.next_sequence` is bound to the readback state's ... FAIL
+test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught)
+Invariant: substituted readback bytes with `state_hash` and `cut` repaired and ... FAIL
+test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet)
+Invariant: a fully self-consistent production receipt minted over a DIFFERENT ... FAIL
+test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught)
+Invariant: the read prestate bytes are load bearing — substituting them and ... FAIL
+test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected)
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is ... 
+  test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='scope_id')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is ... FAIL
+  test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='scenario_id')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is ... FAIL
+  test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='run_id')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is ... FAIL
+  test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='transaction_commit_id')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is ... FAIL
+  test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='subject_identity')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is ... FAIL
+test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing)
+Invariant (crash-window law): a crash before the commit fsync leaves a PENDING ... ERROR
+test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing)
+Invariant: a proposal row with no applied-child row and no poststate snapshot ... ERROR
+test_ba21_adversarial_committed_without_readback_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba21_adversarial_committed_without_readback_mints_nothing)
+Invariant: postcommit authority is a durable readback, not the writer's ... ERROR
+test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges)
+Invariant: reference/oracle reducer independence is load bearing. If the two ... FAIL
+test_ba23_positive_operator_b_derives_byte_identical_receipt_content (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba23_positive_operator_b_derives_byte_identical_receipt_content)
+Invariant: operator B, sharing only schema and frozen hashing, must derive ... ERROR
+test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed)
+Invariant: a poisoned operator-B finalizer must surface as DETECTED operator ... FAIL
+test_ba25_positive_frozen_state_suite_stays_green_alongside_build_modules (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba25_positive_frozen_state_suite_stays_green_alongside_build_modules)
+Invariant: the BUILD-A modules are purely additive. The frozen r13.2 state ... ok
+
+======================================================================
+ERROR: test_ba01_positive_production_transition_discharges_only_the_named_sentinel (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba01_positive_production_transition_discharges_only_the_named_sentinel)
+Invariant: store commit -> independent readback -> V2 receipt is the ONLY way
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 295, in test_ba01_positive_production_transition_discharges_only_the_named_sentinel
+    store = store_mod.SingleWriterStateStore.open_verified(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>-build\mbcx01_build_state_store.py", line 91, in open_verified
+    raise NotImplementedError(_NOT_IMPLEMENTED)
+NotImplementedError: BUILD_A_STORE_NOT_IMPLEMENTED
+
+======================================================================
+ERROR: test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing)
+Invariant (crash-window law): a crash before the commit fsync leaves a PENDING
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 567, in test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing
+    store = store_mod.SingleWriterStateStore.open_verified(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>-build\mbcx01_build_state_store.py", line 91, in open_verified
+    raise NotImplementedError(_NOT_IMPLEMENTED)
+NotImplementedError: BUILD_A_STORE_NOT_IMPLEMENTED
+
+======================================================================
+ERROR: test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing)
+Invariant: a proposal row with no applied-child row and no poststate snapshot
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 588, in test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing
+    store = store_mod.SingleWriterStateStore.open_verified(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>-build\mbcx01_build_state_store.py", line 91, in open_verified
+    raise NotImplementedError(_NOT_IMPLEMENTED)
+NotImplementedError: BUILD_A_STORE_NOT_IMPLEMENTED
+
+======================================================================
+ERROR: test_ba21_adversarial_committed_without_readback_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba21_adversarial_committed_without_readback_mints_nothing)
+Invariant: postcommit authority is a durable readback, not the writer's
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 607, in test_ba21_adversarial_committed_without_readback_mints_nothing
+    store = store_mod.SingleWriterStateStore.open_verified(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>-build\mbcx01_build_state_store.py", line 91, in open_verified
+    raise NotImplementedError(_NOT_IMPLEMENTED)
+NotImplementedError: BUILD_A_STORE_NOT_IMPLEMENTED
+
+======================================================================
+ERROR: test_ba23_positive_operator_b_derives_byte_identical_receipt_content (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba23_positive_operator_b_derives_byte_identical_receipt_content)
+Invariant: operator B, sharing only schema and frozen hashing, must derive
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 649, in test_ba23_positive_operator_b_derives_byte_identical_receipt_content
+    store = store_mod.SingleWriterStateStore.open_verified(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>-build\mbcx01_build_state_store.py", line 91, in open_verified
+    raise NotImplementedError(_NOT_IMPLEMENTED)
+NotImplementedError: BUILD_A_STORE_NOT_IMPLEMENTED
+
+======================================================================
+FAIL: test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged)
+Invariant: a fixture `StateAuthorityReceiptV1` can never express production
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 337, in test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_SCHEMA_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root)
+Invariant: a cryptographically valid signature from a key absent from the
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 348, in test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself)
+Invariant: a trust root named only by the receipt envelope is self-authored;
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 358, in test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics)
+Invariant: the signature covers the whole receipt content; a repaired inner
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 366, in test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_SIGNATURE_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint)
+Invariant (I13): the signing-key custodian cannot edit or approve the trust
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 379, in test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused)
+Invariant: relabeling fixture evidence never creates production authority —
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 390, in test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority)
+Invariant: validity window and revocation list are enforced at verification
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 399, in test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence)
+Invariant (r13.2 Opus residual): postcommit authority requires an independently
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 410, in test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_READER_NOT_INDEPENDENT' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected) (override={'store_id': 'STORE.MBCX01.OTHER'})
+Invariant: store id, namespace, namespace version, and the transaction commit
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 430, in test_ba10_adversarial_store_namespace_version_and_transaction_are_injected
+    self.assert_named_rejection(self.verify(receipt), named)
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_STORE_IDENTITY_MISMATCH' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected) (override={'namespace': 'MBCX01.OTHER.NAMESPACE'})
+Invariant: store id, namespace, namespace version, and the transaction commit
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 430, in test_ba10_adversarial_store_namespace_version_and_transaction_are_injected
+    self.assert_named_rejection(self.verify(receipt), named)
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_STORE_IDENTITY_MISMATCH' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected) (override={'namespace_version': 2})
+Invariant: store id, namespace, namespace version, and the transaction commit
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 430, in test_ba10_adversarial_store_namespace_version_and_transaction_are_injected
+    self.assert_named_rejection(self.verify(receipt), named)
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_STORE_IDENTITY_MISMATCH' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected) (override='transaction_commit_id')
+Invariant: store id, namespace, namespace version, and the transaction commit
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 434, in test_ba10_adversarial_store_namespace_version_and_transaction_are_injected
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_TRANSACTION_IDENTITY_MISMATCH' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected)
+Invariant: the readback cut must be the exact `current_cut` of the readback
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 447, in test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_CUT_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught)
+Invariant: a substituted applied child with every attacker-controlled hash and
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 469, in test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_EVENT_SUBSTITUTION' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught)
+Invariant: the proposal must be the exact event persisted in the read prestate
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 485, in test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_EVENT_SUBSTITUTION' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba14_adversarial_next_sequence_substitution_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba14_adversarial_next_sequence_substitution_is_caught)
+Invariant: `applied_child.next_sequence` is bound to the readback state's
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 494, in test_ba14_adversarial_next_sequence_substitution_is_caught
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_SEQUENCE_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught)
+Invariant: substituted readback bytes with `state_hash` and `cut` repaired and
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 512, in test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_STATE_SUBSTITUTION' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet)
+Invariant: a fully self-consistent production receipt minted over a DIFFERENT
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 521, in test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_BYTE_BINDING_MISMATCH' not found in ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught)
+Invariant: the read prestate bytes are load bearing — substituting them and
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 532, in test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_STATE_SUBSTITUTION' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='scope_id')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 551, in test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_REPLAY_IDENTITY_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='scenario_id')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 551, in test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_REPLAY_IDENTITY_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='run_id')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 551, in test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_REPLAY_IDENTITY_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='transaction_commit_id')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 551, in test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_REPLAY_IDENTITY_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected) (field='subject_identity')
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 557, in test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_REPLAY_IDENTITY_INVALID' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges)
+Invariant: reference/oracle reducer independence is load bearing. If the two
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 641, in test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_REDUCER_DISAGREEMENT' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+======================================================================
+FAIL: test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed)
+Invariant: a poisoned operator-B finalizer must surface as DETECTED operator
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_state.py", line 685, in test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed
+    self.assert_named_rejection(
+  File "<repo>-build\test_mbcx01_build_state.py", line 284, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_OPERATOR_DISAGREEMENT' not found in ['STATE_AUTHORITY_UNAVAILABLE']
+
+----------------------------------------------------------------------
+Ran 25 tests in 2.209s
+
+FAILED (failures=26, errors=5)
+exit=1
+
+================================================================================
+=== SEPARATOR: FROZEN-SUITE COMPATIBILITY (must be untouched-green) ===
+=== COMMAND: python -m unittest test_mbcx01_r13_state -v ===
+================================================================================
+
+test_commit_rechecks_current_target_state (test_mbcx01_r13_state.R13StateTests.test_commit_rechecks_current_target_state) ... ok
+test_correction_and_retraction_do_not_rewrite_historical_cut (test_mbcx01_r13_state.R13StateTests.test_correction_and_retraction_do_not_rewrite_historical_cut) ... ok
+test_correction_requires_strictly_internal_start_and_bounded_end (test_mbcx01_r13_state.R13StateTests.test_correction_requires_strictly_internal_start_and_bounded_end) ... ok
+test_every_event_type_rejects_wrong_payload_types_without_throwing (test_mbcx01_r13_state.R13StateTests.test_every_event_type_rejects_wrong_payload_types_without_throwing) ... ok
+test_explicit_fact_interval_is_not_silently_truncated_at_a_future_row (test_mbcx01_r13_state.R13StateTests.test_explicit_fact_interval_is_not_silently_truncated_at_a_future_row) ... ok
+test_finite_visible_head_can_be_corrected_without_inversion (test_mbcx01_r13_state.R13StateTests.test_finite_visible_head_can_be_corrected_without_inversion) ... ok
+test_full_legal_event_matrix_matches_reference_byte_for_byte (test_mbcx01_r13_state.R13StateTests.test_full_legal_event_matrix_matches_reference_byte_for_byte) ... ok
+test_future_fact_does_not_block_current_interval (test_mbcx01_r13_state.R13StateTests.test_future_fact_does_not_block_current_interval) ... ok
+test_handoff_catalog_must_include_its_named_target_action (test_mbcx01_r13_state.R13StateTests.test_handoff_catalog_must_include_its_named_target_action) ... ok
+test_handoff_rejects_a_reduced_catalog_that_disagrees_with_bound_preimages (test_mbcx01_r13_state.R13StateTests.test_handoff_rejects_a_reduced_catalog_that_disagrees_with_bound_preimages) ... ok
+test_i05_durability_identity_binds_exact_handoff_id (test_mbcx01_r13_state.R13StateTests.test_i05_durability_identity_binds_exact_handoff_id) ... ok
+test_i14_adversarial_receipt_mutations_fail_both_verifiers (test_mbcx01_r13_state.R13StateTests.test_i14_adversarial_receipt_mutations_fail_both_verifiers) ... ok
+test_i14_poison_fixture_receipt_never_grants_production_authority (test_mbcx01_r13_state.R13StateTests.test_i14_poison_fixture_receipt_never_grants_production_authority) ... ok
+test_i14_positive_fixture_receipt_has_exact_dual_engine_conformance (test_mbcx01_r13_state.R13StateTests.test_i14_positive_fixture_receipt_has_exact_dual_engine_conformance) ... ok
+test_i15_adversarial_each_finalizer_is_independently_load_bearing (test_mbcx01_r13_state.R13StateTests.test_i15_adversarial_each_finalizer_is_independently_load_bearing) ... ok
+test_i15_adversarial_each_replay_gate_is_independently_load_bearing (test_mbcx01_r13_state.R13StateTests.test_i15_adversarial_each_replay_gate_is_independently_load_bearing) ... ok
+test_i15_poison_shared_finalization_helpers_cannot_affect_either_reducer (test_mbcx01_r13_state.R13StateTests.test_i15_poison_shared_finalization_helpers_cannot_affect_either_reducer) ... ok
+test_i15_positive_replay_and_finalization_are_owned_by_each_reducer (test_mbcx01_r13_state.R13StateTests.test_i15_positive_replay_and_finalization_are_owned_by_each_reducer) ... ok
+test_late_observation_requires_the_exact_current_knowledge_cut (test_mbcx01_r13_state.R13StateTests.test_late_observation_requires_the_exact_current_knowledge_cut) ... ok
+test_noncanonical_event_id_is_rejected (test_mbcx01_r13_state.R13StateTests.test_noncanonical_event_id_is_rejected) ... ok
+test_oracle_semantics_survive_poisoned_shared_and_reference_helpers (test_mbcx01_r13_state.R13StateTests.test_oracle_semantics_survive_poisoned_shared_and_reference_helpers) ... ok
+test_originating_cut_cannot_claim_future_knowledge (test_mbcx01_r13_state.R13StateTests.test_originating_cut_cannot_claim_future_knowledge) ... ok
+test_proposal_requires_exact_durable_b_response_foreign_key (test_mbcx01_r13_state.R13StateTests.test_proposal_requires_exact_durable_b_response_foreign_key) ... ok
+test_rejection_requires_an_exact_stored_proposal_hash (test_mbcx01_r13_state.R13StateTests.test_rejection_requires_an_exact_stored_proposal_hash) ... ok
+test_response_must_follow_matching_open_handoff_in_same_scope_and_be_unique (test_mbcx01_r13_state.R13StateTests.test_response_must_follow_matching_open_handoff_in_same_scope_and_be_unique) ... ok
+test_response_receipt_identity_cannot_be_replayed_for_a_second_handoff (test_mbcx01_r13_state.R13StateTests.test_response_receipt_identity_cannot_be_replayed_for_a_second_handoff) ... ok
+test_response_refs_provider_ids_and_transactions_cannot_alias_other_bytes (test_mbcx01_r13_state.R13StateTests.test_response_refs_provider_ids_and_transactions_cannot_alias_other_bytes) ... ok
+test_response_timestamps_and_node_stage_are_causal (test_mbcx01_r13_state.R13StateTests.test_response_timestamps_and_node_stage_are_causal) ... ok
+test_response_worker_hash_must_be_derived_from_durable_raw_bytes (test_mbcx01_r13_state.R13StateTests.test_response_worker_hash_must_be_derived_from_durable_raw_bytes) ... ok
+test_retracted_future_fact_does_not_truncate_current_interval (test_mbcx01_r13_state.R13StateTests.test_retracted_future_fact_does_not_truncate_current_interval) ... ok
+test_retro_correction_cannot_invert_interval (test_mbcx01_r13_state.R13StateTests.test_retro_correction_cannot_invert_interval) ... ok
+test_stale_cut_and_overlapping_assertions_are_rejected (test_mbcx01_r13_state.R13StateTests.test_stale_cut_and_overlapping_assertions_are_rejected) ... ok
+test_unserializable_envelope_is_schema_invalid_not_an_exception (test_mbcx01_r13_state.R13StateTests.test_unserializable_envelope_is_schema_invalid_not_an_exception) ... ok
+test_worker_scope_actions_and_manifest_are_bound_to_handoff_and_proposal (test_mbcx01_r13_state.R13StateTests.test_worker_scope_actions_and_manifest_are_bound_to_handoff_and_proposal) ... ok
+
+----------------------------------------------------------------------
+Ran 34 tests in 0.061s
+
+OK
+exit=0

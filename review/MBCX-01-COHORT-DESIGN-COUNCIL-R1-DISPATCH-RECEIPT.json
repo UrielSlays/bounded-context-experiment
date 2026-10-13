@@ -1,0 +1,17 @@
+{
+  "receipt_id": "MBCX-01-COHORT-DESIGN-COUNCIL-R1-DISPATCH-RECEIPT",
+  "round": "cohort-content generator DESIGN r1 (issue #17; ENGINE-FIRST owner ruling 2026-08-16)",
+  "packet_path": "MBCX-01-COHORT-CONTENT-DESIGN-COUNCIL-PACKET-r1.md",
+  "packet_commit": "5ec09d6503084dcac86eb1395bae71ceb0a4c3ae",
+  "review_target": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md",
+  "review_target_commit": "b18d7ab196325715466246a67e9d686e8163de4c",
+  "packet_check": "GREEN (itemsChecked=7; NOT-AN-ATTACK classes only - internal-consistency / author-blind-spot; no REAL class declared, no threat model exists in this lane's DoR)",
+  "driver_predispatch_execution": "C1 stamp + laundering byte-read by the driver at mbcx01_r13_measurement.py:203-334 and :317-321 this session; the Explore sweep's executed root recomputation matched the banked retained_set_root 38A62E8C... (sweep result treated as pointer; seats asked to execute the generator independently); design-history cites r3:168-215 / r4:243-287 / r5:205-240 byte-read by the driver; packet premises listed and byted in the packet's own section",
+  "seats": [
+    {"seat": "SEAT1_OUTSIDE_OPUS5", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "reused_lane_seat": true, "primed": "r6 card stands (current card revision; read-probe PASS + model Opus 5 Extra verified at r6 dispatch)", "packet_sent_utc": "2026-08-16T11:28:47Z"},
+    {"seat": "SEAT2_CHATGPT_SOL", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "reused_lane_seat": true, "primed": "r6 card stands (read-probe PASS at r6 dispatch)", "packet_sent_utc": "2026-08-16T11:29:07Z"},
+    {"seat": "SEAT3_CODEX_EXEC", "model": "gpt-5.6-sol", "service_tier": "default", "reasoning_effort": "xhigh", "prompt_path": "MBCX-01-COHORT-SEAT3-CODEX-EXEC-PROMPT-r1.txt", "prompt_generated_from_card_by_extractor": "generate-seat3-cohort-r1-prompt.ps1 (refuse-to-emit lane checks: source-poisoning, execute, why-this-exists, primary-consumer, round-call, propose, sweep)", "log_paths": ["MBCX-01-COHORT-SEAT3-CODEX-EXEC-r1.stdout.log", "MBCX-01-COHORT-SEAT3-CODEX-EXEC-r1.stderr.log"], "serialized": true, "dispatched_utc": "2026-08-16T11:26:00Z"}
+  ],
+  "sealing": "blind round - no seat sees another; verdicts banked by the driver from each thread",
+  "next": "bank three verdicts (check the commit each names; exit 0 is not reviewed - grep the codex log); driver byte-reproduces every finding and closure he acts on; synthesis; folds land red-first; then the BUILD dispatch for the generator module"
+}

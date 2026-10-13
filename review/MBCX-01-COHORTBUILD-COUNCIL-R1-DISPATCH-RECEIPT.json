@@ -1,0 +1,31 @@
+{
+  "receipt_id": "MBCX-01-COHORTBUILD-COUNCIL-R1-DISPATCH-RECEIPT",
+  "round": "cohort-BUILD acceptance council r1 (fresh arc; the engine CODE; design arc closed GO-TO-CODE at its r3)",
+  "packet_path": "MBCX-01-COHORT-BUILD-ACCEPTANCE-COUNCIL-PACKET-r1.md",
+  "packet_commit": "8432132ed8db3feb3b854ac4d9efddacb840ce4f",
+  "packet_sha256": "aaf99c5eee4f0d52b66e9804709d619178bb73c8c549e6442ce5e24781b285d3",
+  "packet_bytes": 20363,
+  "review_target_content_commit": "f35851e94b73731dc9cb5db8cb7085471d4c1bac",
+  "py_diff_empty_to_head": "driver-verified: git diff --stat f35851e dc064fbe -- '*.py' EMPTY",
+  "pin_discipline": "rev-parse emitted, cat-file -e gated pre-dispatch (both pins)",
+  "packet_check": "GREEN (itemsChecked=10; NOT-AN-ATTACK classes only; validity framing)",
+  "driver_predispatch_execution": {
+    "cohort_suite": "Ran 32 - OK, exit 0 (96.7s)",
+    "full_discover": "Ran 541 - OK, exit 0 (167.7s)",
+    "bundle": "verify-build-bundle.py REAL exit 0; readiness BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED",
+    "settling_grep": "zero hits at this pin (threat-model trigger family, three DoR files)",
+    "log": "council-logs-predispatch-gates-2026-08-16c.log",
+    "driver_probe": "packet section 4.8 placement-shortfall arithmetic REASONED (k=12 vs 16 joint strata); missing totality check named for the seats"
+  },
+  "read_probes": {
+    "seat1": "sha256 aaf99c5e... + 20363 + first line returned byte-exact 2026-08-16T17:04Z",
+    "seat2": "sha256 aaf99c5e... + 20363 + first line returned byte-exact 2026-08-16T17:04Z"
+  },
+  "seats": [
+    {"seat": "SEAT1_CLAUDE", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "primed": "standing card governs (this lane's thread; card acked in-thread at the design arc)", "packet_sent_utc": "2026-08-16T17:05:18Z"},
+    {"seat": "SEAT2_CHATGPT_SOL", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "primed": "standing card governs", "packet_sent_utc": "2026-08-16T17:05:32Z"},
+    {"seat": "SEAT3_CODEX_EXEC", "model": "gpt-5.6-sol", "service_tier": "default", "reasoning_effort": "xhigh", "prompt_path": "MBCX-01-COHORTBUILD-SEAT3-CODEX-EXEC-PROMPT-r1.txt", "extractor": "generate-seat3-cohortbuild-r1-prompt.ps1", "launch": "DETACHED cmd.exe PID 30228 (not harness-backgrounded)", "log_paths": ["MBCX-01-COHORTBUILD-SEAT3-CODEX-EXEC-r1.stdout.log", "MBCX-01-COHORTBUILD-SEAT3-CODEX-EXEC-r1.stderr.log"], "dispatched_utc": "2026-08-16T17:02:35Z"}
+  ],
+  "sealing": "blind round; prior-arc banked records are completed-round history; no seat sees another's verdict",
+  "next": "9-then-3 cadence; bank three verdicts (empty stdout / exit!=0 = re-run); driver reproduces every finding at the byte before any fold; folds red-first; then codex-CLI to literal green (#1), serialized after the seats"
+}

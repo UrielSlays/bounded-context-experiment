@@ -1,0 +1,82 @@
+{
+  "contract_id": "MBCX-01-PACKET-SCHEMAS-v5",
+  "normative": true,
+  "served_envelope_bytes": 65536,
+  "semantic_validation": "mbcx01_r11_packets.validate_scorer_input recomputes every hash, selection, gold action, stage, response identity, child event, and postcommit edge after structural admission",
+  "schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://moonwalker.local/schema/mbcx01/r11/scorer-input-v1",
+    "$ref": "#/$defs/scorerInput",
+    "$defs": {
+      "sha256": {"type": "string", "pattern": "^[0-9A-F]{64}$"},
+      "sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "utc": {"type": "string", "format": "moonwalker-utc", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z$"},
+      "condition": {"enum": ["BC", "OM"]},
+      "stringArray": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+      "semanticId": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+      "eventId": {"type": "string", "pattern": "^EV\\.[0-9A-F]{64}$"},
+      "cut": {"type": "object", "additionalProperties": false, "required": ["journal_seq", "knowledge_time", "valid_time"], "properties": {"journal_seq": {"type": "integer", "minimum": 0}, "knowledge_time": {"$ref": "#/$defs/utc"}, "valid_time": {"$ref": "#/$defs/utc"}}},
+      "commitEvent": {"type": "object", "additionalProperties": false, "required": ["event_id", "scope_id", "event_type", "semantic_operation", "idempotency_key", "journal_seq", "observed_at", "valid_from", "valid_to", "originating_cut", "payload"], "properties": {"event_id": {"$ref": "#/$defs/eventId"}, "scope_id": {"$ref": "#/$defs/semanticId"}, "event_type": {"const": "commit_handoff_result"}, "semantic_operation": {"const": "COMMIT_HANDOFF_RESULT"}, "idempotency_key": {"$ref": "#/$defs/semanticId"}, "journal_seq": {"type": "integer", "minimum": 1}, "observed_at": {"$ref": "#/$defs/utc"}, "valid_from": {"$ref": "#/$defs/utc"}, "valid_to": {"type": "null"}, "originating_cut": {"$ref": "#/$defs/cut"}, "payload": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "proposal_event_id"], "properties": {"handoff_id": {"$ref": "#/$defs/semanticId"}, "proposal_event_id": {"$ref": "#/$defs/eventId"}}}}},
+      "manifest": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "scenario_id", "scope_id", "cut", "observation", "canonical_world", "canonical_world_hash", "action_catalog", "action_catalog_hash", "route_contract_hash", "candidate_selector_id", "bc_selected_object_ids", "bc_selection_hash", "gold_read_set", "gold_action_id", "expected_a1_action_ids", "manifest_hash"],
+        "properties": {
+          "schema_id": {"const": "ExpectedScenarioManifestV2"}, "scenario_id": {"type": "string"}, "scope_id": {"type": "string"},
+          "cut": {"$ref": "#/$defs/cut"}, "observation": {"type": "object"}, "canonical_world": {"type": "array"}, "canonical_world_hash": {"$ref": "#/$defs/sha384"},
+          "action_catalog": {"type": "array"}, "action_catalog_hash": {"$ref": "#/$defs/sha384"}, "route_contract_hash": {"$ref": "#/$defs/sha384"}, "candidate_selector_id": {"type": "string", "minLength": 1},
+          "bc_selected_object_ids": {"$ref": "#/$defs/stringArray"}, "bc_selection_hash": {"$ref": "#/$defs/sha384"}, "gold_read_set": {"$ref": "#/$defs/stringArray"},
+          "gold_action_id": {"type": "string"}, "expected_a1_action_ids": {"$ref": "#/$defs/stringArray"}, "manifest_hash": {"$ref": "#/$defs/sha384"}
+        }
+      },
+      "decisionPacket": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "stage", "condition", "scenario_id", "scope_id", "cut", "objects", "action_catalog", "observation", "manifest_hash", "packet_hash"],
+        "properties": {
+          "schema_id": {"const": "DecisionPacketV5"}, "stage": {"enum": ["A0_PRECOMMIT", "A1_POSTCOMMIT"]}, "condition": {"$ref": "#/$defs/condition"},
+          "scenario_id": {"type": "string"}, "scope_id": {"type": "string"}, "cut": {"$ref": "#/$defs/cut"}, "objects": {"type": "array"},
+          "action_catalog": {"type": "array"}, "observation": {"type": "object"}, "manifest_hash": {"$ref": "#/$defs/sha384"}, "packet_hash": {"$ref": "#/$defs/sha384"}
+        }
+      },
+      "a0Result": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "input_packet_hash", "served_request_hash", "manifest_hash", "selected_action_ids", "result_hash"],
+        "properties": {"schema_id": {"const": "A0ResultV3"}, "input_packet_hash": {"$ref": "#/$defs/sha384"}, "served_request_hash": {"$ref": "#/$defs/sha256"}, "manifest_hash": {"$ref": "#/$defs/sha384"}, "selected_action_ids": {"$ref": "#/$defs/stringArray"}, "result_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "taskPacket": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "scenario_id", "scope_id", "condition", "manifest_hash", "a0_packet_hash", "a0_served_request_hash", "a0_result_hash", "a0_call_record_hash", "requested_action_catalog_hash", "task_packet_hash"],
+        "properties": {"schema_id": {"const": "TaskPacketV1"}, "scenario_id": {"type": "string"}, "scope_id": {"type": "string"}, "condition": {"$ref": "#/$defs/condition"}, "manifest_hash": {"$ref": "#/$defs/sha384"}, "a0_packet_hash": {"$ref": "#/$defs/sha384"}, "a0_served_request_hash": {"$ref": "#/$defs/sha256"}, "a0_result_hash": {"$ref": "#/$defs/sha384"}, "a0_call_record_hash": {"$ref": "#/$defs/sha384"}, "requested_action_catalog_hash": {"$ref": "#/$defs/sha384"}, "task_packet_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "workerHandoff": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "scenario_id", "scope_id", "condition", "task_packet_hash", "served_request_hash", "manifest_hash", "status_code", "proposed_action_ids", "produced_at", "worker_handoff_hash"],
+        "properties": {"schema_id": {"const": "WorkerHandoffV5"}, "scenario_id": {"type": "string"}, "scope_id": {"type": "string"}, "condition": {"$ref": "#/$defs/condition"}, "task_packet_hash": {"$ref": "#/$defs/sha384"}, "served_request_hash": {"$ref": "#/$defs/sha256"}, "manifest_hash": {"$ref": "#/$defs/sha384"}, "status_code": {"const": "PROPOSE"}, "proposed_action_ids": {"$ref": "#/$defs/stringArray"}, "produced_at": {"$ref": "#/$defs/utc"}, "worker_handoff_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "callRecord": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "scenario_id", "condition", "node", "task_packet_hash", "served_request_hash", "request_parameters_hash", "idempotency_token", "route_contract_hash", "raw_response_utf8", "raw_response_hash", "parsed_response_hash", "response_ref", "provider_request_id", "durability_receipt", "accepted_at", "call_record_hash"],
+        "properties": {"schema_id": {"const": "DurableCallRecordV1"}, "scenario_id": {"type": "string"}, "condition": {"$ref": "#/$defs/condition"}, "node": {"enum": ["A0", "B", "A1"]}, "task_packet_hash": {"$ref": "#/$defs/sha384"}, "served_request_hash": {"$ref": "#/$defs/sha256"}, "request_parameters_hash": {"$ref": "#/$defs/sha384"}, "idempotency_token": {"type": "string", "minLength": 1}, "route_contract_hash": {"$ref": "#/$defs/sha384"}, "raw_response_utf8": {"type": "string", "minLength": 1}, "raw_response_hash": {"$ref": "#/$defs/sha384"}, "parsed_response_hash": {"$ref": "#/$defs/sha384"}, "response_ref": {"type": "string", "minLength": 1}, "provider_request_id": {"type": "string", "minLength": 1}, "durability_receipt": {"$ref": "#/$defs/durabilityReceipt"}, "accepted_at": {"$ref": "#/$defs/utc"}, "call_record_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "durabilityReceipt": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "ledger_identity_hash", "raw_response_hash", "response_ref", "provider_request_id", "transaction_id", "fsync_completed", "commit_completed", "receipt_hash"],
+        "properties": {"schema_id": {"const": "DurabilityReceiptV1"}, "ledger_identity_hash": {"$ref": "#/$defs/sha384"}, "raw_response_hash": {"$ref": "#/$defs/sha384"}, "response_ref": {"type": "string", "minLength": 1}, "provider_request_id": {"type": "string", "minLength": 1}, "transaction_id": {"type": "string", "minLength": 1}, "fsync_completed": {"const": true}, "commit_completed": {"const": true}, "receipt_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "writerReceipt": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "manifest_hash", "worker_handoff_hash", "worker_call_record_hash", "status_code", "committed_action_ids", "child_events", "postcommit_cut", "postcommit_world_hash", "receipt_hash"],
+        "properties": {"schema_id": {"const": "WriterReceiptV2"}, "manifest_hash": {"$ref": "#/$defs/sha384"}, "worker_handoff_hash": {"$ref": "#/$defs/sha384"}, "worker_call_record_hash": {"$ref": "#/$defs/sha384"}, "status_code": {"const": "COMMITTED"}, "committed_action_ids": {"$ref": "#/$defs/stringArray"}, "child_events": {"type": "array", "minItems": 1, "maxItems": 1, "items": {"$ref": "#/$defs/commitEvent"}}, "postcommit_cut": {"$ref": "#/$defs/cut"}, "postcommit_world_hash": {"$ref": "#/$defs/sha384"}, "receipt_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "a1Result": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "input_packet_hash", "served_request_hash", "manifest_hash", "writer_receipt_hash", "selected_action_ids", "result_hash"],
+        "properties": {"schema_id": {"const": "A1ResultV3"}, "input_packet_hash": {"$ref": "#/$defs/sha384"}, "served_request_hash": {"$ref": "#/$defs/sha256"}, "manifest_hash": {"$ref": "#/$defs/sha384"}, "writer_receipt_hash": {"$ref": "#/$defs/sha384"}, "selected_action_ids": {"$ref": "#/$defs/stringArray"}, "result_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "scorerInput": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "condition", "manifest", "a0_packet", "a0_call_record", "a0_result", "task_packet", "b_call_record", "worker_handoff", "writer_receipt", "a1_packet", "a1_call_record", "a1_result"],
+        "properties": {"schema_id": {"const": "ScorerInputV1"}, "condition": {"$ref": "#/$defs/condition"}, "manifest": {"$ref": "#/$defs/manifest"}, "a0_packet": {"$ref": "#/$defs/decisionPacket"}, "a0_call_record": {"$ref": "#/$defs/callRecord"}, "a0_result": {"$ref": "#/$defs/a0Result"}, "task_packet": {"$ref": "#/$defs/taskPacket"}, "b_call_record": {"$ref": "#/$defs/callRecord"}, "worker_handoff": {"$ref": "#/$defs/workerHandoff"}, "writer_receipt": {"$ref": "#/$defs/writerReceipt"}, "a1_packet": {"$ref": "#/$defs/decisionPacket"}, "a1_call_record": {"$ref": "#/$defs/callRecord"}, "a1_result": {"$ref": "#/$defs/a1Result"}}
+      }
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "ledger_id": "MBCX-01-R12-REPAIR-LEDGER",
+  "normative": true,
+  "repairs": {
+    "R12-STATE-RETAINED": [
+      "test_mbcx01_r12_state.R12StateTests.test_noncanonical_event_id_is_rejected",
+      "test_mbcx01_r12_state.R12StateTests.test_every_event_type_rejects_wrong_payload_types_without_throwing",
+      "test_mbcx01_r12_state.R12StateTests.test_unserializable_envelope_is_schema_invalid_not_an_exception",
+      "test_mbcx01_r12_state.R12StateTests.test_future_fact_does_not_block_current_interval",
+      "test_mbcx01_r12_state.R12StateTests.test_explicit_fact_interval_is_not_silently_truncated_at_a_future_row",
+      "test_mbcx01_r12_state.R12StateTests.test_finite_visible_head_can_be_corrected_without_inversion",
+      "test_mbcx01_r12_state.R12StateTests.test_retro_correction_cannot_invert_interval",
+      "test_mbcx01_r12_state.R12StateTests.test_proposal_requires_exact_durable_b_response_foreign_key",
+      "test_mbcx01_r12_state.R12StateTests.test_correction_and_retraction_do_not_rewrite_historical_cut",
+      "test_mbcx01_r12_state.R12StateTests.test_stale_cut_and_overlapping_assertions_are_rejected",
+      "test_mbcx01_r12_state.R12StateTests.test_correction_requires_strictly_internal_start_and_bounded_end",
+      "test_mbcx01_r12_state.R12StateTests.test_response_must_follow_matching_open_handoff_in_same_scope_and_be_unique",
+      "test_mbcx01_r12_state.R12StateTests.test_response_worker_hash_must_be_derived_from_durable_raw_bytes",
+      "test_mbcx01_r12_state.R12StateTests.test_worker_scope_actions_and_manifest_are_bound_to_handoff_and_proposal",
+      "test_mbcx01_r12_state.R12StateTests.test_handoff_catalog_must_include_its_named_target_action",
+      "test_mbcx01_r12_state.R12StateTests.test_handoff_rejects_a_reduced_catalog_that_disagrees_with_bound_preimages",
+      "test_mbcx01_r12_state.R12StateTests.test_response_refs_provider_ids_and_transactions_cannot_alias_other_bytes",
+      "test_mbcx01_r12_state.R12StateTests.test_response_receipt_identity_cannot_be_replayed_for_a_second_handoff",
+      "test_mbcx01_r12_state.R12StateTests.test_response_timestamps_and_node_stage_are_causal",
+      "test_mbcx01_r12_state.R12StateTests.test_originating_cut_cannot_claim_future_knowledge",
+      "test_mbcx01_r12_state.R12StateTests.test_retracted_future_fact_does_not_truncate_current_interval",
+      "test_mbcx01_r12_state.R12StateTests.test_commit_rechecks_current_target_state",
+      "test_mbcx01_r12_state.R12StateTests.test_late_observation_requires_the_exact_current_knowledge_cut",
+      "test_mbcx01_r12_state.R12StateTests.test_rejection_requires_an_exact_stored_proposal_hash"
+    ],
+    "R12-ORACLE-INDEPENDENCE": [
+      "test_mbcx01_r12_state.R12StateTests.test_oracle_semantics_survive_poisoned_shared_and_reference_helpers",
+      "test_mbcx01_r12_state.R12StateTests.test_full_legal_event_matrix_matches_reference_byte_for_byte"
+    ],
+    "R12-AUTHORITATIVE-WRITER": [
+      "test_mbcx01_r12_packets.R12PacketTests.test_valid_typed_dag_scores_one",
+      "test_mbcx01_r12_packets.R12PacketTests.test_persisted_proposal_event_bytes_are_exact",
+      "test_mbcx01_r12_packets.R12PacketTests.test_arbitrary_persisted_proposal_id_cannot_score",
+      "test_mbcx01_r12_packets.R12PacketTests.test_writer_child_cannot_jump_next_sequence",
+      "test_mbcx01_r12_packets.R12PacketTests.test_postcommit_cut_must_make_child_validly_effective",
+      "test_mbcx01_r12_packets.R12PacketTests.test_packet_local_child_must_equal_transition_authority_event",
+      "test_mbcx01_r12_packets.R12PacketTests.test_call_record_requires_structured_durability_receipt",
+      "test_mbcx01_r12_packets.R12PacketTests.test_call_record_raw_bytes_must_parse_to_the_bound_result",
+      "test_mbcx01_r12_packets.R12PacketTests.test_call_record_all_identity_fields_and_one_route_are_admitted",
+      "test_mbcx01_r12_packets.R12PacketTests.test_call_ids_are_node_unique_and_temporally_ordered",
+      "test_mbcx01_r12_packets.R12PacketTests.test_scorer_is_total_and_fail_closed_for_malformed_nested_values",
+      "test_mbcx01_r12_packets.R12PacketTests.test_bc_builder_has_no_unbound_selection_argument",
+      "test_mbcx01_r12_packets.R12PacketTests.test_semantically_forged_gold_manifest_is_rejected",
+      "test_mbcx01_r12_packets.R12PacketTests.test_manifest_rejects_nonhex_route_contract_hash",
+      "test_mbcx01_r12_packets.R12PacketTests.test_worker_must_be_produced_before_b_acceptance",
+      "test_mbcx01_r12_packets.R12PacketTests.test_durability_transaction_ids_are_node_unique",
+      "test_mbcx01_r12_packets.R12PacketTests.test_schema_invalid_nested_worker_cannot_score",
+      "test_mbcx01_r12_packets.R12PacketTests.test_fake_common_packet_hash_cannot_score",
+      "test_mbcx01_r12_packets.R12PacketTests.test_unbound_served_request_hash_cannot_score",
+      "test_mbcx01_r12_packets.R12PacketTests.test_cross_scenario_b_response_cannot_score",
+      "test_mbcx01_r12_packets.R12PacketTests.test_invented_child_event_cannot_score",
+      "test_mbcx01_r12_packets.R12PacketTests.test_precommit_a1_packet_cannot_score",
+      "test_mbcx01_r12_integration.R12IntegrationTests.test_full_valid_authoritative_transition_join",
+      "test_mbcx01_r12_integration.R12IntegrationTests.test_packet_child_must_equal_actually_applied_integration_event",
+      "test_mbcx01_r12_integration.R12IntegrationTests.test_cross_artifact_manifest_substitution_fails"
+    ],
+    "R12-COHORT-RETAINED": [
+      "test_mbcx01_r12_measurement.R12CohortTests.test_cut_domain_is_contract_driven",
+      "test_mbcx01_r12_measurement.R12CohortTests.test_generator_digest_is_the_pinned_generator_artifact_digest",
+      "test_mbcx01_r12_measurement.R12CohortTests.test_source_provenance_rejects_motif_and_action_substitution",
+      "test_mbcx01_r12_measurement.R12CohortTests.test_cohort_selects_six_by_128_with_bound_provenance"
+    ],
+    "R12-SIGNED-PHYSICAL-RECEIPT": [
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_signed_no_paid_fixture_verifies_but_cannot_establish_physical_pass",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_contract_publishes_a_closed_nested_envelope_schema",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_trust_root_is_separately_loaded_closed_and_fixture_only",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_unsigned_receipts_are_not_admissible",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_receipt_mutation_without_resigning_breaks_signature",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_fixture_kind_is_inside_the_signed_preimage",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_test_key_cannot_sign_a_physical_harness_receipt",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_receipt_supplied_or_unknown_key_cannot_become_a_trust_root",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_run_and_cell_identities_are_signed_and_anti_replay_checked",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_mixed_candidate_grid_is_rejected_even_when_test_signed",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_boolean_axis_is_rejected",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_missing_io_or_job_completion_is_rejected",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_unmeasured_external_work_is_rejected",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_instruction_mode_is_exactly_pinned_and_unsupported_is_fatal",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_etw_loss_or_incomplete_attribution_is_fatal",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_total_io_transfer_has_an_h_shape_gate",
+      "test_mbcx01_r12_measurement.R12SignedMeasurementTests.test_total_io_operations_have_an_h_shape_gate"
+    ],
+    "R12-AMBIGUITY-TERMINAL": [
+      "test_mbcx01_r12_measurement.R12LedgerTests.test_empty_identity_is_rejected",
+      "test_mbcx01_r12_measurement.R12LedgerTests.test_durable_transition_requires_exact_response_evidence",
+      "test_mbcx01_r12_measurement.R12LedgerTests.test_corrupt_restart_is_rejected",
+      "test_mbcx01_r12_measurement.R12LedgerTests.test_acceptance_ambiguity_is_terminal_missing_and_never_retryable",
+      "test_mbcx01_r12_measurement.R12LedgerTests.test_durable_response_is_immutable"
+    ],
+    "R12-INFERENCE-RETAINED": [
+      "test_mbcx01_r12_inference.R12InferenceTests.test_exact_missing_dp_matches_small_exhaustive_witnesses",
+      "test_mbcx01_r12_inference.R12InferenceTests.test_dp_has_no_missing_count_ceiling",
+      "test_mbcx01_r12_inference.R12InferenceTests.test_no_missing_preserves_complete_data_decision",
+      "test_mbcx01_r12_inference.R12InferenceTests.test_known_design_failure_precedes_transport",
+      "test_mbcx01_r12_inference.R12InferenceTests.test_route_plan_reproduces_exact_tail_bounds",
+      "test_mbcx01_r12_inference.R12InferenceTests.test_route_bound_requires_conditional_hazard_not_marginals",
+      "test_mbcx01_r12_inference.R12InferenceTests.test_registered_cells_remain_pointwise_planning_diagnostics",
+      "test_mbcx01_r12_inference.R12InferenceTests.test_binomial_cdf_validates_inputs"
+    ],
+    "R12-DP-SPOTCHECK": [
+      "test_mbcx01_r12_inference.R12InferenceTests.test_randomized_completion_property_spot_check_near_twenty_missing",
+      "test_mbcx01_r12_inference.R12InferenceTests.test_randomized_spot_check_validates_sample_count"
+    ],
+    "R12-PORTABLE-AJV": [
+      "AJV.STRICT_COMPILE_AND_MUTANTS"
+    ],
+    "R12-BOOTSTRAP": [
+      "INTEGRATION.PINNED_BOOTSTRAP_SOURCE_GUARD"
+    ],
+    "R12-REPAIR-LEDGER": [
+      "INTEGRATION.REPAIR_LEDGER_TOTAL"
+    ]
+  }
+}

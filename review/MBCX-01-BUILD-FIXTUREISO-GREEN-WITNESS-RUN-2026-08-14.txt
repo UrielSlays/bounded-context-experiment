@@ -1,0 +1,288 @@
+MBCX-01 BUILD - FIXTURE_ISOLATION / INSTANCE-SCOPED VERIFIER CONTEXT - GREEN WITNESS RUN
+Date: 2026-08-14
+Fix class: FIXTURE_ISOLATION (BUILD acceptance council r2 = GO-WITH-FIXES)
+Discharges: MBCX01-BUILD-R2-FIXTURE-ISOLATION (load bearing)
+Worktree: <repo>-build
+Branch: codex/mbcx01-production-build  Base HEAD: 491b0ab (fold NOT committed; the driver
+byte-audits the working tree)
+Python: Python 3.11.9  Node: v24.17.0
+
+THE ONE INVARIANT, as implemented (COMPLEMENT-shaped; adopted from Go crypto/x509
+VerifyOptions + the TUF out-of-band trusted root, per MBCX-01-BUILD-R2-TRUSTCONTEXT-
+SWEEP-LOG.md, NOT invented):
+
+    Production verification accepts exactly one thing - an immutable, INSTANCE-SCOPED
+    ProductionVerifierContext whose anchor is operator-supplied and NOT fixture-marked,
+    carrying its own current time - and refuses everything else.
+
+Each production door resolves that context ONCE, at entry, before it reads any
+caller-supplied object, and carries the immutable value through the whole evaluation;
+the operator wiring seam is frozen for the length of a verification, so nothing reachable
+from request DATA can substitute the root of trust in flight or leave the process
+re-wired afterwards.
+
+================================================================================
+GREEN STAGE 1 - the SAME probe file, unchanged, against the POST-FIX bytes.
+================================================================================
+
+Byte-for-byte the same mbcx01_build_fixtureiso_probe.py that produced the RED bank:
+same six probes, same universes, same keys, same order. Nothing about the probe was
+adjusted to the fix. Compare P1..P6 line by line with the RED bank.
+
+=== COMMAND: python mbcx01_build_fixtureiso_probe.py   (cwd = the lane worktree) ===
+
+MBCX-01 BUILD — FIXTURE-ISOLATION probe (codex r2 F1/F2/F3/F4/F6/F7)
+cwd: <repo>-build
+operator anchor (generated in memory, NOT committed): anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+
+== P1 (F1): the COMMITTED fixture-only owner anchor, whose private half is committed ==
+  configured anchor: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1' fixture_only=True
+  measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY']
+  exactness door   -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY
+  (activation signed by the COMMITTED fixture owner private key)
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  state FIXTURE lane (require_production=False) -> []
+  (same committed fixture owner key, BUILD A)
+  fixture LANE: committed fixture manifest parses, roots=1 fixture_only=[True]
+
+== P2 (F2): a caller-supplied mapping object reconfigures the anchor from inside .get/__getitem__ ==
+  measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION']
+     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
+  exactness door -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION
+     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION']
+     anchor after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
+
+== P3 (F3): the integration fixture is built and RELEASED by a caller ==
+  operator anchor before: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+  operator anchor after build+release: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+  subsequent production evaluation under the fixture-signed universe -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_ACTIVATION_UNAUTHENTICATED']
+
+== P4 (F4): a manifest whose validity window closed in 2001 ==
+  manifest validity={'not_before': '2000-01-01T00:00:00Z', 'not_after': '2001-01-01T00:00:00Z'} revocation.published_at=2000-06-01T00:00:00Z
+  measurement door (verifier default instant) -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'TRUST_ROOT_VALIDITY_EXPIRED']
+  structural validator at 2026-08-14T00:00:00Z -> TRUST_ROOT_VALIDITY_EXPIRED
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED']
+  state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED']
+  state FIXTURE lane (require_production=False) -> []
+  (state trust root stale at the verifier's clock, valid at the receipt's own knowledge_time)
+
+== P5 (F7): a binding-only exactness evaluation (the suite is NOT executed) ==
+  emitted receipt result='AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED' authority_mode='PRODUCTION_MEASUREMENT_AUTHORITY'
+  a receipt CLAIMING result='PASS' -> MeasurementAuthorityError: CARRIER_EXACTNESS_SUITE_NOT_EXECUTED
+
+== P6 (F6): an anchor document with a DUPLICATE member ==
+  document carries fixture_only TWICE: true then false
+  loader -> TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<home>\AppData\Local\Temp\mbcx01-build-fixtureiso-s29co8v5\ambiguous-owner-anchor.json
+
+READ THIS AS (every line is the flip of the same line in the RED bank):
+  P1 (F1)  - the COMMITTED fixture anchor, signing a correct activation with the
+             committed fixture owner private key, is REFUSED BY NAME at all three doors:
+             measurement PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY + the fail-loud sentinel,
+             exactness MeasurementAuthorityError PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY,
+             state STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY + the state sentinel at
+             BOTH the verify and the scorer door.
+             The FIXTURE LANE stays green, unchanged: require_production=False returns []
+             over the very same receipt, and the committed fixture manifest still parses
+             with its fixture_only roots. Refusing fixture AUTHORITY is not refusing
+             fixture DOCUMENTS.
+  P2 (F2)  - the mapping gadget fires ONCE (swaps_fired=1) and is refused
+             PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION /
+             STATE_AUTHORITY_V2_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION. The anchor is
+             the operator's before AND after at every door: the swap changes neither this
+             evaluation nor the next one.
+  P3 (F3)  - after build_connected_authority_fixture() + release, the operator's own
+             anchor is STILL installed (anchor_id and fixture_only unchanged), and the
+             subsequent fixture-signed production evaluation is refused
+             PRODUCTION_ACTIVATION_UNAUTHENTICATED + sentinel.
+  P4 (F4)  - the 2000-2001 manifest is TRUST_ROOT_VALIDITY_EXPIRED at the measurement
+             door under the verifier's own clock, and the stale BUILD A trust root is
+             STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED at both state doors - while the
+             fixture lane, which grants nothing, still returns [].
+  P5 (F7)  - the emitted result is AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED, and a
+             receipt CLAIMING result='PASS' is refused
+             CARRIER_EXACTNESS_SUITE_NOT_EXECUTED.
+  P6 (F6)  - the duplicate-member anchor document is refused
+             TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<path>.
+
+================================================================================
+GREEN STAGE 2 - the NINE NEW WITNESSES on the post-fix tree.
+================================================================================
+
+=== COMMAND: python -m unittest -v test_mbcx01_build_measurement.BuildFixtureIsolationTests
+             test_mbcx01_build_state.BuildAFixtureIsolationWitnesses
+             test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi05_... ===
+
+test_bw22_adversarial_committed_fixture_anchor_cannot_grant_production (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw22_adversarial_committed_fixture_anchor_cannot_grant_production)
+Invariant (codex r2 F1, the deciding one): the COMMITTED fixture owner anchor ... ok
+test_bw23_adversarial_mapping_object_cannot_swap_the_anchor_mid_evaluation (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw23_adversarial_mapping_object_cannot_swap_the_anchor_mid_evaluation)
+Invariant (codex r2 F2): authority state is captured ONCE, before any ... ok
+test_bw24_adversarial_expired_manifest_is_refused_at_the_verifier_clock (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw24_adversarial_expired_manifest_is_refused_at_the_verifier_clock)
+Invariant (codex r2 F4): the evaluation instant belongs to the VERIFIER, not ... ok
+test_bw25_adversarial_binding_only_exactness_is_not_labelled_suite_executed (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw25_adversarial_binding_only_exactness_is_not_labelled_suite_executed)
+Invariant (codex r2 F7): this authority BINDS an exactness claim; it does not ... ok
+test_bw26_adversarial_ambiguous_anchor_document_is_refused_at_the_loader (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw26_adversarial_ambiguous_anchor_document_is_refused_at_the_loader)
+Invariant (codex r2 F6): the operator configuration boundary parses strictly. ... ok
+test_bw27_positive_verifier_context_is_immutable_instance_scoped_and_clocked (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw27_positive_verifier_context_is_immutable_instance_scoped_and_clocked)
+Invariant (the r2 COMPLEMENT): production verification accepts EXACTLY one ... ok
+test_ba34_adversarial_committed_fixture_anchor_cannot_grant_state_production (test_mbcx01_build_state.BuildAFixtureIsolationWitnesses.test_ba34_adversarial_committed_fixture_anchor_cannot_grant_state_production)
+Invariant (codex r2 F1 on BUILD A): the COMMITTED fixture owner anchor, whose ... ok
+test_ba35_adversarial_state_trust_root_stale_at_the_verifier_clock (test_mbcx01_build_state.BuildAFixtureIsolationWitnesses.test_ba35_adversarial_state_trust_root_stale_at_the_verifier_clock)
+Invariant (codex r2 F4 on BUILD A): trust-root freshness is judged at the ... ok
+test_bi05_adversarial_the_integration_fixture_does_not_leak_its_verifier_context (test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi05_adversarial_the_integration_fixture_does_not_leak_its_verifier_context)
+Invariant (codex r2 F3): the connected fixture is an ASSEMBLER, not an ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 10.162s
+
+OK
+
+================================================================================
+GREEN STAGE 3 - NOTHING ALREADY CLOSED REGRESSED.
+================================================================================
+
+The BUILD suites (86 witnesses before this fold, 95 after) and the FROZEN r13.2 suites
+(145/145, zero frozen files touched) both run clean. The r1 and r2 closures the council
+confirmed are still proved by the same witnesses, now under a production-shaped operator
+anchor instead of the fixture one:
+
+  * self-authored universe refused at all three doors without the anchor key - bw17,
+    bw21, ba29;
+  * the seven activation splice axes incl. the same-manifest_id mutation - bw19, ba30;
+  * all four signature-carrier spellings - bw20, ba33 (codex F5, confirmed by 3 seats);
+  * the r1 false-REJECT repair (production-shaped ceremony manifest admits under a
+    legitimate anchor) - ba31, bw18, bi01;
+  * fail-closed-when-unanchored named errors - bw19(a), ba32.
+
+=== COMMAND: python -m unittest test_mbcx01_build_state test_mbcx01_build_measurement
+             test_mbcx01_build_integration ===
+
+...............................................................................................
+----------------------------------------------------------------------
+Ran 95 tests in 29.497s
+
+OK
+
+=== COMMAND: python -m unittest test_mbcx01_r13_state test_mbcx01_r13_packets
+             test_mbcx01_r13_measurement test_mbcx01_r13_inference
+             test_mbcx01_r13_integration   (the FROZEN r13.2 suites) ===
+
+.................................................................................................................................................
+----------------------------------------------------------------------
+Ran 145 tests in 25.588s
+
+OK
+
+================================================================================
+GREEN STAGE 4 - the whole deterministic bundle verifier.
+================================================================================
+
+Section statuses, taken from the FRESH runtime report the verifier emits (no committed
+copy exists; the run below produced these):
+
+  frozen_suites          PASS   145/145 (expected 145)
+  build_suites           PASS   95 tests over the three BUILD suites
+  ledger                 PASS   42 invariants / 95 witnesses, two_way_total=true
+  schemas                PASS   2 subjects, 12 mutants rejected, strict compile
+  canonical_parity       PASS   5 documents, SHA-384, out-of-domain control refused
+  no_production_activation PASS committed_manifests_production_ready=false,
+                               committed_owner_trust_anchor_fixture_only=true,
+                               physical_collection_env_flag_present=false,
+                               signing_ceremony_performed=false,
+                               trust_root_activated=false
+  execution_posture      PASS   728 spawned processes, permitted: node, python.exe
+  top_level_readiness    BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED
+
+NO NEW KEY MATERIAL IS COMMITTED. The positive lane runs under a TEST PRODUCTION anchor
+whose Ed25519 key pair mbcx01_build_ceremony_fixture generates IN MEMORY at first use and
+never writes to the repository (its public key differs every run, which is itself a check
+that nothing is quietly depending on committed key material). The committed anchor
+document MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json is UNCHANGED - still
+fixture_only:true, still key-free - and verify-build-bundle.py's existing check on it
+still passes, as the no_production_activation section above shows.
+
+=== COMMAND: python verify-build-bundle.py ===
+
+frozen_suites: PASS
+build_suites: PASS
+ledger: PASS
+schemas: PASS
+canonical_parity: PASS
+no_production_activation: PASS
+execution_posture: PASS
+{
+  "blocking_prerequisites": [
+    "PRODUCTION_STATE_TRUST_ROOT_NOT_ACTIVATED",
+    "PRODUCTION_MEASUREMENT_TRUST_ROOT_NOT_ACTIVATED",
+    "PHYSICAL_HARNESS_NOT_EXECUTED"
+  ],
+  "experiment_executed": false,
+  "paid_calls": 0,
+  "physical_harness_executed": false,
+  "production_activation": false,
+  "provider_calls": 0,
+  "report_id": "MBCX-01-BUILD-LIVE-NO-PAID-VERIFICATION",
+  "route_qualification_executed": false,
+  "scientific_calls": 0,
+  "sections": {
+    "build_suites": {
+      "modules": [
+        "test_mbcx01_build_state",
+        "test_mbcx01_build_measurement",
+        "test_mbcx01_build_integration"
+      ],
+      "status": "PASS",
+      "tests": 95
+    },
+    "canonical_parity": {
+      "boundary": "python:mbcx01_r13_common vs node:verify-build-canonical-parity.mjs",
+      "documents": 5,
+      "hash_algorithm": "SHA-384",
+      "out_of_domain_control_refused": "MBCX-01-R13.2-NO-PAID-VERIFICATION-REPORT.json",
+      "status": "PASS",
+      "value_domain": "object/array/string/boolean/null/safe-integer"
+    },
+    "execution_posture": {
+      "permitted_executables": [
+        "node",
+        "python.exe"
+      ],
+      "spawned_processes": 728,
+      "status": "PASS"
+    },
+    "frozen_suites": {
+      "expected": 145,
+      "modules": [
+        "test_mbcx01_r13_state",
+        "test_mbcx01_r13_packets",
+        "test_mbcx01_r13_measurement",
+        "test_mbcx01_r13_inference",
+        "test_mbcx01_r13_integration"
+      ],
+      "status": "PASS",
+      "tests": 145
+    },
+    "ledger": {
+      "invariants": 42,
+      "status": "PASS",
+      "two_way_total": true,
+      "witnesses": 95
+    },
+    "no_production_activation": {
+      "committed_manifests_production_ready": false,
+      "committed_owner_trust_anchor_fixture_only": true,
+      "physical_collection_env_flag_present": false,
+      "signing_ceremony_performed": false,
+      "status": "PASS",
+      "trust_root_activated": false
+    },
+    "schemas": {
+      "mutants_rejected": 12,
+      "status": "PASS",
+      "strict_compile": true,
+      "subjects": 2
+    }
+  },
+  "top_level_readiness": "BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED"
+}

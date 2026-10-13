@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="892.8pt" height="475.2pt" viewBox="0 0 892.8 475.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-26T05:19:06.026253</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 475.2 
+L 892.8 475.2 
+L 892.8 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="PathCollection_1">
+    <path d="M 216.23616 116.427249 
+C 219.891732 116.427249 223.398074 114.974874 225.982954 112.389994 
+C 228.567834 109.805114 230.020209 106.298772 230.020209 102.6432 
+C 230.020209 98.987628 228.567834 95.481286 225.982954 92.896406 
+C 223.398074 90.311526 219.891732 88.859151 216.23616 88.859151 
+C 212.580588 88.859151 209.074246 90.311526 206.489366 92.896406 
+C 203.904486 95.481286 202.452111 98.987628 202.452111 102.6432 
+C 202.452111 106.298772 203.904486 109.805114 206.489366 112.389994 
+C 209.074246 114.974874 212.580588 116.427249 216.23616 116.427249 
+L 216.23616 116.427249 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_2">
+    <path d="M 284.874624 116.427249 
+C 288.530196 116.427249 292.036538 114.974874 294.621418 112.389994 
+C 297.206298 109.805114 298.658673 106.298772 298.658673 102.6432 
+C 298.658673 98.987628 297.206298 95.481286 294.621418 92.896406 
+C 292.036538 90.311526 288.530196 88.859151 284.874624 88.859151 
+C 281.219052 88.859151 277.71271 90.311526 275.12783 92.896406 
+C 272.54295 95.481286 271.090575 98.987628 271.090575 102.6432 
+C 271.090575 106.298772 272.54295 109.805114 275.12783 112.389994 
+C 277.71271 114.974874 281.219052 116.427249 284.874624 116.427249 
+L 284.874624 116.427249 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_3">
+    <path d="M 216.23616 152.542449 
+C 219.891732 152.542449 223.398074 151.090074 225.982954 148.505194 
+C 228.567834 145.920314 230.020209 142.413972 230.020209 138.7584 
+C 230.020209 135.102828 228.567834 131.596486 225.982954 129.011606 
+C 223.398074 126.426726 219.891732 124.974351 216.23616 124.974351 
+C 212.580588 124.974351 209.074246 126.426726 206.489366 129.011606 
+C 203.904486 131.596486 202.452111 135.102828 202.452111 138.7584 
+C 202.452111 142.413972 203.904486 145.920314 206.489366 148.505194 
+C 209.074246 151.090074 212.580588 152.542449 216.23616 152.542449 
+L 216.23616 152.542449 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_4">
+    <path d="M 216.23616 188.657649 
+C 219.891732 188.657649 223.398074 187.205274 225.982954 184.620394 
+C 228.567834 182.035514 230.020209 178.529172 230.020209 174.8736 
+C 230.020209 171.218028 228.567834 167.711686 225.982954 165.126806 
+C 223.398074 162.541926 219.891732 161.089551 216.23616 161.089551 
+C 212.580588 161.089551 209.074246 162.541926 206.489366 165.126806 
+C 203.904486 167.711686 202.452111 171.218028 202.452111 174.8736 
+C 202.452111 178.529172 203.904486 182.035514 206.489366 184.620394 
+C 209.074246 187.205274 212.580588 188.657649 216.23616 188.657649 
+L 216.23616 188.657649 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_5">
+    <path d="M 216.23616 224.772849 
+C 219.891732 224.772849 223.398074 223.320474 225.982954 220.735594 
+C 228.567834 218.150714 230.020209 214.644372 230.020209 210.9888 
+C 230.020209 207.333228 228.567834 203.826886 225.982954 201.242006 
+C 223.398074 198.657126 219.891732 197.204751 216.23616 197.204751 
+C 212.580588 197.204751 209.074246 198.657126 206.489366 201.242006 
+C 203.904486 203.826886 202.452111 207.333228 202.452111 210.9888 
+C 202.452111 214.644372 203.904486 218.150714 206.489366 220.735594 
+C 209.074246 223.320474 212.580588 224.772849 216.23616 224.772849 
+L 216.23616 224.772849 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_6">
+    <path d="M 284.874624 224.772849 
+C 288.530196 224.772849 292.036538 223.320474 294.621418 220.735594 
+C 297.206298 218.150714 298.658673 214.644372 298.658673 210.9888 
+C 298.658673 207.333228 297.206298 203.826886 294.621418 201.242006 
+C 292.036538 198.657126 288.530196 197.204751 284.874624 197.204751 
+C 281.219052 197.204751 277.71271 198.657126 275.12783 201.242006 
+C 272.54295 203.826886 271.090575 207.333228 271.090575 210.9888 
+C 271.090575 214.644372 272.54295 218.150714 275.12783 220.735594 
+C 277.71271 223.320474 281.219052 224.772849 284.874624 224.772849 
+L 284.874624 224.772849 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_7">
+    <path d="M 216.23616 260.888049 
+C 219.891732 260.888049 223.398074 259.435674 225.982954 256.850794 
+C 228.567834 254.265914 230.020209 250.759572 230.020209 247.104 
+C 230.020209 243.448428 228.567834 239.942086 225.982954 237.357206 
+C 223.398074 234.772326 219.891732 233.319951 216.23616 233.319951 
+C 212.580588 233.319951 209.074246 234.772326 206.489366 237.357206 
+C 203.904486 239.942086 202.452111 243.448428 202.452111 247.104 
+C 202.452111 250.759572 203.904486 254.265914 206.489366 256.850794 
+C 209.074246 259.435674 212.580588 260.888049 216.23616 260.888049 
+L 216.23616 260.888049 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_8">
+    <path d="M 250.555392 260.888049 
+C 254.210964 260.888049 257.717306 259.435674 260.302186 256.850794 
+C 262.887066 254.265914 264.339441 250.759572 264.339441 247.104 
+C 264.339441 243.448428 262.887066 239.942086 260.302186 237.357206 
+C 257.717306 234.772326 254.210964 233.319951 250.555392 233.319951 
+C 246.89982 233.319951 243.393478 234.772326 240.808598 237.357206 
+C 238.223718 239.942086 236.771343 243.448428 236.771343 247.104 
+C 236.771343 250.759572 238.223718 254.265914 240.808598 256.850794 
+C 243.393478 259.435674 246.89982 260.888049 250.555392 260.888049 
+L 250.555392 260.888049 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_9">
+    <path d="M 284.874624 260.888049 
+C 288.530196 260.888049 292.036538 259.435674 294.621418 256.850794 
+C 297.206298 254.265914 298.658673 250.759572 298.658673 247.104 
+C 298.658673 243.448428 297.206298 239.942086 294.621418 237.357206 
+C 292.036538 234.772326 288.530196 233.319951 284.874624 233.319951 
+C 281.219052 233.319951 277.71271 234.772326 275.12783 237.357206 
+C 272.54295 239.942086 271.090575 243.448428 271.090575 247.104 
+C 271.090575 250.759572 272.54295 254.265914 275.12783 256.850794 
+C 277.71271 259.435674 281.219052 260.888049 284.874624 260.888049 
+L 284.874624 260.888049 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_10">
+    <path d="M 319.193856 260.888049 
+C 322.849428 260.888049 326.35577 259.435674 328.94065 256.850794 
+C 331.52553 254.265914 332.977905 250.759572 332.977905 247.104 
+C 332.977905 243.448428 331.52553 239.942086 328.94065 237.357206 
+C 326.35577 234.772326 322.849428 233.319951 319.193856 233.319951 
+C 315.538284 233.319951 312.031942 234.772326 309.447062 237.357206 
+C 306.862182 239.942086 305.409807 243.448428 305.409807 247.104 
+C 305.409807 250.759572 306.862182 254.265914 309.447062 256.850794 
+C 312.031942 259.435674 315.538284 260.888049 319.193856 260.888049 
+L 319.193856 260.888049 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_11">
+    <path d="M 216.23616 297.003249 
+C 219.891732 297.003249 223.398074 295.550874 225.982954 292.965994 
+C 228.567834 290.381114 230.020209 286.874772 230.020209 283.2192 
+C 230.020209 279.563628 228.567834 276.057286 225.982954 273.472406 
+C 223.398074 270.887526 219.891732 269.435151 216.23616 269.435151 
+C 212.580588 269.435151 209.074246 270.887526 206.489366 273.472406 
+C 203.904486 276.057286 202.452111 279.563628 202.452111 283.2192 
+C 202.452111 286.874772 203.904486 290.381114 206.489366 292.965994 
+C 209.074246 295.550874 212.580588 297.003249 216.23616 297.003249 
+L 216.23616 297.003249 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_12">
+    <path d="M 250.555392 297.003249 
+C 254.210964 297.003249 257.717306 295.550874 260.302186 292.965994 
+C 262.887066 290.381114 264.339441 286.874772 264.339441 283.2192 
+C 264.339441 279.563628 262.887066 276.057286 260.302186 273.472406 
+C 257.717306 270.887526 254.210964 269.435151 250.555392 269.435151 
+C 246.89982 269.435151 243.393478 270.887526 240.808598 273.472406 
+C 238.223718 276.057286 236.771343 279.563628 236.771343 283.2192 
+C 236.771343 286.874772 238.223718 290.381114 240.808598 292.965994 
+C 243.393478 295.550874 246.89982 297.003249 250.555392 297.003249 
+L 250.555392 297.003249 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="PathCollection_13">
+    <path d="M 216.23616 405.348849 
+C 219.891732 405.348849 223.398074 403.896474 225.982954 401.311594 
+C 228.567834 398.726714 230.020209 395.220372 230.020209 391.5648 
+C 230.020209 387.909228 228.567834 384.402886 225.982954 381.818006 
+C 223.398074 379.233126 219.891732 377.780751 216.23616 377.780751 
+C 212.580588 377.780751 209.074246 379.233126 206.489366 381.818006 
+C 203.904486 384.402886 202.452111 387.909228 202.452111 391.5648 
+C 202.452111 395.220372 203.904486 398.726714 206.489366 401.311594 
+C 209.074246 403.896474 212.580588 405.348849 216.23616 405.348849 
+L 216.23616 405.348849 
+z
+" clip-path="url(#p9a9f1b562b)" style="fill: none; stroke: #22262e; stroke-width: 1.6"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="105.206066" transform="rotate(-0 44.64 105.206066)">the smoke run</text>
+   </g>
+   <g id="PathCollection_14">
+    <defs>
+     <path id="m179864b2c1" d="M 0 9.746794 
+C 2.58488 9.746794 5.064238 8.719811 6.892024 6.892024 
+C 8.719811 5.064238 9.746794 2.58488 9.746794 0 
+C 9.746794 -2.58488 8.719811 -5.064238 6.892024 -6.892024 
+C 5.064238 -8.719811 2.58488 -9.746794 0 -9.746794 
+C -2.58488 -9.746794 -5.064238 -8.719811 -6.892024 -6.892024 
+C -8.719811 -5.064238 -9.746794 -2.58488 -9.746794 0 
+C -9.746794 2.58488 -8.719811 5.064238 -6.892024 6.892024 
+C -5.064238 8.719811 -2.58488 9.746794 0 9.746794 
+z
+" style="stroke: #d08c1e; stroke-width: 0.8"/>
+    </defs>
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="216.23616" y="102.6432" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_15">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="250.555392" y="102.6432" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_16">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="284.874624" y="102.6432" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_17">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="319.193856" y="102.6432" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="361.816128" y="104.842907" transform="rotate(-0 361.816128 104.842907)">4</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="141.320895" transform="rotate(-0 44.64 141.320895)">physical stage</text>
+   </g>
+   <g id="PathCollection_18">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="216.23616" y="138.7584" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="258.858432" y="140.958107" transform="rotate(-0 258.858432 140.958107)">1</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="177.436095" transform="rotate(-0 44.64 177.436095)">review gates</text>
+   </g>
+   <g id="PathCollection_19">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="216.23616" y="174.8736" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="258.858432" y="177.073307" transform="rotate(-0 258.858432 177.073307)">1</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="213.551666" transform="rotate(-0 44.64 213.551666)">build rounds 1 to 3</text>
+   </g>
+   <g id="PathCollection_20">
+    <defs>
+     <path id="m35067a6ed5" d="M 0 9.746794 
+C 2.58488 9.746794 5.064238 8.719811 6.892024 6.892024 
+C 8.719811 5.064238 9.746794 2.58488 9.746794 0 
+C 9.746794 -2.58488 8.719811 -5.064238 6.892024 -6.892024 
+C 5.064238 -8.719811 2.58488 -9.746794 0 -9.746794 
+C -2.58488 -9.746794 -5.064238 -8.719811 -6.892024 -6.892024 
+C -8.719811 -5.064238 -9.746794 -2.58488 -9.746794 0 
+C -9.746794 2.58488 -8.719811 5.064238 -6.892024 6.892024 
+C -5.064238 8.719811 -2.58488 9.746794 0 9.746794 
+z
+" style="stroke: #1b2a49; stroke-width: 0.8"/>
+    </defs>
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="216.23616" y="210.9888" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_21">
+    <defs>
+     <path id="m483942cc46" d="M 0 9.746794 
+C 2.58488 9.746794 5.064238 8.719811 6.892024 6.892024 
+C 8.719811 5.064238 9.746794 2.58488 9.746794 0 
+C 9.746794 -2.58488 8.719811 -5.064238 6.892024 -6.892024 
+C 5.064238 -8.719811 2.58488 -9.746794 0 -9.746794 
+C -2.58488 -9.746794 -5.064238 -8.719811 -6.892024 -6.892024 
+C -8.719811 -5.064238 -9.746794 -2.58488 -9.746794 0 
+C -9.746794 2.58488 -8.719811 5.064238 -6.892024 6.892024 
+C -5.064238 8.719811 -2.58488 9.746794 0 9.746794 
+z
+" style="stroke: #e6e9ee; stroke-width: 0.8"/>
+    </defs>
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m483942cc46" x="250.555392" y="210.9888" style="fill: #e6e9ee; stroke: #e6e9ee; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_22">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="284.874624" y="210.9888" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_23">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="319.193856" y="210.9888" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_24">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="353.513088" y="210.9888" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="396.13536" y="213.188507" transform="rotate(-0 396.13536 213.188507)">5</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="249.666495" transform="rotate(-0 44.64 249.666495)">acceptance r4</text>
+   </g>
+   <g id="PathCollection_25">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="216.23616" y="247.104" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_26">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="250.555392" y="247.104" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_27">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="284.874624" y="247.104" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_28">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="319.193856" y="247.104" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_29">
+    <defs>
+     <path id="mc185eea259" d="M 0 9.746794 
+C 2.58488 9.746794 5.064238 8.719811 6.892024 6.892024 
+C 8.719811 5.064238 9.746794 2.58488 9.746794 0 
+C 9.746794 -2.58488 8.719811 -5.064238 6.892024 -6.892024 
+C 5.064238 -8.719811 2.58488 -9.746794 0 -9.746794 
+C -2.58488 -9.746794 -5.064238 -8.719811 -6.892024 -6.892024 
+C -8.719811 -5.064238 -9.746794 -2.58488 -9.746794 0 
+C -9.746794 2.58488 -8.719811 5.064238 -6.892024 6.892024 
+C -5.064238 8.719811 -2.58488 9.746794 0 9.746794 
+z
+" style="stroke: #b9c1cc; stroke-width: 0.8"/>
+    </defs>
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#mc185eea259" x="353.513088" y="247.104" style="fill: #b9c1cc; stroke: #b9c1cc; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_30">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="387.83232" y="247.104" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_31">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="422.151552" y="247.104" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="464.773824" y="249.303707" transform="rotate(-0 464.773824 249.303707)">7</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="285.781695" transform="rotate(-0 44.64 285.781695)">acceptance r5</text>
+   </g>
+   <g id="PathCollection_32">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="216.23616" y="283.2192" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_33">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="250.555392" y="283.2192" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_34">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="284.874624" y="283.2192" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_35">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="319.193856" y="283.2192" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_36">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="353.513088" y="283.2192" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_37">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="387.83232" y="283.2192" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_38">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="422.151552" y="283.2192" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="464.773824" y="285.418907" transform="rotate(-0 464.773824 285.418907)">7</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="321.896895" transform="rotate(-0 44.64 321.896895)">key material</text>
+   </g>
+   <g id="PathCollection_39">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="216.23616" y="319.3344" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_40">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m179864b2c1" x="250.555392" y="319.3344" style="fill: #d08c1e; stroke: #d08c1e; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="293.177664" y="321.534107" transform="rotate(-0 293.177664 321.534107)">2</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="358.012095" transform="rotate(-0 44.64 358.012095)">design series</text>
+   </g>
+   <g id="PathCollection_41">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m483942cc46" x="216.23616" y="355.4496" style="fill: #e6e9ee; stroke: #e6e9ee; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="258.858432" y="357.649307" transform="rotate(-0 258.858432 357.649307)">1</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 9.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="44.64" y="394.127295" transform="rotate(-0 44.64 394.127295)">repository</text>
+   </g>
+   <g id="PathCollection_42">
+    <g clip-path="url(#p9a9f1b562b)">
+     <use xlink:href="#m35067a6ed5" x="216.23616" y="391.5648" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 8.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="258.858432" y="393.764507" transform="rotate(-0 258.858432 393.764507)">1</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_2">
+    <path d="M 632.19168 247.104 
+L 858.78432 247.104 
+Q 866.016 247.104 866.016 236.26944 
+L 866.016 84.5856 
+Q 866.016 73.75104 858.78432 73.75104 
+L 632.19168 73.75104 
+Q 624.96 73.75104 624.96 84.5856 
+L 624.96 236.26944 
+Q 624.96 247.104 632.19168 247.104 
+z
+" clip-path="url(#p49ad4cedb9)" style="fill: #fbf7ef; stroke: #b9c1cc; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 632.19168 348.22656 
+L 858.78432 348.22656 
+Q 866.016 348.22656 866.016 337.392 
+L 866.016 272.38464 
+Q 866.016 261.55008 858.78432 261.55008 
+L 632.19168 261.55008 
+Q 624.96 261.55008 624.96 272.38464 
+L 624.96 337.392 
+Q 624.96 348.22656 632.19168 348.22656 
+z
+" clip-path="url(#p49ad4cedb9)" style="fill: #1b2a49; stroke: #1b2a49; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 10.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="637.0128" y="86.39136" transform="rotate(-0 637.0128 86.39136)">Open on the live tracker, 2026-09-26</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(637.0128 114.266726)">Before the smoke proof (#2; #3): the elevated</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(637.0128 122.720093)">    one-cell run itself, and the machine-wide trace</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(637.0128 130.944125)">    provider the consumer must scope.</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(637.0128 153.993446)">Unbuilt before the route gate (#7, #18, #19, #20, #21, #22): the</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(637.0128 162.406438)">    per-witness exactness runner, the three carriers</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(637.0128 170.779055)">    that are the experiment's subject, the 100-cell</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(637.0128 179.192048)">    grid runner, the provider route client.</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="637.0128" y="203.974855" transform="rotate(-0 637.0128 203.974855)">A review gate still owed (#1).</text>
+   </g>
+   <g id="text_23">
+    <text style="font-style: italic; font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #5a6473" transform="translate(637.0128 226.232159)">23 open of 32 filed; 9 closed since the</text>
+    <text style="font-style: italic; font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #5a6473" transform="translate(637.0128 234.619026)">    committed snapshot.</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #b9c1cc" x="745.488" y="281.41344" transform="rotate(-0 745.488 281.41344)">readiness word the verifier prints today</text>
+   </g>
+   <g id="text_25">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #ffffff" x="745.488" y="310.3056" transform="rotate(-0 745.488 310.3056)">BUILD IMPLEMENTED</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 8.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #ffffff" x="745.488" y="335.58624" transform="rotate(-0 745.488 335.58624)">PRODUCTION AUTHORITY NOT ACTIVATED</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(624.96 376.101926)">Today's run of the repository (26 September 2026):</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(624.96 384.595668)">601 tests, all passing; bundle verifier exit 0;</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(624.96 393.08941)">frozen 156 of 156; build 289 of 289;</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(624.96 401.313442)">ledger 118 invariants over 289 witnesses.</text>
+   </g>
+  </g>
+  <g id="patch_4">
+   <path d="M 49.9968 448.5888 
+C 51.41744 448.5888 52.780085 448.28838 53.78463 447.753703 
+C 54.789174 447.219026 55.3536 446.493747 55.3536 445.7376 
+C 55.3536 444.981453 54.789174 444.256174 53.78463 443.721497 
+C 52.780085 443.18682 51.41744 442.8864 49.9968 442.8864 
+C 48.57616 442.8864 47.213515 443.18682 46.20897 443.721497 
+C 45.204426 444.256174 44.64 444.981453 44.64 445.7376 
+C 44.64 446.493747 45.204426 447.219026 46.20897 447.753703 
+C 47.213515 448.28838 48.57616 448.5888 49.9968 448.5888 
+z
+" style="fill: #1b2a49; stroke: #1b2a49; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_5">
+   <path d="M 174.9888 448.5888 
+C 176.40944 448.5888 177.772085 448.28838 178.77663 447.753703 
+C 179.781174 447.219026 180.3456 446.493747 180.3456 445.7376 
+C 180.3456 444.981453 179.781174 444.256174 178.77663 443.721497 
+C 177.772085 443.18682 176.40944 442.8864 174.9888 442.8864 
+C 173.56816 442.8864 172.205515 443.18682 171.20097 443.721497 
+C 170.196426 444.256174 169.632 444.981453 169.632 445.7376 
+C 169.632 446.493747 170.196426 447.219026 171.20097 447.753703 
+C 172.205515 448.28838 173.56816 448.5888 174.9888 448.5888 
+z
+" style="fill: #d08c1e; stroke: #d08c1e; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_6">
+   <path d="M 299.9808 448.5888 
+C 301.40144 448.5888 302.764085 448.28838 303.76863 447.753703 
+C 304.773174 447.219026 305.3376 446.493747 305.3376 445.7376 
+C 305.3376 444.981453 304.773174 444.256174 303.76863 443.721497 
+C 302.764085 443.18682 301.40144 442.8864 299.9808 442.8864 
+C 298.56016 442.8864 297.197515 443.18682 296.19297 443.721497 
+C 295.188426 444.256174 294.624 444.981453 294.624 445.7376 
+C 294.624 446.493747 295.188426 447.219026 296.19297 447.753703 
+C 297.197515 448.28838 298.56016 448.5888 299.9808 448.5888 
+z
+" style="fill: #b9c1cc; stroke: #b9c1cc; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_7">
+   <path d="M 424.9728 448.5888 
+C 426.39344 448.5888 427.756085 448.28838 428.76063 447.753703 
+C 429.765174 447.219026 430.3296 446.493747 430.3296 445.7376 
+C 430.3296 444.981453 429.765174 444.256174 428.76063 443.721497 
+C 427.756085 443.18682 426.39344 442.8864 424.9728 442.8864 
+C 423.55216 442.8864 422.189515 443.18682 421.18497 443.721497 
+C 420.180426 444.256174 419.616 444.981453 419.616 445.7376 
+C 419.616 446.493747 420.180426 447.219026 421.18497 447.753703 
+C 422.189515 448.28838 423.55216 448.5888 424.9728 448.5888 
+z
+" style="fill: #e6e9ee; stroke: #e6e9ee; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_8">
+   <path d="M 549.9648 449.7768 
+C 551.977373 449.7768 553.907788 449.351204 555.330892 448.593746 
+C 556.753996 447.836287 557.5536 446.808808 557.5536 445.7376 
+C 557.5536 444.666392 556.753996 443.638913 555.330892 442.881454 
+C 553.907788 442.123996 551.977373 441.6984 549.9648 441.6984 
+C 547.952227 441.6984 546.021812 442.123996 544.598708 442.881454 
+C 543.175604 443.638913 542.376 444.666392 542.376 445.7376 
+C 542.376 446.808808 543.175604 447.836287 544.598708 448.593746 
+C 546.021812 449.351204 547.952227 449.7768 549.9648 449.7768 
+L 549.9648 449.7768 
+z
+" style="fill: none; stroke: #22262e; stroke-width: 1.2; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_9">
+   <path d="M 549.9648 448.1136 
+C 551.148667 448.1136 552.284205 447.86325 553.121325 447.417686 
+C 553.958445 446.972122 554.4288 446.367723 554.4288 445.7376 
+C 554.4288 445.107477 553.958445 444.503078 553.121325 444.057514 
+C 552.284205 443.61195 551.148667 443.3616 549.9648 443.3616 
+C 548.780933 443.3616 547.645395 443.61195 546.808275 444.057514 
+C 545.971155 444.503078 545.5008 445.107477 545.5008 445.7376 
+C 545.5008 446.367723 545.971155 446.972122 546.808275 447.417686 
+C 547.645395 447.86325 548.780933 448.1136 549.9648 448.1136 
+z
+" style="fill: #1b2a49; stroke: #1b2a49; stroke-linejoin: miter"/>
+  </g>
+  <g id="text_28">
+   <text style="font-size: 16px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="35.712" y="21.384" transform="rotate(-0 35.712 21.384)">Where the arc stands: the committed tracker of 2026-08-15 beside the live tracker of</text>
+  </g>
+  <g id="text_29">
+   <text style="font-size: 16px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="35.712" y="37.5408" transform="rotate(-0 35.712 37.5408)">2026-09-26</text>
+  </g>
+  <g id="text_30">
+   <text style="font-size: 9.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="35.712" y="55.1232" transform="rotate(-0 35.712 55.1232)">Committed tracker: 29 items: 11 closed, 2 void or superseded, 1 half closed, 15 open. Live tracker: 32 issues: 23 open, 9 closed. Left: the committed tracker file,</text>
+  </g>
+  <g id="text_31">
+   <text style="font-size: 9.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="35.712" y="66.528" transform="rotate(-0 35.712 66.528)">one dot per item as it stood on its own date; an outer ring marks the items it calls load-bearing. Right: what the repository's issue tracker says stands between</text>
+  </g>
+  <g id="text_32">
+   <text style="font-size: 9.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="35.712" y="77.9328" transform="rotate(-0 35.712 77.9328)">today and a paid run.</text>
+  </g>
+  <g id="text_33">
+   <text style="font-size: 8px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="60.7104" y="447.7576" transform="rotate(-0 60.7104 447.7576)">closed or discharged</text>
+  </g>
+  <g id="text_34">
+   <text style="font-size: 8px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="185.7024" y="447.729709" transform="rotate(-0 185.7024 447.729709)">open</text>
+  </g>
+  <g id="text_35">
+   <text style="font-size: 8px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="310.6944" y="447.899553" transform="rotate(-0 310.6944 447.899553)">half closed</text>
+  </g>
+  <g id="text_36">
+   <text style="font-size: 8px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="435.6864" y="447.77885" transform="rotate(-0 435.6864 447.77885)">void or superseded</text>
+  </g>
+  <g id="text_37">
+   <text style="font-size: 8px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="562.464" y="447.7576" transform="rotate(-0 562.464 447.7576)">load-bearing (outer ring)</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p9a9f1b562b">
+   <rect x="44.64" y="66.528" width="553.536" height="361.152"/>
+  </clipPath>
+  <clipPath id="p49ad4cedb9">
+   <rect x="624.96" y="66.528" width="241.056" height="361.152"/>
+  </clipPath>
+ </defs>
+</svg>

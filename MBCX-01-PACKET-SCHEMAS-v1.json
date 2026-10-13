@@ -1,0 +1,95 @@
+{
+  "contract_id": "MBCX-01-PACKET-SCHEMAS-v1",
+  "normative": true,
+  "json_schema_draft": "https://json-schema.org/draft/2020-12/schema",
+  "shared_definitions": {
+    "SemanticId": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Z0-9][A-Z0-9:._/-]*$"},
+    "Sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+    "UtcTime": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "SafeInteger": {"type": "integer", "minimum": -9007199254740991, "maximum": 9007199254740991}
+  },
+  "schemas": {
+    "DecisionPacketV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "condition", "cut", "objects", "available_action_ids", "observation", "packet_hash"],
+      "properties": {
+        "schema_id": {"const": "DecisionPacketV2"},
+        "scenario_id": {"$ref": "#/shared_definitions/SemanticId"},
+        "condition": {"enum": ["BC", "OM"]},
+        "cut": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["journal_seq", "knowledge_time", "valid_time"],
+          "properties": {
+            "journal_seq": {"$ref": "#/shared_definitions/SafeInteger"},
+            "knowledge_time": {"$ref": "#/shared_definitions/UtcTime"},
+            "valid_time": {"$ref": "#/shared_definitions/UtcTime"}
+          }
+        },
+        "objects": {"type": "array", "maxItems": 256, "items": {"type": "object", "additionalProperties": false, "required": ["object_id", "object_kind", "fields", "source_event_ids"], "properties": {"object_id": {"$ref": "#/shared_definitions/SemanticId"}, "object_kind": {"enum": ["FACT", "OBLIGATION", "DEPENDENCY", "HANDOFF", "OBSERVATION"]}, "fields": {"type": "object"}, "source_event_ids": {"type": "array", "maxItems": 64, "items": {"$ref": "#/shared_definitions/SemanticId"}}}}},
+        "available_action_ids": {"type": "array", "minItems": 2, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/shared_definitions/SemanticId"}},
+        "observation": {"type": "object", "additionalProperties": false, "required": ["observed_at", "code"], "properties": {"observed_at": {"$ref": "#/shared_definitions/UtcTime"}, "code": {"type": "string", "enum": ["NO_CHANGE", "TARGET_VISIBLE", "TARGET_TERMINAL", "DEPENDENCY_BLOCKED"]}}},
+        "packet_hash": {"$ref": "#/shared_definitions/Sha384"}
+      }
+    },
+    "TaskPacketV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "scope_id", "target_obligation_id", "input_packet_hash", "idempotency_key", "available_action_ids", "issued_at"],
+      "properties": {
+        "schema_id": {"const": "TaskPacketV2"},
+        "scenario_id": {"$ref": "#/shared_definitions/SemanticId"},
+        "scope_id": {"$ref": "#/shared_definitions/SemanticId"},
+        "target_obligation_id": {"$ref": "#/shared_definitions/SemanticId"},
+        "input_packet_hash": {"$ref": "#/shared_definitions/Sha384"},
+        "idempotency_key": {"$ref": "#/shared_definitions/SemanticId"},
+        "available_action_ids": {"type": "array", "minItems": 2, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/shared_definitions/SemanticId"}},
+        "issued_at": {"$ref": "#/shared_definitions/UtcTime"}
+      }
+    },
+    "WorkerHandoffV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "scope_id", "input_packet_hash", "proposed_action_ids", "evidence_event_ids", "status_code", "unresolved_item_codes", "warning_codes", "produced_at"],
+      "properties": {
+        "schema_id": {"const": "WorkerHandoffV2"},
+        "scenario_id": {"$ref": "#/shared_definitions/SemanticId"},
+        "scope_id": {"$ref": "#/shared_definitions/SemanticId"},
+        "input_packet_hash": {"$ref": "#/shared_definitions/Sha384"},
+        "proposed_action_ids": {"type": "array", "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/shared_definitions/SemanticId"}},
+        "evidence_event_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/shared_definitions/SemanticId"}},
+        "status_code": {"enum": ["PROPOSE", "ABSTAIN", "REJECT"]},
+        "unresolved_item_codes": {"type": "array", "maxItems": 8, "uniqueItems": true, "items": {"enum": ["MISSING_EVIDENCE", "AMBIGUOUS_SCOPE", "DEPENDENCY_UNRESOLVED", "FRONTIER_LIMIT", "PAGE_FAULT"]}},
+        "warning_codes": {"type": "array", "maxItems": 8, "uniqueItems": true, "items": {"enum": ["STALE_INPUT", "CONFLICT_PRESENT", "PARTIAL_EVIDENCE", "TRANSPORT_METADATA_MISSING"]}},
+        "produced_at": {"$ref": "#/shared_definitions/UtcTime"}
+      }
+    }
+  },
+  "renderer": {
+    "canonicalizer": "RFC 8785 over schema-valid object before padding",
+    "outer_key_order": ["schema_id", "scenario_id", "condition", "cut", "objects", "available_action_ids", "observation", "packet_hash"],
+    "object_order": "object_id UTF8-bytewise ascending",
+    "action_order": "action_id UTF8-bytewise ascending",
+    "instructions_id": "MBCX01-STAGE2-SYSTEM-v2",
+    "descriptions_id": "MBCX01-STAGE2-FIELDS-v2",
+    "padding": "append U+0020 after canonical JSON to the fixed byte envelope; padding is outside packet_hash and inside served-input hash",
+    "fixed_byte_envelope": 65536,
+    "maximum_output_tokens": 512,
+    "transport_settings": {"temperature": 0, "top_p": 1, "tools": "none", "response_format": "strict schema"},
+    "discriminator": {
+      "kind": "deterministic_unpaid",
+      "features": ["served_byte_length", "token_count", "key_positions", "action_positions", "padding_length"],
+      "classifier": "exact-match lookup trained on half of ID-permuted Stage-0 fixtures and tested on the disjoint half",
+      "pass": "accuracy confidence interval contains 0.5 and upper bound <= 0.55"
+    },
+    "id_permutation_required": true,
+    "id_permutation": "independent SHA256-derived bijection per fixture applied to every public semantic ID before BC/OM rendering"
+  },
+  "parity": {
+    "BC_OM_required_equal": ["outer keys", "field descriptions", "system instructions", "user instructions", "action order", "output schema", "byte envelope", "transport settings"],
+    "byte_identical_inputs_share_one_stochastic_call": true,
+    "served_input_hash": "SHA-384 over exact UTF-8 bytes sent to provider"
+  },
+  "red_witnesses": ["RENDER_ID_LEAKAGE"]
+}

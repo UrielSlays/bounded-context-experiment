@@ -1,0 +1,263 @@
+{
+    "manifest_id":  "MBCX-01-R12-PIN-MANIFEST",
+    "created_at":  "2026-08-13T00:00:00.000000Z",
+    "normative":  true,
+    "governing_commit":  "235f37bcbf213e6700c30333d6fee6a68f0886b6",
+    "hash_algorithm":  "SHA-384",
+    "git_object_algorithm":  "SHA-1 as configured by this repository",
+    "governing_commit_binding":  "Every subject resolves as governing_commit:path and must match git_blob, bytes, LF count and SHA-384 before import or execution.",
+    "manifest_self_binding":  "The council packet pins this file by Git blob; this manifest does not self-hash.",
+    "paid_calls":  0,
+    "experiment_executed":  false,
+    "physical_harness_executed":  false,
+    "subjects":  [
+                     {
+                         "path":  "MBCX-01-EXPERIMENT-DESIGN-r9.md",
+                         "bytes":  6167,
+                         "lines":  74,
+                         "lf_count":  74,
+                         "sha384":  "F2085646250FD078FB6DA3375754F6829334A30A3A41FCBD053D051AD90354145940B8F0FFE558373D0562B09E4393FF",
+                         "git_blob":  "dcff8ad4f534c405c077581cd1b298dccbdebc17"
+                     },
+                     {
+                         "path":  "MBCX-01-COUNCIL-R11-SYNTHESIS-AND-DISPOSITION.md",
+                         "bytes":  7689,
+                         "lines":  54,
+                         "lf_count":  54,
+                         "sha384":  "C7CFCF002F3CAEF90EB535AAB3C2E9885FD7E6FEA2F0DF1AF7E94DECCFE469300B43E6A1748529B9B6042E21F2CCD4AD",
+                         "git_blob":  "222a5faf2b16895beaabd48dbc7cf0d7c13ad8c2"
+                     },
+                     {
+                         "path":  "MBCX-01-R12-ARCHITECTURE-SPEC.md",
+                         "bytes":  10090,
+                         "lines":  120,
+                         "lf_count":  120,
+                         "sha384":  "8659AF895B3AD1765740916FD9BD339BE92F7B7D364A8FC5A8F397B8978C99B557B6A789D599FDBCF704CAD0F6D09AF6",
+                         "git_blob":  "bc9f5d561182f8faf62e340be3ab676c3927def5"
+                     },
+                     {
+                         "path":  "MBCX-01-R12-PRIOR-ART-AND-SHELF-MEMO.md",
+                         "bytes":  8692,
+                         "lines":  133,
+                         "lf_count":  133,
+                         "sha384":  "7EDE2CBDC16C9BE3311E305A8A46DD351DBA9DC33CF37BC61CF00B41FC3F538E8FC67F70EF8F39894BF172FCA5B35663",
+                         "git_blob":  "870f359c6f5850095ab9221997254a3caae1d9a0"
+                     },
+                     {
+                         "path":  "MBCX-01-R12-PHYSICAL-HARNESS-REQUIREMENTS.md",
+                         "bytes":  6028,
+                         "lines":  76,
+                         "lf_count":  76,
+                         "sha384":  "A2DAEA77DED8EBF758B0F953DCCD2151FA6A5A538912A741EF3D3D99C91A123EA7EC28B2296A580A8A86FD9643ABBE86",
+                         "git_blob":  "a8990e5e58b7a3a60b7ae83f4e260b9aac278e75"
+                     },
+                     {
+                         "path":  "MBCX-01-R12-SYNTHETIC-COHORT-GENERATOR.json",
+                         "bytes":  600,
+                         "lines":  18,
+                         "lf_count":  18,
+                         "sha384":  "08AA729E2D4239424EB6E567F7259E05C2FBDF666F1D9D144B75927A6A40139167C9A1CA01269766B5D38EBFB0294299",
+                         "git_blob":  "2ee97a670eb5f72b64bb9f8e12d760a8d5af4cb5"
+                     },
+                     {
+                         "path":  "MBCX-01-R12-MEASUREMENT-TRUST-ROOTS.json",
+                         "bytes":  365,
+                         "lines":  12,
+                         "lf_count":  12,
+                         "sha384":  "344C51A685043FEB352F18F92EA41A31F995997282841C5BC522F5052F1385D7C6191BEFCD2806B9F63EA66DBB54300A",
+                         "git_blob":  "83e46a1419c7e35f7237dd10dc0b34977fa692b8"
+                     },
+                     {
+                         "path":  "MBCX-01-STATE-TRANSITION-CONTRACT-v7.json",
+                         "bytes":  15348,
+                         "lines":  103,
+                         "lf_count":  103,
+                         "sha384":  "82334E4D6DC328F754E9A7F2C20403D07EC13354E9981CD3F02CB3FCDABD6978AE59F11525633B746AAF15398748390A",
+                         "git_blob":  "67b8843cc7f4dadcf5aabd5b02403a69580608f7"
+                     },
+                     {
+                         "path":  "MBCX-01-PACKET-SCHEMAS-v6.json",
+                         "bytes":  13683,
+                         "lines":  88,
+                         "lf_count":  88,
+                         "sha384":  "C4D8F507637F439F8BE9ED91E5B72A125E712A09347DF302EECAA6C388A068E7B1A6366E0C6549E8C5F42122535FDE58",
+                         "git_blob":  "2085b8f2c48234091e0e7b6e6d8cddf18212e1c6"
+                     },
+                     {
+                         "path":  "MBCX-01-MEASUREMENT-CONTRACT-v6.json",
+                         "bytes":  9819,
+                         "lines":  147,
+                         "lf_count":  147,
+                         "sha384":  "384551391E570A671AD9E381F94BD282B61B17789FF32DB3DA92C4B33BC5E6F0380289FA1C390A5141A1B910C4A4D21C",
+                         "git_blob":  "a1350881e5db0823ba8bf24b00d40c422a453d70"
+                     },
+                     {
+                         "path":  "MBCX-01-INFERENCE-CONTRACT-v7.json",
+                         "bytes":  3579,
+                         "lines":  79,
+                         "lf_count":  79,
+                         "sha384":  "E15BB57236D8AE5F3A9BD2A6CBBAED94900A6BDE30C0829DD4E04B0AA9AFA70B6AD7D4A7747068B2344D098A740A004A",
+                         "git_blob":  "3126725bcec3eaeaf8b16a4fe1938f7082d0bc5a"
+                     },
+                     {
+                         "path":  "MBCX-01-R12-REPAIR-LEDGER.json",
+                         "bytes":  9738,
+                         "lines":  118,
+                         "lf_count":  118,
+                         "sha384":  "0A66DA244E0EDE72DC9A97B37046595A503C9E9DC2CE87E451703A62AEF67BDD1503723C06BE71BD6633BE297477D110",
+                         "git_blob":  "13a74c7e89ef4ea0d0c885bdebeee001ec5d768b"
+                     },
+                     {
+                         "path":  "MBCX-01-R12-NO-PAID-VERIFICATION.json",
+                         "bytes":  4022,
+                         "lines":  130,
+                         "lf_count":  130,
+                         "sha384":  "17D26C7E1E0A1092CEC030AA5059109C78124F519D217FF82BA22390F7317FD1429E57E7B28717040D4601176B8E0AD1",
+                         "git_blob":  "e391e9dd1882aed5b98140b52e502a3e2b0518f3"
+                     },
+                     {
+                         "path":  "mbcx01_r12_common.py",
+                         "bytes":  22730,
+                         "lines":  425,
+                         "lf_count":  425,
+                         "sha384":  "E029AA7DFD9F71561C5038D63E497F1E1D3A1638F97B162234CE825DD25E5FE79564F4CD44696E59CE057CF87AC81ADC",
+                         "git_blob":  "53991e11787854141f81259bea8beb3d5118c5ca"
+                     },
+                     {
+                         "path":  "mbcx01_r12_state_reference.py",
+                         "bytes":  26254,
+                         "lines":  450,
+                         "lf_count":  450,
+                         "sha384":  "D17082FB47A5240D9DDACA1C97DBC63910A139A68A093DCBF85C08F5AD0F968729ADE12DF4A3CFDEB5455C5BD1F6F479",
+                         "git_blob":  "054ea8fcf4f7ede2d3591e22877ff7a48c724302"
+                     },
+                     {
+                         "path":  "mbcx01_r12_state_oracle.py",
+                         "bytes":  28091,
+                         "lines":  627,
+                         "lf_count":  627,
+                         "sha384":  "7904040E5230AA910DCD5A2906ED1F612430FC142E61B11C3138DD56011CA3D5D38EB7E423FA3F02622503BFAA773213",
+                         "git_blob":  "928c46dba58393c99a2f2fd6878c63a84cd37993"
+                     },
+                     {
+                         "path":  "mbcx01_r12_packets.py",
+                         "bytes":  48020,
+                         "lines":  827,
+                         "lf_count":  827,
+                         "sha384":  "D15E184D705C73973A5D6DC09BC82502DD766947A746B808E8C5C4BCCF1F0A6FCC8E5FD82BAB3435BDB1A768E7105F06",
+                         "git_blob":  "f5ce9e04403747ec733aa9d6d84cc8c3ea5feba3"
+                     },
+                     {
+                         "path":  "mbcx01_r12_measurement.py",
+                         "bytes":  37429,
+                         "lines":  692,
+                         "lf_count":  692,
+                         "sha384":  "163610476D85B7C74DEA5907A048E82C7DB97A5F3E2B52CDBDEF0B35F9A76EA26663896D2E7588A7DEABD121573FE2AC",
+                         "git_blob":  "1a91b6a1904cda1beca95613c7d3b0c6e83ac31a"
+                     },
+                     {
+                         "path":  "mbcx01_r12_inference.py",
+                         "bytes":  19115,
+                         "lines":  391,
+                         "lf_count":  391,
+                         "sha384":  "35B800A41EF0E9A810F3123D2599FAA3B641018BEAC6D51221B0B2E4E971073AAB61ABBB6B3248032298969FE676E56D",
+                         "git_blob":  "0a9f9f7ff78a2ff1d6d6b941977983a2a0cbc146"
+                     },
+                     {
+                         "path":  "mbcx01_r12_integration.py",
+                         "bytes":  8883,
+                         "lines":  164,
+                         "lf_count":  164,
+                         "sha384":  "53C1BBFAA282A15D02513A33E30DC7D74371D244241BC285F186D14D2EFB6C06FE7A011E95051236030A00DFA9B4EC93",
+                         "git_blob":  "f1fa58994521414784deb0972262d724682add3e"
+                     },
+                     {
+                         "path":  "test_mbcx01_r12_state.py",
+                         "bytes":  45569,
+                         "lines":  787,
+                         "lf_count":  787,
+                         "sha384":  "9D8B2EC7B4EAA9D6D6C8D7969F63891B57F4CF38CCA403233D959C924369078C9464E969CD46B28D30F8825E61C5F9D6",
+                         "git_blob":  "53f88aca0f93845540dee6147ec4c933b11eac83"
+                     },
+                     {
+                         "path":  "test_mbcx01_r12_packets.py",
+                         "bytes":  17096,
+                         "lines":  300,
+                         "lf_count":  300,
+                         "sha384":  "EC2C10790A4F66988CA871FCF17E14D141B5AC8DDC8AE81AEDF670CC4F6F61E09BBECD806719F19973E86936FC319905",
+                         "git_blob":  "adc42bc1e01dd88c8efa9d83c230b88ca44b1d8c"
+                     },
+                     {
+                         "path":  "test_mbcx01_r12_measurement.py",
+                         "bytes":  16217,
+                         "lines":  316,
+                         "lf_count":  316,
+                         "sha384":  "C22BA49B27E519F0CA8169ACDA2EF398343CFFA979E09536E5CF6943399343D154CE5F8B298504A566BF6B71AD10AD82",
+                         "git_blob":  "02e96322bb16169d6a2adfe65aed9e0f61f00b28"
+                     },
+                     {
+                         "path":  "test_mbcx01_r12_inference.py",
+                         "bytes":  4331,
+                         "lines":  87,
+                         "lf_count":  87,
+                         "sha384":  "9BA543EE819CD589FA8D1C9D823C7E200A2AB59036EAA9B9713BB98C9E33C473F04DAC4270336F24C4B92D5D0A06ADAD",
+                         "git_blob":  "54123207d718b5b0a019ad5f0f80460e80e2acd8"
+                     },
+                     {
+                         "path":  "test_mbcx01_r12_integration.py",
+                         "bytes":  2069,
+                         "lines":  44,
+                         "lf_count":  44,
+                         "sha384":  "253F65985FB6FA32DA819C77C7B295C54B80DD5F90B8536ABC8BA4E532CF135B951C196736D545AB06C11497B21D20DE",
+                         "git_blob":  "d3e2ed5ad520cea94eaa139a23f80751253adb55"
+                     },
+                     {
+                         "path":  "verify-r12-normative-bundle.py",
+                         "bytes":  11936,
+                         "lines":  261,
+                         "lf_count":  261,
+                         "sha384":  "C0CAF95380EFF55E8412B1FE5287338DF2381C40ED63ADDDB17B8F35F57410E219D9D28107970D4B9D691FDADBCE2286",
+                         "git_blob":  "e9c42e812759542a4dd0c3e8db10949c57e108a5"
+                     },
+                     {
+                         "path":  "verify-r12-schema-ajv.mjs",
+                         "bytes":  2517,
+                         "lines":  63,
+                         "lf_count":  63,
+                         "sha384":  "A0B5545D5289AA4C37E8B595DE662F15291ECC8FD44DF466F84C98C9487E23D446DB17B6165D426F0801CDA7C088F7B7",
+                         "git_blob":  "8088e6dd46966b37f6c75a9501d66098e05851d6"
+                     },
+                     {
+                         "path":  "verify-r12-receipt-signature.mjs",
+                         "bytes":  1146,
+                         "lines":  32,
+                         "lf_count":  32,
+                         "sha384":  "C995F8DBAA2483B6732FE523E137F45DC0B8B398AEAEAEFE266F7228D527F0E144E48B8F22D17D22429BE34417E9E83B",
+                         "git_blob":  "b7f0a5711280356226f90db288a93e082e837193"
+                     },
+                     {
+                         "path":  "vendor/ajv-r12.bundle.cjs",
+                         "bytes":  274585,
+                         "lines":  7144,
+                         "lf_count":  7144,
+                         "sha384":  "D9F48D19276B9ADBEA5A72BDB72F4882C2069B19305505454EB406674E8B338AEC24873F7B679BEB8C2D39F32EAB49C5",
+                         "git_blob":  "fb4622d52372fea52b5ffb86f6cbb23fa783a583"
+                     },
+                     {
+                         "path":  "verify-r12-pinned.ps1",
+                         "bytes":  5001,
+                         "lines":  102,
+                         "lf_count":  102,
+                         "sha384":  "5EA3C554CBB3983D374A3BF3FC0DF080ACF52F47BB2845F6988415FAB938463604858314416A4CB2A2096EFE89C47755",
+                         "git_blob":  "2b575b10f3c00c7a3ac79a39e54693104443f330"
+                     },
+                     {
+                         "path":  "test-r12-normative-bundle.ps1",
+                         "bytes":  336,
+                         "lines":  13,
+                         "lf_count":  13,
+                         "sha384":  "D54C1F6D93B8C507BB6D989A0BFD64E046507B874BE8DFA24B80618E2E3676CFB0B5845DBF95AA21419C962693915245",
+                         "git_blob":  "60deaddcbb6fcfda7ee3baebb2933e2562afaf4d"
+                     }
+                 ]
+}

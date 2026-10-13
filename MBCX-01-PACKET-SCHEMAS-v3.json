@@ -1,0 +1,161 @@
+{
+  "contract_id": "MBCX-01-PACKET-SCHEMAS-v3",
+  "normative": true,
+  "json_schema_draft": "https://json-schema.org/draft/2020-12/schema",
+  "validator_runtime": {
+    "engine": "Ajv",
+    "version": "8.20.0",
+    "dialect": "draft-2020-12",
+    "package_json_sha384": "0AF330905106D4E03139621669897AF6C79D138E739FFB3519C98215672F3C922104E1376BD26985EBD921D0209DD66D",
+    "tree_hash_algorithm": "for every regular file in UTF-8 relative-path byte order: uint64be(path byte length), path UTF-8, uint64be(content byte length), content; uppercase SHA-384 over the concatenation",
+    "runtime_closure": {
+      "ajv": {"version": "8.20.0", "files": 466, "tree_sha384": "90263B4885A2D165C28E817F80C4CBDB8D649BE25C80D57C7E431B7F2DC66F44EC97AD20B82BFC1303F1B8E1D451892C"},
+      "fast-deep-equal": {"version": "3.1.3", "files": 11, "tree_sha384": "AE3E39E921948FB52792826B889082D90BA9F50004B9EE7652108C2ABA129D4E65F069003300FADEADF2050896CBF7D6"},
+      "fast-uri": {"version": "3.1.2", "files": 34, "tree_sha384": "9BA99CD8341DC889B2D8489EFAE6CF65FA13413F83BCDE1B077659123BE7DBE4EF5E0CA3A4C5F6F36BCE6DE3254E829D"},
+      "json-schema-traverse": {"version": "1.0.0", "files": 12, "tree_sha384": "D10792A9F57EE9AEA90EDF1EC1188A39C566ECE040C31A4BFBCD756A2BDDF89CFA27629AF04C0ADDED3399BEEBD367CB"},
+      "require-from-string": {"version": "2.0.2", "files": 4, "tree_sha384": "623220B28B016FDE4296A1954EB28D3548CC148FDD81A89B45E9C555CDBC8119152F767F1CFE60221D50F33A538DAE28"}
+    },
+    "evidence": "the r9 verifier authenticates and executes the pinned Ajv runtime closure in addition to its independent semantic validator"
+  },
+  "$defs": {
+    "SemanticId": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Z0-9][A-Z0-9:._/-]*$"},
+    "ActionId": {"type": "string", "pattern": "^(NO_ACTION|ACT\\.[0-9A-F]{64})$"},
+    "HashedActionId": {"type": "string", "pattern": "^ACT\\.[0-9A-F]{64}$"},
+    "Sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+    "UtcTime": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z$"},
+    "SafeInteger": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+    "Cut": {
+      "type": "object", "additionalProperties": false,
+      "required": ["journal_seq", "knowledge_time", "valid_time"],
+      "properties": {
+        "journal_seq": {"$ref": "#/$defs/SafeInteger"},
+        "knowledge_time": {"$ref": "#/$defs/UtcTime"},
+        "valid_time": {"$ref": "#/$defs/UtcTime"}
+      }
+    },
+    "FactObject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["object_id", "object_kind", "fields", "source_event_ids"],
+      "properties": {
+        "object_id": {"$ref": "#/$defs/SemanticId"},
+        "object_kind": {"const": "FACT"},
+        "fields": {"type": "object", "additionalProperties": false,
+          "required": ["subject_id", "predicate_id", "value_code", "current_event_id"],
+          "properties": {"subject_id": {"$ref": "#/$defs/SemanticId"}, "predicate_id": {"$ref": "#/$defs/SemanticId"}, "value_code": {"$ref": "#/$defs/SemanticId"}, "current_event_id": {"$ref": "#/$defs/SemanticId"}}},
+        "source_event_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}
+      }
+    },
+    "ObligationObject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["object_id", "object_kind", "fields", "source_event_ids"],
+      "properties": {
+        "object_id": {"$ref": "#/$defs/SemanticId"},
+        "object_kind": {"const": "OBLIGATION"},
+        "fields": {"type": "object", "additionalProperties": false,
+          "required": ["scope_id", "subject_id", "owner_role", "due_at", "critical", "lifecycle", "completion_action_id", "prerequisite_obligation_ids"],
+          "properties": {"scope_id": {"$ref": "#/$defs/SemanticId"}, "subject_id": {"$ref": "#/$defs/SemanticId"}, "owner_role": {"enum": ["CONDUCTOR", "WORKER", "WRITER"]}, "due_at": {"$ref": "#/$defs/UtcTime"}, "critical": {"type": "boolean"}, "lifecycle": {"enum": ["OPEN", "COMPLETED", "CANCELLED"]}, "completion_action_id": {"$ref": "#/$defs/HashedActionId"}, "prerequisite_obligation_ids": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}}},
+        "source_event_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}
+      }
+    },
+    "DependencyObject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["object_id", "object_kind", "fields", "source_event_ids"],
+      "properties": {"object_id": {"$ref": "#/$defs/SemanticId"}, "object_kind": {"const": "DEPENDENCY"}, "fields": {"type": "object", "additionalProperties": false, "required": ["scope_id", "obligation_id", "prerequisite_obligation_id", "satisfied"], "properties": {"scope_id": {"$ref": "#/$defs/SemanticId"}, "obligation_id": {"$ref": "#/$defs/SemanticId"}, "prerequisite_obligation_id": {"$ref": "#/$defs/SemanticId"}, "satisfied": {"type": "boolean"}}}, "source_event_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "HandoffObject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["object_id", "object_kind", "fields", "source_event_ids"],
+      "properties": {"object_id": {"$ref": "#/$defs/SemanticId"}, "object_kind": {"const": "HANDOFF"}, "fields": {"type": "object", "additionalProperties": false, "required": ["scope_id", "target_obligation_id", "status", "originating_cut_hash"], "properties": {"scope_id": {"$ref": "#/$defs/SemanticId"}, "target_obligation_id": {"$ref": "#/$defs/SemanticId"}, "status": {"enum": ["OPEN", "PROPOSED", "COMMITTED", "REJECTED", "CLOSED"]}, "originating_cut_hash": {"$ref": "#/$defs/Sha384"}}}, "source_event_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "ObservationObject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["object_id", "object_kind", "fields", "source_event_ids"],
+      "properties": {"object_id": {"$ref": "#/$defs/SemanticId"}, "object_kind": {"const": "OBSERVATION"}, "fields": {"type": "object", "additionalProperties": false, "required": ["scope_id", "observed_at", "code"], "properties": {"scope_id": {"$ref": "#/$defs/SemanticId"}, "observed_at": {"$ref": "#/$defs/UtcTime"}, "code": {"enum": ["NO_CHANGE", "TARGET_VISIBLE", "TARGET_TERMINAL", "DEPENDENCY_BLOCKED"]}}}, "source_event_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "ActionTargetEntry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["action_id", "action_kind", "scope_id", "obligation_id"],
+      "properties": {"action_id": {"$ref": "#/$defs/HashedActionId"}, "action_kind": {"const": "ACT_ON_OBLIGATION"}, "scope_id": {"$ref": "#/$defs/SemanticId"}, "obligation_id": {"$ref": "#/$defs/SemanticId"}}
+    },
+    "NoActionEntry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["action_id", "action_kind"],
+      "properties": {"action_id": {"const": "NO_ACTION"}, "action_kind": {"const": "NO_ACTION"}}
+    }
+  },
+  "schemas": {
+    "DecisionPacketV3": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "cut", "objects", "action_catalog", "available_action_ids", "observation", "packet_hash"],
+      "properties": {
+        "schema_id": {"const": "DecisionPacketV3"},
+        "scenario_id": {"$ref": "#/$defs/SemanticId"},
+        "cut": {"$ref": "#/$defs/Cut"},
+        "objects": {"type": "array", "maxItems": 64, "items": {"oneOf": [{"$ref": "#/$defs/FactObject"}, {"$ref": "#/$defs/ObligationObject"}, {"$ref": "#/$defs/DependencyObject"}, {"$ref": "#/$defs/HandoffObject"}, {"$ref": "#/$defs/ObservationObject"}]}},
+        "action_catalog": {"type": "array", "minItems": 2, "maxItems": 16, "items": {"oneOf": [{"$ref": "#/$defs/ActionTargetEntry"}, {"$ref": "#/$defs/NoActionEntry"}]}},
+        "available_action_ids": {"type": "array", "minItems": 2, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/ActionId"}},
+        "observation": {"type": "object", "additionalProperties": false, "required": ["scope_id", "observed_at", "code"], "properties": {"scope_id": {"$ref": "#/$defs/SemanticId"}, "observed_at": {"$ref": "#/$defs/UtcTime"}, "code": {"enum": ["NO_CHANGE", "TARGET_VISIBLE", "TARGET_TERMINAL", "DEPENDENCY_BLOCKED"]}}},
+        "packet_hash": {"$ref": "#/$defs/Sha384"}
+      }
+    },
+    "A0ResultV1": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "input_packet_hash", "selected_action_id"],
+      "properties": {"schema_id": {"const": "A0ResultV1"}, "input_packet_hash": {"$ref": "#/$defs/Sha384"}, "selected_action_id": {"$ref": "#/$defs/ActionId"}}
+    },
+    "TaskPacketV3": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "scope_id", "target_obligation_id", "target_action_id", "input_packet_hash", "originating_cut", "originating_cut_hash", "idempotency_key", "available_action_ids", "issued_at", "packet_hash"],
+      "properties": {"schema_id": {"const": "TaskPacketV3"}, "scenario_id": {"$ref": "#/$defs/SemanticId"}, "scope_id": {"$ref": "#/$defs/SemanticId"}, "target_obligation_id": {"$ref": "#/$defs/SemanticId"}, "target_action_id": {"$ref": "#/$defs/HashedActionId"}, "input_packet_hash": {"$ref": "#/$defs/Sha384"}, "originating_cut": {"$ref": "#/$defs/Cut"}, "originating_cut_hash": {"$ref": "#/$defs/Sha384"}, "idempotency_key": {"$ref": "#/$defs/SemanticId"}, "available_action_ids": {"type": "array", "minItems": 2, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/ActionId"}}, "issued_at": {"$ref": "#/$defs/UtcTime"}, "packet_hash": {"$ref": "#/$defs/Sha384"}}
+    },
+    "WorkerHandoffV3": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "scope_id", "input_packet_hash", "status_code", "proposed_action_ids", "evidence_event_ids", "unresolved_item_codes", "warning_codes", "produced_at"],
+      "properties": {"schema_id": {"const": "WorkerHandoffV3"}, "scenario_id": {"$ref": "#/$defs/SemanticId"}, "scope_id": {"$ref": "#/$defs/SemanticId"}, "input_packet_hash": {"$ref": "#/$defs/Sha384"}, "status_code": {"enum": ["PROPOSE", "ABSTAIN", "REJECT"]}, "proposed_action_ids": {"type": "array", "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/$defs/HashedActionId"}}, "evidence_event_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}, "unresolved_item_codes": {"type": "array", "maxItems": 8, "uniqueItems": true, "items": {"enum": ["MISSING_EVIDENCE", "AMBIGUOUS_SCOPE", "DEPENDENCY_UNRESOLVED", "FRONTIER_LIMIT"]}}, "warning_codes": {"type": "array", "maxItems": 8, "uniqueItems": true, "items": {"enum": ["STALE_INPUT", "CONFLICT_PRESENT", "PARTIAL_EVIDENCE", "TRANSPORT_METADATA_MISSING"]}}, "produced_at": {"$ref": "#/$defs/UtcTime"}},
+      "allOf": [
+        {"if": {"properties": {"status_code": {"const": "PROPOSE"}}, "required": ["status_code"]}, "then": {"properties": {"proposed_action_ids": {"minItems": 1}}}},
+        {"if": {"properties": {"status_code": {"enum": ["ABSTAIN", "REJECT"]}}, "required": ["status_code"]}, "then": {"properties": {"proposed_action_ids": {"maxItems": 0}}}}
+      ]
+    },
+    "A1ResultV1": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "input_packet_hash", "selected_action_ids"],
+      "properties": {"schema_id": {"const": "A1ResultV1"}, "input_packet_hash": {"$ref": "#/$defs/Sha384"}, "selected_action_ids": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/HashedActionId"}}}
+    }
+  },
+  "semantic_validator": {
+    "error_codes": ["SCHEMA_INVALID", "DUPLICATE_OBJECT_ID", "DUPLICATE_ACTION_ID", "ACTION_HASH_MISMATCH", "AVAILABLE_ACTION_UNRESOLVED", "CATALOG_ACTION_UNAVAILABLE", "NO_ACTION_KIND_MISMATCH", "ACTION_TARGET_UNRESOLVED", "PREREQUISITE_UNRESOLVED", "SCOPE_MISMATCH", "PACKET_HASH_MISMATCH", "PACKET_ENVELOPE_EXCEEDED"],
+    "order": ["schema", "object_identity", "catalog_identity", "action_hash", "catalog_resolution", "reference_resolution", "scope", "packet_hash", "encoded_bytes"]
+  },
+  "builders": {
+    "BC": "render canonical cut objects named by the frozen candidate-selected public object-ID set",
+    "OM": "render canonical cut objects in the independent gold enumerator read-set",
+    "shared": ["scenario", "cut", "action universe", "neutral schema", "instructions", "field descriptions", "UTF-8 ordering", "padding target", "output schema", "transport settings"],
+    "forbidden": ["condition label", "due label", "gold label", "answer ID", "free text", "transcript", "scratch space"]
+  },
+  "hashing": {
+    "packet_hash_preimage": "complete packet object with packet_hash omitted",
+    "algorithm": "uppercase SHA-384 over RFC8785/JCS UTF-8 bytes",
+    "served_input_hash": "uppercase SHA-384 over exact padded bytes sent to provider"
+  },
+  "renderer": {
+    "fixed_byte_envelope": 65536,
+    "schema_valid_packet_may_exceed_envelope": true,
+    "pre_dispatch_rule": "encoded canonical packet bytes must be strictly less than 65536",
+    "oversize_result": "PACKET_ENVELOPE_EXCEEDED",
+    "oversize_precedence": "DESIGN_OR_IMPLEMENTATION_FAIL before any provider call",
+    "padding": "append U+0020 after canonical packet bytes to the fixed envelope; padding excluded from packet_hash and included in served_input_hash",
+    "instructions_id": "MBCX01-STAGE2-SYSTEM-v4",
+    "descriptions_id": "MBCX01-STAGE2-FIELDS-v4",
+    "maximum_output_tokens": 512,
+    "transport_settings": {"temperature": 0, "top_p": 1, "tools": "none", "response_format": "strict schema"}
+  },
+  "scorer": {
+    "A0_correct": "selected action equals the unique frozen gold action",
+    "B_correct": "proposal is exactly the singleton target action and writer commits exactly that singleton once with no other child",
+    "A1_correct": "selected set equals the independently recomputed post-commit gold set",
+    "condition_success": "A0_correct AND B_correct AND A1_correct",
+    "schema_invalid_output": "observed condition failure, not transport missingness"
+  }
+}

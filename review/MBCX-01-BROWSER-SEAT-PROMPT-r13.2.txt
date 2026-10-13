@@ -1,0 +1,1 @@
+Read and execute this targeted confirmation packet exactly, read-only, with strict lateral seal and no experiment/provider/paid/physical calls: <repo>\MBCX-01-TARGETED-CLOSURE-CONFIRMATION-PACKET-r13.2.md

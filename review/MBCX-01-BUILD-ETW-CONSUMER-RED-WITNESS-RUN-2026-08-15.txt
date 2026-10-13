@@ -1,0 +1,176 @@
+MBCX-01 BUILD B — ETW PMC CONSUMER: RED WITNESS RUN (three live-path defects)
+Date: 2026-08-15
+<personal folder listing redacted from this log>
+Branch: codex/mbcx01-production-build   HEAD at start: 5ba03893b65da9ab3b75476b0a9e740d4935dce9
+Python: Python 3.11.9
+
+⛔ NOTHING IN THIS RUN STARTED AN ETW SESSION, CREATED A JOB OBJECT, TOUCHED A
+   PMU, SET MBCX01_BUILD_ALLOW_PHYSICAL OR RAN run-smoke-cell.ps1. Verified:
+  $ env | grep -i MBCX01_BUILD_ALLOW_PHYSICAL   -> no match (unset)
+   The consumer's OS layer is driven only through a recording fake of the
+   advapi32 trace entry points (`_FakeTraceApi`) and synthetic EVENT_RECORDs.
+
+THE THREE DEFECTS, EACH VERIFIED AT THE BYTE BEFORE ANY FIX WAS WRITTEN
+-----------------------------------------------------------------------
+1. WRONG SDK CONSTANT ON A LIVE PATH
+   mbcx01_build_etw_consumer.py:175   EVENT_HEADER_FLAG_CLASSIC_HEADER = 0x0040
+   C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\evntcons.h:156
+       #define EVENT_HEADER_FLAG_CLASSIC_HEADER        0x0100
+   evntcons.h:154
+       #define EVENT_HEADER_FLAG_64_BIT_HEADER         0x0040   <- what 0x0040 IS
+   Used LIVE at mbcx01_build_etw_consumer.py:1746 (`_on_event_record`), whose
+   failure mode is a bare `return` — a silent record drop.
+   Also wrong, but DEAD (defined, never read):
+     EVENT_HEADER_EXT_TYPE_PROCESS_START_KEY = 0x000A   vs evntcons.h:63  0x000D
+     EVENT_HEADER_EXT_TYPE_EVENT_KEY         = 0x000B   vs evntcons.h:60  0x000A
+   CORRECT and unchanged: EVENT_HEADER_EXT_TYPE_PMC_COUNTERS = 0x0008 (evntcons.h:57).
+
+2. THREAD-LIFETIME JOIN CANNOT SUCCEED
+   mbcx01_build_etw_consumer.py:1833  "process_start_key": None   (every thread event)
+   mbcx01_build_etw_consumer.py:964   assemble_thread_lifetimes() requires a real key
+   mbcx01_build_etw_consumer.py:844-845 _start_key_text(None) -> ETW_PROCESS_START_KEY_INVALID:None
+
+3. LOSS COUNTERS QUERIED AFTER THE SESSION IS STOPPED
+   mbcx01_build_etw_consumer.py:1517-1536  CloseTrace return discarded; join(timeout=30)
+                                           result discarded; _session_handle never invalidated
+   mbcx01_build_etw_consumer.py:1869       capture() calls _query_loss() a SECOND time
+
+HOW THE RED IS PRODUCED AGAINST PRE-FIX BYTES
+---------------------------------------------
+The new witnesses are run against the module as committed at HEAD, by importing
+`git show HEAD:mbcx01_build_etw_consumer.py` (sha256
+4ecbaa18cf9ccf3e23b9716caa0110a8e3690f493036ee102f75cd3252ee43be) ahead of the
+working tree; nothing else is shadowed.
+
+  $ python <scratch>/prefix/run_prefix_red.py
+    (sys.path.insert(0, <scratch>/prefix); sys.path.append(os.getcwd());
+     unittest -v test_mbcx01_build_measurement.BuildEtwConsumerTests
+              -k bw48 -k bw49 -k bw50 -k bw51 -k bw52 -k bw53 -k bw54)
+
+================================================================================
+RED — all seven witnesses fail on the pre-fix consumer, each for its own defect
+================================================================================
+test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header)
+Every `VALUE NOT PUBLISHED` ExtType/Flags pin equals the SDK's value. ... FAIL
+test_bw49_positive_decoded_thread_events_join_the_signed_member_roster (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw49_positive_decoded_thread_events_join_the_signed_member_roster)
+The REAL decoder emits thread events a member roster can join. ... FAIL
+test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name)
+A thread the ProcessStart stream never explained is a NAMED fault. ... 
+  test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name) (case='no ProcessStart at all')
+A thread the ProcessStart stream never explained is a NAMED fault. ... FAIL
+  test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name) (case='thread predates every ProcessStart for its PID')
+A thread the ProcessStart stream never explained is a NAMED fault. ... FAIL
+test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain)
+`CloseTrace`'s return was DISCARDED, so a failed close read as a drain. ... FAIL
+test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain)
+`join(timeout=30)`'s result was DISCARDED, so a timeout read as a drain. ... ERROR
+test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops)
+`capture()` queried the loss counters a SECOND time, after the STOP. ... FAIL
+test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate)
+The wrong CLASSIC_HEADER pin DROPPED records. Show the drop, not the number. ... FAIL
+
+======================================================================
+ERROR: test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain)
+`join(timeout=30)`'s result was DISCARDED, so a timeout read as a drain.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 2307, in test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain
+    saved = etw.CONSUMER_JOIN_TIMEOUT_SECONDS
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'mbcx01_build_etw_consumer' has no attribute 'CONSUMER_JOIN_TIMEOUT_SECONDS'
+
+======================================================================
+FAIL: test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header)
+Every `VALUE NOT PUBLISHED` ExtType/Flags pin equals the SDK's value.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 2135, in test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header
+    self.assertEqual(etw.EVENT_HEADER_FLAG_CLASSIC_HEADER, 0x0100)
+AssertionError: 64 != 256
+
+======================================================================
+FAIL: test_bw49_positive_decoded_thread_events_join_the_signed_member_roster (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw49_positive_decoded_thread_events_join_the_signed_member_roster)
+The REAL decoder emits thread events a member roster can join.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 2215, in test_bw49_positive_decoded_thread_events_join_the_signed_member_roster
+    self.assertNotIn(None, [row["process_start_key"]
+AssertionError: None unexpectedly found in [None, None, None, None]
+
+======================================================================
+FAIL: test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name) (case='no ProcessStart at all')
+A thread the ProcessStart stream never explained is a NAMED fault.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 2262, in test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name
+    with self.assertRaises(etw.EtwConsumerFault) as caught:
+AssertionError: EtwConsumerFault not raised
+
+======================================================================
+FAIL: test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name) (case='thread predates every ProcessStart for its PID')
+A thread the ProcessStart stream never explained is a NAMED fault.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 2262, in test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name
+    with self.assertRaises(etw.EtwConsumerFault) as caught:
+AssertionError: EtwConsumerFault not raised
+
+======================================================================
+FAIL: test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain)
+`CloseTrace`'s return was DISCARDED, so a failed close read as a drain.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 2286, in test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain
+    with self.assertRaises(etw.EtwConsumerFault) as caught:
+AssertionError: EtwConsumerFault not raised
+
+======================================================================
+FAIL: test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops)
+`capture()` queried the loss counters a SECOND time, after the STOP.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 2352, in test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops
+    with self.assertRaises(etw.EtwConsumerFault) as caught:
+AssertionError: EtwConsumerFault not raised
+
+======================================================================
+FAIL: test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate)
+The wrong CLASSIC_HEADER pin DROPPED records. Show the drop, not the number.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 2402, in test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate
+    self.assertEqual(consumer._cswitch_records,
+AssertionError: Lists differ: [] != [{'processor': 3, 'qpc': 907, 'old_thread_[40 chars]242}]
+
+Second list contains 1 additional elements.
+First extra element 0:
+{'processor': 3, 'qpc': 907, 'old_thread_id': 900, 'instruction_retired': 4242424242}
+
+- []
++ [{'instruction_retired': 4242424242,
++   'old_thread_id': 900,
++   'processor': 3,
++   'qpc': 907}]
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.043s
+
+FAILED (failures=7, errors=1)
+
+================================================================================
+RED (sharpened) — defect 3 observed directly: capture() re-queries the loss
+counters AFTER ControlTraceW(STOP), on a handle nobody invalidated, and returns
+a DIFFERENT number than the one read while the session was alive.
+Command: python <scratch>/prefix/probe_second_query.py
+The fake scripts EventsLost=0 for the first query and 7 for any second one.
+Call tuples are (api, handle, control_code); control_code 0 = QUERY, 1 = STOP.
+================================================================================
+consumer module : <home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\mbcx01_build_etw_consumer.py
+stop() loss     : LossCounters(events_lost=0, log_buffers_lost=0, realtime_buffers_lost=0)
+calls after stop: [('ControlTraceW', 4660, 0), ('ControlTraceW', 4660, 1)]
+capture().loss  : LossCounters(events_lost=7, log_buffers_lost=0, realtime_buffers_lost=0)
+calls after cap : [('ControlTraceW', 4660, 0), ('ControlTraceW', 4660, 1), ('ControlTraceW', 4660, 0)]
+session handle after stop: 4660
+
+=> stop() carried 0; capture() reported 7, read from a stopped session.
+=> exit code of the red witness run: 1 (FAILED failures=7, errors=1)

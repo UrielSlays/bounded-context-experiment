@@ -1,0 +1,21 @@
+:root { --navy: #1B2A49; --ink: #22262E; --slate: #5A6473; --fog: #E6E9EE; --cream: #FBF7EF; }
+html { background: #fff; }
+body { max-width: 62rem; margin: 2.5rem auto; padding: 0 1.25rem; color: var(--ink);
+       font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 16px; line-height: 1.55; }
+header#title-block-header { border-bottom: 2px solid var(--navy); margin-bottom: 2rem; padding-bottom: 1rem; }
+h1.title { font-family: Georgia, "<account>Vu Serif", serif; font-weight: normal; color: var(--navy); font-size: 2rem; margin: 0 0 .4rem 0; }
+p.subtitle { color: var(--slate); font-size: 1.05rem; margin: 0 0 .6rem 0; }
+p.author, p.date { color: var(--slate); font-size: .9rem; margin: 0; display: inline-block; margin-right: 1.5rem; }
+h2 { font-family: Georgia, "<account>Vu Serif", serif; font-weight: normal; color: var(--navy); font-size: 1.45rem;
+     margin-top: 2.6rem; border-top: 1px solid var(--fog); padding-top: 1rem; }
+figure { margin: 1.5rem 0; }
+figure img { width: 100%; height: auto; border: 1px solid var(--fog); }
+figcaption { color: var(--slate); font-size: .88rem; margin-top: .4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .95rem; }
+th { background: var(--navy); color: #fff; text-align: left; padding: .45rem .6rem; }
+td { padding: .45rem .6rem; border-bottom: 1px solid var(--fog); vertical-align: top; }
+tr td:first-child { font-weight: 600; width: 34%; }
+pre { background: var(--cream); border: 1px solid var(--fog); padding: .8rem 1rem; overflow-x: auto; font-size: .88rem; }
+code { font-family: Consolas, "<account>Vu Sans Mono", monospace; font-size: .92em; }
+ul { padding-left: 1.3rem; }
+li { margin: .25rem 0; }

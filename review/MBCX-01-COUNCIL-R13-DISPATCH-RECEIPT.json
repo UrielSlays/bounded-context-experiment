@@ -1,0 +1,58 @@
+{
+  "receipt_id": "MBCX-01-COUNCIL-R13-DISPATCH-RECEIPT",
+  "round": "r13",
+  "mode": "CLOSURE_COUNCIL_REVIEW_ONLY",
+  "packet_path": "<repo>\\MBCX-01-EXPERIMENT-COUNCIL-PACKET-r13.md",
+  "packet_commit": "dfa31aa8abf4bff507aa243de8b2e33d036a1337",
+  "governing_commit": "ec583834e08df77b65ca773ef6fdf525b0ee51b2",
+  "manifest_blob": "d71e653d95df662097d2507299fd85ff265ed856",
+  "launcher_blob": "ba046408a0a210176d6d53616a8535eb26542be4",
+  "browser_pointer": "Hey homie, can you help me out? Read this and execute:\n<repo>\\MBCX-01-EXPERIMENT-COUNCIL-PACKET-r13.md",
+  "seats": [
+    {
+      "seat": "SEAT1_OUTSIDE_OPUS5",
+      "conversation_id": "<id>",
+      "url": "https://claude.ai/chat/<id>",
+      "title": "Council mode activation - Claude",
+      "cdp_port": <council-browser-port>,
+      "moonwalker_session_id": "<id>",
+      "sent_at_utc": "2026-08-13T13:50:13.967Z",
+      "send_audit_id": "<id>",
+      "fresh_seat": false
+    },
+    {
+      "seat": "SEAT2_CHATGPT_SOL",
+      "conversation_id": "<id>",
+      "url": "https://chatgpt.com/g/<chatgpt-project>/c/<id>",
+      "title": "ChatGPT - Moonwalker MCP",
+      "cdp_port": <council-browser-port>,
+      "moonwalker_session_id": "<id>",
+      "sent_at_utc": "2026-08-13T13:50:05.250Z",
+      "send_audit_id": "<id>",
+      "fresh_seat": false
+    },
+    {
+      "seat": "SEAT3_CODEX_EXEC",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "xhigh",
+      "service_tier": "default",
+      "approval_policy": "never",
+      "prompt_path": "MBCX-01-SEAT3-CODEX-EXEC-PROMPT-r13.txt",
+      "codex_pid": 44828,
+      "watcher_pid": 23160,
+      "started_at_utc": "2026-08-13T13:50:46.056Z",
+      "stdout_path": "MBCX-01-SEAT3-CODEX-EXEC-r13.stdout.log",
+      "stderr_path": "MBCX-01-SEAT3-CODEX-EXEC-r13.stderr.log",
+      "verdict_path": "MBCX-01-SEAT3-CODEX-VERDICT-r13.md",
+      "completion_marker_path": "MBCX-01-SEAT3-CODEX-EXEC-r13.complete.json"
+    }
+  ],
+  "browser_sessions_left_attached": true,
+  "council_seats_confirmed_running": 3,
+  "scientific_experiment_started": false,
+  "physical_harness_run": false,
+  "production_state_adapter_run": false,
+  "route_qualification_run": false,
+  "experiment_provider_or_model_calls": false,
+  "experiment_paid_calls": false
+}

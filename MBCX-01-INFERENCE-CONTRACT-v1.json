@@ -1,0 +1,112 @@
+{
+  "contract_id": "MBCX-01-INFERENCE-CONTRACT-v1",
+  "normative": true,
+  "status": "design-input; Stage-0 audited implementation and simulation must reproduce this contract exactly",
+  "primary_estimand": "mean(contract_success_BC - contract_success_OM)",
+  "paired_observation_support": [-1, 0, 1],
+  "looks": [96, 192, 384],
+  "family_alpha": 0.05,
+  "multiplicity": {
+    "delta_cs_alpha": 0.025,
+    "om_cs_alpha": 0.025,
+    "rationale": "Bonferroni allocation gives joint family coverage of at least 95% across the delta and OM confidence sequences; each function internally splits its supplied alpha across lower and upper tails"
+  },
+  "reference": {
+    "repository": "https://github.com/gostevehoward/confseq",
+    "commit": "5ffe733ca2447a2e28c2c91f3b00086173f2ab2c",
+    "function": "confseq.predmix.predmix_empbern_twosided_cs",
+    "predmix_py": {
+      "path": "src/confseq/predmix.py",
+      "git_blob": "da8002734e3668f3ae6b23f7bbe0857fe0f047dd",
+      "bytes_via_utf8_response_body": 9952,
+      "sha384": "3302EBE5AB637A11DF780614CC1E10089EE22B4F1C1F78DD4F11681973003109A9BFCF1408ACF61FDFF2C434AF0CDBC6"
+    },
+    "betting_strategies_py": {
+      "path": "src/confseq/betting_strategies.py",
+      "git_blob": "7596cfc6f3fdf0a596ef64279d8b20cd70caa150",
+      "bytes_via_utf8_response_body": 4172,
+      "sha384": "CAAD5BB36CCFDCD88C6C530FA0363671886EAFED53978401564CB215463EBB483010CDB1F9F51D64E9BE049D15B27486"
+    },
+    "warning": "the upstream repository describes itself as early-stage; MBCX-01 therefore vendors or independently transcribes only the pinned functions and validates them against an independent implementation before use"
+  },
+  "call_parameters": {
+    "truncation": 0.5,
+    "running_intersection": true,
+    "N": null,
+    "fixed_n": null,
+    "lambda_prior_mean": 0.5,
+    "lambda_prior_variance": 0.25,
+    "lambda_fake_obs": 1,
+    "lambda_scale": 1.0
+  },
+  "delta_transform": {
+    "input": "delta_i in {-1,0,1}",
+    "to_unit_interval": "Y_i = (delta_i + 1) / 2",
+    "reference_call": "predmix_empbern_twosided_cs(Y, alpha=0.025, truncation=0.5, running_intersection=true, N=null, fixed_n=null)",
+    "back_transform": "delta_lower = 2 * Y_lower - 1; delta_upper = 2 * Y_upper - 1"
+  },
+  "om_transform": {
+    "input": "OM contract_success_i in {0,1}",
+    "reference_call": "predmix_empbern_twosided_cs(OM, alpha=0.025, truncation=0.5, running_intersection=true, N=null, fixed_n=null)",
+    "back_transform": "none"
+  },
+  "decision_thresholds": {
+    "noninferiority_margin": -0.1,
+    "oracle_floor": 0.8,
+    "PROMOTE_TO_COORDINATION_STAGE": "delta_lower > -0.10 AND om_lower >= 0.80 AND every deterministic hard gate holds",
+    "MODEL_INTERFACE_FAIL": "delta_upper < -0.10 AND om_lower >= 0.80 AND every deterministic hard gate holds",
+    "MODEL_OR_INTERFACE_CEILING": "om_upper < 0.80",
+    "INCONCLUSIVE_OR_UNDERFUNDED": "none of the other branches holds at n=384",
+    "branch_precedence": ["TRANSPORT_INCONCLUSIVE", "DESIGN_OR_IMPLEMENTATION_FAIL", "MODEL_OR_INTERFACE_CEILING", "MODEL_INTERFACE_FAIL", "PROMOTE_TO_COORDINATION_STAGE", "INCONCLUSIVE_OR_UNDERFUNDED"]
+  },
+  "missingness": {
+    "whole_pair_missing": "any accepted/no-body or route-identity failure in any of the six BC/OM call nodes makes the scenario pair missing",
+    "worst_case": "recompute the delta confidence sequence twice, assigning every missing delta to -1 and then +1; the decision branch must be identical under both assignments",
+    "hard_ceiling_fraction": 0.02,
+    "hard_ceiling_count_at_n384": 7,
+    "stop_rule": "eight or more missing pairs by n=384, any missingness association capable of tipping the branch, or any failure of worst-case branch invariance yields TRANSPORT_INCONCLUSIVE",
+    "no_substitution": true
+  },
+  "operating_characteristic_grid": {
+    "delta_means": [-0.25, -0.12, -0.1, 0.0, 0.1],
+    "discordance_rates": [0.02, 0.1, 0.2, 0.3, 0.5],
+    "om_success_rates": [0.7, 0.79, 0.8, 0.85, 0.9],
+    "missing_fractions": [0.0, 0.01, 0.02],
+    "replicates_per_cell": 10000,
+    "deterministic_rng": "PCG64 with master seed 20260812 and cell seed SHA256(canonical cell JSON) truncated to 128 bits",
+    "required_reports": [
+      "simultaneous coverage across all three looks",
+      "PROMOTE probability and first-look distribution",
+      "MODEL_INTERFACE_FAIL probability and first-look distribution",
+      "MODEL_OR_INTERFACE_CEILING probability and first-look distribution",
+      "INCONCLUSIVE probability",
+      "P(BC=1,OM=0) and P(BC=0,OM=1)",
+      "worst-case missingness branch invariance"
+    ],
+    "authorization_policy": "the owner reviews the full grid; no single minimum-power number is silently substituted for that operating-characteristic report"
+  },
+  "numerics": {
+    "floating_point": "IEEE-754 binary64",
+    "comparison_tolerance": 1e-12,
+    "fixture_rounding_decimals": 12,
+    "NaN_or_infinite": "fatal Stage-0 failure"
+  },
+  "reference_vectors": {
+    "source": "executed directly from the pinned upstream commit with only unused optional imports stubbed; NumPy 2 compatibility alias supplied; no algorithm line modified",
+    "delta_all_zero": [[96, -0.184596392909, 0.184596392909], [192, -0.092298196454, 0.092298196454], [384, -0.046149098227, 0.046149098227]],
+    "delta_every_tenth_minus_one": [[96, -0.306559647105, 0.106274112962], [192, -0.210599388968, 0.01013041472], [384, -0.165202165789, -0.035340633611]],
+    "delta_every_tenth_plus_one": [[96, -0.106274112962, 0.306559647105], [192, -0.01013041472, 0.210599388968], [384, 0.035340633611, 0.165202165789]],
+    "om_ninety_percent_pattern": [[96, 0.764282888267, 1.0], [192, 0.812585576214, 0.983202557949], [384, 0.838513500163, 0.958131809402]],
+    "om_eighty_percent_pattern": [[96, 0.636414186307, 0.957362147641], [192, 0.686021239362, 0.909211875531], [384, 0.717732759517, 0.87880823577]]
+  },
+  "gate5_requirements": [
+    "vendored/transcribed implementation source hash is frozen",
+    "implementation matches every reference vector within 1e-12",
+    "an independently written implementation matches randomized sequences within 1e-12",
+    "exact enumeration covers every paired-support sequence through a tractable small n",
+    "simulation covers every operating-characteristic grid cell",
+    "PROMOTE, MODEL_INTERFACE_FAIL, MODEL_OR_INTERFACE_CEILING, and INCONCLUSIVE branches each fire in at least one synthetic fixture",
+    "missingness at zero through seven pairs is exercised and eight-pair TRANSPORT_INCONCLUSIVE fires",
+    "look order is the SHA256-sorted Stage-2 scenario manifest and is never outcome-adaptive"
+  ]
+}

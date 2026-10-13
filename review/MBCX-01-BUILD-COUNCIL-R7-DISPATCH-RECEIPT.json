@@ -1,0 +1,16 @@
+{
+  "receipt_id": "MBCX-01-BUILD-COUNCIL-R7-DISPATCH-RECEIPT",
+  "round": "BUILD acceptance r7 (targeted re-round on the r6 folds + AMENDMENT-3)",
+  "packet_path": "MBCX-01-BUILD-ACCEPTANCE-COUNCIL-PACKET-r7.md",
+  "packet_commit": "cbab20bc81337c0a8b7c9e02eef2c4ce1f226d9f",
+  "review_target_commit": "abcab342802be20ba0bb15652c54340d4dededd4",
+  "packet_check": "GREEN (itemsChecked=6; NOT-AN-ATTACK classes only; no threat declaration - settling grep re-run 0 hits at the pin)",
+  "driver_predispatch_execution": "packet section 14 - BUILD 186/186 exit 0, frozen 155/155 exit 0, bundle REAL exit 0 (72/186 two-way), clean-room PINNED RECONSTRUCTION COMPLETE at abcab342/9fa1440d, AMENDMENT-3 differentials driver-executed; all witnessed on these bytes this session",
+  "seats": [
+    {"seat": "SEAT1_OUTSIDE_OPUS5", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "reused_lane_seat": true, "primed_this_session": "r6 card stands (read-probe PASS + model Opus 5 Extra verified at r6 dispatch)", "packet_sent_utc": "2026-08-16T07:22:10Z"},
+    {"seat": "SEAT2_CHATGPT_SOL", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "reused_lane_seat": true, "primed_this_session": "r6 card stands (read-probe PASS at r6 dispatch)", "packet_sent_utc": "2026-08-16T07:22:22Z"},
+    {"seat": "SEAT3_CODEX_EXEC", "model": "gpt-5.6-sol", "service_tier": "default", "reasoning_effort": "xhigh", "prompt_path": "MBCX-01-BUILD-SEAT3-CODEX-EXEC-PROMPT-r7.txt", "prompt_generated_from_card_by_extractor": "generate-seat3-build-r7-prompt.ps1 (same refuse-to-emit lane checks as r6)", "log_path": "MBCX-01-BUILD-SEAT3-CODEX-EXEC-r7.log", "serialized": true, "dispatched_utc": "2026-08-16T07:20:00Z"}
+  ],
+  "sealing": "blind round - no seat sees another; verdicts banked by the driver from each thread",
+  "next": "bank three verdicts (check the commit each names), driver byte-reproduction, synthesis; ACCEPT rulings + leaf fixes fold and advance to codex-CLI r4 (#1); a CHANGE on AMENDMENT-3 or the scope rules folds and re-rounds"
+}

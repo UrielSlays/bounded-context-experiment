@@ -1,0 +1,102 @@
+{
+  "contract_id": "MBCX-01-STATE-ACTION-CONTRACT-v6",
+  "normative": true,
+  "event_types": [
+    "assert_fact", "correct_fact", "retract_fact", "open_obligation",
+    "reschedule_obligation", "delegate_obligation", "complete_obligation",
+    "cancel_obligation", "reopen_obligation", "link_dependency",
+    "unlink_dependency", "open_handoff", "record_call_response",
+    "propose_handoff_result", "commit_handoff_result",
+    "reject_handoff_result", "close_handoff"
+  ],
+  "schema_ingress": {
+    "shared": "closed JSON Schema admission plus canonical event-ID verification",
+    "independence_boundary": "AFTER_SHARED_SCHEMA_VALIDATION",
+    "post_ingress": "reference and oracle guards/effects are independently organized"
+  },
+  "originating_cut": {
+    "new_event_rule": "journal_seq must equal current next_seq and originating_cut must equal current_cut(state, chosen valid_time): journal_seq=next_seq-1 and knowledge_time=max(T1,last_observed_at)",
+    "replay_exception": "an exact previously applied event is DUPLICATE_NOOP",
+    "purpose": "prevents stale/backdated or stale-knowledge mutation while preserving historical cut answers"
+  },
+  "facts": {
+    "intervals": "half-open, nonempty, and nonoverlapping among currently known unsuperseded versions",
+    "correction": "strictly inside the cut-relative parent interval and never beyond its old upper bound",
+    "history": "closure and retraction are append-only knowledge-time evidence; old rows are never mutated"
+  },
+  "responses": {
+    "causal_rule": "one exact durable B response after the matching open same-scope handoff",
+    "uniqueness": "distinct response events remain distinct rows; duplicate logical identity conflicts",
+    "proposal": "requires exactly one complete B foreign-key match",
+    "commit": "rechecks current target legality and unchanged originating target state",
+    "rejection": "requires an existing PROPOSED handoff and proposal_hash equal to the persisted SHA-384 hash of that exact proposal event"
+  },
+  "event_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://moonwalker.local/schema/mbcx01/r11/event-envelope-v6",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["event_id", "scope_id", "event_type", "semantic_operation", "idempotency_key", "journal_seq", "observed_at", "valid_from", "valid_to", "originating_cut", "payload"],
+    "properties": {
+      "event_id": {"type": "string", "pattern": "^EV\\.[0-9A-F]{64}$"},
+      "scope_id": {"$ref": "#/$defs/semanticId"},
+      "event_type": {"enum": ["assert_fact", "correct_fact", "retract_fact", "open_obligation", "reschedule_obligation", "delegate_obligation", "complete_obligation", "cancel_obligation", "reopen_obligation", "link_dependency", "unlink_dependency", "open_handoff", "record_call_response", "propose_handoff_result", "commit_handoff_result", "reject_handoff_result", "close_handoff"]},
+      "semantic_operation": {"type": "string"},
+      "idempotency_key": {"$ref": "#/$defs/semanticId"},
+      "journal_seq": {"type": "integer", "minimum": 0},
+      "observed_at": {"$ref": "#/$defs/utc"},
+      "valid_from": {"$ref": "#/$defs/utc"},
+      "valid_to": {"anyOf": [{"$ref": "#/$defs/utc"}, {"type": "null"}]},
+      "originating_cut": {"$ref": "#/$defs/cut"},
+      "payload": {"type": "object"}
+    },
+    "allOf": [
+      {"if": {"properties": {"event_type": {"const": "assert_fact"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/assertFact"}}}},
+      {"if": {"properties": {"event_type": {"const": "correct_fact"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/correctFact"}}}},
+      {"if": {"properties": {"event_type": {"const": "retract_fact"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/retractFact"}}}},
+      {"if": {"properties": {"event_type": {"const": "open_obligation"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/openObligation"}}}},
+      {"if": {"properties": {"event_type": {"const": "reschedule_obligation"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/rescheduleObligation"}}}},
+      {"if": {"properties": {"event_type": {"const": "delegate_obligation"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/delegateObligation"}}}},
+      {"if": {"properties": {"event_type": {"const": "complete_obligation"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/completeObligation"}}}},
+      {"if": {"properties": {"event_type": {"const": "cancel_obligation"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/cancelObligation"}}}},
+      {"if": {"properties": {"event_type": {"const": "reopen_obligation"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/reopenObligation"}}}},
+      {"if": {"properties": {"event_type": {"const": "link_dependency"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/dependency"}}}},
+      {"if": {"properties": {"event_type": {"const": "unlink_dependency"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/dependency"}}}},
+      {"if": {"properties": {"event_type": {"const": "open_handoff"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/openHandoff"}}}},
+      {"if": {"properties": {"event_type": {"const": "record_call_response"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/callResponse"}}}},
+      {"if": {"properties": {"event_type": {"const": "propose_handoff_result"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/proposal"}}}},
+      {"if": {"properties": {"event_type": {"const": "commit_handoff_result"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/commit"}}}},
+      {"if": {"properties": {"event_type": {"const": "reject_handoff_result"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/reject"}}}},
+      {"if": {"properties": {"event_type": {"const": "close_handoff"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/close"}}}}
+    ],
+    "$defs": {
+      "semanticId": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+      "sha256": {"type": "string", "pattern": "^[0-9A-F]{64}$"},
+      "sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "utc": {"type": "string", "format": "moonwalker-utc", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z$"},
+      "cut": {"type": "object", "additionalProperties": false, "required": ["journal_seq", "knowledge_time", "valid_time"], "properties": {"journal_seq": {"type": "integer", "minimum": 0}, "knowledge_time": {"$ref": "#/$defs/utc"}, "valid_time": {"$ref": "#/$defs/utc"}}},
+      "actionCatalog": {"type": "array", "minItems": 1, "items": {"oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["action_id", "obligation_id"], "properties": {"action_id": {"type": "string", "pattern": "^ACT\\.[0-9A-F]{64}$"}, "obligation_id": {"$ref": "#/$defs/semanticId"}}},
+        {"type": "object", "additionalProperties": false, "required": ["action_id", "action_kind", "scope_id", "obligation_id"], "properties": {"action_id": {"type": "string", "pattern": "^ACT\\.[0-9A-F]{64}$"}, "action_kind": {"const": "ACT_ON_OBLIGATION"}, "scope_id": {"$ref": "#/$defs/semanticId"}, "obligation_id": {"$ref": "#/$defs/semanticId"}}},
+        {"type": "object", "additionalProperties": false, "required": ["action_id", "action_kind"], "properties": {"action_id": {"const": "NO_ACTION"}, "action_kind": {"const": "NO_ACTION"}}}
+      ]}},
+      "assertFact": {"type": "object", "additionalProperties": false, "required": ["subject_id", "predicate_id", "value_code"], "properties": {"subject_id": {"$ref": "#/$defs/semanticId"}, "predicate_id": {"$ref": "#/$defs/semanticId"}, "value_code": {"$ref": "#/$defs/semanticId"}}},
+      "correctFact": {"type": "object", "additionalProperties": false, "required": ["subject_id", "predicate_id", "parent_event_id", "value_code"], "properties": {"subject_id": {"$ref": "#/$defs/semanticId"}, "predicate_id": {"$ref": "#/$defs/semanticId"}, "parent_event_id": {"type": "string"}, "value_code": {"$ref": "#/$defs/semanticId"}}},
+      "retractFact": {"type": "object", "additionalProperties": false, "required": ["subject_id", "predicate_id", "target_event_id"], "properties": {"subject_id": {"$ref": "#/$defs/semanticId"}, "predicate_id": {"$ref": "#/$defs/semanticId"}, "target_event_id": {"type": "string"}}},
+      "openObligation": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "subject_id", "owner_role", "due_at", "critical", "completion_action_id", "prerequisite_obligation_ids"], "properties": {"obligation_id": {"$ref": "#/$defs/semanticId"}, "subject_id": {"$ref": "#/$defs/semanticId"}, "owner_role": {"$ref": "#/$defs/semanticId"}, "due_at": {"$ref": "#/$defs/utc"}, "critical": {"type": "boolean"}, "completion_action_id": {"type": "string", "pattern": "^ACT\\.[0-9A-F]{64}$"}, "prerequisite_obligation_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/semanticId"}}}},
+      "rescheduleObligation": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "due_at"], "properties": {"obligation_id": {"$ref": "#/$defs/semanticId"}, "due_at": {"$ref": "#/$defs/utc"}}},
+      "delegateObligation": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "owner_role"], "properties": {"obligation_id": {"$ref": "#/$defs/semanticId"}, "owner_role": {"$ref": "#/$defs/semanticId"}}},
+      "completeObligation": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "completion_action_id", "originating_cut_hash"], "properties": {"obligation_id": {"$ref": "#/$defs/semanticId"}, "completion_action_id": {"type": "string", "pattern": "^ACT\\.[0-9A-F]{64}$"}, "originating_cut_hash": {"$ref": "#/$defs/sha384"}}},
+      "cancelObligation": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "cancellation_code"], "properties": {"obligation_id": {"$ref": "#/$defs/semanticId"}, "cancellation_code": {"$ref": "#/$defs/semanticId"}}},
+      "reopenObligation": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "due_at", "owner_role"], "properties": {"obligation_id": {"$ref": "#/$defs/semanticId"}, "due_at": {"$ref": "#/$defs/utc"}, "owner_role": {"$ref": "#/$defs/semanticId"}}},
+      "dependency": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "prerequisite_obligation_id"], "properties": {"obligation_id": {"$ref": "#/$defs/semanticId"}, "prerequisite_obligation_id": {"$ref": "#/$defs/semanticId"}}},
+      "openHandoff": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "scenario_id", "condition", "target_obligation_id", "task_packet_hash", "served_request_hash", "request_parameters_hash", "idempotency_token", "task_packet_utf8", "manifest_utf8", "originating_cut_hash", "action_catalog_hash", "canonical_snapshot_hash", "route_contract_hash", "manifest_hash", "action_catalog"], "properties": {"handoff_id": {"$ref": "#/$defs/semanticId"}, "scenario_id": {"$ref": "#/$defs/semanticId"}, "condition": {"enum": ["BC", "OM"]}, "target_obligation_id": {"$ref": "#/$defs/semanticId"}, "task_packet_hash": {"$ref": "#/$defs/sha384"}, "served_request_hash": {"$ref": "#/$defs/sha256"}, "request_parameters_hash": {"$ref": "#/$defs/sha384"}, "idempotency_token": {"$ref": "#/$defs/semanticId"}, "task_packet_utf8": {"type": "string", "minLength": 1}, "manifest_utf8": {"type": "string", "minLength": 1}, "originating_cut_hash": {"$ref": "#/$defs/sha384"}, "action_catalog_hash": {"$ref": "#/$defs/sha384"}, "canonical_snapshot_hash": {"$ref": "#/$defs/sha384"}, "route_contract_hash": {"$ref": "#/$defs/sha384"}, "manifest_hash": {"$ref": "#/$defs/sha384"}, "action_catalog": {"$ref": "#/$defs/actionCatalog"}}},
+      "durability": {"type": "object", "additionalProperties": false, "required": ["schema_id", "ledger_identity_hash", "raw_response_hash", "response_ref", "provider_request_id", "transaction_id", "fsync_completed", "commit_completed", "receipt_hash"], "properties": {"schema_id": {"const": "DurabilityReceiptV1"}, "ledger_identity_hash": {"$ref": "#/$defs/sha384"}, "raw_response_hash": {"$ref": "#/$defs/sha384"}, "response_ref": {"$ref": "#/$defs/semanticId"}, "provider_request_id": {"$ref": "#/$defs/semanticId"}, "transaction_id": {"$ref": "#/$defs/semanticId"}, "fsync_completed": {"const": true}, "commit_completed": {"const": true}, "receipt_hash": {"$ref": "#/$defs/sha384"}}},
+      "callResponse": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "scenario_id", "condition", "node", "task_packet_hash", "served_request_hash", "request_parameters_hash", "idempotency_token", "raw_response_utf8", "raw_response_hash", "worker_handoff_hash", "response_ref", "provider_request_id", "durability_receipt", "route_contract_hash", "accepted_at"], "properties": {"handoff_id": {"$ref": "#/$defs/semanticId"}, "scenario_id": {"$ref": "#/$defs/semanticId"}, "condition": {"enum": ["BC", "OM"]}, "node": {"const": "B"}, "task_packet_hash": {"$ref": "#/$defs/sha384"}, "served_request_hash": {"$ref": "#/$defs/sha256"}, "request_parameters_hash": {"$ref": "#/$defs/sha384"}, "idempotency_token": {"$ref": "#/$defs/semanticId"}, "raw_response_utf8": {"type": "string", "minLength": 1}, "raw_response_hash": {"$ref": "#/$defs/sha384"}, "worker_handoff_hash": {"$ref": "#/$defs/sha384"}, "response_ref": {"$ref": "#/$defs/semanticId"}, "provider_request_id": {"$ref": "#/$defs/semanticId"}, "durability_receipt": {"$ref": "#/$defs/durability"}, "route_contract_hash": {"$ref": "#/$defs/sha384"}, "accepted_at": {"$ref": "#/$defs/utc"}}},
+      "proposal": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "worker_handoff_hash", "originating_cut_hash", "action_ids"], "properties": {"handoff_id": {"$ref": "#/$defs/semanticId"}, "worker_handoff_hash": {"$ref": "#/$defs/sha384"}, "originating_cut_hash": {"$ref": "#/$defs/sha384"}, "action_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^ACT\\.[0-9A-F]{64}$"}}}},
+      "commit": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "proposal_event_id"], "properties": {"handoff_id": {"$ref": "#/$defs/semanticId"}, "proposal_event_id": {"type": "string", "pattern": "^EV\\.[0-9A-F]{64}$"}}},
+      "reject": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "rejection_code", "proposal_hash"], "properties": {"handoff_id": {"$ref": "#/$defs/semanticId"}, "rejection_code": {"$ref": "#/$defs/semanticId"}, "proposal_hash": {"$ref": "#/$defs/sha384"}}},
+      "close": {"type": "object", "additionalProperties": false, "required": ["handoff_id"], "properties": {"handoff_id": {"$ref": "#/$defs/semanticId"}}}
+    }
+  }
+}

@@ -1,0 +1,8 @@
+ROLE: Independent Moonwalker council confirmation reviewer, adversarial and byte-first. Read the complete role card at <vault> and follow it. Read-only authority: do not edit, write, commit, push, or run provider/paid/physical/scientific work. Deterministic read-only reconstruction and fresh no-paid attacks are authorized.
+
+Maintain a strict lateral seal. Do not inspect either browser seat's r13.2 output, verdict, chat, logs, or completion markers. Your own prior longitudinal context and r13.1 verdict are allowed and must be labeled.
+
+Read and execute this targeted confirmation packet exactly:
+<repo>\MBCX-01-TARGETED-CLOSURE-CONFIRMATION-PACKET-r13.2.md
+
+This is a three-fix confirmation, not r14. Return the required compact verdict in stdout. Do not edit files and do not run the experiment.

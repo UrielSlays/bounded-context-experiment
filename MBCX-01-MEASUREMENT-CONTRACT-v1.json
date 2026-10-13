@@ -1,0 +1,85 @@
+{
+  "contract_id": "MBCX-01-MEASUREMENT-CONTRACT-v1",
+  "normative": true,
+  "counter_set_closed": true,
+  "sampling_boundary": "begin before candidate-specific preprocessing/open and end after packet bytes, projection maintenance, background work quiescence, and artifact close",
+  "counter_catalog": [
+    {"id": "SOURCE_BYTES_READ", "layer": "source", "unit_class": "bytes", "H_absolute_range_max": 0, "D_absolute_range_max": 0},
+    {"id": "ARTIFACT_BYTES_READ", "layer": "artifact", "unit_class": "bytes", "H_absolute_range_max": 4096, "D_absolute_range_max": 4096},
+    {"id": "ARTIFACT_BYTES_WRITTEN", "layer": "artifact", "unit_class": "bytes", "H_absolute_range_max": 4096, "D_absolute_range_max": 4096},
+    {"id": "SOURCE_RECORDS_READ", "layer": "source", "unit_class": "records", "H_absolute_range_max": 9, "D_absolute_range_max": 0},
+    {"id": "INDEX_RECORDS_READ", "layer": "index", "unit_class": "records", "H_absolute_range_max": 32, "D_absolute_range_max": 32},
+    {"id": "PAGES_READ", "layer": "storage", "unit_class": "pages", "H_absolute_range_max": 4, "D_absolute_range_max": 4},
+    {"id": "DEPENDENCY_PROBES", "layer": "resolver", "unit_class": "operations", "H_absolute_range_max": 16, "D_absolute_range_max": 16},
+    {"id": "DECODE_OPERATIONS", "layer": "renderer", "unit_class": "operations", "H_absolute_range_max": 4, "D_absolute_range_max": 4},
+    {"id": "IMPLEMENTATION_BRANCHES", "layer": "candidate", "unit_class": "branches", "H_absolute_range_max": 0, "D_absolute_range_max": 0}
+  ],
+  "unit_class_total_gates": {
+    "bytes": {"H_absolute_range_max": 8192, "D_absolute_range_max": 8192},
+    "records": {"H_absolute_range_max": 41, "D_absolute_range_max": 32},
+    "pages": {"H_absolute_range_max": 4, "D_absolute_range_max": 4},
+    "operations": {"H_absolute_range_max": 20, "D_absolute_range_max": 20},
+    "branches": {"H_absolute_range_max": 0, "D_absolute_range_max": 0}
+  },
+  "aggregation": {
+    "per_counter": "max(cell value) - min(cell value) over the named axis family",
+    "unit_total": "sum every registered counter in the unit class at each cell, then max(total) - min(total)",
+    "new_counter": "DESIGN_OR_IMPLEMENTATION_FAIL",
+    "counter_rename_or_split": "same semantic operation retains the registered ID; duplicate accounting is rejected"
+  },
+  "axis_values": {
+    "H": [128, 1024, 10000, 100000],
+    "D": [1, 4, 16, 64, 256],
+    "F": [1, 4, 16, 64, 256]
+  },
+  "crossed_axes": {
+    "H_at_D": [16, 256],
+    "D_at_H": [1024, 100000],
+    "F_at": {"H": 100000, "D": 16},
+    "combined_stress": {"H": 100000, "D": 256, "F": 16}
+  },
+  "charged_work": [
+    "candidate config parse",
+    "candidate-specific preprocessing",
+    "index and projection construction",
+    "checkpoint and rollover",
+    "background maintenance",
+    "cold artifact open",
+    "decode and materialization",
+    "governed dependency reads",
+    "packet render and close"
+  ],
+  "candidate_config": {
+    "type": "object",
+    "additionalProperties": false,
+    "allowed_fields": ["candidate_id", "artifact_root", "memory_budget_bytes", "checkpoint_interval", "cache_mode"],
+    "prohibited_fields": ["precomputed_packet", "selected_event_ids", "gold_action_ids", "reference_state", "generator_path", "arbitrary_source_path"],
+    "path_rule": "artifact_root is an empty candidate-owned directory under the run root; no other path field is accepted"
+  },
+  "dependency_api": {
+    "all_reads_registered": true,
+    "logical_index_lookup_charges": "every physical record, page, and byte touched beneath the lookup",
+    "ambient_filesystem": "denied",
+    "network": "denied"
+  },
+  "performance": {
+    "exactness": "all Stage-1 scenarios, cuts, axis cells, crosses, and red candidates once",
+    "repetitions": "preregistered 10 percent hash-stratified cells; one warm-up plus 30 cold measurements",
+    "latency_statistic": "Hyndman-Fan type 7 p95 within cell; maximum cell p95 across cells",
+    "jitter": "per counter/unit calibration is the maximum absolute difference over 100 frozen no-op repetitions; calibration bytes and outputs are retained",
+    "latency_not_boundedness_substitute": true,
+    "run_root_hard_ceiling_bytes": 21474836480
+  },
+  "frontier": {
+    "reported_as_curve": true,
+    "resource_only_cells": [16, 64, 256],
+    "required_overflow": "FRONTIER_LIMIT before model dispatch with zero silent omission"
+  },
+  "red_candidates": [
+    "HD_INTERACTION_ARCHIVE_LINEAR",
+    "COUNTER_SPLIT_SAME_WORK",
+    "PRECOMPUTED_PACKET_CONFIG",
+    "LOGICAL_LOOKUP_PHYSICAL_SCAN"
+  ],
+  "red_witnesses": ["CONFIG_PRECOMPUTED_PACKET", "COUNTER_SPLIT", "HD_INTERACTION"]
+}

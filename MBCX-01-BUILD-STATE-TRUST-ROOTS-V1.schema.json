@@ -1,0 +1,96 @@
+{
+  "contract_id": "MBCX-01-BUILD-STATE-TRUST-ROOTS-V1",
+  "normative": true,
+  "closure_revision": "BUILD-A",
+  "semantic_validation": "StateTrustRootManifestV1 is the injected trust root for mbcx01_build_state_authority.verify_state_authority_receipt_v2. A manifest is admissible input only; it can never activate production by itself. production_ready must be false for every committed instance: activation requires the external ceremony evidence named in trust_policy.required_external_evidence, which is not committed to this repository. The signer custodian role, the trust-root editor role, and the readback reader role must be pairwise distinct, and a key id authorized for STATE_OWNER_WRITER must never appear in the root-editor approval chain (signer-cannot-edit-root, checked mechanically by the adapter, not merely declared here). Absence, ambiguity, expiry, revocation, role mismatch, or a root supplied by the receipt envelope rather than by this injected manifest keeps STATE_AUTHORITY_UNAVAILABLE.",
+  "schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://moonwalker.local/schema/mbcx01/build/state-trust-root-manifest-v1",
+    "$ref": "#/$defs/stateTrustRootManifest",
+    "$defs": {
+      "sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "utc": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z$"},
+      "semanticId": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+      "publicKeyPem": {"type": "string", "pattern": "^-----BEGIN PUBLIC KEY-----\\n[A-Za-z0-9+/=\\n]+-----END PUBLIC KEY-----\\n$"},
+      "validityWindow": {
+        "type": "object", "additionalProperties": false,
+        "required": ["not_before", "not_after"],
+        "properties": {"not_before": {"$ref": "#/$defs/utc"}, "not_after": {"$ref": "#/$defs/utc"}}
+      },
+      "stateRole": {"enum": ["STATE_OWNER_WRITER", "STATE_READBACK_READER"]},
+      "revocationState": {"enum": ["NOT_REVOKED", "REVOKED"]},
+      "trustPolicy": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "status", "fail_loud_sentinel", "signer_custodian_role", "trust_root_editor_role", "writer_role", "reader_role", "roles_must_be_distinct", "signer_cannot_edit_root", "manifest_edit_cannot_activate_production", "activation_authority", "required_external_evidence"],
+        "properties": {
+          "schema_id": {"const": "ProductionStateTrustPolicyV1"},
+          "status": {"enum": ["NOT_ACTIVATED", "ACTIVATED"]},
+          "fail_loud_sentinel": {"const": "STATE_AUTHORITY_UNAVAILABLE"},
+          "signer_custodian_role": {"$ref": "#/$defs/semanticId"},
+          "trust_root_editor_role": {"$ref": "#/$defs/semanticId"},
+          "writer_role": {"const": "STATE_OWNER_WRITER"},
+          "reader_role": {"const": "STATE_READBACK_READER"},
+          "roles_must_be_distinct": {"const": true},
+          "signer_cannot_edit_root": {"const": true},
+          "manifest_edit_cannot_activate_production": {"const": true},
+          "activation_authority": {"$ref": "#/$defs/semanticId"},
+          "required_external_evidence": {
+            "type": "array", "minItems": 4, "uniqueItems": true,
+            "items": {"enum": ["SEPARATE_STATE_KEY_CUSTODY_ATTESTATION", "SEPARATE_TRUST_ROOT_EDITOR_APPROVAL", "STATE_STORE_BUILD_PROVENANCE", "PRODUCTION_SIGNING_CEREMONY_RECEIPT"]}
+          }
+        }
+      },
+      "revocationRow": {
+        "type": "object", "additionalProperties": false,
+        "required": ["key_id", "revoked_at", "reason_code"],
+        "properties": {"key_id": {"$ref": "#/$defs/semanticId"}, "revoked_at": {"$ref": "#/$defs/utc"}, "reason_code": {"$ref": "#/$defs/semanticId"}}
+      },
+      "root": {
+        "type": "object", "additionalProperties": false,
+        "required": ["key_id", "algorithm", "fixture_only", "authorized_role", "authorized_producer_id", "authorized_subject_identity", "trust_policy_digest", "public_key_pem", "validity", "revocation_state"],
+        "properties": {
+          "key_id": {"$ref": "#/$defs/semanticId"},
+          "algorithm": {"const": "ED25519"},
+          "fixture_only": {"type": "boolean"},
+          "authorized_role": {"$ref": "#/$defs/stateRole"},
+          "authorized_producer_id": {"$ref": "#/$defs/semanticId"},
+          "authorized_subject_identity": {"$ref": "#/$defs/semanticId"},
+          "trust_policy_digest": {"$ref": "#/$defs/sha384"},
+          "public_key_pem": {"$ref": "#/$defs/publicKeyPem"},
+          "validity": {"$ref": "#/$defs/validityWindow"},
+          "revocation_state": {"$ref": "#/$defs/revocationState"}
+        }
+      },
+      "custodyRoles": {
+        "type": "object", "additionalProperties": false,
+        "required": ["signer_custodian_role", "trust_root_editor_role", "readback_reader_role", "writer_producer_role"],
+        "properties": {
+          "signer_custodian_role": {"$ref": "#/$defs/semanticId"},
+          "trust_root_editor_role": {"$ref": "#/$defs/semanticId"},
+          "readback_reader_role": {"$ref": "#/$defs/semanticId"},
+          "writer_producer_role": {"$ref": "#/$defs/semanticId"}
+        }
+      },
+      "stateTrustRootManifest": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "manifest_id", "production_ready", "store_binding", "custody_roles", "trust_policy", "trust_policy_digest", "validity", "revocation_list", "roots"],
+        "properties": {
+          "schema_id": {"const": "StateTrustRootManifestV1"},
+          "manifest_id": {"$ref": "#/$defs/semanticId"},
+          "production_ready": {"type": "boolean"},
+          "store_binding": {
+            "type": "object", "additionalProperties": false,
+            "required": ["store_id", "namespace", "namespace_version"],
+            "properties": {"store_id": {"$ref": "#/$defs/semanticId"}, "namespace": {"$ref": "#/$defs/semanticId"}, "namespace_version": {"type": "integer", "minimum": 1}}
+          },
+          "custody_roles": {"$ref": "#/$defs/custodyRoles"},
+          "trust_policy": {"$ref": "#/$defs/trustPolicy"},
+          "trust_policy_digest": {"$ref": "#/$defs/sha384"},
+          "validity": {"$ref": "#/$defs/validityWindow"},
+          "revocation_list": {"type": "array", "items": {"$ref": "#/$defs/revocationRow"}, "uniqueItems": true},
+          "roots": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/root"}}
+        }
+      }
+    }
+  }
+}

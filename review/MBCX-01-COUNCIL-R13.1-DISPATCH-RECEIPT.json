@@ -1,0 +1,63 @@
+{
+  "receipt_id": "MBCX-01-COUNCIL-R13.1-DISPATCH-RECEIPT",
+  "round": "r13.1",
+  "mode": "FOCUSED_CLOSURE_COUNCIL_REVIEW_ONLY",
+  "packet_path": "<repo>\\MBCX-01-FOCUSED-CLOSURE-COUNCIL-PACKET-r13.1.md",
+  "packet_commit": "7c09b740607ccbca2353bf425bd3771395552fa3",
+  "governing_commit": "d9b054f9617bbeba2b55fa488736adf808f19457",
+  "manifest_blob": "e5d6e8f07d1602dac16f0d7df5e8c4ab1ecda4e4",
+  "launcher_blob": "e22013a7be82c3e8899b9b0360e1215819859669",
+  "pinned_reconstruction_exit_code": 0,
+  "pinned_reconstruction_tests": 140,
+  "seats": [
+    {
+      "seat": "SEAT1_OUTSIDE_OPUS5",
+      "conversation_id": "<id>",
+      "url": "https://claude.ai/chat/<id>",
+      "title": "Council mode activation - Claude",
+      "model_label_verified": "Opus 5 Extra",
+      "cdp_port": <council-browser-port>,
+      "moonwalker_session_id": "<id>",
+      "sent_at_utc": "2026-08-14T06:08:13.664Z",
+      "send_audit_id": "<id>",
+      "fresh_seat": false
+    },
+    {
+      "seat": "SEAT2_CHATGPT_SOL",
+      "conversation_id": "<id>",
+      "url": "https://chatgpt.com/g/<chatgpt-project>/c/<id>",
+      "title": "ChatGPT - Moonwalker MCP",
+      "cdp_port": <council-browser-port>,
+      "moonwalker_session_id": "<id>",
+      "rebind_session_id": "<id>",
+      "sent_at_utc": "2026-08-14T06:08:19.308Z",
+      "type_audit_id": "<id>",
+      "delivery_confirmation_audit_id": "<id>",
+      "send_selector_timed_out_after_provider_accepted_message": true,
+      "fresh_seat": false
+    },
+    {
+      "seat": "SEAT3_CODEX_EXEC",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "xhigh",
+      "service_tier": "default",
+      "approval_policy": "never",
+      "prompt_path": "MBCX-01-SEAT3-CODEX-EXEC-PROMPT-r13.1.txt",
+      "codex_pid": 59892,
+      "watcher_pid": 59508,
+      "started_at_utc": "2026-08-14T06:10:16Z",
+      "stdout_path": "MBCX-01-SEAT3-CODEX-EXEC-r13.1.stdout.log",
+      "stderr_path": "MBCX-01-SEAT3-CODEX-EXEC-r13.1.stderr.log",
+      "verdict_path": "MBCX-01-SEAT3-CODEX-VERDICT-r13.1.md",
+      "completion_marker_path": "MBCX-01-SEAT3-CODEX-EXEC-r13.1.complete.json"
+    }
+  ],
+  "browser_sessions_left_attached": false,
+  "council_seats_confirmed_running": 3,
+  "scientific_experiment_started": false,
+  "physical_harness_run": false,
+  "production_state_adapter_run": false,
+  "route_qualification_run": false,
+  "experiment_provider_or_model_calls": false,
+  "experiment_paid_calls": false
+}

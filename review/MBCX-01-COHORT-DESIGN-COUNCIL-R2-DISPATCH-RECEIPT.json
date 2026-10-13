@@ -1,0 +1,18 @@
+{
+  "receipt_id": "MBCX-01-COHORT-DESIGN-COUNCIL-R2-DISPATCH-RECEIPT",
+  "round": "cohort-content generator DESIGN r2 (issue #17; the r1 3/3 NO-GO fold)",
+  "packet_path": "MBCX-01-COHORT-CONTENT-DESIGN-COUNCIL-PACKET-r2.md",
+  "packet_commit": "5b58e01694ccdcaed7f4bd3c401e62ae3f5051a6",
+  "review_target": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md (r2)",
+  "review_target_commit": "3614ae4790a2068a798731c29501ae91c3d177e7",
+  "pin_discipline": "both 40-hex pins emitted by git rev-parse and gated by git cat-file -e before dispatch (the r1 F0 fabricated-pin defect closed at the process)",
+  "packet_check": "GREEN (itemsChecked=8; NOT-AN-ATTACK classes only; validity framing)",
+  "driver_predispatch_execution": "every r1 finding folded into r2 was driver-reproduced first (MBCX-01-COHORT-R1-DRIVER-REPRODUCTIONS.md: P1 restoration executed on both reducers, P2 ghost-fact/observation executed, P3 catalog executed, P4 partial+labeled, P5 totality read, C3 binomial reproduced to 4 decimals)",
+  "seats": [
+    {"seat": "SEAT1_CLAUDE_NEW_ACCOUNT", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "primed_this_round": "CARD sent verbatim (extractor-checked lanes) -> ack 'Council Mode ready' -> packet; the r1 provenance deviations (owner-relayed dispatch, no card) do NOT recur; model label still unverified by the driver - recorded honestly, the seat's evidence quality is the admission basis", "packet_sent_utc": "2026-08-16T12:34:53Z"},
+    {"seat": "SEAT2_CHATGPT_SOL", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "reused_lane_seat": true, "primed": "standing card governs", "packet_sent_utc": "2026-08-16T12:32:32Z"},
+    {"seat": "SEAT3_CODEX_EXEC", "model": "gpt-5.6-sol", "service_tier": "default", "reasoning_effort": "xhigh", "prompt_path": "MBCX-01-COHORT-SEAT3-CODEX-EXEC-PROMPT-r2.txt", "extractor": "generate-seat3-cohort-r2-prompt.ps1 (same refuse-to-emit lane checks)", "log_paths": ["MBCX-01-COHORT-SEAT3-CODEX-EXEC-r2.stdout.log", "MBCX-01-COHORT-SEAT3-CODEX-EXEC-r2.stderr.log"], "serialized": true, "dispatched_utc": "2026-08-16T12:31:30Z"}
+  ],
+  "sealing": "blind round - no seat sees another's r2 view; the banked r1 record is completed-round history available to all",
+  "next": "bank three verdicts (empty stdout or exit!=0 = re-run, never a pass); driver byte-reproduces everything acted on; synthesis; on GO -> the BUILD dispatch (three siblings, red-first); from round 3 the ROUND CALL binds"
+}

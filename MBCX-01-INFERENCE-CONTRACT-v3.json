@@ -1,0 +1,125 @@
+{
+  "contract_id": "MBCX-01-INFERENCE-CONTRACT-v3",
+  "normative": true,
+  "estimands": {
+    "population": "the complete frozen 384-scenario eligible retained manifest in SHA-256 scenario order",
+    "delta": "average conditional mean over that ordered manifest of BC_i minus OM_i",
+    "om": "average conditional mean over that ordered manifest of OM_i",
+    "support": {"delta": [-1, 0, 1], "om": [0, 1]},
+    "heterogeneity": "conditional means may change arbitrarily by scenario and motif",
+    "within_pair_dependence": "unrestricted",
+    "adapted_sequence": "each paired outcome is bounded and measurable after its frozen scenario call; its conditional mean is taken relative to all prior scenario outcomes and frozen pre-call state",
+    "cross_scenario_dependence": "no independence or common-mean assumption; dependence through the past filtration is allowed, while future scenario outcomes and provider randomness are unavailable at the current call"
+  },
+  "method": {
+    "name": "exact-mixture empirical-Bernstein confidence sequence",
+    "source": {
+      "title": "Closed-form empirical Bernstein confidence sequences for scalars and matrices",
+      "authors": ["Ben Chugg", "Aaditya Ramdas"],
+      "version_date": "2025-12-24",
+      "url": "https://arxiv.org/abs/2512.21300",
+      "deciding_result": "Proposition 3.1 exact mixture confidence sequence for the running average of bounded, possibly time-varying conditional means"
+    },
+    "family_alpha": 0.05,
+    "stream_alpha": 0.025,
+    "streams": ["delta_transformed", "om"],
+    "kappa": 0.25,
+    "delta_transform": "Y_i=(BC_i-OM_i+1)/2 in [0,1]; map confidence limits back by 2*m-1",
+    "predictable_estimate": "xhat_i=(0.5+sum_{j<i} X_j)/i",
+    "psi_E": "-log(1-x)-x",
+    "U_t": "1/(2*kappa^2)+sum_i psi_E(abs(X_i-xhat_i))",
+    "I": "I(y;v)=integral from -1 to 1 of exp(y*z-v*z^2) dz",
+    "normalizer": "Z=Phi(1/kappa)-Phi(-1/kappa)",
+    "confidence_set": "m in [0,1] such that I(sum_i X_i-t*m;U_t) < kappa*Z*sqrt(2*pi)/stream_alpha",
+    "primary_integral": "analytic completion-of-square formula using IEEE-754 binary64 erf",
+    "independent_integral": "composite Simpson quadrature with 16384 even subintervals",
+    "inversion": "symmetric root in nonnegative y by 80-step bisection after power-of-two bracketing",
+    "parity_tolerance_interval_endpoint": 1e-09,
+    "time_uniform": true,
+    "fixed_look_bonferroni": false,
+    "common_mean_assumption": false
+  },
+  "looks": {
+    "96": "DIAGNOSTIC_ONLY",
+    "192": "DIAGNOSTIC_ONLY",
+    "384": "TERMINAL_SCIENTIFIC_DECISION",
+    "prefix_rule": "a prefix average never binds a branch about the complete frozen manifest",
+    "running_intersection_used_for_decision": false
+  },
+  "decision": {
+    "noninferiority_margin": -0.1,
+    "oracle_floor": 0.8,
+    "PROMOTE_TO_COORDINATION_STAGE": "delta_lower > -0.10 AND om_lower >= 0.80 AND every deterministic hard gate passes",
+    "MODEL_INTERFACE_FAIL": "delta_upper < -0.10 AND om_lower >= 0.80 AND every deterministic hard gate passes",
+    "MODEL_OR_INTERFACE_CEILING": "om_upper < 0.80",
+    "INCONCLUSIVE_OR_UNDERFUNDED": "none of the other scientific branches holds",
+    "precedence": ["TRANSPORT_INCONCLUSIVE", "DESIGN_OR_IMPLEMENTATION_FAIL", "MODEL_OR_INTERFACE_CEILING", "MODEL_INTERFACE_FAIL", "PROMOTE_TO_COORDINATION_STAGE", "INCONCLUSIVE_OR_UNDERFUNDED"]
+  },
+  "missingness": {
+    "pair_rule": "any unresolved transport state in any of six calls makes the complete BC/OM scenario pair missing",
+    "schema_invalid_model_output": "observed condition failure, not missing",
+    "completion_alphabet": [[0, 0], [0, 1], [1, 0], [1, 1]],
+    "joint_enumeration": "Cartesian product of the four paired completions at the exact missing scenario positions",
+    "maximum_enumerated_missing_pairs": 7,
+    "completion_count_at_maximum": 16384,
+    "eight_or_more": "TRANSPORT_INCONCLUSIVE",
+    "branch_invariance": "report a scientific branch only if identical for every joint completion; otherwise TRANSPORT_INCONCLUSIVE",
+    "no_resample_or_substitution": true,
+    "placement_algorithms": {
+      "front_loaded": "lowest frozen scenario indices",
+      "back_loaded": "highest frozen scenario indices",
+      "uniform_hash_positions": "lowest SHA-256 integer of length-framed seed, scenario_id, MISSING-POSITION-r8"
+    },
+    "association_algorithms": {
+      "MCAR": "placement ignores simulated pair value",
+      "BC_FAILURE_ENRICHED": "sort by BC ascending then uniform placement hash",
+      "OM_FAILURE_ENRICHED": "sort by OM ascending then uniform placement hash",
+      "DISCORDANT_ENRICHED": "sort by abs(BC-OM) descending then uniform placement hash"
+    }
+  },
+  "operating_characteristics": {
+    "synthetic_only": true,
+    "experiment_evidence": false,
+    "n": 384,
+    "replicates_per_cell": 10000,
+    "rng": "SHA-256 counter stream; seed is length-framed global seed, cell_id, replicate decimal; each digest is four big-endian unsigned 64-bit uniforms divided by 2^64",
+    "categorical_sampling": "inverse CDF in fixed order p00,p01,p10,p11 with half-open intervals and last-cell closure",
+    "runtime_filtering": "forbidden",
+    "cells": [
+      {"id": "OM70_EQUAL", "p00": 0.25, "p01": 0.05, "p10": 0.05, "p11": 0.65},
+      {"id": "OM80_EQUAL", "p00": 0.15, "p01": 0.05, "p10": 0.05, "p11": 0.75},
+      {"id": "OM90_EQUAL", "p00": 0.05, "p01": 0.05, "p10": 0.05, "p11": 0.85},
+      {"id": "DELTA_NEG25_OM95", "p00": 0.05, "p01": 0.25, "p10": 0.00, "p11": 0.70},
+      {"id": "DELTA_NEG12_OM95", "p00": 0.05, "p01": 0.12, "p10": 0.00, "p11": 0.83},
+      {"id": "DELTA_NEG10_OM95", "p00": 0.05, "p01": 0.10, "p10": 0.00, "p11": 0.85},
+      {"id": "DELTA_POS10_OM90", "p00": 0.00, "p01": 0.00, "p10": 0.10, "p11": 0.90},
+      {"id": "HIGH_DISCORD_EQUAL", "p00": 0.25, "p01": 0.25, "p10": 0.25, "p11": 0.25},
+      {"id": "LOW_DISCORD_EQUAL", "p00": 0.09, "p01": 0.01, "p10": 0.01, "p11": 0.89}
+    ],
+    "required_publication": ["branch frequency per cell", "mean and p95 interval widths", "terminal reachability", "inconclusive probability", "deterministic seed", "implementation hash", "maximum and expected accepted calls"]
+  },
+  "cost": {
+    "accepted_calls_per_complete_pair": 6,
+    "complete_pairs": 384,
+    "maximum_accepted_calls": 2304,
+    "expected_accepted_calls_under_registered_stopping": 2304,
+    "cold_reconstructions": 768,
+    "why_equal": "96 and 192 are diagnostic only, so no scientific early stop exists",
+    "paid_authorization": "separate owner decision after endpoint, snapshot, tokens, prices, reliability, and dollar ceiling are frozen"
+  },
+  "transport_readiness": {
+    "pair_missing_budget": 0.02,
+    "six_call_independence_mapping_only": "per_call_failure <= 1-(1-0.02)^(1/6); dependence is not assumed for the deciding gate",
+    "deciding_gate": "one-sided exact Clopper-Pearson 95 percent upper bound for every registered endpoint failure mode, union-bounded across six call positions, is within pair budget",
+    "clopper_pearson": "invert Binomial(n,p) CDF at observed failures using deterministic bisection",
+    "no_paid_claim": "a route soak is called no-paid only if the frozen provider route has a genuinely zero-price primitive; otherwise it belongs in the later authorization cost"
+  },
+  "reference_vectors": {
+    "environment": {"language": "Python 3.13", "numeric": "IEEE-754 binary64", "external_dependencies": "none"},
+    "delta_all_zero_n384": {"input": "384 copies of 0 transformed to 384 copies of 0.5", "expected_half_width_approx": 0.135},
+    "om_ninety_deterministic": {"input": "346 ones followed by 38 zeros", "expected_half_width_approx": 0.10},
+    "low_discord_deterministic": {"input": "four 01, four 10, and 376 equal pairs in fixed interleaving", "expected_delta_half_width_max": 0.08},
+    "independent_match_required": true
+  },
+  "red_witnesses": ["PREFIX_REVERSAL", "LOW_DISCORD_POWER_KILLED", "ANALYTIC_QUADRATURE_MISMATCH", "OC_RNG_NONDETERMINISM", "MISSING_PAIR_BRANCH_FLIP", "TRANSPORT_SIDEDNESS_UNFROZEN"]
+}

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="892.8pt" height="460.8pt" viewBox="0 0 892.8 460.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-26T05:19:06.306009</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 460.8 
+L 892.8 460.8 
+L 892.8 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 267.84 387.072 
+L 642.816 387.072 
+L 642.816 82.944 
+L 267.84 82.944 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 267.84 148.8384 
+L 598.850064 148.8384 
+L 598.850064 103.943314 
+L 267.84 103.943314 
+z
+" clip-path="url(#p88025e0cef)" style="fill: #e6e9ee"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 267.84 221.249829 
+L 277.000128 221.249829 
+L 277.000128 176.354743 
+L 267.84 176.354743 
+z
+" clip-path="url(#p88025e0cef)" style="fill: #b9c1cc"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 267.84 293.661257 
+L 283.267584 293.661257 
+L 283.267584 248.766171 
+L 267.84 248.766171 
+z
+" clip-path="url(#p88025e0cef)" style="fill: #1b2a49"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 267.84 366.072686 
+L 292.427712 366.072686 
+L 292.427712 321.1776 
+L 267.84 321.1776 
+z
+" clip-path="url(#p88025e0cef)" style="fill: #d08c1e"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 267.84 387.072 
+L 267.84 82.944 
+" clip-path="url(#p88025e0cef)" style="fill: none; stroke: #e6e9ee; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="mbba7fee194" d="M 0 0 
+L 0 3.5 
+" style="stroke: #22262e; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mbba7fee194" x="267.84" y="387.072" style="fill: #22262e; stroke: #22262e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 9px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #22262e" x="267.84" y="400.624246" transform="rotate(-0 267.84 400.624246)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 334.8 387.072 
+L 334.8 82.944 
+" clip-path="url(#p88025e0cef)" style="fill: none; stroke: #e6e9ee; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#mbba7fee194" x="334.8" y="387.072" style="fill: #22262e; stroke: #22262e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 9px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #22262e" x="334.8" y="400.624246" transform="rotate(-0 334.8 400.624246)">20,000</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 401.76 387.072 
+L 401.76 82.944 
+" clip-path="url(#p88025e0cef)" style="fill: none; stroke: #e6e9ee; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#mbba7fee194" x="401.76" y="387.072" style="fill: #22262e; stroke: #22262e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 9px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #22262e" x="401.76" y="400.624246" transform="rotate(-0 401.76 400.624246)">40,000</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 468.72 387.072 
+L 468.72 82.944 
+" clip-path="url(#p88025e0cef)" style="fill: none; stroke: #e6e9ee; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#mbba7fee194" x="468.72" y="387.072" style="fill: #22262e; stroke: #22262e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 9px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #22262e" x="468.72" y="400.624246" transform="rotate(-0 468.72 400.624246)">60,000</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 535.68 387.072 
+L 535.68 82.944 
+" clip-path="url(#p88025e0cef)" style="fill: none; stroke: #e6e9ee; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#mbba7fee194" x="535.68" y="387.072" style="fill: #22262e; stroke: #22262e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 9px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #22262e" x="535.68" y="400.624246" transform="rotate(-0 535.68 400.624246)">80,000</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <path d="M 602.64 387.072 
+L 602.64 82.944 
+" clip-path="url(#p88025e0cef)" style="fill: none; stroke: #e6e9ee; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#mbba7fee194" x="602.64" y="387.072" style="fill: #22262e; stroke: #22262e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 9px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #22262e" x="602.64" y="400.624246" transform="rotate(-0 602.64 400.624246)">100,000</text>
+     </g>
+    </g>
+    <g id="text_7">
+     <text style="font-size: 9px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: middle; fill: #22262e" x="455.328" y="413.181102" transform="rotate(-0 455.328 413.181102)">scheduled model calls</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="patch_7">
+    <path d="M 267.84 387.072 
+L 642.816 387.072 
+" style="fill: none; stroke: #5a6473; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="601.863264" y="128.849353" transform="rotate(-0 601.863264 128.849353)">98,868</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 8.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: end; fill: #22262e" x="263.8224" y="128.461357" transform="rotate(-0 263.8224 128.461357)">route soak in the superseded r8 design</text>
+   </g>
+   <g id="text_10">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="280.013328" y="201.260782" transform="rotate(-0 280.013328 201.260782)">2,736</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 8.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(138.303463 196.312417)">route gate in the registered design</text>
+    <text style="font-size: 8.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(103.304838 205.476717)">(456 six-call trials, pass at 4 or fewer failures)</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="286.280784" y="273.67221" transform="rotate(-0 286.280784 273.67221)">4,608</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 8.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(189.76615 268.871189)">the experiment itself</text>
+    <text style="font-size: 8.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(178.352775 277.827927)">(768 pairs x 6 positions)</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #22262e" x="295.440912" y="346.083639" transform="rotate(-0 295.440912 346.083639)">7,344</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 8.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: end; fill: #22262e" x="263.8224" y="345.841145" transform="rotate(-0 263.8224 345.841145)">total scheduled calls before the one look</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(320.524128 193.756522)">the council replaced the 98,868-call soak with a 2,736-call binomial gate</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(320.524128 202.169514)">that still accepts a 2% bad route with probability at most 0.0495</text>
+    <text style="font-size: 7.6px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(320.524128 210.582506)">and passes a 0.5% good route with probability at least 0.919</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_8">
+    <path d="M 684.15264 387.072 
+L 860.39136 387.072 
+Q 866.016 387.072 866.016 377.94816 
+L 866.016 92.06784 
+Q 866.016 82.944 860.39136 82.944 
+L 684.15264 82.944 
+Q 678.528 82.944 678.528 92.06784 
+L 678.528 377.94816 
+Q 678.528 387.072 684.15264 387.072 
+z
+" clip-path="url(#pdf0d363792)" style="fill: #fbf7ef; stroke: #b9c1cc; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_13">
+    <path d="M 689.77728 201.55392 
+L 854.76672 201.55392 
+" clip-path="url(#pdf0d363792)" style="fill: none; stroke: #b9c1cc; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_14">
+    <path d="M 689.77728 250.2144 
+L 854.76672 250.2144 
+" clip-path="url(#pdf0d363792)" style="fill: none; stroke: #b9c1cc; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_15">
+    <path d="M 689.77728 298.87488 
+L 854.76672 298.87488 
+" clip-path="url(#pdf0d363792)" style="fill: none; stroke: #b9c1cc; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 10.5px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="689.77728" y="104.23296" transform="rotate(-0 689.77728 104.23296)">Illustrative only</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 7.8px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(689.77728 134.849893)">7,344 calls at an assumed all-in</text>
+    <text style="font-size: 7.8px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #22262e" transform="translate(689.77728 143.290346)">price per call:</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 10px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="693.52704" y="186.34752" transform="rotate(-0 693.52704 186.34752)">$0.10</text>
+   </g>
+   <g id="text_20">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: end; fill: #22262e" x="851.01696" y="186.34752" transform="rotate(-0 851.01696 186.34752)">$734</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 10px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="693.52704" y="235.008" transform="rotate(-0 693.52704 235.008)">$0.50</text>
+   </g>
+   <g id="text_22">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: end; fill: #22262e" x="851.01696" y="235.008" transform="rotate(-0 851.01696 235.008)">$3,672</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 10px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="693.52704" y="283.66848" transform="rotate(-0 693.52704 283.66848)">$2.00</text>
+   </g>
+   <g id="text_24">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: end; fill: #22262e" x="851.01696" y="283.66848" transform="rotate(-0 851.01696 283.66848)">$14,688</text>
+   </g>
+   <g id="text_25">
+    <text style="font-style: italic; font-size: 7.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #5a6473" transform="translate(689.77728 344.217997)">Values are illustrative. Prices, token ceilings and</text>
+    <text style="font-style: italic; font-size: 7.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #5a6473" transform="translate(689.77728 352.2692)">retry ceilings are frozen and approved before the</text>
+    <text style="font-style: italic; font-size: 7.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #5a6473" transform="translate(689.77728 360.239403)">route gate runs inside that ceiling; the paid run</text>
+    <text style="font-style: italic; font-size: 7.2px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; fill: #5a6473" transform="translate(689.77728 368.290606)">needs its own authorization after the gates.</text>
+   </g>
+  </g>
+  <g id="text_26">
+   <text style="font-size: 16px; font-family: 'Georgia', '<account>Vu Serif'; text-anchor: start; fill: #1b2a49" x="35.712" y="20.736" transform="rotate(-0 35.712 20.736)">What it costs to press go, in calls, and why the number is what it is</text>
+  </g>
+  <g id="text_27">
+   <text style="font-size: 9.5px; font-family: 'Segoe UI', '<account>Vu Sans', 'Arial', sans-serif; text-anchor: start; fill: #5a6473" x="35.712" y="37.7856" transform="rotate(-0 35.712 37.7856)">The design freezes call counts; it deliberately does not freeze a price. Dollar values are illustrative and are not part of the record.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p88025e0cef">
+   <rect x="267.84" y="82.944" width="374.976" height="304.128"/>
+  </clipPath>
+  <clipPath id="pdf0d363792">
+   <rect x="678.528" y="82.944" width="187.488" height="304.128"/>
+  </clipPath>
+ </defs>
+</svg>

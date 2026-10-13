@@ -1,0 +1,13 @@
+{
+  "schema_id": "OwnerTrustAnchorV1",
+  "anchor_id": "MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1",
+  "fixture_only": true,
+  "algorithm": "ED25519",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAHt3A1PbOnMO1yjjssQWKpzaBOgzgAp0eIeVd9DvZ8zY=\n-----END PUBLIC KEY-----\n",
+  "authorities": [
+    "MBCX01_BUILD_MEASUREMENT_AUTHORITY",
+    "MBCX01_BUILD_STATE_AUTHORITY"
+  ],
+  "minimum_activation_generation": 1,
+  "custody_note": "FIXTURE-ONLY owner trust anchor for the BUILD witness suites. Its private half is a committed TEST key (mbcx01_build_ceremony_fixture.py) and it authorizes nothing physical: every activation it signs binds an in-memory simulated manifest over fixture-only signing keys. A PRODUCTION anchor is generated in the owner ceremony (MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md section 3), never committed to this repository, and delivered to the verifier through operator configuration - configure_owner_trust_anchor(...) at process construction, or the MBCX01_BUILD_OWNER_TRUST_ANCHOR path."
+}

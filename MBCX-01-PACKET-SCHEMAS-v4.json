@@ -1,0 +1,196 @@
+{
+  "contract_id": "MBCX-01-PACKET-SCHEMAS-v4",
+  "normative": true,
+  "json_schema_draft": "https://json-schema.org/draft/2020-12/schema",
+  "validator_runtime": {
+    "engine": "Ajv",
+    "version": "8.20.0",
+    "dialect": "draft-2020-12",
+    "strict": true,
+    "format_assertion": "microsecond-utc is registered as an asserting calendar-valid format",
+    "package_json_sha384": "0AF330905106D4E03139621669897AF6C79D138E739FFB3519C98215672F3C922104E1376BD26985EBD921D0209DD66D",
+    "tree_hash_algorithm": "for every regular file in UTF-8 relative-path byte order: uint64be(path byte length), path UTF-8, uint64be(content byte length), content; uppercase SHA-384 over the concatenation",
+    "runtime_closure": {
+      "ajv": {"version": "8.20.0", "files": 466, "tree_sha384": "90263B4885A2D165C28E817F80C4CBDB8D649BE25C80D57C7E431B7F2DC66F44EC97AD20B82BFC1303F1B8E1D451892C"},
+      "fast-deep-equal": {"version": "3.1.3", "files": 11, "tree_sha384": "AE3E39E921948FB52792826B889082D90BA9F50004B9EE7652108C2ABA129D4E65F069003300FADEADF2050896CBF7D6"},
+      "fast-uri": {"version": "3.1.2", "files": 34, "tree_sha384": "9BA99CD8341DC889B2D8489EFAE6CF65FA13413F83BCDE1B077659123BE7DBE4EF5E0CA3A4C5F6F36BCE6DE3254E829D"},
+      "json-schema-traverse": {"version": "1.0.0", "files": 12, "tree_sha384": "D10792A9F57EE9AEA90EDF1EC1188A39C566ECE040C31A4BFBCD756A2BDDF89CFA27629AF04C0ADDED3399BEEBD367CB"},
+      "require-from-string": {"version": "2.0.2", "files": 4, "tree_sha384": "623220B28B016FDE4296A1954EB28D3548CC148FDD81A89B45E9C555CDBC8119152F767F1CFE60221D50F33A538DAE28"}
+    }
+  },
+  "$defs": {
+    "SemanticId": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Z0-9][A-Z0-9:._/-]*$"},
+    "ActionId": {"type": "string", "pattern": "^(NO_ACTION|ACT\\.[0-9A-F]{64})$"},
+    "HashedActionId": {"type": "string", "pattern": "^ACT\\.[0-9A-F]{64}$"},
+    "Sha256": {"type": "string", "pattern": "^[0-9A-F]{64}$"},
+    "Sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+    "UtcTime": {"type": "string", "format": "microsecond-utc", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z$"},
+    "SafeInteger": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+    "Cut": {
+      "type": "object", "additionalProperties": false,
+      "required": ["journal_seq", "knowledge_time", "valid_time"],
+      "properties": {
+        "journal_seq": {"$ref": "#/$defs/SafeInteger"},
+        "knowledge_time": {"$ref": "#/$defs/UtcTime"},
+        "valid_time": {"$ref": "#/$defs/UtcTime"}
+      }
+    },
+    "Observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope_id", "observed_at", "code"],
+      "properties": {
+        "scope_id": {"$ref": "#/$defs/SemanticId"},
+        "observed_at": {"$ref": "#/$defs/UtcTime"},
+        "code": {"enum": ["NO_CHANGE", "TARGET_VISIBLE", "TARGET_TERMINAL", "DEPENDENCY_BLOCKED"]}
+      }
+    },
+    "ActionEntry": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["action_id", "action_kind", "scope_id", "obligation_id"],
+          "properties": {
+            "action_id": {"$ref": "#/$defs/HashedActionId"},
+            "action_kind": {"const": "ACT_ON_OBLIGATION"},
+            "scope_id": {"$ref": "#/$defs/SemanticId"},
+            "obligation_id": {"$ref": "#/$defs/SemanticId"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["action_id", "action_kind"],
+          "properties": {"action_id": {"const": "NO_ACTION"}, "action_kind": {"const": "NO_ACTION"}}
+        }
+      ]
+    },
+    "CanonicalObject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["object_id", "object_kind", "fields", "source_event_ids"],
+      "properties": {
+        "object_id": {"$ref": "#/$defs/SemanticId"},
+        "object_kind": {"enum": ["FACT", "OBLIGATION", "DEPENDENCY", "HANDOFF", "OBSERVATION"]},
+        "fields": {"type": "object"},
+        "source_event_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}
+      }
+    }
+  },
+  "schemas": {
+    "ExperimentPacketManifestV1": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "scope_id", "cut", "observation", "canonical_world", "canonical_world_hash", "action_catalog", "action_catalog_hash", "gold_read_set", "gold_action_id", "expected_a1_action_ids", "manifest_hash"],
+      "properties": {
+        "schema_id": {"const": "ExperimentPacketManifestV1"},
+        "scenario_id": {"$ref": "#/$defs/SemanticId"},
+        "scope_id": {"$ref": "#/$defs/SemanticId"},
+        "cut": {"$ref": "#/$defs/Cut"},
+        "observation": {"$ref": "#/$defs/Observation"},
+        "canonical_world": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/CanonicalObject"}},
+        "canonical_world_hash": {"$ref": "#/$defs/Sha384"},
+        "action_catalog": {"type": "array", "minItems": 2, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/ActionEntry"}},
+        "action_catalog_hash": {"$ref": "#/$defs/Sha384"},
+        "gold_read_set": {"type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}},
+        "gold_action_id": {"$ref": "#/$defs/HashedActionId"},
+        "expected_a1_action_ids": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/HashedActionId"}},
+        "manifest_hash": {"$ref": "#/$defs/Sha384"}
+      }
+    },
+    "DecisionPacketV4": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "scope_id", "cut", "objects", "action_catalog", "observation", "manifest_hash", "packet_hash"],
+      "properties": {
+        "schema_id": {"const": "DecisionPacketV4"},
+        "scenario_id": {"$ref": "#/$defs/SemanticId"},
+        "scope_id": {"$ref": "#/$defs/SemanticId"},
+        "cut": {"$ref": "#/$defs/Cut"},
+        "objects": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/CanonicalObject"}},
+        "action_catalog": {"type": "array", "minItems": 2, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/ActionEntry"}},
+        "observation": {"$ref": "#/$defs/Observation"},
+        "manifest_hash": {"$ref": "#/$defs/Sha384"},
+        "packet_hash": {"$ref": "#/$defs/Sha384"}
+      }
+    },
+    "A0ResultV2": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "input_packet_hash", "manifest_hash", "selected_action_ids"],
+      "properties": {
+        "schema_id": {"const": "A0ResultV2"},
+        "input_packet_hash": {"$ref": "#/$defs/Sha384"},
+        "manifest_hash": {"$ref": "#/$defs/Sha384"},
+        "selected_action_ids": {"type": "array", "minItems": 1, "maxItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/ActionId"}}
+      }
+    },
+    "WorkerHandoffV4": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "scenario_id", "scope_id", "input_packet_hash", "manifest_hash", "request_hash", "response_hash", "status_code", "proposed_action_ids", "produced_at"],
+      "properties": {
+        "schema_id": {"const": "WorkerHandoffV4"},
+        "scenario_id": {"$ref": "#/$defs/SemanticId"},
+        "scope_id": {"$ref": "#/$defs/SemanticId"},
+        "input_packet_hash": {"$ref": "#/$defs/Sha384"},
+        "manifest_hash": {"$ref": "#/$defs/Sha384"},
+        "request_hash": {"$ref": "#/$defs/Sha384"},
+        "response_hash": {"$ref": "#/$defs/Sha384"},
+        "status_code": {"enum": ["PROPOSE", "ABSTAIN", "REJECT"]},
+        "proposed_action_ids": {"type": "array", "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/$defs/HashedActionId"}},
+        "produced_at": {"$ref": "#/$defs/UtcTime"}
+      },
+      "allOf": [
+        {"if": {"properties": {"status_code": {"const": "PROPOSE"}}, "required": ["status_code"]}, "then": {"properties": {"proposed_action_ids": {"type": "array", "minItems": 1}}}},
+        {"if": {"properties": {"status_code": {"enum": ["ABSTAIN", "REJECT"]}}, "required": ["status_code"]}, "then": {"properties": {"proposed_action_ids": {"type": "array", "maxItems": 0}}}}
+      ]
+    },
+    "WriterReceiptV1": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "manifest_hash", "worker_response_hash", "status_code", "committed_action_ids", "child_event_ids", "receipt_hash"],
+      "properties": {
+        "schema_id": {"const": "WriterReceiptV1"},
+        "manifest_hash": {"$ref": "#/$defs/Sha384"},
+        "worker_response_hash": {"$ref": "#/$defs/Sha384"},
+        "status_code": {"enum": ["COMMITTED", "REJECTED"]},
+        "committed_action_ids": {"type": "array", "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/$defs/HashedActionId"}},
+        "child_event_ids": {"type": "array", "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}},
+        "receipt_hash": {"$ref": "#/$defs/Sha384"}
+      }
+    },
+    "A1ResultV2": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_id", "input_packet_hash", "manifest_hash", "writer_receipt_hash", "selected_action_ids"],
+      "properties": {
+        "schema_id": {"const": "A1ResultV2"},
+        "input_packet_hash": {"$ref": "#/$defs/Sha384"},
+        "manifest_hash": {"$ref": "#/$defs/Sha384"},
+        "writer_receipt_hash": {"$ref": "#/$defs/Sha384"},
+        "selected_action_ids": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/HashedActionId"}}
+      }
+    }
+  },
+  "semantic_validator": {
+    "authority": "expected ExperimentPacketManifestV1 supplied out-of-band by the experiment runner",
+    "reject": ["scenario, scope, cut, observation, manifest, action catalog, or canonical object mismatch", "invented object", "hash mismatch", "unresolved action or prerequisite", "duplicate semantic identity"],
+    "schema_invalid_model_output": "observed condition failure, not transport missingness"
+  },
+  "builders": {
+    "only_action_universe_source": "the same validated ExperimentPacketManifestV1 instance",
+    "BC": "canonical closure of the candidate's frozen object-ID selection",
+    "OM": "canonical closure of the independent gold read-set",
+    "forbidden": ["condition label", "gold label", "answer ID", "free text", "transcript", "scratch space"]
+  },
+  "renderer": {
+    "fixed_byte_envelope": 65536,
+    "serialization": "canonical UTF-8 JSON",
+    "padding": "ASCII U+0020 appended after canonical bytes",
+    "overflow": "DESIGN_OR_IMPLEMENTATION_FAIL before dispatch",
+    "packet_hash": "uppercase SHA-384 of packet without packet_hash",
+    "served_input_hash": "uppercase SHA-256 of the exact 65536 served bytes"
+  },
+  "scorer": {
+    "inputs": ["validated expected manifest", "validated A0ResultV2", "validated WorkerHandoffV4", "validated WriterReceiptV1", "validated A1ResultV2"],
+    "condition_success": "A0_correct AND B_correct AND A1_correct after every manifest/request/response/receipt hash link is exact"
+  }
+}

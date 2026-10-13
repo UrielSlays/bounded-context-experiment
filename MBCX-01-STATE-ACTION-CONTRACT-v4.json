@@ -1,0 +1,173 @@
+{
+  "contract_id": "MBCX-01-STATE-ACTION-CONTRACT-v4",
+  "normative": true,
+  "serialization": "UTF-8 RFC8785/JCS over the closed JSON domain used by this contract",
+  "idempotency": {
+    "key": ["scope_id", "semantic_operation", "idempotency_key"],
+    "same_key_same_semantic_preimage": "DUPLICATE_NOOP with byte-identical state",
+    "same_key_different_semantic_preimage": "IDEMPOTENCY_CONFLICT with byte-identical state",
+    "event_id_reused_with_different_envelope": "EVENT_ID_CONFLICT with byte-identical state"
+  },
+  "$defs": {
+    "SemanticId": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Z0-9][A-Z0-9:._/-]*$"},
+    "ActionId": {"type": "string", "pattern": "^ACT\\.[0-9A-F]{64}$"},
+    "Sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+    "UtcTime": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z$"},
+    "SafeInteger": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+    "Cut": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["journal_seq", "knowledge_time", "valid_time"],
+      "properties": {
+        "journal_seq": {"$ref": "#/$defs/SafeInteger"},
+        "knowledge_time": {"$ref": "#/$defs/UtcTime"},
+        "valid_time": {"$ref": "#/$defs/UtcTime"}
+      }
+    },
+    "ActionTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action_id", "obligation_id"],
+      "properties": {
+        "action_id": {"$ref": "#/$defs/ActionId"},
+        "obligation_id": {"$ref": "#/$defs/SemanticId"}
+      }
+    }
+  },
+  "event_envelope": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["event_id", "scope_id", "event_type", "semantic_operation", "idempotency_key", "journal_seq", "observed_at", "valid_from", "valid_to", "originating_cut", "payload"],
+    "properties": {
+      "event_id": {"$ref": "#/$defs/SemanticId"},
+      "scope_id": {"$ref": "#/$defs/SemanticId"},
+      "event_type": {"enum": ["assert_fact", "correct_fact", "retract_fact", "open_obligation", "reschedule_obligation", "delegate_obligation", "complete_obligation", "cancel_obligation", "reopen_obligation", "link_dependency", "unlink_dependency", "open_handoff", "record_call_response", "propose_handoff_result", "commit_handoff_result", "reject_handoff_result", "close_handoff"]},
+      "semantic_operation": {"enum": ["ASSERT_FACT", "CORRECT_FACT", "RETRACT_FACT", "OPEN_OBLIGATION", "RESCHEDULE_OBLIGATION", "DELEGATE_OBLIGATION", "COMPLETE_OBLIGATION", "CANCEL_OBLIGATION", "REOPEN_OBLIGATION", "LINK_DEPENDENCY", "UNLINK_DEPENDENCY", "OPEN_HANDOFF", "RECORD_CALL_RESPONSE", "PROPOSE_HANDOFF_RESULT", "COMMIT_HANDOFF_RESULT", "REJECT_HANDOFF_RESULT", "CLOSE_HANDOFF"]},
+      "idempotency_key": {"$ref": "#/$defs/SemanticId"},
+      "journal_seq": {"$ref": "#/$defs/SafeInteger"},
+      "observed_at": {"$ref": "#/$defs/UtcTime"},
+      "valid_from": {"$ref": "#/$defs/UtcTime"},
+      "valid_to": {"oneOf": [{"$ref": "#/$defs/UtcTime"}, {"type": "null"}]},
+      "originating_cut": {"$ref": "#/$defs/Cut"},
+      "payload": {"type": "object"}
+    }
+  },
+  "guard_catalog": {
+    "FACT_ABSENT_AT_CUT": "fact has no visible effective head at originating cut",
+    "FACT_PARENT_VISIBLE_HEAD": "parent is the unique visible effective head and has no child",
+    "FACT_TARGET_VISIBLE": "target is visible, effective, and not retracted",
+    "OBLIGATION_ABSENT_PREREQS_EXIST": "obligation absent and every same-scope prerequisite exists",
+    "OBLIGATION_OPEN": "obligation is OPEN at originating cut",
+    "OBLIGATION_DUE_UNBLOCKED": "critical obligation is OPEN and due, prerequisites completed, and action matches",
+    "OBLIGATION_TERMINAL": "obligation is COMPLETED or CANCELLED at originating cut",
+    "DEPENDENCY_ACYCLIC": "same-scope OPEN endpoints exist and new edge creates no directed cycle",
+    "DEPENDENCY_EXISTS": "named same-scope edge exists",
+    "HANDOFF_ABSENT_TARGET_OPEN": "handoff absent and target obligation OPEN at originating cut",
+    "CALL_KEY_UNRECORDED": "call key has no different durable response",
+    "HANDOFF_OPEN_ACTIONS_LEGAL": "handoff OPEN, hashes match, actions resolve, and each is legal against immutable originating cut",
+    "HANDOFF_PROPOSED_CHILDREN_LEGAL": "handoff PROPOSED and frozen children remain legal against immutable originating cut",
+    "HANDOFF_OPEN_NO_PROPOSAL": "handoff OPEN with no proposal",
+    "HANDOFF_TERMINAL": "handoff COMMITTED or REJECTED"
+  },
+  "effect_catalog": {
+    "CREATE_FACT_ROOT": "append root fact version",
+    "APPEND_FACT_CORRECTION": "close parent validity and append child version",
+    "RETRACT_FACT_VERSION": "mark target retracted",
+    "CREATE_OBLIGATION": "create OPEN obligation",
+    "REPLACE_DUE_AT": "replace due_at",
+    "REPLACE_OWNER_ROLE": "replace owner_role without changing scope",
+    "COMPLETE_OBLIGATION": "set COMPLETED and terminal event",
+    "CANCEL_OBLIGATION": "set CANCELLED and terminal event",
+    "REOPEN_OBLIGATION": "set OPEN, replace due and owner, clear terminal",
+    "ADD_DEPENDENCY": "add directed prerequisite edge",
+    "REMOVE_DEPENDENCY": "remove directed prerequisite edge",
+    "CREATE_HANDOFF": "create OPEN handoff bound to task, cut, action catalog, and immutable obligation snapshot",
+    "RECORD_RESPONSE": "record immutable response identity before parse",
+    "FREEZE_PROPOSAL": "set PROPOSED and freeze UTF-8 ordered action IDs",
+    "COMMIT_CHILDREN": "atomically complete every frozen target and set COMMITTED",
+    "REJECT_HANDOFF": "append no child and set REJECTED with one code",
+    "CLOSE_HANDOFF": "set CLOSED while retaining terminal disposition"
+  },
+  "event_types": {
+    "assert_fact": {
+      "semantic_operation": "ASSERT_FACT", "guard_id": "FACT_ABSENT_AT_CUT", "effect_id": "CREATE_FACT_ROOT", "illegal_result": "FACT_ALREADY_EXISTS", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["subject_id", "predicate_id", "value_code"], "properties": {"subject_id": {"$ref": "#/$defs/SemanticId"}, "predicate_id": {"$ref": "#/$defs/SemanticId"}, "value_code": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "correct_fact": {
+      "semantic_operation": "CORRECT_FACT", "guard_id": "FACT_PARENT_VISIBLE_HEAD", "effect_id": "APPEND_FACT_CORRECTION", "illegal_result": "FACT_PARENT_NOT_HEAD", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["subject_id", "predicate_id", "parent_event_id", "value_code"], "properties": {"subject_id": {"$ref": "#/$defs/SemanticId"}, "predicate_id": {"$ref": "#/$defs/SemanticId"}, "parent_event_id": {"$ref": "#/$defs/SemanticId"}, "value_code": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "retract_fact": {
+      "semantic_operation": "RETRACT_FACT", "guard_id": "FACT_TARGET_VISIBLE", "effect_id": "RETRACT_FACT_VERSION", "illegal_result": "FACT_TARGET_UNAVAILABLE", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["subject_id", "predicate_id", "target_event_id"], "properties": {"subject_id": {"$ref": "#/$defs/SemanticId"}, "predicate_id": {"$ref": "#/$defs/SemanticId"}, "target_event_id": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "open_obligation": {
+      "semantic_operation": "OPEN_OBLIGATION", "guard_id": "OBLIGATION_ABSENT_PREREQS_EXIST", "effect_id": "CREATE_OBLIGATION", "illegal_result": "OBLIGATION_ALREADY_EXISTS_OR_BAD_PREREQUISITE", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "subject_id", "owner_role", "due_at", "critical", "completion_action_id", "prerequisite_obligation_ids"], "properties": {"obligation_id": {"$ref": "#/$defs/SemanticId"}, "subject_id": {"$ref": "#/$defs/SemanticId"}, "owner_role": {"enum": ["CONDUCTOR", "WORKER", "WRITER"]}, "due_at": {"$ref": "#/$defs/UtcTime"}, "critical": {"type": "boolean"}, "completion_action_id": {"$ref": "#/$defs/ActionId"}, "prerequisite_obligation_ids": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/SemanticId"}}}}
+    },
+    "reschedule_obligation": {
+      "semantic_operation": "RESCHEDULE_OBLIGATION", "guard_id": "OBLIGATION_OPEN", "effect_id": "REPLACE_DUE_AT", "illegal_result": "OBLIGATION_NOT_OPEN", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "due_at"], "properties": {"obligation_id": {"$ref": "#/$defs/SemanticId"}, "due_at": {"$ref": "#/$defs/UtcTime"}}}
+    },
+    "delegate_obligation": {
+      "semantic_operation": "DELEGATE_OBLIGATION", "guard_id": "OBLIGATION_OPEN", "effect_id": "REPLACE_OWNER_ROLE", "illegal_result": "OBLIGATION_NOT_OPEN", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "owner_role"], "properties": {"obligation_id": {"$ref": "#/$defs/SemanticId"}, "owner_role": {"enum": ["CONDUCTOR", "WORKER", "WRITER"]}}}
+    },
+    "complete_obligation": {
+      "semantic_operation": "COMPLETE_OBLIGATION", "guard_id": "OBLIGATION_DUE_UNBLOCKED", "effect_id": "COMPLETE_OBLIGATION", "illegal_result": "OBLIGATION_NOT_DUE_AT_ORIGINATING_CUT", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "completion_action_id", "originating_cut_hash"], "properties": {"obligation_id": {"$ref": "#/$defs/SemanticId"}, "completion_action_id": {"$ref": "#/$defs/ActionId"}, "originating_cut_hash": {"$ref": "#/$defs/Sha384"}}}
+    },
+    "cancel_obligation": {
+      "semantic_operation": "CANCEL_OBLIGATION", "guard_id": "OBLIGATION_OPEN", "effect_id": "CANCEL_OBLIGATION", "illegal_result": "OBLIGATION_NOT_OPEN", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "cancellation_code"], "properties": {"obligation_id": {"$ref": "#/$defs/SemanticId"}, "cancellation_code": {"enum": ["OWNER_CANCELLED", "SUPERSEDED", "INVALIDATED"]}}}
+    },
+    "reopen_obligation": {
+      "semantic_operation": "REOPEN_OBLIGATION", "guard_id": "OBLIGATION_TERMINAL", "effect_id": "REOPEN_OBLIGATION", "illegal_result": "OBLIGATION_NOT_TERMINAL", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "due_at", "owner_role"], "properties": {"obligation_id": {"$ref": "#/$defs/SemanticId"}, "due_at": {"$ref": "#/$defs/UtcTime"}, "owner_role": {"enum": ["CONDUCTOR", "WORKER", "WRITER"]}}}
+    },
+    "link_dependency": {
+      "semantic_operation": "LINK_DEPENDENCY", "guard_id": "DEPENDENCY_ACYCLIC", "effect_id": "ADD_DEPENDENCY", "illegal_result": "DEPENDENCY_ILLEGAL", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "prerequisite_obligation_id"], "properties": {"obligation_id": {"$ref": "#/$defs/SemanticId"}, "prerequisite_obligation_id": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "unlink_dependency": {
+      "semantic_operation": "UNLINK_DEPENDENCY", "guard_id": "DEPENDENCY_EXISTS", "effect_id": "REMOVE_DEPENDENCY", "illegal_result": "DEPENDENCY_NOT_FOUND", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["obligation_id", "prerequisite_obligation_id"], "properties": {"obligation_id": {"$ref": "#/$defs/SemanticId"}, "prerequisite_obligation_id": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "open_handoff": {
+      "semantic_operation": "OPEN_HANDOFF", "guard_id": "HANDOFF_ABSENT_TARGET_OPEN", "effect_id": "CREATE_HANDOFF", "illegal_result": "HANDOFF_OR_TARGET_ILLEGAL", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "target_obligation_id", "task_packet_hash", "originating_cut_hash", "action_catalog"], "properties": {"handoff_id": {"$ref": "#/$defs/SemanticId"}, "target_obligation_id": {"$ref": "#/$defs/SemanticId"}, "task_packet_hash": {"$ref": "#/$defs/Sha384"}, "originating_cut_hash": {"$ref": "#/$defs/Sha384"}, "action_catalog": {"type": "array", "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/$defs/ActionTarget"}}}}
+    },
+    "record_call_response": {
+      "semantic_operation": "RECORD_CALL_RESPONSE", "guard_id": "CALL_KEY_UNRECORDED", "effect_id": "RECORD_RESPONSE", "illegal_result": "CALL_RESPONSE_CONFLICT", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["scenario_id", "condition", "node", "request_hash", "response_hash", "response_ref", "provider_request_id", "route_fingerprint", "accepted_at"], "properties": {"scenario_id": {"$ref": "#/$defs/SemanticId"}, "condition": {"enum": ["BC", "OM"]}, "node": {"enum": ["A0", "B", "A1"]}, "request_hash": {"$ref": "#/$defs/Sha384"}, "response_hash": {"$ref": "#/$defs/Sha384"}, "response_ref": {"$ref": "#/$defs/SemanticId"}, "provider_request_id": {"$ref": "#/$defs/SemanticId"}, "route_fingerprint": {"$ref": "#/$defs/Sha384"}, "accepted_at": {"$ref": "#/$defs/UtcTime"}}}
+    },
+    "propose_handoff_result": {
+      "semantic_operation": "PROPOSE_HANDOFF_RESULT", "guard_id": "HANDOFF_OPEN_ACTIONS_LEGAL", "effect_id": "FREEZE_PROPOSAL", "illegal_result": "PROPOSAL_INVALID", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "worker_handoff_hash", "originating_cut_hash", "action_ids"], "properties": {"handoff_id": {"$ref": "#/$defs/SemanticId"}, "worker_handoff_hash": {"$ref": "#/$defs/Sha384"}, "originating_cut_hash": {"$ref": "#/$defs/Sha384"}, "action_ids": {"type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/$defs/ActionId"}}}}
+    },
+    "commit_handoff_result": {
+      "semantic_operation": "COMMIT_HANDOFF_RESULT", "guard_id": "HANDOFF_PROPOSED_CHILDREN_LEGAL", "effect_id": "COMMIT_CHILDREN", "illegal_result": "COMMIT_INVALID", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "proposal_event_id"], "properties": {"handoff_id": {"$ref": "#/$defs/SemanticId"}, "proposal_event_id": {"$ref": "#/$defs/SemanticId"}}}
+    },
+    "reject_handoff_result": {
+      "semantic_operation": "REJECT_HANDOFF_RESULT", "guard_id": "HANDOFF_OPEN_NO_PROPOSAL", "effect_id": "REJECT_HANDOFF", "illegal_result": "HANDOFF_NOT_OPEN", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "rejection_code", "proposal_hash"], "properties": {"handoff_id": {"$ref": "#/$defs/SemanticId"}, "rejection_code": {"enum": ["SCHEMA_INVALID", "HASH_MISMATCH", "CUT_MISMATCH", "SCOPE_MISMATCH", "ACTION_UNAVAILABLE", "TRANSITION_ILLEGAL", "IDEMPOTENCY_CONFLICT"]}, "proposal_hash": {"$ref": "#/$defs/Sha384"}}}
+    },
+    "close_handoff": {
+      "semantic_operation": "CLOSE_HANDOFF", "guard_id": "HANDOFF_TERMINAL", "effect_id": "CLOSE_HANDOFF", "illegal_result": "HANDOFF_NOT_TERMINAL", "duplicate_result": "DUPLICATE_NOOP",
+      "payload_schema": {"type": "object", "additionalProperties": false, "required": ["handoff_id"], "properties": {"handoff_id": {"$ref": "#/$defs/SemanticId"}}}
+    }
+  },
+  "call_ledger": {
+    "key": ["scenario_id", "condition", "node"],
+    "states": ["PREPARED", "DISPATCHED", "RESPONSE_DURABLY_RECORDED", "PROVEN_PRE_ACCEPT_FAILURE", "ACCEPTANCE_AMBIGUOUS"],
+    "retry_only_from": "PROVEN_PRE_ACCEPT_FAILURE",
+    "acceptance_ambiguous": "terminal missing pair unless a separately frozen route contract proves exact request binding",
+    "response_order": "durably record immutable bytes and hash before parse"
+  },
+  "mandatory_witnesses": {
+    "ordered_event_type_pairs": 289,
+    "generated_trace_seed": "MBCX01-R9-STATE-TRACES-V1",
+    "mutants": ["DROP_RESCHEDULE_EFFECT", "DROP_DELEGATE_EFFECT", "TWO_CYCLE_ONLY", "SKIP_ORIGINATING_CUT", "PAYLOAD_HASH_IDEMPOTENCY", "SEEN_ONLY_EFFECT"]
+  }
+}

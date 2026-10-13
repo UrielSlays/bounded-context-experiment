@@ -1,0 +1,88 @@
+MBCX-01 BUILD B — ETW PMC CONSUMER: GREEN WITNESS RUN (three live-path defects)
+Date: 2026-08-15
+<personal folder listing redacted from this log>
+Branch: codex/mbcx01-production-build   HEAD: 5ba03893b65da9ab3b75476b0a9e740d4935dce9
+Python: Python 3.11.9
+Pair: MBCX-01-BUILD-ETW-CONSUMER-RED-WITNESS-RUN-2026-08-15.txt (the same seven
+      witnesses, run against the HEAD copy of the consumer, all seven failing).
+
+⛔ NOTHING IN THIS RUN STARTED AN ETW SESSION, CREATED A JOB OBJECT, TOUCHED A
+   PMU, SET MBCX01_BUILD_ALLOW_PHYSICAL OR RAN run-smoke-cell.ps1.
+
+WHAT CHANGED (mbcx01_build_etw_consumer.py only)
+------------------------------------------------
+1. EVENT_HEADER_FLAG_CLASSIC_HEADER 0x0040 -> 0x0100 (LIVE, evntcons.h:156);
+   EVENT_HEADER_EXT_TYPE_PROCESS_START_KEY 0x000A -> 0x000D (dead, evntcons.h:63);
+   EVENT_HEADER_EXT_TYPE_EVENT_KEY 0x000B -> 0x000A (dead, evntcons.h:60);
+   EVENT_HEADER_EXT_TYPE_PMC_COUNTERS 0x0008 unchanged (already correct).
+   The FLAGGED comments now record verification against the INSTALLED SDK header
+   on 2026-08-15, with file and line numbers, because Learn publishes no numbers
+   for these at all — which is why they were flagged in the first place.
+2. `_decode_kernel_process_event()` no longer writes a hard-coded
+   `process_start_key: None`; `bind_thread_start_keys()` binds each thread event
+   to the ProcessStart the same consumer decoded, by PID and QPC interval, and
+   `capture()` runs it. An unbindable thread event is ETW_THREAD_START_KEY_UNBINDABLE.
+3. `stop()` checks the CloseTrace return (ERROR_SUCCESS / ERROR_CTX_CLOSE_PENDING
+   = 7007, winerror.h:18367), checks whether the pump thread actually ended after
+   a bounded join, carries the counters it read while the session was alive, and
+   invalidates the session handle; `capture()` refuses on an unproven drain
+   (ETW_TRACE_NOT_STOPPED / ETW_TRACE_DRAIN_INCOMPLETE) and never re-queries.
+
+================================================================================
+GREEN — the same seven witnesses on the fixed consumer
+Command: python -m unittest test_mbcx01_build_measurement.BuildEtwConsumerTests -v
+         -k bw48 -k bw49 -k bw50 -k bw51 -k bw52 -k bw53 -k bw54
+================================================================================
+test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header)
+Every `VALUE NOT PUBLISHED` ExtType/Flags pin equals the SDK's value. ... ok
+test_bw49_positive_decoded_thread_events_join_the_signed_member_roster (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw49_positive_decoded_thread_events_join_the_signed_member_roster)
+The REAL decoder emits thread events a member roster can join. ... ok
+test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name)
+A thread the ProcessStart stream never explained is a NAMED fault. ... ok
+test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain)
+`CloseTrace`'s return was DISCARDED, so a failed close read as a drain. ... ok
+test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain)
+`join(timeout=30)`'s result was DISCARDED, so a timeout read as a drain. ... ok
+test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops)
+`capture()` queried the loss counters a SECOND time, after the STOP. ... ok
+test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate)
+The wrong CLASSIC_HEADER pin DROPPED records. Show the drop, not the number. ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.091s
+
+OK
+
+================================================================================
+GREEN (sharpened) — the same defect-3 probe that reported EventsLost=7 from a
+stopped session now shows ONE loss query, carried counters, and a session handle
+invalidated at stop(). (bw53 asserts capture().session_handle is still 0x1234:
+the handle is kept as EVIDENCE and destroyed as a HANDLE.)
+Command: python <scratch>/probe_second_query_postfix.py
+================================================================================
+consumer module : <repo>-build\mbcx01_build_etw_consumer.py
+stop() loss     : LossCounters(events_lost=0, log_buffers_lost=0, realtime_buffers_lost=0)
+calls after stop: [('ControlTraceW', 4660, 0), ('ControlTraceW', 4660, 1)]
+capture().loss  : LossCounters(events_lost=0, log_buffers_lost=0, realtime_buffers_lost=0)
+calls after cap : [('ControlTraceW', 4660, 0), ('ControlTraceW', 4660, 1)]
+session handle after stop: 0
+
+================================================================================
+WHOLE BUILD SUITE
+Command: python -m unittest test_mbcx01_build_measurement test_mbcx01_build_state test_mbcx01_build_integration
+================================================================================
+.........................................................................................................................
+----------------------------------------------------------------------
+Ran 121 tests in 29.533s
+
+OK
+
+================================================================================
+BUNDLE VERIFIER (real exit code, captured directly — not from a pipeline)
+Command: python verify-build-bundle.py ; echo "EXIT: $?"
+================================================================================
+EXIT: 0
+  build_suites : PASS, 121 tests (was 114 + 7 new ETW witnesses)
+  frozen_suites: PASS, 147 tests (r13 layer untouched)
+  ledger       : PASS, 45 invariants / 121 witnesses, two_way_total true
+  top_level_readiness: BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED

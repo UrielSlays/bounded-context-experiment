@@ -1,0 +1,449 @@
+MBCX-01 BUILD - AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP - RED WITNESS RUN
+Date: 2026-08-14
+Fix class: AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP (BUILD acceptance council r1 = NO-GO)
+Discharges: MBCX01-BUILD-R1-TRUST-BOOTSTRAP (load bearing) + MBCX01-BUILD-R1-SIGNATURE-CARRIER (leaf)
+Worktree: <repo>-build
+Branch: codex/mbcx01-production-build  HEAD: 4e58f9b545c0546fd53132da71500cc5be04280c
+Python: Python 3.11.9  Node: v24.17.0
+
+EVERY RUN BELOW EXECUTES THE AUTHORITY MODULES AS COMMITTED AT HEAD
+(4e58f9b545c0546fd53132da71500cc5be04280c), reconstructed with 'git archive HEAD | tar -x' into a
+temporary directory. The reconstruction was byte-verified against git:
+  mbcx01_build_measurement_authority.py      sha256(HEAD)=77811b3577440010afbb51c56077bb93  IDENTICAL-TO-HEAD
+  mbcx01_build_state_authority.py            sha256(HEAD)=f40c4d8d628ecbaa9409e106fc73990c  IDENTICAL-TO-HEAD
+  mbcx01_build_exactness_authority.py        sha256(HEAD)=f2b61bde94d3c455fc4eeaf401c6c18e  IDENTICAL-TO-HEAD
+  mbcx01_build_state_adapter.py              sha256(HEAD)=37d89f6a8233814fba2f9ab94fc31719  IDENTICAL-TO-HEAD
+  mbcx01_build_state_operator_b.py           sha256(HEAD)=74f230ee6c2de955eb7bcf99144dd568  IDENTICAL-TO-HEAD
+  mbcx01_build_integration.py                sha256(HEAD)=020c90a838dcc7e7e3e07c4cfa7f90eb  IDENTICAL-TO-HEAD
+
+No experiment, provider/model call, network call, physical collection or signing
+ceremony ran. Every key below is a labelled FIXTURE/attacker test key.
+
+================================================================================
+RED STAGE 1 (DECIDING) - the r1 council's EXECUTED attacks, reproduced on the
+PRE-FIX bytes with the PRE-FIX API only. No new module is imported here: this is
+'git archive HEAD' plus the probe file, nothing else.
+================================================================================
+
+=== COMMAND: python mbcx01_build_trustboot_probe.py  (cwd = HEAD reconstruction) ===
+
+== PROBE A: BUILD B, fully self-authored measurement universe (SEAT2 + SEAT3 F2) ==
+evaluate_production_measurement -> []
+
+== PROBE B: BUILD A, fully self-authored state universe (SEAT3 F1) ==
+verify_state_authority_receipt_v2 -> []
+verify_production_scorer_input    -> []
+
+== PROBE C: BUILD A, the ceremony spec's own production-shaped manifest (ChatGPT corollary) ==
+verify_state_authority_receipt_v2 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+
+== PROBE D: signature carrier malleability (SEAT3 F6) ==
+canonical carrier                 -> []
+whitespace-injected carrier       -> []
+
+READ THIS AS: 
+  PROBE A  - a FRESH attacker Ed25519 key + a fully attacker-authored
+             MeasurementTrustRootManifestV3 + attacker-authored custody documents
+             + 100 attacker-signed envelopes CLEAR production admission ([]).
+             = SEAT2 (ChatGPT Sol) and SEAT3 (codex) F2, reproduced.
+  PROBE B  - the same on BUILD A: attacker key + attacker manifest + custody
+             digests of 'A'*96 verify clean AND clear scientific admission ([]).
+             = SEAT3 F1, reproduced.
+  PROBE C  - the ceremony spec's OWN production-shaped manifest (production_ready
+             true, ACTIVATED, roots not fixture_only, MBCX-01-BUILD-KEY-CUSTODY-
+             CEREMONY.md 3.3) is REFUSED STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED.
+             = ChatGPT's both-sides-wrong corollary, reproduced.
+  PROBE D  - a whitespace-injected but otherwise valid Ed25519 signature carrier
+             is ACCEPTED ([]), exactly like the canonical carrier.
+             = SEAT3 F6 / MBCX01-BUILD-R1-SIGNATURE-CARRIER, reproduced.
+
+================================================================================
+RED STAGE 2 - the TEN NEW WITNESSES (ba29-ba33, bw17-bw21) executed against the
+same PRE-FIX authority bytes. Reconstruction = 'git archive HEAD' plus ONLY the
+new support files and the two witness files:
+    mbcx01_build_trust_anchor.py, mbcx01_build_ceremony_fixture.py,
+    MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json,
+    verify-build-receipt-signature.mjs,
+    test_mbcx01_build_state.py, test_mbcx01_build_measurement.py
+Every authority module is byte-identical to HEAD (table above).
+
+The pre-fix authorities have no NAME for anything in the fix class, so the
+witnesses would die with AttributeError in setUp and prove nothing about
+behaviour. prefix_red_runner.py installs a NAME-ONLY shim - the missing constants,
+the binding derivation (a pure function of manifest+custody that decides nothing),
+and it makes the pre-fix custody check IGNORE the fifth custody item exactly as
+pre-fix code did (it had no concept of one). The shim adds NO check, NO refusal
+and NO anchor resolution; its full source is quoted at the end of this file.
+================================================================================
+
+=== COMMAND: python prefix_red_runner.py  (cwd = HEAD reconstruction + witnesses) ===
+
+test_ba29_adversarial_fully_self_authored_state_universe_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba29_adversarial_fully_self_authored_state_universe_is_refused)
+Invariant: a fresh attacker Ed25519 key + an attacker-authored manifest + ... FAIL
+test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused)
+Invariant: PRODUCTION shape is not authority. The same production-shaped ... 
+  test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='not-the-anchor')
+Invariant: PRODUCTION shape is not authority. The same production-shaped ... FAIL
+  test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='binds-another-manifest')
+Invariant: PRODUCTION shape is not authority. The same production-shaped ... FAIL
+  test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='rolled-back-generation')
+Invariant: PRODUCTION shape is not authority. The same production-shaped ... FAIL
+  test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='anchor-id-substituted')
+Invariant: PRODUCTION shape is not authority. The same production-shaped ... FAIL
+test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param)
+Invariant: the LEGITIMATE authenticated ceremony path is green. The ceremony ... ERROR
+test_ba32_adversarial_unconfigured_anchor_fails_closed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba32_adversarial_unconfigured_anchor_fails_closed)
+Invariant: "nobody configured a root of trust" must never read as "no root of ... ERROR
+test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused)
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... FAIL
+test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis)
+Invariant: a fresh attacker key + attacker manifest + attacker custody ... FAIL
+test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid)
+Invariant: the LEGITIMATE authenticated ceremony path is green — a manifest ... ok
+test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back)
+Invariant: every way of reaching admission without THIS owner anchor having ... FAIL
+test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused)
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... 
+  test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2\nKrJ4V7X')
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... FAIL
+  test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2 KrJ4V7X')
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... FAIL
+  test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2KrJ4V7Xg')
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... FAIL
+test_bw21_adversarial_exactness_authority_requires_the_anchored_activation (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw21_adversarial_exactness_authority_requires_the_anchored_activation)
+Invariant: the exactness authority is the THIRD production door and takes the ... ERROR
+
+======================================================================
+ERROR: test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param)
+Invariant: the LEGITIMATE authenticated ceremony path is green. The ceremony
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 1157, in test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param
+    receipt = adapter.produce_state_authority_receipt_v2(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: produce_state_authority_receipt_v2() got an unexpected keyword argument 'trust_root_manifest'
+
+======================================================================
+ERROR: test_ba32_adversarial_unconfigured_anchor_fails_closed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba32_adversarial_unconfigured_anchor_fails_closed)
+Invariant: "nobody configured a root of trust" must never read as "no root of
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 1180, in test_ba32_adversarial_unconfigured_anchor_fails_closed
+    receipt = adapter.produce_state_authority_receipt_v2(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: produce_state_authority_receipt_v2() got an unexpected keyword argument 'trust_root_manifest'
+
+======================================================================
+ERROR: test_bw21_adversarial_exactness_authority_requires_the_anchored_activation (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw21_adversarial_exactness_authority_requires_the_anchored_activation)
+Invariant: the exactness authority is the THIRD production door and takes the
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_measurement.py", line 1131, in test_bw21_adversarial_exactness_authority_requires_the_anchored_activation
+    exactness.verify_production_carrier_exactness(
+TypeError: verify_production_carrier_exactness() got an unexpected keyword argument 'custody_evidence'
+
+======================================================================
+FAIL: test_ba29_adversarial_fully_self_authored_state_universe_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba29_adversarial_fully_self_authored_state_universe_is_refused)
+Invariant: a fresh attacker Ed25519 key + an attacker-authored manifest +
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 1093, in test_ba29_adversarial_fully_self_authored_state_universe_is_refused
+    self.assert_named_rejection(
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 441, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED' not found in []
+
+======================================================================
+FAIL: test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='not-the-anchor')
+Invariant: PRODUCTION shape is not authority. The same production-shaped
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 1125, in test_ba30_adversarial_production_manifest_without_owner_signature_is_refused
+    self.assert_named_rejection(
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 441, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED' not found in ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+
+======================================================================
+FAIL: test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='binds-another-manifest')
+Invariant: PRODUCTION shape is not authority. The same production-shaped
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 1125, in test_ba30_adversarial_production_manifest_without_owner_signature_is_refused
+    self.assert_named_rejection(
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 441, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED' not found in ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+
+======================================================================
+FAIL: test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='rolled-back-generation')
+Invariant: PRODUCTION shape is not authority. The same production-shaped
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 1125, in test_ba30_adversarial_production_manifest_without_owner_signature_is_refused
+    self.assert_named_rejection(
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 441, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED' not found in ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+
+======================================================================
+FAIL: test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='anchor-id-substituted')
+Invariant: PRODUCTION shape is not authority. The same production-shaped
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 1125, in test_ba30_adversarial_production_manifest_without_owner_signature_is_refused
+    self.assert_named_rejection(
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 441, in assert_named_rejection
+    self.assertIn(named, errors)
+AssertionError: 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED' not found in ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+
+======================================================================
+FAIL: test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused)
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_state.py", line 1198, in test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused
+    self.assertEqual(self.verify(receipt), [])
+AssertionError: Lists differ: ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED'] != []
+
+First list contains 2 additional elements.
+First extra element 0:
+'STATE_AUTHORITY_UNAVAILABLE'
+
+- ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
++ []
+
+======================================================================
+FAIL: test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis)
+Invariant: a fresh attacker key + attacker manifest + attacker custody
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_measurement.py", line 1028, in test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis
+    self.assertIn("PRODUCTION_ACTIVATION_UNAUTHENTICATED", errors)
+AssertionError: 'PRODUCTION_ACTIVATION_UNAUTHENTICATED' not found in []
+
+======================================================================
+FAIL: test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back)
+Invariant: every way of reaching admission without THIS owner anchor having
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_measurement.py", line 1073, in test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back
+    self.assertIn("PRODUCTION_TRUST_ANCHOR_UNAVAILABLE", errors)
+AssertionError: 'PRODUCTION_TRUST_ANCHOR_UNAVAILABLE' not found in []
+
+======================================================================
+FAIL: test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2\nKrJ4V7X')
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_measurement.py", line 1119, in test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused
+    self.assertIn("MEASUREMENT_SIGNATURE_CARRIER_INVALID", admit(forged))
+AssertionError: 'MEASUREMENT_SIGNATURE_CARRIER_INVALID' not found in ['MEASUREMENT_SIGNATURE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+
+======================================================================
+FAIL: test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2 KrJ4V7X')
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_measurement.py", line 1119, in test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused
+    self.assertIn("MEASUREMENT_SIGNATURE_CARRIER_INVALID", admit(forged))
+AssertionError: 'MEASUREMENT_SIGNATURE_CARRIER_INVALID' not found in ['MEASUREMENT_SIGNATURE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+
+======================================================================
+FAIL: test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2KrJ4V7Xg')
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix\test_mbcx01_build_measurement.py", line 1119, in test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused
+    self.assertIn("MEASUREMENT_SIGNATURE_CARRIER_INVALID", admit(forged))
+AssertionError: 'MEASUREMENT_SIGNATURE_CARRIER_INVALID' not found in ['MEASUREMENT_SIGNATURE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+
+----------------------------------------------------------------------
+Ran 10 tests in 9.755s
+
+FAILED (failures=11, errors=3)
+
+EXIT STATUS OF prefix_red_runner.py: 1 (non-zero = RED, as required)
+
+================================================================================
+THE DECIDING RED LINES, quoted
+================================================================================
+
+ERROR: test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param)
+ERROR: test_ba32_adversarial_unconfigured_anchor_fails_closed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba32_adversarial_unconfigured_anchor_fails_closed)
+ERROR: test_bw21_adversarial_exactness_authority_requires_the_anchored_activation (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw21_adversarial_exactness_authority_requires_the_anchored_activation)
+FAIL: test_ba29_adversarial_fully_self_authored_state_universe_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba29_adversarial_fully_self_authored_state_universe_is_refused)
+AssertionError: 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED' not found in []
+FAIL: test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='not-the-anchor')
+AssertionError: 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED' not found in ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+FAIL: test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='binds-another-manifest')
+AssertionError: 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED' not found in ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+FAIL: test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='rolled-back-generation')
+AssertionError: 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED' not found in ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+FAIL: test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused) (case='anchor-id-substituted')
+AssertionError: 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED' not found in ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+FAIL: test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused)
+AssertionError: Lists differ: ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED'] != []
+FAIL: test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis)
+AssertionError: 'PRODUCTION_ACTIVATION_UNAUTHENTICATED' not found in []
+FAIL: test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back)
+AssertionError: 'PRODUCTION_TRUST_ANCHOR_UNAVAILABLE' not found in []
+FAIL: test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2\nKrJ4V7X')
+AssertionError: 'MEASUREMENT_SIGNATURE_CARRIER_INVALID' not found in ['MEASUREMENT_SIGNATURE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+FAIL: test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2 KrJ4V7X')
+AssertionError: 'MEASUREMENT_SIGNATURE_CARRIER_INVALID' not found in ['MEASUREMENT_SIGNATURE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+FAIL: test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused) (carrier='YqVPDYV2KrJ4V7Xg')
+AssertionError: 'MEASUREMENT_SIGNATURE_CARRIER_INVALID' not found in ['MEASUREMENT_SIGNATURE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+
+NOTE ON THE ONE WITNESS THAT WAS NOT RED (bw18, the positive control)
+--------------------------------------------------------------------
+9 of the 10 new witnesses are red above. bw18
+(test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid) reported "ok"
+against the pre-fix bytes, and that is itself a statement of the defect rather than an
+exception to it: under the name-only shim the pre-fix authority IGNORES the owner
+activation entirely, so it admits the simulated grid whether an anchor exists or not.
+Its discriminating half - that no anchor can be passed to evaluate_production_measurement
+- was true before the fold too, because there was no anchor anywhere. The witness earns
+its place as the positive control for AB-01: after the fold it passes only when the
+operator-preconfigured anchor has actually signed the manifest, which is exactly what
+bw19 (a) proves by clearing the anchor and getting PRODUCTION_TRUST_ANCHOR_UNAVAILABLE.
+
+================================================================================
+APPENDIX - prefix_red_runner.py (the NAME-ONLY shim used in RED STAGE 2)
+================================================================================
+
+"""RED STAGE 2 runner: the NEW witnesses against PRE-FIX authority bytes.
+
+This directory is a `git archive HEAD` reconstruction of the lane at
+4e58f9b545c0546fd53132da71500cc5be04280c, with ONLY these files copied in from the
+working tree:
+
+    mbcx01_build_trust_anchor.py            (new support library)
+    mbcx01_build_ceremony_fixture.py        (new FIXTURE-ONLY ceremony evidence helper)
+    MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json (new committed fixture anchor)
+    verify-build-receipt-signature.mjs      (new BUILD-side strict verifier)
+    test_mbcx01_build_state.py              (the witnesses)
+    test_mbcx01_build_measurement.py        (the witnesses)
+
+Every AUTHORITY module here is byte-identical to HEAD (verified by sha256 against
+`git show HEAD:<path>`): mbcx01_build_state_authority.py,
+mbcx01_build_measurement_authority.py, mbcx01_build_exactness_authority.py,
+mbcx01_build_state_adapter.py, mbcx01_build_state_operator_b.py.
+
+The pre-fix authorities have no NAME for anything in the fix class, so the witnesses
+would otherwise die with AttributeError at setUp and prove nothing about behaviour.
+This runner installs a NAME-ONLY shim: it adds the missing constants, the binding
+derivation (a pure function of the manifest + custody set — it decides nothing), and it
+makes the pre-fix custody checks IGNORE the fifth custody item exactly as pre-fix code
+did (it had no concept of it). The shim adds NO check, NO refusal and NO anchor
+resolution. Every red below is therefore the pre-fix authority's own behaviour.
+"""
+
+from __future__ import annotations
+
+import sys
+import unittest
+
+import mbcx01_build_measurement_authority as measurement_authority
+import mbcx01_build_state_authority as state_authority
+import mbcx01_build_trust_anchor as trust_anchor
+import mbcx01_r13_common as common
+import mbcx01_r13_measurement as measurement
+
+OWNER_ACTIVATION_EVIDENCE_STATE = "owner_ceremony_activation"
+OWNER_ACTIVATION_EVIDENCE_MEASUREMENT = "OWNER_CEREMONY_ACTIVATION"
+
+# ---- name-only shim: BUILD A ------------------------------------------------------
+state_authority.TRUST_POLICY_STATUS_ACTIVATED = "ACTIVATED"
+state_authority.OWNER_ACTIVATION_EVIDENCE = OWNER_ACTIVATION_EVIDENCE_STATE
+state_authority.STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED = (
+    "STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED")
+state_authority.STATE_AUTHORITY_V2_TRUST_ANCHOR_UNAVAILABLE = (
+    "STATE_AUTHORITY_V2_TRUST_ANCHOR_UNAVAILABLE")
+state_authority.STATE_AUTHORITY_V2_SIGNATURE_CARRIER_INVALID = (
+    "STATE_AUTHORITY_V2_SIGNATURE_CARRIER_INVALID")
+state_authority.CUSTODY_EVIDENCE_KEYS = (
+    set(state_authority.CUSTODY_EVIDENCE_KEYS) | {OWNER_ACTIVATION_EVIDENCE_STATE})
+
+_STATE_DIGEST_FIELDS = (
+    ("SEPARATE_STATE_KEY_CUSTODY_ATTESTATION", "key_custody_attestation_digest"),
+    ("SEPARATE_TRUST_ROOT_EDITOR_APPROVAL", "root_editor_approval_digest"),
+    ("STATE_STORE_BUILD_PROVENANCE", "store_build_provenance_digest"),
+    ("PRODUCTION_SIGNING_CEREMONY_RECEIPT", "signing_ceremony_receipt_digest"),
+)
+
+
+def _state_binding(manifest, custody_evidence):
+    return {
+        "authority": trust_anchor.AUTHORITY_STATE,
+        "manifest_validity": manifest["validity"],
+        "signing_key_id": sorted(custody_evidence["signer_key_ids"]),
+        "editor_key_ids": list(custody_evidence["root_editor_key_ids"]),
+        "custody_evidence_digests": {
+            name: custody_evidence[field] for name, field in _STATE_DIGEST_FIELDS},
+        "provenance_digest": custody_evidence["store_build_provenance_digest"],
+    }
+
+
+state_authority.production_activation_binding = _state_binding
+
+# ---- name-only shim: BUILD B ------------------------------------------------------
+measurement_authority.OWNER_ACTIVATION_EVIDENCE = OWNER_ACTIVATION_EVIDENCE_MEASUREMENT
+
+
+def _measurement_binding(document, roots, custody_evidence):
+    harness = {row["authorized_harness_build_digest"] for row in roots.values()}
+    return {
+        "authority": trust_anchor.AUTHORITY_MEASUREMENT,
+        "manifest_validity": document["validity"],
+        "signing_key_id": custody_evidence[
+            "SEPARATE_KEY_CUSTODY_ATTESTATION"]["key_id"],
+        "editor_key_ids": list(document["trust_policy"]["editor_approval_key_ids"]),
+        "custody_evidence_digests": {
+            name: measurement.sha384(custody_evidence[name])
+            for name in measurement_authority.REQUIRED_CUSTODY_EVIDENCE},
+        "provenance_digest": next(iter(harness)),
+    }
+
+
+measurement_authority.production_activation_binding = _measurement_binding
+
+_original_custody_errors = measurement_authority._custody_errors
+
+
+def _custody_errors_ignoring_the_fifth_item(document, roots, custody_evidence):
+    if isinstance(custody_evidence, dict):
+        custody_evidence = {key: value for key, value in custody_evidence.items()
+                            if key != OWNER_ACTIVATION_EVIDENCE_MEASUREMENT}
+    return _original_custody_errors(document, roots, custody_evidence)
+
+
+measurement_authority._custody_errors = _custody_errors_ignoring_the_fifth_item
+
+WITNESSES = [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses."
+    "test_ba29_adversarial_fully_self_authored_state_universe_is_refused",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses."
+    "test_ba30_adversarial_production_manifest_without_owner_signature_is_refused",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses."
+    "test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses."
+    "test_ba32_adversarial_unconfigured_anchor_fails_closed",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses."
+    "test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests."
+    "test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests."
+    "test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests."
+    "test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests."
+    "test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests."
+    "test_bw21_adversarial_exactness_authority_requires_the_anchored_activation",
+]
+
+if __name__ == "__main__":
+    suite = unittest.TestLoader().loadTestsFromNames(WITNESSES)
+    result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2).run(suite)
+    raise SystemExit(0 if result.wasSuccessful() else 1)

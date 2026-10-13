@@ -1,0 +1,25 @@
+{
+  "receipt_id": "MBCX-01-COHORTBUILD-COUNCIL-R2-DISPATCH-RECEIPT",
+  "round": "cohort-BUILD acceptance r2 (TARGETED CONFIRM on the r1 folds; r1 = GWF/NO-GO/NO-GO all EXECUTED, folded)",
+  "packet_path": "MBCX-01-COHORT-BUILD-ACCEPTANCE-COUNCIL-PACKET-r2.md",
+  "packet_commit": "210f1faa12d69d594f096b2cb68a7bc2995870cb",
+  "packet_sha256": "792244b4506d27f193b4dd7e965c1afc193e6e46189d30e1bc7625f0830b9242",
+  "packet_bytes": 15802,
+  "review_target_content_commit": "ad713b22f9bad58e3de15df1a05bc78ebdb3728c",
+  "py_diff_empty_to_head": "driver-verified at dispatch",
+  "packet_check": "GREEN (itemsChecked=6; NOT-AN-ATTACK classes only; two shape rounds: internal-shelf declarations, adversary declaration form)",
+  "driver_predispatch_execution": {
+    "cohort_suite": "39/39 OK", "full_discover": "548/548 OK",
+    "bundle": "REAL exit 0 (ledger 101/236 two-way)",
+    "cleanroom": "PINNED RECONSTRUCTION COMPLETE, real exit 0 (-Commit ad713b22 -ManifestBlob bc21b78d)",
+    "driver_red_reruns": "bc18-21 4/4 RED on hash-proven pre-fix bytes; R5/R6 reproduced pre-fold and REFUSED post-fold",
+    "gate_police": "ledger carrier rule refused the driver's first BC-21 row; pin-freshness arm refused the pre-regen tree - both banked"
+  },
+  "seats": [
+    {"seat": "SEAT1_CLAUDE", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "read_probe": "byte-verified earlier this session", "packet_sent_utc": "2026-08-16T19:28:48Z"},
+    {"seat": "SEAT2_CHATGPT_SOL", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "read_probe": "byte-verified earlier this session", "packet_sent_utc": "2026-08-16T19:28:50Z"},
+    {"seat": "SEAT3_CODEX_EXEC", "model": "gpt-5.6-sol", "service_tier": "default", "reasoning_effort": "xhigh", "prompt_path": "MBCX-01-COHORTBUILD-SEAT3-CODEX-EXEC-PROMPT-r2.txt", "extractor": "generate-seat3-cohortbuild-r2-prompt.ps1", "launch": "DETACHED cmd.exe PID 35392", "log_paths": ["MBCX-01-COHORTBUILD-SEAT3-CODEX-EXEC-r2.stdout.log", "MBCX-01-COHORTBUILD-SEAT3-CODEX-EXEC-r2.stderr.log"], "dispatched_utc": "2026-08-16T19:28:00Z"}
+  ],
+  "sealing": "blind round; r1 banked records are completed-round history",
+  "next": "9-then-3 cadence; bank three verdicts; driver reproduces at the byte; six ACCEPTs => codex-CLI to literal green (#1)"
+}

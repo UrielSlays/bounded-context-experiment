@@ -1,0 +1,147 @@
+{
+  "contract_id": "MBCX-01-INFERENCE-CONTRACT-v4",
+  "normative": true,
+  "estimands": {
+    "population": "the complete frozen 768-scenario eligible retained manifest in SHA-256 scenario order",
+    "delta": "average conditional mean over that ordered manifest of BC_i minus OM_i",
+    "om": "average conditional mean over that ordered manifest of OM_i",
+    "support": {"delta": [-1, 0, 1], "om": [0, 1]},
+    "heterogeneity": "conditional means may change arbitrarily by scenario and motif",
+    "within_pair_dependence": "unrestricted",
+    "cross_scenario_dependence": "no independence or common-mean assumption; dependence through the past filtration is allowed while future outcomes and provider randomness are unavailable"
+  },
+  "method": {
+    "name": "exact-mixture empirical-Bernstein confidence sequence",
+    "source": {
+      "title": "Closed-form empirical Bernstein confidence sequences for scalars and matrices",
+      "authors": ["Ben Chugg", "Aaditya Ramdas"],
+      "version_date": "2025-12-24",
+      "url": "https://arxiv.org/abs/2512.21300",
+      "deciding_result": "Proposition 3.1 exact mixture confidence sequence for the running average of bounded, possibly time-varying conditional means"
+    },
+    "family_alpha": 0.05,
+    "stream_alpha": 0.025,
+    "streams": ["delta_transformed", "om"],
+    "kappa": 0.25,
+    "kappa_source_rule": "SOURCE_DEFAULT_NOT_OC_TUNED",
+    "kappa_sensitivity": [0.10, 0.15, 0.25, 0.50, "UNIFORM"],
+    "uniform_limit": "kappa approaches infinity: prior term vanishes and kappa times the truncated-normal normalizer approaches sqrt(2/pi), so the mixture threshold is 2/alpha",
+    "delta_transform": "Y_i=(BC_i-OM_i+1)/2 in [0,1]; map confidence limits back by 2*m-1",
+    "predictable_estimate": "xhat_i=(0.5+sum_{j<i} X_j)/i",
+    "psi_E": "-log(1-x)-x",
+    "U_t": "1/(2*kappa^2)+sum_i psi_E(abs(X_i-xhat_i))",
+    "I": "I(y;v)=integral from -1 to 1 of exp(y*z-v*z^2) dz",
+    "normalizer": "Z=Phi(1/kappa)-Phi(-1/kappa)",
+    "confidence_set": "m in [0,1] such that I(sum_i X_i-t*m;U_t) < kappa*Z*sqrt(2*pi)/stream_alpha",
+    "primary_integral": "analytic completion-of-square formula using IEEE-754 binary64 erf",
+    "independent_integral": "composite Simpson quadrature with 16384 even subintervals",
+    "high_precision_witness": "Python Decimal precision 60 composite Simpson quadrature with 4096 even subintervals",
+    "inversion": "symmetric root in nonnegative y by 80-step bisection after power-of-two bracketing",
+    "parity_tolerance_interval_endpoint": 1e-9,
+    "time_uniform": true,
+    "fixed_look_bonferroni": false,
+    "common_mean_assumption": false
+  },
+  "looks": {
+    "768": "TERMINAL_SCIENTIFIC_DECISION"
+  },
+  "progress_reporting": {
+    "96": "operational counts and projected cost only; no interval or scientific branch",
+    "192": "operational counts and projected cost only; no interval or scientific branch",
+    "384": "operational counts and projected cost only; no interval or scientific branch"
+  },
+  "decision": {
+    "noninferiority_margin": -0.1,
+    "oracle_floor": 0.8,
+    "PROMOTE_TO_COORDINATION_STAGE": "delta_lower > -0.10 AND om_lower >= 0.80 AND every deterministic hard gate passes",
+    "MODEL_INTERFACE_FAIL": "delta_upper < -0.10 AND om_lower >= 0.80 AND every deterministic hard gate passes",
+    "MODEL_OR_INTERFACE_CEILING": "om_upper < 0.80",
+    "INCONCLUSIVE_OR_UNDERFUNDED": "none of the other scientific branches holds",
+    "precedence": ["DESIGN_OR_IMPLEMENTATION_FAIL", "TRANSPORT_INCONCLUSIVE", "MODEL_OR_INTERFACE_CEILING", "MODEL_INTERFACE_FAIL", "PROMOTE_TO_COORDINATION_STAGE", "INCONCLUSIVE_OR_UNDERFUNDED"]
+  },
+  "missingness": {
+    "pair_rule": "any unresolved transport state in any of six calls makes the complete BC/OM scenario pair missing",
+    "schema_invalid_model_output": "observed condition failure, not missing",
+    "completion_alphabet": [[0, 0], [0, 1], [1, 0], [1, 1]],
+    "joint_enumeration": "Cartesian product of the four paired completions at the exact missing scenario positions",
+    "maximum_enumerated_missing_pairs": 7,
+    "completion_count_at_maximum": 16384,
+    "eight_or_more": "TRANSPORT_INCONCLUSIVE",
+    "branch_invariance": "report a scientific branch only if identical for every joint completion; otherwise TRANSPORT_INCONCLUSIVE",
+    "no_resample_or_substitution": true
+  },
+  "operating_characteristics": {
+    "synthetic_only": true,
+    "experiment_evidence": false,
+    "n": 768,
+    "replicates_per_cell": 10000,
+    "rng": "SHA-256 counter stream; seed is length-framed global seed, cell_id, replicate decimal; each digest is four big-endian unsigned 64-bit uniforms divided by 2^64",
+    "categorical_sampling": "inverse CDF in fixed order p00,p01,p10,p11 with half-open intervals and last-cell closure",
+    "runtime_filtering": "forbidden",
+    "cells": [
+      {"id": "CEILING_OM70_EQUAL", "delta": 0.00, "om": 0.70, "p00": 0.25, "p01": 0.05, "p10": 0.05, "p11": 0.65},
+      {"id": "FLOOR_OM80_EQUAL", "delta": 0.00, "om": 0.80, "p00": 0.15, "p01": 0.05, "p10": 0.05, "p11": 0.75},
+      {"id": "OM90_EQUAL", "delta": 0.00, "om": 0.90, "p00": 0.05, "p01": 0.05, "p10": 0.05, "p11": 0.85},
+      {"id": "DELTA_NEG20_OM90", "delta": -0.20, "om": 0.90, "p00": 0.10, "p01": 0.20, "p10": 0.00, "p11": 0.70},
+      {"id": "DELTA_NEG25_OM80", "delta": -0.25, "om": 0.80, "p00": 0.20, "p01": 0.25, "p10": 0.00, "p11": 0.55},
+      {"id": "DELTA_NEG25_OM85", "delta": -0.25, "om": 0.85, "p00": 0.15, "p01": 0.25, "p10": 0.00, "p11": 0.60},
+      {"id": "DELTA_NEG25_OM95", "delta": -0.25, "om": 0.95, "p00": 0.05, "p01": 0.25, "p10": 0.00, "p11": 0.70},
+      {"id": "DELTA_NEG12_OM80", "delta": -0.12, "om": 0.80, "p00": 0.20, "p01": 0.12, "p10": 0.00, "p11": 0.68},
+      {"id": "DELTA_NEG12_OM85", "delta": -0.12, "om": 0.85, "p00": 0.15, "p01": 0.12, "p10": 0.00, "p11": 0.73},
+      {"id": "DELTA_NEG12_OM95", "delta": -0.12, "om": 0.95, "p00": 0.05, "p01": 0.12, "p10": 0.00, "p11": 0.83},
+      {"id": "DELTA_NEG10_OM80", "delta": -0.10, "om": 0.80, "p00": 0.20, "p01": 0.10, "p10": 0.00, "p11": 0.70},
+      {"id": "DELTA_NEG10_OM85", "delta": -0.10, "om": 0.85, "p00": 0.15, "p01": 0.10, "p10": 0.00, "p11": 0.75},
+      {"id": "DELTA_NEG10_OM95", "delta": -0.10, "om": 0.95, "p00": 0.05, "p01": 0.10, "p10": 0.00, "p11": 0.85},
+      {"id": "DELTA_POS10_OM90", "delta": 0.10, "om": 0.90, "p00": 0.00, "p01": 0.00, "p10": 0.10, "p11": 0.90},
+      {"id": "HIGH_DISCORD_EQUAL", "delta": 0.00, "om": 0.50, "p00": 0.25, "p01": 0.25, "p10": 0.25, "p11": 0.25},
+      {"id": "LOW_DISCORD_EQUAL", "delta": 0.00, "om": 0.90, "p00": 0.09, "p01": 0.01, "p10": 0.01, "p11": 0.89}
+    ],
+    "required_publication": ["branch frequency per cell", "mean and p95 interval widths", "terminal reachability", "inconclusive probability", "complete negative-delta by oracle-marginal curve", "deterministic seed", "implementation hash", "maximum and expected accepted calls"]
+  },
+  "power_targets": [
+    {"cell_id": "OM90_EQUAL", "branch": "PROMOTE_TO_COORDINATION_STAGE", "minimum_probability": 0.90, "interpretation": "clearly usable oracle and no BC loss"},
+    {"cell_id": "LOW_DISCORD_EQUAL", "branch": "PROMOTE_TO_COORDINATION_STAGE", "minimum_probability": 0.90, "interpretation": "clearly usable low-discord oracle and no BC loss"},
+    {"cell_id": "DELTA_NEG20_OM90", "branch": "MODEL_INTERFACE_FAIL", "minimum_probability": 0.90, "interpretation": "BC is practically worse than the -0.10 margin while oracle is clearly usable"},
+    {"cell_id": "CEILING_OM70_EQUAL", "branch": "MODEL_OR_INTERFACE_CEILING", "minimum_probability": 0.90, "interpretation": "oracle is practically below the 0.80 floor"}
+  ],
+  "boundary_interpretation": "exact threshold and near-threshold cells quantify the honest indifference region and may remain inconclusive; power is required at the separately registered practical alternatives",
+  "sample_size_selection": {"selected_n": 768, "candidates_compared": [384, 512, 768, 1024], "compact_replicates_per_candidate_cell": 2000, "seed": "MBCX01-R9-POWER-V1", "rule": "smallest tested n expected to clear 0.90 at every practical power target with confirmatory 10000-replicate verification"},
+  "cost": {
+    "accepted_calls_per_complete_pair": 6,
+    "complete_pairs": 768,
+    "maximum_accepted_calls": 4608,
+    "expected_accepted_calls_under_registered_stopping": 4608,
+    "cold_reconstructions": 1536,
+    "why_equal": "only n=768 has a scientific interval, so no scientific early stop exists",
+    "paid_authorization": "separate owner decision after endpoint, snapshot, tokens, prices, reliability, and dollar ceiling are frozen"
+  },
+  "transport_readiness": {
+    "failure_modes": ["DNS_OR_CONNECT", "TLS_OR_PROTOCOL", "RATE_OR_CAPACITY", "PROVIDER_5XX", "BODY_TRUNCATION", "SCHEMA_TRANSPORT_DAMAGE", "ACCEPTANCE_AMBIGUOUS", "ROUTE_ATTESTATION_MISSING"],
+    "call_positions": ["BC_A0", "BC_B", "BC_A1", "OM_A0", "OM_B", "OM_A1"],
+    "familywise_confidence_error": 0.05,
+    "pair_missing_budget": 0.02,
+    "cell_confidence_error": "0.05/(6*M)",
+    "cell_failure_budget": "0.02/(6*M)",
+    "deciding_gate": "every mode-position one-sided exact Clopper-Pearson upper bound is at or below its cell failure budget",
+    "simultaneous_coverage": "Bonferroni allocation gives at least 95 percent familywise coverage across every frozen mode-position cell",
+    "pair_bound": "union bound across all mode-position cells is at most 0.02; no independence assumption",
+    "clopper_pearson": "invert the Binomial(n,p) CDF at observed failures using deterministic bisection",
+    "zero_failure_reference": {"failure_mode_count": 8, "trials_per_call_position": 16478, "accepted_calls_across_six_positions": 98868, "interpretation": "this buys simultaneous evidence about route reliability; it does not increase the frozen 768-pair scientific sample"},
+    "no_paid_claim": "a route soak is no-paid only if the frozen provider route has a genuinely zero-price primitive"
+  },
+  "reference_vectors": {
+    "environment": {"language": "Python 3.13", "primary_numeric": "IEEE-754 binary64", "independent_numeric": "Decimal precision 60", "external_dependencies": "none"},
+    "delta_all_zero_n768": {"pairs": "768 copies of (0,0)", "expected_interval": [-0.028724411075760736, 0.028724411075760736]},
+    "low_discord_deterministic": {
+      "n": 768,
+      "zero_equal_positions_zero_based": [0, 11, 22, 33, 44, 55, 66, 77, 88, 99, 110, 121, 132, 143, 154, 165, 176, 187, 198, 209, 220, 231, 242, 253, 264, 275, 286, 297, 308, 319, 330, 341, 352, 363, 374, 385, 396, 407, 418, 429, 440, 451, 462, 473, 484, 495, 506, 517, 528, 539, 550, 561, 572, 583, 594, 605, 616, 627, 638, 649, 660, 671, 682, 693, 704, 715, 726, 737],
+      "bc0_om1_positions_zero_based": [17, 103, 211, 337, 452, 559, 663, 751],
+      "bc1_om0_positions_zero_based": [52, 146, 259, 381, 487, 601, 709, 767],
+      "all_other_positions": [1, 1],
+      "expected_delta_interval": [-0.034205200399165414, 0.034205200399165525],
+      "expected_om_interval": [0.8378729716502146, 0.9642103616831187]
+    },
+    "independent_match_required": true
+  },
+  "red_witnesses": ["PREFIX_INTERVAL_REINTRODUCED", "KAPPA_OC_TUNED", "LOW_DISCORD_POSITIONS_MUTATED", "ANALYTIC_SIMPSON_DECIMAL_MISMATCH", "OC_RNG_NONDETERMINISM", "OM95_ONLY_POWER_HEADLINE", "RELIABILITY_NOT_SIMULTANEOUS", "DESIGN_FAILURE_AFTER_TRANSPORT"]
+}

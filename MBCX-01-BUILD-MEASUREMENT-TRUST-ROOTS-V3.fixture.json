@@ -1,0 +1,57 @@
+{
+  "schema_id": "MeasurementTrustRootManifestV3",
+  "manifest_id": "MBCX01.BUILD.MEASUREMENT.TRUST.ROOTS.V3.FIXTURE",
+  "production_ready": false,
+  "activation_authority": "NONE_IN_BUILD_B",
+  "trust_policy": {
+    "schema_id": "ProductionMeasurementTrustPolicyV2",
+    "status": "NOT_ACTIVATED",
+    "fail_loud_sentinel": "PHYSICAL_HARNESS_UNAVAILABLE",
+    "signer_custodian_role": "MEASUREMENT_KEY_CUSTODIAN",
+    "trust_root_editor_role": "TRUST_ROOT_APPROVAL_AUTHORITY",
+    "roles_must_be_distinct": true,
+    "manifest_edit_cannot_activate_production": true,
+    "required_external_evidence": [
+      "SEPARATE_KEY_CUSTODY_ATTESTATION",
+      "SEPARATE_TRUST_ROOT_EDITOR_APPROVAL",
+      "HARNESS_BUILD_PROVENANCE",
+      "PRODUCTION_SIGNING_CEREMONY_RECEIPT"
+    ],
+    "key_custodian_attestation_digest": "A292E7BA79F91D6851CAECDA106B85B8E374D6DEF6E58AD01EE1251C3989A3CBEC5ACA1B228CC8E3886D51C1B3716593",
+    "trust_root_editor_approval_digest": "E65F5DBB5E1F5502B9D42C0E45D470A5A7D3884214046FEA40CD3847E34686636ECEBE8D0FFEFA4ACF10D0A37F659041",
+    "harness_build_provenance_digest": "3403318FEF91F5CAD4665865FAD01B3CEEFBCE41F17C0D9D8F3ED754F634F9B386F4A5AA699E282998EDCB76FB9C2AED",
+    "signing_ceremony_receipt_digest": "BBAE4DAE6CB8B3E45AB8A84FACDC36754224E084A575AEC09D3BA75E5AB4DEB90268C85668B0B54726B2197C272DACBB",
+    "editor_approval_key_ids": [
+      "MBCX01.BUILD.FIXTURE.TRUST-ROOT-EDITOR.ED25519.TEST.1"
+    ]
+  },
+  "validity": {
+    "not_before": "2026-08-14T00:00:00Z",
+    "not_after": "2027-08-14T00:00:00Z"
+  },
+  "revocation": {
+    "schema_id": "MeasurementTrustRootRevocationListV1",
+    "revocation_list_id": "MBCX01.BUILD.MEASUREMENT.REVOCATION.V3.FIXTURE",
+    "published_at": "2026-08-14T00:00:00Z",
+    "revoked_key_ids": [],
+    "revocation_list_digest": "562109B054CB4428FC53607B107C0ACDF91DE434B990A0295F516EF2AAD79EFC902238944E76D42F21BCF710BFA4C554"
+  },
+  "roots": [
+    {
+      "key_id": "MBCX01.BUILD.FIXTURE.ED25519.TEST.1",
+      "algorithm": "ED25519",
+      "fixture_only": true,
+      "authorized_producer_role": "PHYSICAL_MEASUREMENT_PRODUCER",
+      "authorized_fixture_kind": "PHYSICAL_HARNESS_RECEIPT",
+      "signer_custodian_role": "MEASUREMENT_KEY_CUSTODIAN",
+      "authorized_harness_build_digest": "DB94B5B9FEA1C15533527FD9A1258D10C76408229BD88D3B5E3BC9AFB68715510BD6458DEE5826686C1C073E3C2A0887",
+      "trust_policy_digest": "E0B356F079F99EC7E427753EE0C3F0234B190DAB86E1941B51C4B4F794D8E150F98D1CE5D341AE86A61F79B04D6AD763",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA80rr2l2aDSC4TaeI0a5Yj9LhncDLIA+mUlXcqt2mK+Q=\n-----END PUBLIC KEY-----\n",
+      "validity": {
+        "not_before": "2026-08-14T00:00:00Z",
+        "not_after": "2027-08-14T00:00:00Z"
+      },
+      "revocation_state": "ACTIVE"
+    }
+  ]
+}

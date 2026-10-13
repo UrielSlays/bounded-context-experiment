@@ -1,0 +1,115 @@
+{
+  "contract_id": "MBCX-01-MEASUREMENT-CONTRACT-v3",
+  "normative": true,
+  "claim_scope": "registered physical work is bounded over the complete frozen finite H, D, and F Cartesian product; no universal asymptotic claim",
+  "counter_set_closed": true,
+  "axis_values": {
+    "H": [128, 1024, 10000, 100000],
+    "D": [1, 4, 16, 64, 256],
+    "F": [1, 4, 16, 64, 256]
+  },
+  "required_cells": {
+    "kind": "FULL_CARTESIAN_PRODUCT",
+    "unique_cell_count": 100,
+    "duplicates_removed_by_exact_tuple": false
+  },
+  "storage": {
+    "backend": "SQLite 3 rollback-journal mode on local NTFS",
+    "database_page_size_bytes": 4096,
+    "filesystem_allocation_unit_bytes": 4096,
+    "page_read_equation": "PAGES_READ = ceil(DATABASE_BYTES_READ / 4096)",
+    "page_write_equation": "PAGES_WRITTEN = ceil(DATABASE_BYTES_WRITTEN / 4096)",
+    "backend_or_page_size_change": "DESIGN_OR_IMPLEMENTATION_FAIL"
+  },
+  "sampling_boundary": {
+    "start": "before candidate config parse, candidate-specific preprocessing, process spawn, artifact open, or dependency initialization",
+    "stop": "after packet bytes are durable, all descendants exit, background work quiesces, artifacts close, and counters flush",
+    "descendants": "all descendant PIDs and their filesystem, database, CPU, memory, and allocation work are charged to the candidate",
+    "unregistered_work": "DESIGN_OR_IMPLEMENTATION_FAIL"
+  },
+  "counter_row_schema": {
+    "required": ["candidate_id", "H", "D", "F", "database_page_size_bytes", "descendant_accounted", "unregistered_work", "counters"],
+    "additionalProperties": false,
+    "counter_values": "nonnegative safe integers",
+    "coverage": "exactly one row for each of the 100 registered cells"
+  },
+  "counter_catalog": [
+    {"id": "SOURCE_BYTES_READ", "unit_class": "bytes", "H_range_max": 4096, "D_range_max": 4096, "F_range_max": 4096, "absolute_max": 16384},
+    {"id": "ARTIFACT_BYTES_READ", "unit_class": "bytes", "H_range_max": 4096, "D_range_max": 4096, "F_range_max": 4096, "absolute_max": 16384},
+    {"id": "ARTIFACT_BYTES_WRITTEN", "unit_class": "bytes", "H_range_max": 4096, "D_range_max": 4096, "F_range_max": 4096, "absolute_max": 16384},
+    {"id": "FILESYSTEM_BYTES_READ", "unit_class": "bytes", "H_range_max": 16384, "D_range_max": 16384, "F_range_max": 16384, "absolute_max": 2097152},
+    {"id": "FILESYSTEM_BYTES_WRITTEN", "unit_class": "bytes", "H_range_max": 16384, "D_range_max": 16384, "F_range_max": 16384, "absolute_max": 2097152},
+    {"id": "DATABASE_BYTES_READ", "unit_class": "bytes", "H_range_max": 2097152, "D_range_max": 2097152, "F_range_max": 2097152, "absolute_max": 2097152},
+    {"id": "DATABASE_BYTES_WRITTEN", "unit_class": "bytes", "H_range_max": 1048576, "D_range_max": 1048576, "F_range_max": 1048576, "absolute_max": 1048576},
+    {"id": "SOURCE_RECORDS_READ", "unit_class": "records", "H_range_max": 9, "D_range_max": 9, "F_range_max": 9, "absolute_max": 32},
+    {"id": "INDEX_RECORDS_READ", "unit_class": "records", "H_range_max": 32, "D_range_max": 32, "F_range_max": 32, "absolute_max": 64},
+    {"id": "PAGES_READ", "unit_class": "pages", "H_range_max": 512, "D_range_max": 512, "F_range_max": 512, "absolute_max": 512},
+    {"id": "PAGES_WRITTEN", "unit_class": "pages", "H_range_max": 256, "D_range_max": 256, "F_range_max": 256, "absolute_max": 256},
+    {"id": "DEPENDENCY_OPERATIONS", "unit_class": "operations", "H_range_max": 16, "D_range_max": 16, "F_range_max": 16, "absolute_max": 64},
+    {"id": "DECODE_OPERATIONS", "unit_class": "operations", "H_range_max": 16, "D_range_max": 16, "F_range_max": 16, "absolute_max": 64},
+    {"id": "MATERIALIZATION_OPERATIONS", "unit_class": "operations", "H_range_max": 16, "D_range_max": 16, "F_range_max": 16, "absolute_max": 64},
+    {"id": "PROCESS_CPU_INSTRUCTIONS", "unit_class": "instructions", "H_range_max": 2000000, "D_range_max": 2000000, "F_range_max": 2000000, "absolute_max": 6500000},
+    {"id": "CHILD_CPU_INSTRUCTIONS", "unit_class": "instructions", "H_range_max": 2000000, "D_range_max": 2000000, "F_range_max": 2000000, "absolute_max": 6500000},
+    {"id": "PROCESS_CPU_TIME_NS", "unit_class": "nanoseconds", "H_range_max": 50000000, "D_range_max": 50000000, "F_range_max": 50000000, "absolute_max": 100000000},
+    {"id": "CHILD_CPU_TIME_NS", "unit_class": "nanoseconds", "H_range_max": 50000000, "D_range_max": 50000000, "F_range_max": 50000000, "absolute_max": 100000000},
+    {"id": "PEAK_RSS_BYTES", "unit_class": "memory_bytes", "H_range_max": 67108864, "D_range_max": 67108864, "F_range_max": 67108864, "absolute_max": 134217728},
+    {"id": "PEAK_ALLOCATED_BYTES", "unit_class": "memory_bytes", "H_range_max": 67108864, "D_range_max": 67108864, "F_range_max": 67108864, "absolute_max": 134217728},
+    {"id": "IMPLEMENTATION_BRANCHES", "unit_class": "branches", "H_range_max": 0, "D_range_max": 0, "F_range_max": 0, "absolute_max": 8},
+    {"id": "UNREGISTERED_FALLBACK_BRANCHES", "unit_class": "branches", "H_range_max": 0, "D_range_max": 0, "F_range_max": 0, "absolute_max": 0}
+  ],
+  "unit_total_gates": {
+    "bytes": {"H_range_max": 2100000, "D_range_max": 2100000, "F_range_max": 2100000, "absolute_max": 5308416},
+    "records": {"H_range_max": 40, "D_range_max": 40, "F_range_max": 40, "absolute_max": 80},
+    "pages": {"H_range_max": 700, "D_range_max": 700, "F_range_max": 700, "absolute_max": 700},
+    "operations": {"H_range_max": 32, "D_range_max": 32, "F_range_max": 32, "absolute_max": 96},
+    "instructions": {"H_range_max": 2500000, "D_range_max": 2500000, "F_range_max": 2500000, "absolute_max": 3000000},
+    "nanoseconds": {"H_range_max": 75000000, "D_range_max": 75000000, "F_range_max": 75000000, "absolute_max": 150000000},
+    "memory_bytes": {"H_range_max": 100663296, "D_range_max": 100663296, "F_range_max": 100663296, "absolute_max": 201326592},
+    "branches": {"H_range_max": 0, "D_range_max": 0, "F_range_max": 0, "absolute_max": 8}
+  },
+  "shape_gates": [
+    {"error": "H_SHAPE_LIMIT", "counter_id": "PROCESS_CPU_INSTRUCTIONS", "axis": "H", "lower": 10000, "upper": 100000, "max_increase": 500000},
+    {"error": "D_SHAPE_LIMIT", "counter_id": "DATABASE_BYTES_READ", "axis": "D", "lower": 64, "upper": 256, "max_increase": 524288}
+  ],
+  "aggregation": {
+    "per_counter": "for each axis, hold the other two axes fixed and compute max minus min",
+    "unit_total": "sum all registered counters in a unit at each cell, then apply the same conditional axis ranges",
+    "absolute": "every literal counter and same-unit cell total must be at or below its preregistered maximum",
+    "zero_growth_branches": "both branch counters have exact H, D, and F range zero",
+    "new_renamed_or_missing_counter": "DESIGN_OR_IMPLEMENTATION_FAIL"
+  },
+  "source_and_cohort_freeze": {
+    "order": ["generator_spec_hash", "distribution_parameters_hash", "gold_enumerator_hash", "eligibility_evaluator_hash", "candidate_source_hashes", "candidate_build_hashes", "candidate_dependency_hashes", "candidate_config_hashes", "fresh_confirmatory_seed", "generated_candidates", "one_cut_selection", "eligibility_recomputation", "retained_manifest"],
+    "instrument_freeze_before_candidate_inspection": true,
+    "candidate_freeze_before_confirmatory_seed": true,
+    "confirmatory_seed_candidate_readable": false,
+    "motifs": ["CORRECTION_RESTORATION", "OBLIGATION_LIFECYCLE", "DEPENDENCY_REVERSAL", "CROSS_SCOPE_COLLISION", "DELEGATION_IDEMPOTENT_HANDOFF", "MIXED_DELAYED_CONTINUITY"],
+    "generated_unique_scenarios_per_motif": 160,
+    "retained_unique_scenarios_per_motif": 128,
+    "one_cut_hash": "SHA-256 over 8-byte big-endian length-framed UTF-8 parts: scenario_id, every UTF8-sorted cut_id, stage2-cut-r9; integer digest modulo cut count",
+    "retention_hash": "SHA-256 over length-framed motif, scenario_id, chosen_cut_id, stage2-retain-r9",
+    "eligibility": "recompute from canonical state at the chosen cut: exactly one mounted OPEN critical obligation due by valid_time, its completion action is the unique gold action, and at least one distinct non-gold action is available",
+    "supplied_eligibility_boolean": "REJECT_AS_INPUT_AND_IGNORE",
+    "selection_order": "choose one cut before recomputing eligibility; retain first 64 eligible unique scenario IDs by retention hash",
+    "shortfall": "DESIGN_OR_IMPLEMENTATION_FAIL",
+    "estimand_population": "conditional on the frozen eligible retained manifest; no unbiased-sampling claim",
+    "publish": ["all candidate scenario IDs", "chosen cut", "recomputed eligibility result and reason", "motif", "difficulty stratum", "retention hash"]
+  },
+  "red_candidates": {
+    "HDF_INTERIOR_HOTSPOT": {"expected_error": "COUNTER_RANGE_LIMIT"},
+    "LOW_SLOPE_ARCHIVE_LINEAR_10X": {"expected_error": "H_SHAPE_LIMIT", "work": "PROCESS_CPU_INSTRUCTIONS = 10 * H at every cell"},
+    "HIDDEN_CHILD_CPU": {"expected_error": "DESCENDANT_ACCOUNTING_MISSING"},
+    "COUNTER_SPLIT_SAME_WORK": {"expected_error": "UNIT_TOTAL_LIMIT"},
+    "PAGE_SIZE_SUBSTITUTION": {"expected_error": "PAGE_SIZE_MISMATCH"},
+    "LOGICAL_LOOKUP_PHYSICAL_SCAN": {"expected_error": "D_SHAPE_LIMIT"},
+    "PAGE_BYTE_MISMATCH": {"expected_error": "PAGE_BYTE_INCONSISTENT"}
+  },
+  "performance": {
+    "exactness": "all deterministic scenarios and cuts, all 100 H-D-F cells, and every executable red candidate",
+    "cold_repetitions": 30,
+    "warmups": 1,
+    "latency_statistic": "Hyndman-Fan type 7 p95 within cell; maximum cell p95 across cells",
+    "latency_not_boundedness_substitute": true,
+    "run_root_hard_ceiling_bytes": 21474836480
+  }
+}

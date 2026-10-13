@@ -1,0 +1,18 @@
+{
+  "receipt_id": "MBCX-01-COHORT-DESIGN-COUNCIL-R3-DISPATCH-RECEIPT",
+  "round": "cohort-content generator DESIGN r3 (issue #17; ROUND CALL BINDS - first line GO-TO-CODE or CONTINUE-DESIGN)",
+  "packet_path": "MBCX-01-COHORT-CONTENT-DESIGN-COUNCIL-PACKET-r3.md",
+  "packet_commit": "47159b1273b1e74a8da77b3e4ac4c7f26977a61e",
+  "review_target": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md (r3)",
+  "review_target_commit": "ded124f66ab10b18e9cb08e46c471287a2bc9c33",
+  "pin_discipline": "rev-parse emitted, cat-file -e gated pre-dispatch (both pins)",
+  "packet_check": "GREEN (itemsChecked=7; NOT-AN-ATTACK classes only; validity framing)",
+  "driver_predispatch_execution": "r2 findings folded were driver byte-verified where read-verifiable (renderer padding+comparator :302-306; MANIFEST_KEYS/motif/position :203-222; _fixture_authoritative_state :352-376); executed seat probes (leakage, family-deletion, duplicate matrix, scorer-join) accepted as three-seat EXECUTED convergence with the r3 round itself as the re-attack surface - labels recorded in the r2 synthesis",
+  "seats": [
+    {"seat": "SEAT1_CLAUDE_NEW_ACCOUNT", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "primed": "card acked this session (r2 handshake)", "packet_sent_utc": "2026-08-16T13:06:47Z"},
+    {"seat": "SEAT2_CHATGPT_SOL", "conversation_id": "<id>", "cdp_port": <council-browser-port>, "primed": "standing card governs", "packet_sent_utc": "2026-08-16T13:06:32Z"},
+    {"seat": "SEAT3_CODEX_EXEC", "model": "gpt-5.6-sol", "service_tier": "default", "reasoning_effort": "xhigh", "prompt_path": "MBCX-01-COHORT-SEAT3-CODEX-EXEC-PROMPT-r3.txt", "extractor": "generate-seat3-cohort-r3-prompt.ps1", "log_paths": ["MBCX-01-COHORT-SEAT3-CODEX-EXEC-r3.stdout.log", "MBCX-01-COHORT-SEAT3-CODEX-EXEC-r3.stderr.log"], "serialized": true, "dispatched_utc": "2026-08-16T13:05:30Z"}
+  ],
+  "sealing": "blind round; prior-round banked records are completed-round history",
+  "next": "bank three verdicts (empty stdout / exit!=0 = re-run); adjudicate; GO-TO-CODE majority -> BUILD dispatch (three siblings, red-first, W1-W18); CONTINUE-DESIGN -> one bounded fold and the cap discipline governs"
+}

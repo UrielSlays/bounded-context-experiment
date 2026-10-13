@@ -1,0 +1,214 @@
+{
+  "contract_id": "MBCX-01-STATE-ACTION-CONTRACT-v1",
+  "normative": true,
+  "status": "design-input; Stage-0 implementations must reproduce this contract exactly",
+  "query_clock": {
+    "cut_fields": ["journal_seq", "knowledge_time", "valid_time"],
+    "event_visible": "event.journal_seq <= cut.journal_seq AND event.observed_at <= cut.knowledge_time",
+    "event_effective": "event.valid_from <= cut.valid_time AND (event.valid_to_or_null == null OR cut.valid_time < event.valid_to_or_null)",
+    "currentness": "reduce only events for which event_visible AND event_effective are true, in ascending journal_seq",
+    "now_definition": "O_due(now) and O_blocked(now) use cut.valid_time",
+    "ties": "journal_seq is the sole total-order tie breaker; event_id never breaks time ties",
+    "retroactivity": "fact assertion/correction/retraction events may have valid_from < observed_at; all obligation, dependency, and handoff events require valid_from == observed_at and valid_to_or_null == null",
+    "prior_cut_rule": "an event observed after a prior cut never changes that prior cut, even when its valid_from is retroactive"
+  },
+  "base_event": {
+    "required_fields": [
+      "journal_seq",
+      "event_id",
+      "event_type",
+      "scope_id",
+      "actor_role",
+      "observed_at",
+      "valid_from",
+      "valid_to_or_null",
+      "subject_id_or_null",
+      "obligation_id_or_null",
+      "action_id_or_null",
+      "dependency_ids",
+      "supersedes_event_id_or_null",
+      "payload_ref",
+      "source_event_ids",
+      "idempotency_key"
+    ],
+    "global_guards": [
+      "journal_seq is a positive contiguous integer assigned only by the single writer",
+      "event_id is unique",
+      "idempotency_key is unique per scope_id and semantic operation",
+      "observed_at is nondecreasing by journal_seq",
+      "valid_to_or_null is null or strictly greater than valid_from",
+      "all referenced event, subject, obligation, action, dependency, and handoff IDs exist unless the event type explicitly creates that ID",
+      "every source_event_id is less than the new journal_seq",
+      "duplicate event_id or duplicate idempotency_key returns DUPLICATE_NOOP and appends no second semantic effect"
+    ]
+  },
+  "state": {
+    "fact_key": ["scope_id", "subject_id", "predicate_id"],
+    "fact_version": ["event_id", "fact_key", "value", "parent_event_id_or_null", "valid_from", "valid_to_or_null", "retracted_by_event_ids"],
+    "fact_current_rule": "for each fact_key, choose the greatest-journal_seq visible, effective, unretracted version in the one linear supersession chain; if that version is retracted or out of interval, walk parent_event_id_or_null until an eligible ancestor is found; otherwise the key has no current value",
+    "obligation_key": ["scope_id", "obligation_id"],
+    "obligation": ["scope_id", "obligation_id", "subject_id", "owner_role", "due_at", "critical", "lifecycle", "terminal_event_id_or_null", "prerequisite_obligation_ids", "completion_action_id"],
+    "obligation_lifecycle_values": ["OPEN", "COMPLETED", "CANCELLED"],
+    "handoff_key": ["scope_id", "handoff_id"],
+    "handoff": ["scope_id", "handoff_id", "task_id", "target_obligation_id", "status", "recorded_response_event_id_or_null", "proposal_event_id_or_null", "terminal_event_id_or_null"],
+    "handoff_status_values": ["OPEN", "RESPONSE_RECORDED", "PROPOSED", "COMMITTED", "REJECTED", "CLOSED"],
+    "derived_sets": {
+      "O_active": "lifecycle == OPEN",
+      "O_blocked": "lifecycle == OPEN AND at least one prerequisite lifecycle != COMPLETED",
+      "O_due": "lifecycle == OPEN AND due_at <= cut.valid_time AND obligation not in O_blocked",
+      "O_terminal": "lifecycle == COMPLETED OR lifecycle == CANCELLED"
+    },
+    "scope_rule": "scope_id is immutable for facts, obligations, dependencies, and handoffs; delegation changes owner_role only; cross-scope delegation and cross-scope dependency edges are illegal"
+  },
+  "event_types": {
+    "assert_fact": {
+      "payload_required": ["predicate_id", "value"],
+      "guards": ["subject_id_or_null != null", "obligation_id_or_null == null", "supersedes_event_id_or_null == null", "no fact chain exists for fact_key"],
+      "effect": "create root fact_version"
+    },
+    "correct_fact": {
+      "payload_required": ["predicate_id", "value"],
+      "guards": ["subject_id_or_null != null", "supersedes_event_id_or_null names the current visible fact_version for the same fact_key at (journal_seq-1, observed_at, valid_from)", "the new edge cannot create a cycle or sibling branch"],
+      "effect": "create child fact_version whose parent_event_id is supersedes_event_id_or_null; prior versions remain available outside the child validity interval or after legal retraction"
+    },
+    "retract_fact": {
+      "payload_required": ["predicate_id"],
+      "guards": ["subject_id_or_null != null", "supersedes_event_id_or_null names the current visible fact_version for the same fact_key at (journal_seq-1, observed_at, valid_from)", "the target has no earlier visible effective retraction"],
+      "effect": "mark the named version retracted during this event validity interval; fact_current_rule restores the nearest eligible ancestor or no value"
+    },
+    "open_obligation": {
+      "payload_required": ["subject_id", "owner_role", "due_at", "critical", "completion_action_id"],
+      "guards": ["obligation_id_or_null != null", "obligation_key does not exist", "due_at is an RFC3339 UTC instant", "critical is boolean"],
+      "effect": "create obligation with lifecycle OPEN and empty prerequisite_obligation_ids"
+    },
+    "reschedule_obligation": {
+      "payload_required": ["due_at"],
+      "guards": ["obligation exists in the same scope", "lifecycle == OPEN"],
+      "effect": "replace due_at"
+    },
+    "delegate_obligation": {
+      "payload_required": ["new_owner_role"],
+      "guards": ["obligation exists in the same scope", "lifecycle == OPEN", "new_owner_role is in the frozen role catalog", "payload contains no new scope_id"],
+      "effect": "replace owner_role; scope_id is unchanged"
+    },
+    "complete_obligation": {
+      "payload_required": ["completion_action_id"],
+      "guards": ["obligation exists in the same scope", "lifecycle == OPEN", "obligation is in O_due at the event cut", "completion_action_id equals obligation.completion_action_id"],
+      "effect": "set lifecycle COMPLETED and terminal_event_id to this event_id"
+    },
+    "cancel_obligation": {
+      "payload_required": ["reason_code"],
+      "guards": ["obligation exists in the same scope", "lifecycle == OPEN", "reason_code is in the frozen cancellation-code catalog"],
+      "effect": "set lifecycle CANCELLED and terminal_event_id to this event_id"
+    },
+    "reopen_obligation": {
+      "payload_required": ["new_due_at", "owner_role"],
+      "guards": ["obligation exists in the same scope", "lifecycle is COMPLETED or CANCELLED", "supersedes_event_id_or_null equals terminal_event_id", "new_due_at is an RFC3339 UTC instant"],
+      "effect": "set lifecycle OPEN, due_at new_due_at, owner_role payload.owner_role, terminal_event_id null; retain prerequisite set"
+    },
+    "link_dependency": {
+      "payload_required": ["prerequisite_obligation_id", "dependent_obligation_id"],
+      "guards": ["both obligations exist and are OPEN in event.scope_id", "IDs differ", "edge does not exist", "adding edge leaves the directed graph acyclic"],
+      "effect": "add prerequisite_obligation_id to dependent.prerequisite_obligation_ids"
+    },
+    "unlink_dependency": {
+      "payload_required": ["prerequisite_obligation_id", "dependent_obligation_id"],
+      "guards": ["both obligations exist in event.scope_id", "edge exists"],
+      "effect": "remove prerequisite_obligation_id from dependent.prerequisite_obligation_ids"
+    },
+    "open_handoff": {
+      "payload_required": ["handoff_id", "task_id", "target_obligation_id"],
+      "guards": ["handoff key does not exist", "target obligation exists, is OPEN, and is in event.scope_id", "no other OPEN, RESPONSE_RECORDED, or PROPOSED handoff targets the same obligation"],
+      "effect": "create handoff with status OPEN"
+    },
+    "record_handoff_response": {
+      "payload_required": ["handoff_id", "request_hash", "response_hash", "response_ref", "provider_request_id", "route_fingerprint", "accepted_at"],
+      "guards": ["handoff status == OPEN", "response_ref identifies immutable raw response bytes", "response_hash matches those bytes"],
+      "effect": "set handoff status RESPONSE_RECORDED and recorded_response_event_id to this event_id; parse, validation, commit, rejection, and recovery must read these recorded bytes and may not resample the accepted request"
+    },
+    "propose_handoff_result": {
+      "payload_required": ["handoff_id", "worker_handoff_v1", "recorded_response_event_id"],
+      "guards": ["handoff status == RESPONSE_RECORDED", "recorded_response_event_id matches the handoff", "worker_handoff_v1 is schema-valid, scope-valid, hash-bound to the input packet, and within every cap"],
+      "effect": "set handoff status PROPOSED and proposal_event_id to this event_id"
+    },
+    "commit_handoff_result": {
+      "payload_required": ["handoff_id", "proposal_event_id", "committed_action_ids"],
+      "guards": ["handoff status == PROPOSED", "proposal_event_id matches", "every committed action is available and legal at this event cut", "proposal idempotency key has no committed effect"],
+      "effect": "apply each validated action once through ordinary event transitions; set handoff status COMMITTED and terminal_event_id to this event_id"
+    },
+    "reject_handoff_result": {
+      "payload_required": ["handoff_id", "proposal_event_id_or_null", "rejection_code"],
+      "guards": ["handoff status is RESPONSE_RECORDED or PROPOSED", "rejection_code is one of SCHEMA_INVALID, WRONG_SCOPE, STALE_INPUT, ACTION_UNAVAILABLE, ILLEGAL_TRANSITION, HASH_MISMATCH, DUPLICATE"],
+      "effect": "append no proposed semantic mutation; set handoff status REJECTED and terminal_event_id to this event_id"
+    },
+    "close_handoff": {
+      "payload_required": ["handoff_id"],
+      "guards": ["handoff status is COMMITTED or REJECTED"],
+      "effect": "set handoff status CLOSED; preserve terminal_event_id of commit or rejection"
+    }
+  },
+  "illegal_transition_result": {
+    "code": "ILLEGAL_TRANSITION",
+    "append_policy": "the attempted event is retained in the runner audit log but is not appended to the canonical journal",
+    "state_change": "none"
+  },
+  "action_universe": {
+    "catalog": [
+      {
+        "action_type": "ACT_ON_OBLIGATION",
+        "id_format": "ACT:{scope_id}:{obligation_id}",
+        "precondition": "the obligation has any visible lifecycle event in the scenario world"
+      },
+      {
+        "action_type": "NO_ACTION",
+        "id_format": "NO_ACTION",
+        "precondition": "always present"
+      }
+    ],
+    "deterministic_core_constraint": "each scored scenario has 7 through 15 obligation IDs total across mounted and unmounted scopes, so the complete enumerated list including NO_ACTION has 8 through 16 IDs",
+    "available_action_ids": "UTF8-bytewise sort of NO_ACTION plus ACT:{scope_id}:{obligation_id} for every obligation with any visible lifecycle event at the cut; no generator-supplied ad hoc action ID is legal",
+    "gold_action_ids": "UTF8-bytewise sort of ACT IDs for every critical obligation in O_due whose scope is mounted; if this set is empty, gold is [NO_ACTION]; otherwise NO_ACTION is not gold",
+    "gold_cardinality": "one through four ACT IDs, or the singleton NO_ACTION",
+    "frontier_axis_rule": "F=64 and F=256 cells are deterministic resource cells, not paid/action-scored cells, and may exceed the 8-through-16 action envelope"
+  },
+  "paid_handoff_gold": {
+    "cut_selection": "among cuts with at least one mounted critical O_due obligation and at least one non-gold available action, choose the cut with the smallest SHA256 of scenario_id + '|' + cut_id + '|stage2-cut-v1'",
+    "A0_target": "the UTF8-bytewise smallest gold ACT ID at the selected cut",
+    "B_target": "the obligation named by A0_target",
+    "A1_gold": "recompute gold_action_ids after the deterministic writer commits B's valid completion; the committed target action must not appear again",
+    "contract_success": "1 iff A0 selects exactly A0_target and emits a schema-valid task, B proposes exactly one legal completion for B_target with no extra mutation, the writer commits exactly one effect, and cold A1 emits exactly A1_gold with no stale, terminal, premature, or wrong-scope action; otherwise 0",
+    "scored_decision_count_k": 3
+  },
+  "worker_handoff_caps": {
+    "proposed_action_ids_max": 4,
+    "evidence_event_ids_max": 32,
+    "proposed_claim_ids_max": 8,
+    "proposed_mutations_max": 4,
+    "new_obligations_max": 4,
+    "discharged_obligations_max": 4,
+    "unresolved_item_codes_max": 8,
+    "warning_codes_max": 8,
+    "free_text_fields": 0,
+    "unresolved_item_codes": ["MISSING_EVIDENCE", "AMBIGUOUS_SCOPE", "DEPENDENCY_UNRESOLVED", "FRONTIER_LIMIT", "PAGE_FAULT"],
+    "warning_codes": ["STALE_INPUT", "CONFLICT_PRESENT", "PARTIAL_EVIDENCE", "TRANSPORT_METADATA_MISSING"]
+  },
+  "serialization": {
+    "format": "RFC 8785 JSON Canonicalization Scheme",
+    "text_encoding": "UTF-8 without BOM",
+    "time_format": "RFC3339 UTC with exactly six fractional digits and suffix Z",
+    "array_order": "semantic ID UTF8-bytewise ascending unless this contract specifies journal_seq order",
+    "numbers": "integers only in the state/action contract; no NaN, infinity, or negative zero"
+  },
+  "mandatory_enumerator_checks": [
+    "all 17 event types have at least one legal and one illegal fixture",
+    "every ordered two-event type pair is either witnessed as legal or returns a named illegal-transition code",
+    "correction cycles and dependency cycles are rejected",
+    "correct then retract restores the nearest eligible ancestor",
+    "retroactive correction changes a later knowledge cut but never rewrites a prior cut",
+    "delegation never changes scope_id",
+    "four simultaneous due critical obligations yield four gold ACT IDs",
+    "wrong-scope same-name obligations remain available distractors but never gold",
+    "raw accepted response is replayed after crash without a second provider request",
+    "duplicate proposal and duplicate commit produce one committed effect"
+  ]
+}

@@ -1,0 +1,174 @@
+MBCX-01 BUILD B — ETW PMC CONSUMER: TDD RED WITNESS RUN
+Date: 2026-08-14
+<personal folder listing redacted from this log>
+Branch: codex/mbcx01-production-build   HEAD at start: b5e00eee7367cb6942b624d0133f5e37ff21e798
+Python: Python 3.11.9
+
+THE GAP, VERIFIED AT THE BYTE BEFORE ANY CODE WAS WRITTEN
+--------------------------------------------------------
+  $ grep -rn "EtwPmcSession(" .          -> only MBCX-01-OPEN-ISSUES.json (prose). ZERO constructors.
+  $ grep -rn "ProcessTrace|EventRecordCallback|StartTrace|OpenTrace|EVENT_TRACE_PROPERTIES" .
+      ./mbcx01_build_win32.py:406:    # `ProcessTrace`/`EventRecordCallback` consumer supplies, yielding raw
+      (every other hit is prose in an issues file or a seat verdict)
+  => collect() takes etw_session_factory and nothing in the lane provides one.
+
+⛔ NOTHING IN THIS RUN STARTED AN ETW SESSION, TOUCHED A PMU, SET
+   MBCX01_BUILD_ALLOW_PHYSICAL OR CALLED collect(). Verified unset:
+  $ env | grep -i MBCX01_BUILD_ALLOW_PHYSICAL   -> no match
+
+================================================================================
+RED 1..16 — the consumer module does not exist
+Command: python -m unittest test_mbcx01_build_measurement.BuildEtwConsumerTests -v
+Expectation: every new witness ERRORS on the missing module.
+================================================================================
+test_bw29_positive_etw_struct_layout_matches_the_pinned_win32_abi (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw29_positive_etw_struct_layout_matches_the_pinned_win32_abi)
+test_bw30_adversarial_etw_abi_drift_is_a_fault_at_verify_time (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw30_adversarial_etw_abi_drift_is_a_fault_at_verify_time)
+test_bw31_positive_records_are_emitted_in_per_processor_timestamp_order (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw31_positive_records_are_emitted_in_per_processor_timestamp_order)
+test_bw32_adversarial_a_record_missing_a_join_field_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw32_adversarial_a_record_missing_a_join_field_is_refused)
+test_bw33_positive_pmc_counters_are_read_from_the_pinned_extended_item (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw33_positive_pmc_counters_are_read_from_the_pinned_extended_item)
+test_bw34_adversarial_absent_or_short_pmc_data_is_unavailable_not_zero (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw34_adversarial_absent_or_short_pmc_data_is_unavailable_not_zero)
+test_bw35_positive_member_lifetimes_cover_every_member_including_terminated (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw35_positive_member_lifetimes_cover_every_member_including_terminated)
+test_bw36_adversarial_an_unterminated_or_keyless_member_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw36_adversarial_an_unterminated_or_keyless_member_is_refused)
+test_bw37_adversarial_any_nonzero_loss_counter_makes_evidence_unavailable (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw37_adversarial_any_nonzero_loss_counter_makes_evidence_unavailable)
+test_bw38_adversarial_ungranted_capability_is_unavailable_never_estimated (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw38_adversarial_ungranted_capability_is_unavailable_never_estimated)
+test_bw39_adversarial_multiplexed_counters_are_unavailable (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw39_adversarial_multiplexed_counters_are_unavailable)
+test_bw40_adversarial_a_virtualization_guest_or_nested_host_aborts (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw40_adversarial_a_virtualization_guest_or_nested_host_aborts)
+test_bw41_positive_the_factory_yields_a_contract_shaped_etwpmcsession (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw41_positive_the_factory_yields_a_contract_shaped_etwpmcsession)
+test_bw42_adversarial_unattached_consumer_seams_stay_faults (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw42_adversarial_unattached_consumer_seams_stay_faults)
+test_bw43_positive_capability_evidence_and_capability_facts_are_separate (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw43_positive_capability_evidence_and_capability_facts_are_separate)
+test_bw44_adversarial_ungranted_facts_travel_into_the_receipt_unchanged (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw44_adversarial_ungranted_facts_travel_into_the_receipt_unchanged)
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+Ran 16 tests in 0.046s
+FAILED (errors=16)
+
+  16 distinct errors, all: ModuleNotFoundError: No module named 'mbcx01_build_etw_consumer'
+
+================================================================================
+RED 2 — the RIDER probe: three defects in mbcx01_build_win32.py that make a real
+        physical collection produce a structurally invalid or self-contradicting
+        receipt. Run against PRE-FIX bytes. Each probe asks the collector for
+        exactly what collect() will ask for on the operator's box.
+================================================================================
+==============================================================================
+RIDER RED 1 - capability record cannot carry BOTH evidence shape and facts
+==============================================================================
+session.capability keys == CAPABILITY_QUERY_KEYS : True
+-> _trace_facts(session) reports, for a HEALTHY PMU:
+     etw_pmc_source_available             = False
+     etw_max_pmc_counters                 = 0
+     etw_counter_owner_conflict_count     = 0
+     etw_attribution_complete             = False
+RED: a real run would sign retired_instructions>0 next to
+     etw_pmc_source_available=False / etw_attribution_complete=False.
+
+-> and the other branch (put the facts IN capability) breaks the evidence tree:
+     set(capability) == CAPABILITY_QUERY_KEYS : False   <- frozen validator requires True
+     RED: no separate facts field -> EtwPmcSession.__init__() got an unexpected keyword argument 'capability_facts'
+
+==============================================================================
+RIDER RED 2 - configure() needs a key the evidence attachment cannot carry
+==============================================================================
+EVENT_ATTACHMENT_KEYS = ['attached', 'counter_query_class', 'event_list', 'event_query_class', 'profile_source']
+RED: configure() raised KeyError 'event_id_blob_size' - the key is NOT in EVENT_ATTACHMENT_KEYS
+RED: no attached-blob seam -> 'EtwPmcSession' object has no attribute 'classic_event_id_blob'
+
+==============================================================================
+RIDER RED 3 - configure() sends a ZERO-FILLED CSwitch attachment blob
+==============================================================================
+  TracePmcCounterListInfo    (9) bytes=03000000
+  TracePmcEventListInfo      (8) bytes=000000000000000000000000000000000000000000000000
+RED: the CSwitch CLASSIC_EVENT_ID blob is all zeroes: True
+     documented value = ThreadGuid 3d6fa8d1-fe05-11d0-9dda-00c04fd7ba7c, Type 36
+     -> TraceSetInformation(TracePmcEventListInfo) would attach the counter
+        to GUID_NULL/type 0, i.e. to NOTHING, and no PMC data would arrive.
+
+================================================================================
+RED 3 — the RIDER probe, part 4/5: collect() has no terminal-barrier hook and no
+        root-identity seam, so a LIVE session cannot be constructed at all.
+================================================================================
+collect() call order around the barrier (verbatim):
+    session = etw_session_factory()
+    session.configure(win32, pmc_source_id)
+    if win32.kernel32.ResumeThread(process_information.hThread) == 0xFFFFFFFF:
+    raise CollectorFault("ResumeThread:WIN32_ERROR="
+    if win32.kernel32.WaitForSingleObject(
+    observations = session.consume_cswitch()
+    "process_lifetimes": tuple(session.members()),
+    "thread_lifetimes": tuple(session.thread_lifetimes),
+
+session.close_trace_window in collect() source : False
+EtwPmcSession has a finalizer seam             : False
+
+consume_cswitch() reads thread_lifetimes BEFORE it calls records():
+    11  lifetimes = {row["thread_id"]: row for row in self.thread_lifetimes}
+    12  for sequence, record in enumerate(self.records()):
+    30  if self.events_lost or self.log_buffers_lost or self.realtime_buffers_lost:
+
+FUNCTIONAL RED - a LIVE factory can only return an EMPTY roster at factory time,
+because the candidate has not run yet. Replaying collect()'s own order:
+  -> consume_cswitch() returned 2 observations (in-place mutation worked)
+
+BUT collect() gives the consumer NO CALL between the barrier and consume_cswitch(),
+so nothing can perform that mutation. Grep for a hook:
+   every session.* call collect() makes: ['session.configure(win32, pmc_source_id)', 'observations = session.consume_cswitch()', '"process_lifetimes": tuple(session.members()),', '"thread_lifetimes": tuple(session.thread_lifetimes),', '"trace_capability_query": dict(session.capability),', '"trace_event_attachment": dict(session.attachment),']
+EE
+======================================================================
+ERROR: test_bw45_positive_the_trace_window_closes_at_the_terminal_barrier (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw45_positive_the_trace_window_closes_at_the_terminal_barrier)
+`collect()` must close the trace window BEFORE it reads any delta.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 1928, in test_bw45_positive_the_trace_window_closes_at_the_terminal_barrier
+    session.close_trace_window()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EtwPmcSession' object has no attribute 'close_trace_window'
+
+======================================================================
+ERROR: test_bw46_adversarial_an_unattached_trace_finalizer_is_a_fault (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw46_adversarial_an_unattached_trace_finalizer_is_a_fault)
+No finalizer means the trace window was never closed — never a no-op.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 1950, in test_bw46_adversarial_an_unattached_trace_finalizer_is_a_fault
+    session.close_trace_window()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EtwPmcSession' object has no attribute 'close_trace_window'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.042s
+
+FAILED (errors=2)
+
+E
+======================================================================
+ERROR: test_bw47_positive_collect_tells_the_session_which_root_it_is_measuring (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw47_positive_collect_tells_the_session_which_root_it_is_measuring)
+The root PID/start key reach the session as VALUES, not by patching.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 1994, in test_bw47_positive_collect_tells_the_session_which_root_it_is_measuring
+    session.root_identity()
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EtwPmcSession' object has no attribute 'root_identity'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.040s
+
+FAILED (errors=1)
+
+================================================================================
+END OF RED. Nothing above was executed with elevation, and no ETW session, PMU,
+Job Object or candidate process was created at any point.
+================================================================================

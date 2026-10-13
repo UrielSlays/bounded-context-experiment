@@ -1,0 +1,56 @@
+{
+  "receipt_id": "MBCX-01-BUILD-COUNCIL-R6-DISPATCH-RECEIPT",
+  "round": "BUILD acceptance r6 (first complete round on the folded tree - issue #24)",
+  "packet_path": "MBCX-01-BUILD-ACCEPTANCE-COUNCIL-PACKET-r6.md",
+  "packet_commit": "b56892e3c3d73a60948b724e95d1e2dcc1ac0a9b",
+  "review_target_commit": "396752a680d5f057daef51704a2945ccd2735b41",
+  "packet_check": "GREEN (itemsChecked=7; classes: internal-consistency, maintainer, author-blind-spot only; no REAL class declared - the design of record carries no threat model, settling grep re-run 0 hits this session)",
+  "driver_predispatch_execution": {
+    "build_suite": "170/170 OK, exit 0 (witnessed this session)",
+    "frozen_suite": "150/150 OK, exit 0 (witnessed this session)",
+    "verify_build_bundle": "exit 0, pin-manifest reconciliation PASS (70 subjects), ledger 65 invariants / 170 witnesses two_way_total, readiness BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED",
+    "clean_room": "verify-build-pinned -Commit 396752a680d5f057daef51704a2945ccd2735b41 -ManifestBlob 97a02c13fba6c0f39a913659ff2719d868776154 -> PINNED RECONSTRUCTION COMPLETE, real exit 0 (pwsh 7; Windows PowerShell 5.1 fails on Get-FileHash - harness fact)",
+    "code_parity": "git diff --stat 396752a HEAD -- '*.py' empty at dispatch"
+  },
+  "driver_search_log": "packet section 10 - repnz Win10-17134 Kernel-Process manifest opened at origin 2026-08-15: no ProcessStartKey field in any template, no ProcessSequenceNumber before V3",
+  "seats": [
+    {
+      "seat": "SEAT1_OUTSIDE_OPUS5",
+      "conversation_id": "<id>",
+      "url": "https://claude.ai/chat/<id>",
+      "cdp_port": <council-browser-port>,
+      "reused_lane_seat": true,
+      "chrome_relaunched": "<council-browser-port> Chrome was DOWN at session start (no process); relaunched with the section-1 flag line, no tabs existed to record/reopen",
+      "model_verified_before_message_one": "Opus 5 Extra (composer label read via DOM before the card)",
+      "read_probe": "PASS - sha256 a2e4ff30255089d35d93e7359aebe5a9dfcfd38d3c56e544dc3bd6f9d80674f4 / 26159 bytes / correct first line, matches driver local compute",
+      "reprimed_in_thread": "yes - card re-sent verbatim (it gained PRIMARY-CONSUMER + ROUND CALL since this thread was first primed)",
+      "ack": "Council Mode ready",
+      "packet_sent_utc": "2026-08-16T05:59:37Z"
+    },
+    {
+      "seat": "SEAT2_CHATGPT_SOL",
+      "conversation_id": "<id>",
+      "url": "https://chatgpt.com/g/<chatgpt-project>/c/<id>",
+      "cdp_port": <council-browser-port>,
+      "reused_lane_seat": true,
+      "tab_reopened": "lane tab was closed; conversation reopened server-side in a NEW tab via the debug API (PUT /json/new) - the one pre-existing tab on <council-browser-port> belongs to another conversation and was not touched",
+      "read_probe": "PASS - identical sha256/size/first-line to SEAT1, matches driver local compute",
+      "reprimed_in_thread": "yes - card re-sent; KNOWN VERBATIM DEVIATION, disclosed: in the design-only 'WHAT WOULD YOU BUILD' bullet one clause was doubled from the LABELS section (same rule restated; this is a CODE round where seats skip that section)",
+      "ack": "Council Mode ready",
+      "packet_sent_utc": "2026-08-16T05:59:49Z"
+    },
+    {
+      "seat": "SEAT3_CODEX_EXEC",
+      "model": "gpt-5.6-sol",
+      "service_tier": "default",
+      "reasoning_effort": "xhigh",
+      "prompt_path": "MBCX-01-BUILD-SEAT3-CODEX-EXEC-PROMPT-r6.txt",
+      "prompt_generated_from_card_by_extractor": "generate-seat3-build-r6-prompt.ps1 - refuses to emit if SOURCE-POISONING / EXECUTE / WHY-THIS-EXISTS / PRIMARY-CONSUMER / ROUND CALL / PROPOSE / SWEEP lanes are missing from the card",
+      "log_path": "MBCX-01-BUILD-SEAT3-CODEX-EXEC-r6.log",
+      "serialized": "only codex job running; codex-CLI r4 waits for this seat and the fold",
+      "dispatched_utc": "2026-08-16T05:50:00Z"
+    }
+  ],
+  "sealing": "blind round - no seat sees another; verdicts banked by the driver from each thread",
+  "next": "bank three verdicts (check the commit each names - a stale wait_quiesced once returned the prior round), driver byte-reproduces every finding AND every relied-on closure, synthesis committed, folds red-first, pin manifest regenerated; then codex-CLI r4 to literal GREEN (#1); then draft PR into Selene + @codex review"
+}

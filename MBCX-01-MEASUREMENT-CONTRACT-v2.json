@@ -1,0 +1,103 @@
+{
+  "contract_id": "MBCX-01-MEASUREMENT-CONTRACT-v2",
+  "normative": true,
+  "claim_scope": "registered physical work is bounded over the frozen finite H, D, and F ranges; no universal asymptotic claim",
+  "counter_set_closed": true,
+  "storage": {
+    "backend": "SQLite 3 rollback-journal mode on local NTFS",
+    "database_page_size_bytes": 4096,
+    "filesystem_allocation_unit_bytes": 4096,
+    "page_byte_consistency": "PAGES_READ and PAGES_WRITTEN are counted only at the frozen 4096-byte database page size; byte counters retain exact bytes",
+    "backend_or_page_size_change": "DESIGN_OR_IMPLEMENTATION_FAIL"
+  },
+  "sampling_boundary": {
+    "start": "before candidate config parse, candidate-specific preprocessing, process spawn, artifact open, or dependency initialization",
+    "stop": "after packet bytes are durable, all descendants exit, background work quiesces, artifacts close, and counters flush",
+    "descendants": "all descendant PIDs and their filesystem/database/CPU/memory work are charged to the candidate",
+    "unregistered_work": "DESIGN_OR_IMPLEMENTATION_FAIL"
+  },
+  "axis_values": {
+    "H": [128, 1024, 10000, 100000],
+    "D": [1, 4, 16, 64, 256],
+    "F": [1, 4, 16, 64, 256]
+  },
+  "required_cells": {
+    "HD_full_factorial_at_F16": "Cartesian product of every registered H and D value at F=16; exactly 20 unique cells",
+    "F_curve_at": {"H": 100000, "D": 16, "F": [1, 4, 16, 64, 256]},
+    "duplicates_removed_by_exact_tuple": true
+  },
+  "counter_catalog": [
+    {"id": "SOURCE_BYTES_READ", "unit_class": "bytes", "layer": "source", "H_range_max": 4096, "D_range_max": 4096, "measurement": "ETW/file handle exact bytes"},
+    {"id": "ARTIFACT_BYTES_READ", "unit_class": "bytes", "layer": "artifact", "H_range_max": 4096, "D_range_max": 4096, "measurement": "candidate artifact handles exact bytes"},
+    {"id": "ARTIFACT_BYTES_WRITTEN", "unit_class": "bytes", "layer": "artifact", "H_range_max": 4096, "D_range_max": 4096, "measurement": "candidate artifact handles exact bytes"},
+    {"id": "FILESYSTEM_BYTES_TOUCHED", "unit_class": "bytes", "layer": "filesystem", "H_range_max": 8192, "D_range_max": 8192, "measurement": "all candidate process-tree file IO bytes"},
+    {"id": "DATABASE_BYTES_TOUCHED", "unit_class": "bytes", "layer": "database", "H_range_max": 8192, "D_range_max": 8192, "measurement": "SQLite VFS bytes for database, journal, WAL, and temp files"},
+    {"id": "SOURCE_RECORDS_READ", "unit_class": "records", "layer": "source", "H_range_max": 9, "D_range_max": 9, "measurement": "decoded canonical source records"},
+    {"id": "INDEX_RECORDS_READ", "unit_class": "records", "layer": "index", "H_range_max": 32, "D_range_max": 32, "measurement": "decoded index/projection records"},
+    {"id": "PAGES_READ", "unit_class": "pages", "layer": "storage", "H_range_max": 4, "D_range_max": 4, "measurement": "4096-byte database pages read"},
+    {"id": "PAGES_WRITTEN", "unit_class": "pages", "layer": "storage", "H_range_max": 4, "D_range_max": 4, "measurement": "4096-byte database pages written"},
+    {"id": "DEPENDENCY_OPERATIONS", "unit_class": "operations", "layer": "resolver", "H_range_max": 16, "D_range_max": 16, "measurement": "every governed dependency request"},
+    {"id": "DECODE_OPERATIONS", "unit_class": "operations", "layer": "renderer", "H_range_max": 4, "D_range_max": 4, "measurement": "every decoded object"},
+    {"id": "MATERIALIZATION_OPERATIONS", "unit_class": "operations", "layer": "projection", "H_range_max": 4, "D_range_max": 4, "measurement": "every projection materialization"},
+    {"id": "PROCESS_CPU_INSTRUCTIONS", "unit_class": "instructions", "layer": "process", "H_range_max": 2000000, "D_range_max": 2000000, "measurement": "hardware performance counter for candidate root"},
+    {"id": "CHILD_CPU_INSTRUCTIONS", "unit_class": "instructions", "layer": "process", "H_range_max": 2000000, "D_range_max": 2000000, "measurement": "sum hardware counters for descendants"},
+    {"id": "PROCESS_CPU_TIME_NS", "unit_class": "nanoseconds", "layer": "process", "H_range_max": 50000000, "D_range_max": 50000000, "measurement": "kernel plus user CPU time for root"},
+    {"id": "CHILD_CPU_TIME_NS", "unit_class": "nanoseconds", "layer": "process", "H_range_max": 50000000, "D_range_max": 50000000, "measurement": "kernel plus user CPU time for descendants"},
+    {"id": "PEAK_RSS_BYTES", "unit_class": "memory_bytes", "layer": "process", "H_range_max": 67108864, "D_range_max": 67108864, "measurement": "maximum process-tree resident set"},
+    {"id": "PEAK_ALLOCATED_BYTES", "unit_class": "memory_bytes", "layer": "runtime", "H_range_max": 67108864, "D_range_max": 67108864, "measurement": "maximum registered heap allocation across process tree"},
+    {"id": "IMPLEMENTATION_BRANCHES", "unit_class": "branches", "layer": "candidate", "H_range_max": 0, "D_range_max": 0, "measurement": "static registered branch count plus runtime fallback count"},
+    {"id": "UNREGISTERED_FALLBACK_BRANCHES", "unit_class": "branches", "layer": "candidate", "H_range_max": 0, "D_range_max": 0, "measurement": "must remain exactly zero"}
+  ],
+  "unit_total_gates": {
+    "bytes": {"H_range_max": 24576, "D_range_max": 24576, "sum_of_per_counter_maxima": 28672},
+    "records": {"H_range_max": 32, "D_range_max": 32, "sum_of_per_counter_maxima": 41},
+    "pages": {"H_range_max": 6, "D_range_max": 6, "sum_of_per_counter_maxima": 8},
+    "operations": {"H_range_max": 16, "D_range_max": 16, "sum_of_per_counter_maxima": 24},
+    "instructions": {"H_range_max": 3000000, "D_range_max": 3000000, "sum_of_per_counter_maxima": 4000000},
+    "nanoseconds": {"H_range_max": 75000000, "D_range_max": 75000000, "sum_of_per_counter_maxima": 100000000},
+    "memory_bytes": {"H_range_max": 100663296, "D_range_max": 100663296, "sum_of_per_counter_maxima": 134217728}
+  },
+  "aggregation": {
+    "per_counter": "max cell value minus min cell value over the named axis family",
+    "unit_total": "sum every registered counter in the unit class at each cell, then max minus min",
+    "strict_total_rule": "each unit-total H/D maximum is strictly less than the arithmetic sum of registered per-counter maxima",
+    "zero_growth_branches": "both branch counters must have exact H and D range zero; provenance prevents renaming or splitting",
+    "new_or_renamed_counter": "DESIGN_OR_IMPLEMENTATION_FAIL"
+  },
+  "candidate_config": {
+    "type": "object",
+    "additionalProperties": false,
+    "allowed_fields": ["candidate_id", "artifact_root", "memory_budget_bytes", "checkpoint_interval", "cache_mode"],
+    "prohibited_fields": ["precomputed_packet", "selected_event_ids", "gold_action_ids", "reference_state", "generator_path", "arbitrary_source_path"],
+    "artifact_root": "an initially empty candidate-owned directory under the run root"
+  },
+  "source_and_cohort_freeze": {
+    "order": ["candidate_source_hashes", "build_hashes", "dependency_hashes", "config_hashes", "confirmatory_generator_hash", "generated_candidates", "one_cut_selection", "eligibility", "retained_manifest"],
+    "candidate_freeze_before_confirmatory_generation": true,
+    "motifs": ["CORRECTION_RESTORATION", "OBLIGATION_LIFECYCLE", "DEPENDENCY_REVERSAL", "CROSS_SCOPE_COLLISION", "DELEGATION_IDEMPOTENT_HANDOFF", "MIXED_DELAYED_CONTINUITY"],
+    "generated_unique_scenarios_per_motif": 80,
+    "retained_unique_scenarios_per_motif": 64,
+    "one_cut_hash": "SHA-256 over 8-byte big-endian length-framed UTF-8 parts: scenario_id, every UTF8-sorted cut_id, stage2-cut-r8; integer digest modulo cut count",
+    "retention_hash": "SHA-256 over length-framed motif, scenario_id, chosen_cut_id, stage2-retain-r8",
+    "selection_order": "choose one cut before eligibility; retain first 64 eligible unique scenario IDs by retention hash",
+    "shortfall": "DESIGN_OR_IMPLEMENTATION_FAIL",
+    "estimand_population": "conditional on the frozen eligible retained manifest; no unbiased-sampling claim",
+    "publish": ["all candidate scenario IDs", "chosen cut", "eligibility result and reason", "motif", "difficulty stratum", "retention hash"]
+  },
+  "red_candidates": {
+    "HD_INTERIOR_HOTSPOT": {"trigger_cell": [10000, 64, 16], "expected": "FAIL"},
+    "LOW_SLOPE_ARCHIVE_LINEAR": {"expected": "FAIL"},
+    "UNREGISTERED_CPU_WORK": {"expected": "DESIGN_OR_IMPLEMENTATION_FAIL"},
+    "COUNTER_SPLIT_SAME_WORK": {"expected": "FAIL"},
+    "PAGE_SIZE_SUBSTITUTION": {"expected": "DESIGN_OR_IMPLEMENTATION_FAIL"},
+    "LOGICAL_LOOKUP_PHYSICAL_SCAN": {"expected": "FAIL"}
+  },
+  "performance": {
+    "exactness": "all deterministic scenarios, cuts, 20 H-by-D cells, F curve, and red candidates",
+    "cold_repetitions": 30,
+    "warmups": 1,
+    "latency_statistic": "Hyndman-Fan type 7 p95 within cell; maximum cell p95 across cells",
+    "latency_not_boundedness_substitute": true,
+    "run_root_hard_ceiling_bytes": 21474836480
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "contract_id": "MBCX-01-STATE-ACTION-CONTRACT-v3",
+  "normative": true,
+  "precedence": "this contract governs canonical state, actions, writer, and call-ledger semantics",
+  "serialization": {
+    "format": "RFC 8785 JSON Canonicalization Scheme",
+    "encoding": "UTF-8 without BOM",
+    "safe_integer_min": -9007199254740991,
+    "safe_integer_max": 9007199254740991,
+    "time_format": "RFC3339 UTC with exactly six fractional digits and suffix Z"
+  },
+  "identity": {
+    "idempotency_tuple": ["scope_id", "semantic_operation", "idempotency_key"],
+    "action_preimage_schema": "ActionIdentityV1",
+    "action_preimage": ["schema_id", "scope_id", "obligation_id"],
+    "action_hash": "ACT. plus uppercase SHA-256 of RFC8785/JCS preimage bytes",
+    "action_resolution": "lookup the opaque action ID in the cut-bound action_catalog; never parse the public ID",
+    "no_action_id": "NO_ACTION"
+  },
+  "query_clock": {
+    "cut_fields": ["journal_seq", "knowledge_time", "valid_time"],
+    "visibility": "journal_seq <= cut.journal_seq AND observed_at <= cut.knowledge_time",
+    "effectivity": "valid_from <= cut.valid_time AND (valid_to is null OR cut.valid_time < valid_to)",
+    "prior_cut_immutable": true
+  },
+  "payload_definitions": {
+    "SemanticId": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Z0-9][A-Z0-9:._/-]*$"},
+    "Sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+    "Cut": {"type": "object", "additionalProperties": false, "required": ["journal_seq", "knowledge_time", "valid_time"]}
+  },
+  "event_types": {
+    "assert_fact": {
+      "semantic_operation": "ASSERT_FACT",
+      "payload_schema": {"additionalProperties": false, "required": ["subject_id", "predicate_id", "value_code"], "properties": {"subject_id": "SemanticId", "predicate_id": "SemanticId", "value_code": "SemanticId"}},
+      "legal_prestate": "fact key absent",
+      "effect": "create one root fact version",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "FACT_ALREADY_EXISTS"
+    },
+    "correct_fact": {
+      "semantic_operation": "CORRECT_FACT",
+      "payload_schema": {"additionalProperties": false, "required": ["subject_id", "predicate_id", "parent_event_id", "value_code"], "properties": {"subject_id": "SemanticId", "predicate_id": "SemanticId", "parent_event_id": "SemanticId", "value_code": "SemanticId"}},
+      "legal_prestate": "named parent is visible chain head and has no child",
+      "effect": "append exactly one child version carrying its own validity interval",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "FACT_PARENT_NOT_HEAD"
+    },
+    "retract_fact": {
+      "semantic_operation": "RETRACT_FACT",
+      "payload_schema": {"additionalProperties": false, "required": ["subject_id", "predicate_id", "target_event_id"], "properties": {"subject_id": "SemanticId", "predicate_id": "SemanticId", "target_event_id": "SemanticId"}},
+      "legal_prestate": "target version exists, is visible, and is not retracted",
+      "effect": "mark target retracted; parent walk decides the current value",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "FACT_TARGET_UNAVAILABLE"
+    },
+    "open_obligation": {
+      "semantic_operation": "OPEN_OBLIGATION",
+      "payload_schema": {"additionalProperties": false, "required": ["obligation_id", "subject_id", "owner_role", "due_at", "critical", "completion_action_id", "prerequisite_obligation_ids"], "properties": {"obligation_id": "SemanticId", "subject_id": "SemanticId", "owner_role": "ActorRole", "due_at": "UtcTime", "critical": "Boolean", "completion_action_id": "SemanticId", "prerequisite_obligation_ids": "UniqueSemanticIdArray16"}},
+      "legal_prestate": "obligation key absent and every prerequisite exists in the same scope",
+      "effect": "create OPEN obligation",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "OBLIGATION_ALREADY_EXISTS_OR_BAD_PREREQUISITE"
+    },
+    "reschedule_obligation": {
+      "semantic_operation": "RESCHEDULE_OBLIGATION",
+      "payload_schema": {"additionalProperties": false, "required": ["obligation_id", "due_at"], "properties": {"obligation_id": "SemanticId", "due_at": "UtcTime"}},
+      "legal_prestate": "obligation lifecycle is OPEN at the originating cut",
+      "effect": "replace due_at",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "OBLIGATION_NOT_OPEN"
+    },
+    "delegate_obligation": {
+      "semantic_operation": "DELEGATE_OBLIGATION",
+      "payload_schema": {"additionalProperties": false, "required": ["obligation_id", "owner_role"], "properties": {"obligation_id": "SemanticId", "owner_role": "ActorRole"}},
+      "legal_prestate": "obligation lifecycle is OPEN at the originating cut",
+      "effect": "replace owner_role without changing scope",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "OBLIGATION_NOT_OPEN"
+    },
+    "complete_obligation": {
+      "semantic_operation": "COMPLETE_OBLIGATION",
+      "payload_schema": {"additionalProperties": false, "required": ["obligation_id", "completion_action_id", "originating_cut_hash"], "properties": {"obligation_id": "SemanticId", "completion_action_id": "SemanticId", "originating_cut_hash": "Sha384"}},
+      "legal_prestate": "obligation is OPEN, critical O_due at immutable originating cut, and completion_action_id equals canonical value",
+      "effect": "set COMPLETED and terminal_event_id",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "OBLIGATION_NOT_DUE_AT_ORIGINATING_CUT"
+    },
+    "cancel_obligation": {
+      "semantic_operation": "CANCEL_OBLIGATION",
+      "payload_schema": {"additionalProperties": false, "required": ["obligation_id", "cancellation_code"], "properties": {"obligation_id": "SemanticId", "cancellation_code": "CancellationCode"}},
+      "legal_prestate": "obligation lifecycle is OPEN at the originating cut",
+      "effect": "set CANCELLED and terminal_event_id",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "OBLIGATION_NOT_OPEN"
+    },
+    "reopen_obligation": {
+      "semantic_operation": "REOPEN_OBLIGATION",
+      "payload_schema": {"additionalProperties": false, "required": ["obligation_id", "due_at", "owner_role"], "properties": {"obligation_id": "SemanticId", "due_at": "UtcTime", "owner_role": "ActorRole"}},
+      "legal_prestate": "obligation lifecycle is COMPLETED or CANCELLED at the originating cut",
+      "effect": "set OPEN, replace due/owner, clear terminal, retain prerequisites",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "OBLIGATION_NOT_TERMINAL"
+    },
+    "link_dependency": {
+      "semantic_operation": "LINK_DEPENDENCY",
+      "payload_schema": {"additionalProperties": false, "required": ["obligation_id", "prerequisite_obligation_id"], "properties": {"obligation_id": "SemanticId", "prerequisite_obligation_id": "SemanticId"}},
+      "legal_prestate": "both OPEN obligations exist in same scope and edge creates no cycle",
+      "effect": "add prerequisite edge",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "DEPENDENCY_ILLEGAL"
+    },
+    "unlink_dependency": {
+      "semantic_operation": "UNLINK_DEPENDENCY",
+      "payload_schema": {"additionalProperties": false, "required": ["obligation_id", "prerequisite_obligation_id"], "properties": {"obligation_id": "SemanticId", "prerequisite_obligation_id": "SemanticId"}},
+      "legal_prestate": "named same-scope edge exists at originating cut",
+      "effect": "remove prerequisite edge",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "DEPENDENCY_NOT_FOUND"
+    },
+    "open_handoff": {
+      "semantic_operation": "OPEN_HANDOFF",
+      "payload_schema": {"additionalProperties": false, "required": ["handoff_id", "target_obligation_id", "task_packet_hash", "originating_cut_hash"], "properties": {"handoff_id": "SemanticId", "target_obligation_id": "SemanticId", "task_packet_hash": "Sha384", "originating_cut_hash": "Sha384"}},
+      "legal_prestate": "handoff absent and target is OPEN at originating cut",
+      "effect": "create OPEN handoff bound to immutable TaskPacket and cut",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "HANDOFF_OR_TARGET_ILLEGAL"
+    },
+    "record_call_response": {
+      "semantic_operation": "RECORD_CALL_RESPONSE",
+      "payload_schema": {"additionalProperties": false, "required": ["scenario_id", "condition", "node", "request_hash", "response_hash", "response_ref", "provider_request_id", "route_fingerprint", "accepted_at"], "properties": {"scenario_id": "SemanticId", "condition": "Condition", "node": "Node", "request_hash": "Sha384", "response_hash": "Sha384", "response_ref": "SemanticId", "provider_request_id": "SemanticId", "route_fingerprint": "Sha384", "accepted_at": "UtcTime"}},
+      "legal_prestate": "call key has no durable response and immutable response bytes match response_hash",
+      "effect": "record accepted bytes before parse; recovery reuses exact bytes",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "CALL_RESPONSE_CONFLICT"
+    },
+    "propose_handoff_result": {
+      "semantic_operation": "PROPOSE_HANDOFF_RESULT",
+      "payload_schema": {"additionalProperties": false, "required": ["handoff_id", "worker_handoff_hash", "originating_cut_hash", "action_ids"], "properties": {"handoff_id": "SemanticId", "worker_handoff_hash": "Sha384", "originating_cut_hash": "Sha384", "action_ids": "UniqueSemanticIdArray4"}},
+      "legal_prestate": "handoff OPEN, hashes match, action IDs available, and every action is legal independently against immutable originating cut",
+      "effect": "set PROPOSED and freeze ordered action set",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "PROPOSAL_INVALID"
+    },
+    "commit_handoff_result": {
+      "semantic_operation": "COMMIT_HANDOFF_RESULT",
+      "payload_schema": {"additionalProperties": false, "required": ["handoff_id", "proposal_event_id"], "properties": {"handoff_id": "SemanticId", "proposal_event_id": "SemanticId"}},
+      "legal_prestate": "handoff PROPOSED and every frozen child remains legal against the same immutable originating cut",
+      "effect": "atomically append all child events in UTF8 action-ID order plus one COMMITTED terminal",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "COMMIT_INVALID"
+    },
+    "reject_handoff_result": {
+      "semantic_operation": "REJECT_HANDOFF_RESULT",
+      "payload_schema": {"additionalProperties": false, "required": ["handoff_id", "rejection_code", "proposal_hash"], "properties": {"handoff_id": "SemanticId", "rejection_code": "RejectionCode", "proposal_hash": "Sha384"}},
+      "legal_prestate": "handoff OPEN and no PROPOSED event was appended",
+      "effect": "append no semantic child and set REJECTED with exactly one code",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "HANDOFF_NOT_OPEN"
+    },
+    "close_handoff": {
+      "semantic_operation": "CLOSE_HANDOFF",
+      "payload_schema": {"additionalProperties": false, "required": ["handoff_id"], "properties": {"handoff_id": "SemanticId"}},
+      "legal_prestate": "handoff COMMITTED or REJECTED",
+      "effect": "set CLOSED while retaining terminal disposition",
+      "duplicate_result": "DUPLICATE_NOOP",
+      "illegal_result": "HANDOFF_NOT_TERMINAL"
+    }
+  },
+  "catalogs": {
+    "ActorRole": ["CONDUCTOR", "WORKER", "WRITER"],
+    "Condition": ["BC", "OM"],
+    "Node": ["A0", "B", "A1"],
+    "CancellationCode": ["OWNER_CANCELLED", "SUPERSEDED", "INVALIDATED"],
+    "RejectionCode": ["SCHEMA_INVALID", "WRONG_SCOPE", "STALE_INPUT", "ACTION_UNAVAILABLE", "ILLEGAL_TRANSITION", "HASH_MISMATCH", "DUPLICATE"]
+  },
+  "writer": {
+    "validation_order": ["schema", "hash_binding", "originating_cut", "scope", "action_availability", "independent_transition_legality", "idempotency"],
+    "proposal_prestate": "all children validate against the immutable TaskPacket originating cut; provisional child effects are invisible to sibling validation",
+    "newly_unblocked_rule": "an obligation unblocked by a committed child requires a later packet and decision",
+    "commit_atomicity": "append all constructed children plus one terminal or append no child and one rejection terminal",
+    "due_guard_cut": "the exact originating cut hash carried by TaskPacketV3",
+    "outside_event_rule": "no semantic event may interleave between commit terminal and the immediate A1 cut"
+  },
+  "call_ledger": {
+    "key": ["scenario_id", "condition", "node"],
+    "states": ["PREPARED", "DISPATCHED", "RESPONSE_DURABLY_RECORDED", "PROVEN_PRE_ACCEPT_FAILURE", "ACCEPTANCE_AMBIGUOUS"],
+    "transitions": {
+      "PREPARED": ["DISPATCHED"],
+      "DISPATCHED": ["RESPONSE_DURABLY_RECORDED", "PROVEN_PRE_ACCEPT_FAILURE", "ACCEPTANCE_AMBIGUOUS"],
+      "RESPONSE_DURABLY_RECORDED": [],
+      "PROVEN_PRE_ACCEPT_FAILURE": ["DISPATCHED"],
+      "ACCEPTANCE_AMBIGUOUS": []
+    },
+    "retry_rule": "retry only from PROVEN_PRE_ACCEPT_FAILURE; ACCEPTANCE_AMBIGUOUS makes the whole pair missing unless a frozen provider idempotency contract binds token and all parameters",
+    "response_order": "durably record immutable response bytes and hash before parse",
+    "no_resample": true
+  },
+  "mandatory_enumerator": {
+    "event_type_count": 17,
+    "ordered_pair_count": 289,
+    "fixture_scope": "SCOPE.SHARED",
+    "fixture_entity": "OBL.SHARED",
+    "required_observations": ["prestate", "first_result", "intermediate_state", "second_result", "final_state"],
+    "disjoint_object_fixture_credit": false
+  },
+  "red_witnesses": [
+    "ACTION_DELIMITER_COLLISION",
+    "PROVISIONAL_PRESTATE_LEAKAGE",
+    "ORIGINATING_CUT_DUE_GUARD",
+    "AMBIGUOUS_ACCEPTANCE_RETRY",
+    "PARTIAL_CHILD_COMMIT",
+    "DEPENDENCY_CYCLE"
+  ]
+}

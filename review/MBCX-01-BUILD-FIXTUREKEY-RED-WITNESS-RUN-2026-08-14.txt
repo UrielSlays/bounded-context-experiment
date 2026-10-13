@@ -1,0 +1,158 @@
+MBCX-01 BUILD - COMMITTED FIXTURE KEY MATERIAL - RED WITNESS RUN
+Date: 2026-08-14
+Class: OPERATOR FOOTGUN / self-deception guard (NOT an attacker path)
+Finding: MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r3.md section 4 residual P3-1,
+         "the fixture key is recognised by a FLAG in a document, not by its key
+         material" (lines 147-160), driver-reproduced at the byte.
+Prior art: MITRE CWE-1291 "Public Key Re-Use for Signing both Debug and Production
+         Code" (PeerOf CWE-321). MITRE places the mitigation at Architecture-and-
+         Design - i.e. at context construction, which is where the fix lands.
+Worktree: <repo>-build
+Branch: codex/mbcx01-production-build
+Python: Python 3.11.9  Node: v24.17.0
+
+FRAMING, stated first because this lane spent three rounds on a phantom adversary:
+MBCX-01 has NO threat model (its design of record carries zero adversary language)
+and no untrusted caller - no API, no production runtime, no external submitter
+(MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md). Nothing below is an
+attack. The custody ceremony (MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md section 3 step
+0) is exactly the moment a human hand-writes an OwnerTrustAnchorV1 document, and
+copying the committed example is the obvious way to write one. The defect is that
+an operator doing that would hold a "production" root of trust whose private half
+is committed at mbcx01_build_ceremony_fixture.py:39 - held by everyone holding this
+repository - and NOTHING would say so. It is a guard against the experiment fooling
+ITSELF, not a wall against anyone.
+
+================================================================================
+RED STAGE 1 (DECIDING) - the defect reproduced on the REAL PRE-FIX BYTES, through
+the PRE-FIX public API only.
+================================================================================
+
+Base bytes: commit bbc432b08091c8922f04ae2e0d985a21956af91a (the pin-manifest
+commit after fd26275), which was HEAD of this worktree when the run was made. While
+this fold was in progress the driver committed aadd71a on the same branch; that
+commit touches MBCX-01-OPEN-ISSUES.json only, and every file this witness reads is
+byte-identical between bbc432b and aadd71a (verified with git cat-file blob for
+mbcx01_build_trust_anchor.py, mbcx01_build_ceremony_fixture.py,
+MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json, test_mbcx01_build_measurement.py,
+test_mbcx01_build_state.py).
+
+The reconstruction is a byte-exact checkout of that tree into a temporary directory:
+
+    git -c core.autocrlf=false -c core.eol=lf checkout-index -a -f --prefix=<tmp>/
+
+byte-verified against the git object store, file by file, comparing sha256 of
+"git cat-file blob HEAD:<path>" with sha256 of the reconstructed file:
+
+    tracked files verified: 370   all-identical-to-HEAD=YES
+
+("git archive" is NOT usable here: this clone has core.autocrlf=true, so the archive
+writes CRLF and its files are not byte-identical to the blobs.)
+
+sha256 of the bytes under test (all IDENTICAL-TO-HEAD):
+  mbcx01_build_trust_anchor.py          a24d67f6ff4a52ede52135a462f39fb6b9a11155bdf24a027cc41a06567068a9
+  mbcx01_build_ceremony_fixture.py      7a4e5683cbccb58512abfbbd12e616775f55646d780e89d3efd6c7a50ef80aca
+  MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json
+                                        34fbeb4b794d3e3a78cde07b51f39de7540dd09beff5aa27537369469bfc14bf
+  test_mbcx01_build_measurement.py      589b8e8ebff2580e74e87063b45d26dce8ac050cef2f38201e5e1d0e5c16c57f
+  test_mbcx01_build_state.py            da8aaa61dc702533c5eaa2bd2f43bf35b458a652c79e7fc1bd0d5006c7ddc615
+
+NOT A SHIM. The only file added to that reconstruction is the probe itself
+(mbcx01_build_fixturekey_probe.py, banked alongside this run). It monkeypatches
+nothing, replaces nothing, and calls only APIs that exist at HEAD - which is why the
+identical file runs unchanged against the post-fix tree in the GREEN bank.
+
+No experiment, provider/model call, network call, physical collection or signing
+ceremony ran. Every key is a labelled FIXTURE / TEST key; the one production-shaped
+TEST key pair is generated IN MEMORY per run and never written to the repository.
+
+=== COMMAND: python mbcx01_build_fixturekey_probe.py   (cwd = pre-fix reconstruction) ===
+
+MBCX-01 BUILD — COMMITTED-FIXTURE-KEY probe (operator footgun, MITRE CWE-1291)
+cwd: <home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix-fixturekey
+committed fixture anchor: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1' fixture_only=True
+
+== P1: the committed fixture anchor document, RELABELLED by hand ==
+  edits: fixture_only true->false, anchor_id -> 'MBCX01.RELABELLED.ANCHOR.1'; public_key_pem UNCHANGED
+  (the private half of that public key is committed at mbcx01_build_ceremony_fixture.py:39)
+  context BUILT from relabelled doc : True
+  its public key == COMMITTED fixture public key : True
+  anchor_id: MBCX01.RELABELLED.ANCHOR.1 | fixture_only: False
+
+== P2: the same relabelled document delivered as OS configuration ==
+  MBCX01_BUILD_OWNER_TRUST_ANCHOR=<tmp>/owner-trust-anchor.json (no in-code wiring at all)
+  resolve_production_verifier_context -> refusal=None
+  context BUILT from relabelled doc : True
+  its public key == COMMITTED fixture public key : True
+  anchor_id: MBCX01.RELABELLED.ANCHOR.1 | fixture_only: False
+
+== C3 CONTROL: the in-memory TEST PRODUCTION anchor (key generated per run) ==
+  anchor_id: MBCX01.BUILD.OWNER.ANCHOR.TEST.PRODUCTION.1 | fixture_only: False
+  its public key == COMMITTED fixture public key : False
+  context BUILT: True | current_instant=2026-08-14T12:00:00Z
+  resolve_production_verifier_context -> anchor_id='MBCX01.BUILD.OWNER.ANCHOR.TEST.PRODUCTION.1' refusal=None
+  measurement door (legitimate operator-anchored grid) -> []
+
+== C4 CONTROL: the FIXTURE LANE (documents, not authority) ==
+  committed fixture measurement manifest parses: roots=1 fixture_only=[True]
+  committed anchor document still loads: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1' fixture_only=True
+  state FIXTURE lane (require_production=False) -> []
+
+READ THIS AS:
+  P1 - THE DECIDING RED. The committed fixture anchor document, with two LABELS
+       edited (fixture_only true->false, a new anchor_id) and the public key
+       untouched, BUILDS a production verifier context:
+           context BUILT from relabelled doc : True
+           its public key == COMMITTED fixture public key : True
+           anchor_id: MBCX01.RELABELLED.ANCHOR.1 | fixture_only: False
+       The r2 fold's fixture check reads the FLAG, so a document that lies about
+       itself is believed. The key it carries is the one whose private half is
+       committed at mbcx01_build_ceremony_fixture.py:39.
+  P2 - the same document delivered the way an operator actually delivers one - an
+       OS configuration path in MBCX01_BUILD_OWNER_TRUST_ANCHOR, read by a verifying
+       process nobody wired in code - resolves to a production context with
+       refusal=None. The footgun is not confined to in-code wiring.
+  C3 - CONTROL: the legitimate path. The production-shaped TEST anchor whose Ed25519
+       pair is generated IN MEMORY per run is NOT committed material, builds a
+       context, resolves, and admits the simulated grid ([]). It must still do all of
+       that after the fix, or the fix has broken the lane instead of guarding it.
+  C4 - CONTROL: the FIXTURE LANE. Structural parsing of the committed fixture
+       manifest and require_production=False verification of a BUILD A receipt are
+       green, and must stay green: refusing fixture KEY MATERIAL at the production
+       root is not refusing fixture DOCUMENTS.
+
+================================================================================
+RED STAGE 2 - the NEW WITNESS (bw28) executed against the same PRE-FIX bytes.
+================================================================================
+
+Reconstruction = the SAME byte-verified checkout above, plus ONLY the post-fix
+test_mbcx01_build_measurement.py. mbcx01_build_trust_anchor.py and every other
+module are byte-identical to the pre-fix tree (table above).
+
+HONESTY, stated rather than buried: at the pre-fix bytes there is no derived
+known-fixture-key set and no refusal to reach, so this witness fails at the symbol,
+not at the behaviour. That is a real red on real committed bytes, but it is a
+SYMBOL-ABSENCE red and it is NOT what discharges the finding. The BEHAVIOURAL red is
+RED STAGE 1 above, which runs the same discrimination through the pre-fix API and
+prints the context being built.
+
+=== COMMAND: python -m unittest -v test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root
+             (cwd = pre-fix reconstruction + the one witness file) ===
+
+test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root)
+Invariant (BUILD acceptance r3 seat finding, reproduced at the byte): a ... ERROR
+
+======================================================================
+ERROR: test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root)
+Invariant (BUILD acceptance r3 seat finding, reproduced at the byte): a
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\prefix-fixturekey\test_mbcx01_build_measurement.py", line 1381, in test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root
+    material = trust_anchor.committed_fixture_key_material()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'mbcx01_build_trust_anchor' has no attribute 'committed_fixture_key_material'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.042s
+
+FAILED (errors=1)

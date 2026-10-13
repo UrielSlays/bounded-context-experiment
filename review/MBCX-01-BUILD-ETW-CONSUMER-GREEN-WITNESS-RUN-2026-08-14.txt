@@ -1,0 +1,324 @@
+MBCX-01 BUILD B — ETW PMC CONSUMER: GREEN WITNESS RUN
+Date: 2026-08-14
+<personal folder listing redacted from this log>
+Branch: codex/mbcx01-production-build
+Python: Python 3.11.9
+
+⛔ SAME POSTURE AS THE RED RUN. No ETW session was started, no PMU was touched,
+   no Job Object was created, no candidate process was created, and collect()
+   was never called. Verified before this run:
+     $ env | grep -i MBCX01            -> (no MBCX01 vars)
+     $ logman query -ets | grep -i mbcx01 -> (none)
+     $ ls -d <vault> -> No such file or directory
+
+⚠ READ THIS BEFORE TRUSTING THE GREEN. This suite exercises the PURE layer and
+  the STATIC ABI. It CANNOT observe vendor behaviour. Everything that only a
+  real ELEVATED session reveals is still `pending` — see the "WHAT SOURCE
+  REVIEW CANNOT ESTABLISH" block in mbcx01_build_etw_consumer.py's module
+  docstring and the matching list in MBCX-01-BUILD-SMOKE-RUNBOOK.md section 3.
+  A green suite here means "the logic is right IF the platform behaves as
+  documented". It does NOT mean the consumer works. This lane has already been
+  burned once by an adapter that shipped broken behind a green suite because
+  source review cannot see vendor behaviour.
+
+================================================================================
+GREEN 1 — the 19 ETW consumer witnesses (bw29-bw47)
+Command: python -m unittest test_mbcx01_build_measurement.BuildEtwConsumerTests -v
+================================================================================
+test_bw29_positive_etw_struct_layout_matches_the_pinned_win32_abi (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw29_positive_etw_struct_layout_matches_the_pinned_win32_abi)
+Every ETW structure size/offset is re-derived from ctypes and pinned. ... ok
+test_bw30_adversarial_etw_abi_drift_is_a_fault_at_verify_time (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw30_adversarial_etw_abi_drift_is_a_fault_at_verify_time)
+A pinned size that no longer matches the structure fails loudly. ... ok
+test_bw31_positive_records_are_emitted_in_per_processor_timestamp_order (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw31_positive_records_are_emitted_in_per_processor_timestamp_order)
+Real-time buffers interleave across processors; the emitted stream does not. ... ok
+test_bw32_adversarial_a_record_missing_a_join_field_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw32_adversarial_a_record_missing_a_join_field_is_refused)
+A record the consumer cannot order or attribute is a fault, not a skip. ... ok
+test_bw33_positive_pmc_counters_are_read_from_the_pinned_extended_item (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw33_positive_pmc_counters_are_read_from_the_pinned_extended_item)
+InstructionRetired comes from EVENT_HEADER_EXT_TYPE_PMC_COUNTERS. ... ok
+test_bw34_adversarial_absent_or_short_pmc_data_is_unavailable_not_zero (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw34_adversarial_absent_or_short_pmc_data_is_unavailable_not_zero)
+No counter is never counter==0: an absent PMC item is a fault. ... ok
+test_bw35_positive_member_lifetimes_cover_every_member_including_terminated (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw35_positive_member_lifetimes_cover_every_member_including_terminated)
+ProcessStart/ProcessStop is the only source that sees an unopened descendant. ... ok
+test_bw36_adversarial_an_unterminated_or_keyless_member_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw36_adversarial_an_unterminated_or_keyless_member_is_refused)
+A member without a terminal, or without a start key, cannot be signed. ... ok
+test_bw37_adversarial_any_nonzero_loss_counter_makes_evidence_unavailable (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw37_adversarial_any_nonzero_loss_counter_makes_evidence_unavailable)
+EventsLost / LogBuffersLost / RealTimeBuffersLost are each fatal alone. ... ok
+test_bw38_adversarial_ungranted_capability_is_unavailable_never_estimated (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw38_adversarial_ungranted_capability_is_unavailable_never_estimated)
+An unavailable source, an owner conflict or no counters is UNAVAILABLE. ... ok
+test_bw39_adversarial_multiplexed_counters_are_unavailable (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw39_adversarial_multiplexed_counters_are_unavailable)
+Multiplexing means the counter did not run for the whole interval. ... ok
+test_bw40_adversarial_a_virtualization_guest_or_nested_host_aborts (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw40_adversarial_a_virtualization_guest_or_nested_host_aborts)
+Root partition or bare metal only; a guest needs a signed PMU receipt. ... ok
+test_bw41_positive_the_factory_yields_a_contract_shaped_etwpmcsession (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw41_positive_the_factory_yields_a_contract_shaped_etwpmcsession)
+`etw_session_factory()` must return exactly what `collect()` consumes. ... ok
+test_bw42_adversarial_unattached_consumer_seams_stay_faults (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw42_adversarial_unattached_consumer_seams_stay_faults)
+An unattached seam is a FAULT, never an empty result — unchanged. ... ok
+test_bw43_positive_capability_evidence_and_capability_facts_are_separate (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw43_positive_capability_evidence_and_capability_facts_are_separate)
+RIDER RED: `_trace_facts` cannot read facts out of the evidence record. ... ok
+test_bw44_adversarial_ungranted_facts_travel_into_the_receipt_unchanged (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw44_adversarial_ungranted_facts_travel_into_the_receipt_unchanged)
+An ungranted capability is RECORDED as ungranted, never repaired. ... ok
+test_bw45_positive_the_trace_window_closes_at_the_terminal_barrier (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw45_positive_the_trace_window_closes_at_the_terminal_barrier)
+`collect()` must close the trace window BEFORE it reads any delta. ... ok
+test_bw46_adversarial_an_unattached_trace_finalizer_is_a_fault (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw46_adversarial_an_unattached_trace_finalizer_is_a_fault)
+No finalizer means the trace window was never closed — never a no-op. ... ok
+test_bw47_positive_collect_tells_the_session_which_root_it_is_measuring (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw47_positive_collect_tells_the_session_which_root_it_is_measuring)
+The root PID/start key reach the session as VALUES, not by patching. ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.047s
+
+OK
+
+================================================================================
+GREEN 2 — the RIDER probes, re-run verbatim against POST-FIX bytes
+          (the same three probes that were RED in the red transcript)
+================================================================================
+==============================================================================
+RIDER GREEN 1 - capability evidence and granted facts are separate
+==============================================================================
+session.capability keys == CAPABILITY_QUERY_KEYS : True
+session.attachment  keys == EVENT_ATTACHMENT_KEYS : True
+-> _trace_facts(session) now reports, for a HEALTHY PMU:
+     etw_pmc_source_available             = True
+     etw_max_pmc_counters                 = 4
+     etw_counter_owner_conflict_count     = 0
+     etw_attribution_complete             = True
+     unattached granted_capability     -> ETW_CAPABILITY_FACTS_NOT_ATTACHED
+     unattached classic_event_id_blob  -> ETW_EVENT_ATTACHMENT_BLOB_NOT_ATTACHED
+
+==============================================================================
+RIDER GREEN 2 - configure() no longer needs a non-evidence key
+==============================================================================
+configure() accepted the evidence-shaped attachment: True  (no KeyError)
+
+==============================================================================
+RIDER GREEN 3 - the CSwitch attachment blob is the documented pair
+==============================================================================
+  TracePmcCounterListInfo    (9) bytes=03000000
+  TracePmcEventListInfo      (8) bytes=d1a86f3d05fed0119dda00c04fd7ba7c2400000000000000
+  decoded EventGuid = 3d6fa8d1-fe05-11d0-9dda-00c04fd7ba7c
+  decoded Type      = 36
+  documented        = 3d6fa8d1-fe05-11d0-9dda-00c04fd7ba7c / 36
+  all zeroes?       = False
+
+==============================================================================
+END-TO-END: factory -> collect()-shaped session -> frozen shapes
+==============================================================================
+members (incl. the descendant never opened): [(4100, '0000000000000011', 'EXITED'), (4200, '0000000000000022', 'EXITED')]
+records reordered into per-processor time order: 3
+observations (seq,cpu,qpc,counter,delta): [(0, 0, 12, 1000, 0), (1, 0, 20, 1700, 700), (2, 1, 25, 2500, 0)]
+attributed retired instructions = 700
+observation keys == frozen CSWITCH_OBSERVATION_KEYS: True
+member keys      == frozen PROCESS_KEYS: True
+thread keys      == frozen THREAD_LIFETIME_KEYS: True
+
+LOSS POSTURE: one lost event anywhere -> the factory refuses to build at all
+  -> ETW_EVIDENCE_UNAVAILABLE:ETW_EVENTS_LOST
+
+================================================================================
+GREEN 3 — full BUILD suite (95 -> 114) and the frozen r13.2 suite (145/145)
+================================================================================
+$ python -m unittest test_mbcx01_build_state test_mbcx01_build_measurement test_mbcx01_build_integration
+----------------------------------------------------------------------
+Ran 114 tests in 29.429s
+
+OK
+
+$ python -m unittest test_mbcx01_r13_state test_mbcx01_r13_packets test_mbcx01_r13_measurement test_mbcx01_r13_inference test_mbcx01_r13_integration
+----------------------------------------------------------------------
+Ran 145 tests in 29.357s
+
+OK
+
+================================================================================
+GREEN 4 — python verify-build-bundle.py (all 7 sections PASS, exit 0)
+================================================================================
+frozen_suites: PASS
+build_suites: PASS
+ledger: PASS
+schemas: PASS
+canonical_parity: PASS
+no_production_activation: PASS
+execution_posture: PASS
+exit=0
+frozen_suites.tests = 145
+build_suites.tests  = 114
+ledger              = {"invariants": 44, "status": "PASS", "two_way_total": true, "witnesses": 114}
+top_level_readiness = BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED
+
+================================================================================
+GREEN 5 — the smoke driver's selftest (pure logic + static ABI, no OS state)
+Command: python mbcx01_smoke_cell.py selftest
+================================================================================
+{
+  "attributed_retired_instructions": 700,
+  "cswitch_attachment_blob_hex": "d1a86f3d05fed0119dda00c04fd7ba7c2400000000000000",
+  "cswitch_attachment_is_zero_filled": false,
+  "etw_abi": {
+    "classic_event_id_size": 24,
+    "enable_flags_offset": 72,
+    "etw_buffer_context_size": 4,
+    "event_descriptor_size": 16,
+    "event_header_size": 80,
+    "event_record_size": 112,
+    "event_trace_header_size": 48,
+    "event_trace_logfile_size": 448,
+    "event_trace_properties_size": 120,
+    "event_trace_size": 88,
+    "events_lost_offset": 88,
+    "extended_data_item_size": 16,
+    "guid_size": 16,
+    "header_event_descriptor_offset": 40,
+    "header_provider_id_offset": 24,
+    "header_timestamp_offset": 16,
+    "log_buffers_lost_offset": 96,
+    "log_file_mode_offset": 64,
+    "log_file_name_offset_field": 112,
+    "logfile_context_offset": 440,
+    "logfile_event_record_callback_offset": 424,
+    "logfile_process_trace_mode_offset": 28,
+    "logger_name_offset_field": 116,
+    "realtime_buffers_lost_offset": 100,
+    "record_buffer_context_offset": 80,
+    "record_extended_data_count_offset": 84,
+    "record_extended_data_offset": 88,
+    "record_user_data_offset": 96,
+    "systemtime_size": 16,
+    "time_zone_information_size": 172,
+    "trace_logfile_header_size": 280,
+    "wnode_client_context_offset": 40,
+    "wnode_flags_offset": 44,
+    "wnode_guid_offset": 24,
+    "wnode_header_size": 48
+  },
+  "frozen_shape_checks": {
+    "capability_query": true,
+    "cswitch_keys": true,
+    "event_attachment": true,
+    "process_keys": true,
+    "thread_keys": true,
+    "trace_fact_fields": true
+  },
+  "generated_at": "2026-08-15T02:34:33Z",
+  "job_abi": {
+    "active_processes_offset": 40,
+    "basic_and_io_size": 96,
+    "basic_limit_size": 64,
+    "extended_limit_size": 144,
+    "io_counters_offset": 48,
+    "io_counters_size": 48,
+    "peak_job_memory_offset": 136,
+    "total_page_fault_offset": 32,
+    "total_processes_offset": 36,
+    "total_terminated_offset": 44
+  },
+  "loss_posture": "ETW_EVIDENCE_UNAVAILABLE:ETW_EVENTS_LOST",
+  "members": [
+    {
+      "assigned_before_resume": true,
+      "ended_qpc": 30,
+      "job_object_id": "JOB.0.0.0",
+      "membership_source": "JOB_ASSIGNMENT_PROCESS_ETW_AND_FINAL_QUERY",
+      "parent_process_id": null,
+      "parent_process_start_key": null,
+      "process_id": 4100,
+      "process_start_key": "0000000000000011",
+      "started_qpc": 10,
+      "terminal_status": "EXITED"
+    },
+    {
+      "assigned_before_resume": true,
+      "ended_qpc": 27,
+      "job_object_id": "JOB.0.0.0",
+      "membership_source": "JOB_ASSIGNMENT_PROCESS_ETW_AND_FINAL_QUERY",
+      "parent_process_id": 4100,
+      "parent_process_start_key": "0000000000000011",
+      "process_id": 4200,
+      "process_start_key": "0000000000000022",
+      "started_qpc": 13,
+      "terminal_status": "EXITED"
+    }
+  ],
+  "mode": "selftest",
+  "observations": [
+    {
+      "counter_value": 1000,
+      "delta_from_previous": 0,
+      "old_thread_id": 900,
+      "process_id": 4100,
+      "process_start_key": "0000000000000011",
+      "processor": 0,
+      "qpc": 12,
+      "sequence": 0
+    },
+    {
+      "counter_value": 1700,
+      "delta_from_previous": 700,
+      "old_thread_id": 900,
+      "process_id": 4100,
+      "process_start_key": "0000000000000011",
+      "processor": 0,
+      "qpc": 20,
+      "sequence": 1
+    },
+    {
+      "counter_value": 2500,
+      "delta_from_previous": 0,
+      "old_thread_id": 900,
+      "process_id": 4100,
+      "process_start_key": "0000000000000011",
+      "processor": 1,
+      "qpc": 25,
+      "sequence": 2
+    }
+  ],
+  "records_reordered": 3,
+  "status": "OK",
+  "trace_facts": {
+    "etw_attribution_complete": true,
+    "etw_capability_query_succeeded": true,
+    "etw_counter_owner_conflict_count": 0,
+    "etw_events_lost": 0,
+    "etw_log_buffers_lost": 0,
+    "etw_max_pmc_counters": 2,
+    "etw_pmc_multiplexing_detected": false,
+    "etw_pmc_source_available": true,
+    "etw_pmc_strict_mode": true,
+    "etw_realtime_buffers_lost": 0,
+    "instruction_attribution": "SUM_INSTRUCTIONRETIRED_CSWITCH_DELTAS_BY_OLD_THREAD_JOINED_TO_SIGNED_JOB_PID_TID_LIFETIMES_INCLUDING_TERMINATED",
+    "instruction_backend": "ETW_PMC_EVENT_ATTACHED_V1",
+    "instruction_event_list": "CSWITCH",
+    "instruction_profile_source": "INSTRUCTIONRETIRED"
+  }
+}
+exit=0
+
+================================================================================
+GREEN 6 — the runner REFUSES rather than proceeding (each check, before anything)
+================================================================================
+$ ./run-smoke-cell.ps1 -SelfTest
+MODE: selftest - pure logic and static ABI only. No OS state is touched.
+RESULT: OK
+MBCX01_BUILD_ALLOW_PHYSICAL after the run: ''      <- never set for -SelfTest
+
+$ ./run-smoke-cell.ps1 -Execute -FixtureSigningKeyPem <path> -FixtureSigningKeyId X.TEST
+MODE: execute - the owner-authorized one-cell smoke proof.
+ABORT: this session is NOT elevated. Kernel PMC requires an elevated session
+       (smoke runbook section 3 step 2). Nothing was started.
+MBCX01_BUILD_ALLOW_PHYSICAL still: ''              <- refused BEFORE the flag is set
+Test-Path <vault> : False
+
+$ python mbcx01_smoke_cell.py execute --authorization <real auth> --destination <new dir>
+ABORT | FIXTURE_SIGNING_KEY_REQUIRED: pass --fixture-signing-key-pem and
+        --fixture-signing-key-id. This driver embeds no key material and will
+        not invent one. Runbook section 3 step 1: fixture signing key ONLY.
+   -> no directory created, no session started, no process created.
+
+$ ./run-smoke-cell.ps1 -Execute ... (parameter sets)
+   -FixtureSigningKeyPem and -FixtureSigningKeyId are MANDATORY on -Execute; a
+   key id that is not a *.TEST* id is refused before the run.
+
+================================================================================
+END OF GREEN. Nothing above ran with elevation. No ETW session, PMU, Job Object
+or candidate process was created at any point.
+================================================================================

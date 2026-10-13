@@ -1,0 +1,627 @@
+{
+  "manifest_id": "MBCX-01-BUILD-PIN-MANIFEST",
+  "created_at": "2026-08-14T00:00:00.000000Z",
+  "normative": true,
+  "governing_commit": "d347553671deedbe6cbbe4b38a8708404281098e",
+  "hash_algorithm": "SHA-384",
+  "git_object_algorithm": "SHA-1 as configured by this repository",
+  "governing_commit_binding": "Every subject resolves as governing_commit:path and must match git_blob, bytes, LF count and SHA-384 before import or execution.",
+  "manifest_self_binding": "The launcher pins this file by Git blob; this manifest does not self-hash.",
+  "generated_report_is_not_pinned": "MBCX-01-BUILD-VERIFICATION-REPORT.json is a runtime output of verify-build-bundle.py and is deliberately absent from every subject list.",
+  "paid_calls": 0,
+  "experiment_executed": false,
+  "physical_harness_executed": false,
+  "production_activation": false,
+  "subjects": [
+    {
+      "path": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md",
+      "bytes": 20263,
+      "lines": 345,
+      "lf_count": 345,
+      "sha384": "100AD467D680C3EC85383C8F092D53BC1C9C4855C4EA93D703AAFFC6EAF0DAB05E420A9E25F0DB71C26916C2F90647B4",
+      "git_blob": "abf00c222c759575acffe03a3e24158a652676da"
+    },
+    {
+      "path": "MBCX-01-BUILD-DESIGN-NOTES.md",
+      "bytes": 28388,
+      "lines": 370,
+      "lf_count": 370,
+      "sha384": "45440226E831979FED87832F1B568FC34B6C4B72F48A8FA556FFDAD10BB7481FC6A719A85274991D123C546B39EC95B7",
+      "git_blob": "fd8dfdd73448f3cda58245a3adc171a45779c10e"
+    },
+    {
+      "path": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md",
+      "bytes": 28670,
+      "lines": 351,
+      "lf_count": 351,
+      "sha384": "91BE8742F967DB144CBE294CE6DEA6C7C9493D8C8CC662069733C407095D40A017A02B72FB455B3B11AB60DDEB427C49",
+      "git_blob": "4bd848dad1e9da5ec6c7ba25e95a792923e24b9c"
+    },
+    {
+      "path": "MBCX-01-BUILD-EXACTNESS-PRODUCTION-VERIFIER-SPEC.md",
+      "bytes": 4428,
+      "lines": 69,
+      "lf_count": 69,
+      "sha384": "D0BCB5281C9A7B4FC64D1847C3E1DF467B6513C42CB988FDF3219C35E10B671C90CE408DFC2007D8D846E7902FB4F88A",
+      "git_blob": "05557da2c848bd2f7e6d409d637746dbca0f97cb"
+    },
+    {
+      "path": "MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md",
+      "bytes": 15203,
+      "lines": 207,
+      "lf_count": 207,
+      "sha384": "C905DD347C5E7A3173DB2A8C9919FD22D962629D25BC05C8410BFF7233402C025B552EDC9BDF0ADAC988A78851D74BA4",
+      "git_blob": "19b426d0dee8a79fdd6cb327dd8692f5b6f15e42"
+    },
+    {
+      "path": "MBCX-01-BUILD-SHELF-LOG.md",
+      "bytes": 7682,
+      "lines": 63,
+      "lf_count": 63,
+      "sha384": "817F5DA92082D932D15EAEC689A0FB268C9C9A1D52A0893B83CB6DBE72C8B1F57A888EE48F500B8F99B0E35303B7A755",
+      "git_blob": "cee4dc62f44ecbd56371fa85e4e2f69109ee3b2e"
+    },
+    {
+      "path": "MBCX-01-BUILD-SMOKE-RUNBOOK.md",
+      "bytes": 10191,
+      "lines": 146,
+      "lf_count": 146,
+      "sha384": "0B21D9BDB3FEA87EC77B89766A901D2FA4FC6AB2B5DBEBDA0B60C10453F17FB197448DEFFCE2046C68A5DB598C80E242",
+      "git_blob": "5d96ed746b64d1c99d04f3e27998008eeb6da0d8"
+    },
+    {
+      "path": "MBCX-01-BUILD-STATE-TRUST-ROOTS-V1.schema.json",
+      "bytes": 6484,
+      "lines": 96,
+      "lf_count": 96,
+      "sha384": "E164A3E2E7E21B2CAAE7E70F4D22BB66F9DA3E470F7A89E86408F0A28690185C4E99C7D84D8726A1B40C124282D8788C",
+      "git_blob": "cb983c599df5bada31e37b83844328664d1aac76"
+    },
+    {
+      "path": "MBCX-01-BUILD-STATE-TRUST-ROOTS-V1.fixture.json",
+      "bytes": 4024,
+      "lines": 94,
+      "lf_count": 94,
+      "sha384": "92871939E3E567A9C470C7BA5200DCCFD352935F454FAB2D0ACF4713D03642F196D72E0C1CC8572D31C5B405DEC5AE16",
+      "git_blob": "09494edc72cbecbe6d103fd6437eea2d29dcf31d"
+    },
+    {
+      "path": "MBCX-01-BUILD-MEASUREMENT-TRUST-ROOTS-V3.schema.json",
+      "bytes": 6071,
+      "lines": 163,
+      "lf_count": 163,
+      "sha384": "432A44DEB043E3F72C4613CBA305B389295D8AFF13F56315F94D09C739205375591C3FD1D04FB7442BE76D335EC2264C",
+      "git_blob": "0711403d0b5728dd6c2d69b339ec689ee40bd4dd"
+    },
+    {
+      "path": "MBCX-01-BUILD-MEASUREMENT-TRUST-ROOTS-V3.fixture.json",
+      "bytes": 2800,
+      "lines": 57,
+      "lf_count": 57,
+      "sha384": "E1BA02FA19306BDAEA1D6B8C377FAAA07E549BDC3F38A8FB0C017D876BDA3805D634AB5A901AF2F7252A561B8A820461",
+      "git_blob": "fb7bd32029bf732db2dfaafa6d1ff21c1a2505f8"
+    },
+    {
+      "path": "MBCX-01-BUILD-REPAIR-LEDGER.json",
+      "bytes": 155802,
+      "lines": 1704,
+      "lf_count": 1704,
+      "sha384": "FB1C2604905988268FCF7274EA6341296D321AB983CE0644CE2D404DDA794D5A5A4D3096736AA429CFAC5D3C0D8C6922",
+      "git_blob": "eade4fdc37744e504a88a528b216bbebb709f581"
+    },
+    {
+      "path": "MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json",
+      "bytes": 1023,
+      "lines": 13,
+      "lf_count": 13,
+      "sha384": "7086C4218105CABC7512B31CD9AE9FEBCFA55FCF710B050F1D46D8484CC663F5C08FA722F89A59B87C1C6421AE2713A3",
+      "git_blob": "5e4dd847445efb5105ff2aba1c51931d32b169bc"
+    },
+    {
+      "path": "MBCX-01-BUILD-COHORT-GENERATOR-V1.json",
+      "bytes": 1592,
+      "lines": 1,
+      "lf_count": 1,
+      "sha384": "0AC7322B8F49BB118CFA35A9D88768546FBBA3CB1EBAE2B72B1E3447E9B6EF8A395662C005CF35CF4FFDC54271D2CB41",
+      "git_blob": "eb21bdabe7470ba7f744aebf941054c2f42a0989"
+    },
+    {
+      "path": "mbcx01_build_cohort_authority.py",
+      "bytes": 47061,
+      "lines": 885,
+      "lf_count": 885,
+      "sha384": "736BF33027806029B506E88ED1B428191A725A509EAD12FB00019448E2AAA888CE2886F43E50ED84E0279AE355169845",
+      "git_blob": "65394092080f8fefb91b786d4aff2770066c91d0"
+    },
+    {
+      "path": "mbcx01_build_cohort_generator.py",
+      "bytes": 73379,
+      "lines": 1385,
+      "lf_count": 1385,
+      "sha384": "B3754170F88D96A53457805424754A6E177B0DB6584478B0DF4748AA037C6C0EF31337B9B0D414B2CC8D584489E7BC5A",
+      "git_blob": "5ebbbd3579cef86341012c824d83ae7339893e03"
+    },
+    {
+      "path": "mbcx01_build_cohort_packet.py",
+      "bytes": 69690,
+      "lines": 1259,
+      "lf_count": 1259,
+      "sha384": "7CFB838BDC396FD20B6707EE25C9BEC8AEFCAB8A581A992DF08E9A425B1009B55C1C5EED73B8DE0D7129FB37BC824762",
+      "git_blob": "cc4e08f8aa466b94d376f3d72ff3d0c53e61d6af"
+    },
+    {
+      "path": "test_mbcx01_build_cohort.py",
+      "bytes": 192144,
+      "lines": 3366,
+      "lf_count": 3366,
+      "sha384": "4D59C32F27FE8427B11B1ECBA3F3481BCD4A2009FDE47B3C9CEC24543103E13202501F07AC0E2D3144F8229E7FED42C3",
+      "git_blob": "1ed8e246023120182930b8155fa8f8025383e074"
+    },
+    {
+      "path": "mbcx01_build_trust_anchor.py",
+      "bytes": 57950,
+      "lines": 1071,
+      "lf_count": 1071,
+      "sha384": "4B75DEE2E1F3FB3052F9DED6BCEE9A9D8787A213164AEB81352E4C75045E910CAC5A6529A83A9F46E0E17882C4497903",
+      "git_blob": "5e7b3f93538c017281df7522b312548ca7632a54"
+    },
+    {
+      "path": "mbcx01_build_etw_consumer.py",
+      "bytes": 190038,
+      "lines": 3602,
+      "lf_count": 3602,
+      "sha384": "0799E960CF0653C830858A60F4A0ADCF2E6394F376C53C0B1C26DB415A921B52A1ED0A3DDC7E58E22BD510DBA2B98266",
+      "git_blob": "3fead8eb419483efad75cca7ca69a7f26acfe3e7"
+    },
+    {
+      "path": "mbcx01_smoke_cell.py",
+      "bytes": 97971,
+      "lines": 1858,
+      "lf_count": 1858,
+      "sha384": "E07CC93028453000979DBBB7D17E221FDBC38D61D3373E51AFE129BAF3E2E86A74F576FD4B8AB56A8A72F651E6F1B458",
+      "git_blob": "60c825c95bee05faa6e88bece98ff6edb20ea856"
+    },
+    {
+      "path": "run-smoke-cell.ps1",
+      "bytes": 10482,
+      "lines": 207,
+      "lf_count": 207,
+      "sha384": "820AC38593B189AAF35BCA60BD708C12FA6265BD74C7817021263E8BDAF42A84C73FC0F04BF36546F7E69AE94F3C9D48",
+      "git_blob": "9454ee3d2f03638d7b7dee9ad4af13e5e0e3adab"
+    },
+    {
+      "path": "mbcx01_build_fixturekey_probe.py",
+      "bytes": 10342,
+      "lines": 219,
+      "lf_count": 219,
+      "sha384": "F53DB443F2A6FA1D4B5BC411107EB969E81BF406E2A7BC12ED71C246120EA3E189BC12A0DB37D96114BB03B589F9A775",
+      "git_blob": "f451969be355c72bb5aedce5832eed2595229a32"
+    },
+    {
+      "path": "mbcx01_build_fixtureiso_probe.py",
+      "bytes": 22579,
+      "lines": 451,
+      "lf_count": 451,
+      "sha384": "C44110490482584B8C5CD1F7C13445F46A32DB9C2CCA990B4D29F3C79389C53E84DEF66BF5B2E215E10EB2BA9FC73FCB",
+      "git_blob": "509fbe959900fb2c51120281bde07ad39933d8df"
+    },
+    {
+      "path": "mbcx01_build_ceremony_fixture.py",
+      "bytes": 13366,
+      "lines": 259,
+      "lf_count": 259,
+      "sha384": "F6ADA95DA0E046B06AA142369319F64AE9DE015DC34416EF237CE6F13DBF44AF9D61E774DDCFDCA517F09B6A1B1AC050",
+      "git_blob": "72f7d93adbe6089afed8547b9b6c878d0a7551d1"
+    },
+    {
+      "path": "mbcx01_build_trustboot_probe.py",
+      "bytes": 15647,
+      "lines": 326,
+      "lf_count": 326,
+      "sha384": "F89B1D08483F737E0297EA0784BF6FEE597D327734BF115C24022456DDE2244E09066A61279A6236B2D5B00925B1090A",
+      "git_blob": "a2d7c1ed21f21661a234faf74099e8aad1358223"
+    },
+    {
+      "path": "verify-build-receipt-signature.mjs",
+      "bytes": 2681,
+      "lines": 62,
+      "lf_count": 62,
+      "sha384": "CF09D414B9BF63F8FCDBF10751673BC3B513296AF618FBD1A29A08E7F31D22553309490123A12732024FFB4DFDC30C64",
+      "git_blob": "bcb4302215ad3b47b3adeadc9e099bf1a221f788"
+    },
+    {
+      "path": "mbcx01_build_exactness_authority.py",
+      "bytes": 15822,
+      "lines": 286,
+      "lf_count": 286,
+      "sha384": "BD9687D643F76DB1CF1847D6F631AC3378490915BF8EBDA718F4D2D6AAB2939B463500CDFD2DD3AECFED36602B6C19B1",
+      "git_blob": "749dc63eca9ec56f06c262066930d8734c7ae00b"
+    },
+    {
+      "path": "mbcx01_build_integration.py",
+      "bytes": 12239,
+      "lines": 241,
+      "lf_count": 241,
+      "sha384": "5BE4D999F47937D6B76749558EA9774AA5C7DB5870F31B2740C77E2FF636A7062D44BD5C348D4D47F70136A17651F9BD",
+      "git_blob": "84a96dbe20b93a29770152ff44fdddee3e9ac2da"
+    },
+    {
+      "path": "mbcx01_build_measurement_authority.py",
+      "bytes": 55592,
+      "lines": 1004,
+      "lf_count": 1004,
+      "sha384": "3E279B2581A17C2F33CBB9C7F346EA87F8AC51E979B52580440FAED8EDF031BC307FB3DA8D7B0ADB428091A62256DC57",
+      "git_blob": "64c643db868eba45906a4dccf474f488d182090f"
+    },
+    {
+      "path": "mbcx01_build_state_adapter.py",
+      "bytes": 14484,
+      "lines": 276,
+      "lf_count": 276,
+      "sha384": "9E19B7ECD610E253FD30BE994A04FF55768F4321426485388BE62C532EE5385F15786E5FE140B2B0185A666F2E560B22",
+      "git_blob": "73162057fa058b253eeaeff43b8d9e6e445d6c54"
+    },
+    {
+      "path": "mbcx01_build_state_authority.py",
+      "bytes": 70169,
+      "lines": 1200,
+      "lf_count": 1200,
+      "sha384": "70F1AB57C612F8A63E7C7A9B562912579A2199E2B5DE5428E2B211B59A408C09C42C4F956264DDF0F66A2668DC9C497D",
+      "git_blob": "ede32807f5db885f8faf45dbf3de4bb890508679"
+    },
+    {
+      "path": "mbcx01_build_state_operator_b.py",
+      "bytes": 10985,
+      "lines": 224,
+      "lf_count": 224,
+      "sha384": "05122F830F42045ED69479E677D3D0A6294EDD70A1DB292878D916E1136330E07A092322FFA388D7395C94387C9E17A2",
+      "git_blob": "17c51b19f9141102c0fe63bc7b59d9a0c7ee4639"
+    },
+    {
+      "path": "mbcx01_build_state_store.py",
+      "bytes": 62214,
+      "lines": 1116,
+      "lf_count": 1116,
+      "sha384": "0BE6CFB3881D79BDA34A5A385B7BD4C3232459B03F6FE81CDF85FF82FB01C0B4425F51A97EBCC2995CCFD4E6BFDA8254",
+      "git_blob": "73d20aea99c7edcb0c7088510be66aded914e8be"
+    },
+    {
+      "path": "mbcx01_build_win32.py",
+      "bytes": 65750,
+      "lines": 1251,
+      "lf_count": 1251,
+      "sha384": "D2EA910E8F288CDFA6E6205424F2EF7CCC29B61E94DA801D6B9BC4CA47A5D6B9494865673982FD67B0B61727452E2099",
+      "git_blob": "95b4f392808fa2ae1e21a4f49a98800aa1d1e999"
+    },
+    {
+      "path": "mbcx01_build_windows_producer.py",
+      "bytes": 26523,
+      "lines": 533,
+      "lf_count": 533,
+      "sha384": "96197A0EB3996C1E54CE03DC5BA67DF441140531B19E91A9D69E79B762D9F5F527CB6F5A33A83BFB20302DE7D597068A",
+      "git_blob": "5e5ccb741410cb311f02c74a4815df998efa8331"
+    },
+    {
+      "path": "test_mbcx01_build_state.py",
+      "bytes": 167607,
+      "lines": 2976,
+      "lf_count": 2976,
+      "sha384": "CAFC5F44787C84D9FC1416760DA64EE097058693E5AA1A36CEB477376736A970BA54C4E40559F142B57028C0E83DAFB2",
+      "git_blob": "661e2894cab49c91e93f0131baf911f7602a2943"
+    },
+    {
+      "path": "test_mbcx01_build_measurement.py",
+      "bytes": 327084,
+      "lines": 5812,
+      "lf_count": 5812,
+      "sha384": "6949C1E832CB9EF004DDBD9C7280639864EBD14CF8A8079D820053832C5545B129A9C2883DB637F2A4FB4D0AD3E06C7B",
+      "git_blob": "06747526fa85a7201567a206ef6620b3ab65c4ae"
+    },
+    {
+      "path": "test_mbcx01_build_integration.py",
+      "bytes": 149383,
+      "lines": 2606,
+      "lf_count": 2606,
+      "sha384": "824BA34F10F48077DE688AC5C2475CCDD314D17048D9A96483BA766F217F36AE5DA7F669B90180A7BC7FCE5D9DE1268A",
+      "git_blob": "a44612747d884b127655a23e5ad6f3f16cbd26b8"
+    },
+    {
+      "path": "verify-build-bundle.py",
+      "bytes": 61556,
+      "lines": 1168,
+      "lf_count": 1168,
+      "sha384": "2D902D09A83803CDF97B9125C116C49538633CC3B634BC9BCAD834796721A509A797806F67238DEA6B7236C7269EDC11",
+      "git_blob": "7d5b57853cb441e3530c3b766893129caca499bf"
+    },
+    {
+      "path": "verify-build-schema-ajv.mjs",
+      "bytes": 3350,
+      "lines": 81,
+      "lf_count": 81,
+      "sha384": "F06F5E2D6D5808CB6C07F252A904BFA86B2BA585ACF2C43F51D87B592DDFE9D9EC815ADDB2B1C852D30AD8AD6F7757FB",
+      "git_blob": "bd7e004fb9b0e45aa0b5ffb1a02329a9f498cc4d"
+    },
+    {
+      "path": "verify-build-canonical-parity.mjs",
+      "bytes": 3397,
+      "lines": 83,
+      "lf_count": 83,
+      "sha384": "4E9D7FAEBEC4A6CC6B27741DA30E9D43E65D8CAE2DD5F0045CC235A67BC8AF4A55DADA1BFBC7CFE5E0FBB1443568898C",
+      "git_blob": "7ee7d8b5b32436103b9afb6e0ad725783286e7eb"
+    },
+    {
+      "path": "verify-build-pinned.ps1",
+      "bytes": 8461,
+      "lines": 108,
+      "lf_count": 108,
+      "sha384": "54666394D87FAA2C915F1484F9053B1D05DC7FD3A35C758AC53D8DB040ADB0DD223AF0D08D98457B3F190CD73F97B6CE",
+      "git_blob": "9069e64b4ed80905a4211151c27ee1956981429a"
+    },
+    {
+      "path": "generate-build-pin-manifest.ps1",
+      "bytes": 9547,
+      "lines": 171,
+      "lf_count": 171,
+      "sha384": "6C6F09AFEFA49ECA65BD5BFCD4671AAAA73A9ABBE4A250060B4D27EE78355C13B8E34734D5A0BEDEEB2B3E06D1270CFC",
+      "git_blob": "7f23cc14ddd681f431c353445102b56d21eb5803"
+    }
+  ],
+  "frozen_dependencies": [
+    {
+      "path": "MBCX-01-EXPERIMENT-DESIGN-r9.md",
+      "bytes": 6662,
+      "lines": 76,
+      "lf_count": 76,
+      "sha384": "0D43E66D2627DDEA86BE1C5D81FFB7E1EB72E31855AB8C6E2C5F6959EC3A4BF3C1133FB39DA95D5DE0A8845758048636",
+      "git_blob": "26c528c4f1ac41fc880834dbfcfd868171aed44b"
+    },
+    {
+      "path": "MBCX-01-COUNCIL-R12-SYNTHESIS-AND-CLOSURE-COMMISSION.md",
+      "bytes": 6436,
+      "lines": 71,
+      "lf_count": 71,
+      "sha384": "475382FBD68F45F457BB9E0A2A9264165516938E6F7FD1FB2FA80AB2FA31CBC3686860213C8CD011935224723D7DD031",
+      "git_blob": "27c747d266da1e26a7276fb6f04d652ba3492a7f"
+    },
+    {
+      "path": "MBCX-01-R13-AUTHORITY-INVARIANT-MATRIX.md",
+      "bytes": 10240,
+      "lines": 87,
+      "lf_count": 87,
+      "sha384": "3B566B92E4C351D58ED80940CF8721C47130ECD0375424832676F3BA908991390B841125408E1323195D7D2D863FD1B8",
+      "git_blob": "fef2fdf1fdad497bbdaae4b0a39236ecc6d83343"
+    },
+    {
+      "path": "MBCX-01-R13-CLOSURE-ARCHITECTURE.md",
+      "bytes": 10812,
+      "lines": 118,
+      "lf_count": 118,
+      "sha384": "EBC7A478413D0DF132F1CC88B14970BA076E58F444BA4364871EA976045EB2CAFA583B526099074EFE309F282914CA33",
+      "git_blob": "be8b2ce12e4d2707e0c351354bd7e6d66543bddb"
+    },
+    {
+      "path": "MBCX-01-R13-PRIOR-ART-AND-ENVIRONMENT-ADDENDUM.md",
+      "bytes": 4993,
+      "lines": 65,
+      "lf_count": 65,
+      "sha384": "3FE57719AD5DC07C2AFB51E91CF8EE5A3113C0AB94A2B9C4BFFEF4DF0AA7BBA6C4128391291A93978888AA739BCC63D8",
+      "git_blob": "2f4253a90ead53e1eafa672d70adc4af5947f322"
+    },
+    {
+      "path": "MBCX-01-R13.1-SHELF-QUERY-LOG.md",
+      "bytes": 3722,
+      "lines": 41,
+      "lf_count": 41,
+      "sha384": "75B15A1227D0349C8F8333DFAF3E115C7073647A06FC8E94B4C0E828643A977610E7F1A7FD0A7BC2B7AFDE88D9B73E1E",
+      "git_blob": "7e2bb0ce54dccda1a358e9d3c11fa8f85c7a192e"
+    },
+    {
+      "path": "MBCX-01-R13.2-NO-PAID-VERIFICATION-REPORT.json",
+      "bytes": 4409,
+      "lines": 140,
+      "lf_count": 140,
+      "sha384": "DFC77BA071092703549692E06956B8AE9B1536D18B01AB809B9B1544EB01CAA9DA4EF7E52DE2AD98F907F1E923BAD635",
+      "git_blob": "f9beb81e02e6b4ee2fc9c00a2f045d22cfac6156"
+    },
+    {
+      "path": "MBCX-01-R13-PHYSICAL-HARNESS-REQUIREMENTS.md",
+      "bytes": 6244,
+      "lines": 83,
+      "lf_count": 83,
+      "sha384": "F1C9873D1E217C2B1594189891678F5D20B432AC66A98E621BE7E316C536C44B3526917AAB9C7A90780995B39DD6F382",
+      "git_blob": "bb71933041aa2580b9f6f9ab02132636196c7f8d"
+    },
+    {
+      "path": "MBCX-01-R13-SYNTHETIC-COHORT-GENERATOR.json",
+      "bytes": 600,
+      "lines": 18,
+      "lf_count": 18,
+      "sha384": "D2FBE4EB9E31C9BDAD183C05D31FA54A339E960EC52F697F6842500528BEDF94D5D2D594DFC3C7A5DC7CF5759DB511C5",
+      "git_blob": "3e82156673e91fcef608c106c8a9b685ba05f98a"
+    },
+    {
+      "path": "MBCX-01-R13-MEASUREMENT-TRUST-ROOTS.json",
+      "bytes": 1250,
+      "lines": 31,
+      "lf_count": 31,
+      "sha384": "53DA2EB06C050500E0D176170C45851A6F0B4554761ED4DFAFAD200EAAD20470C224E7261DDA381FAEA87A340538B947",
+      "git_blob": "70cb9adf00f074697696d78e1b08b1e4db6feb3c"
+    },
+    {
+      "path": "MBCX-01-R13-CARRIER-EXACTNESS-SUITE.json",
+      "bytes": 408,
+      "lines": 13,
+      "lf_count": 13,
+      "sha384": "2E1493466FB9849AE1922774A680C4BFF9292D7FB294952B5D468994E5971DEA643D4384627D2EED20AE14AF610EB0AA",
+      "git_blob": "3a1aa4247fd2794f7e00675d294a055a478c8221"
+    },
+    {
+      "path": "MBCX-01-STATE-TRANSITION-CONTRACT-v8.json",
+      "bytes": 21352,
+      "lines": 159,
+      "lf_count": 159,
+      "sha384": "D263A56080DD1026079ABB0BDFF1B9D8C94D014197C95134710A4BB87966F17786EFE2E7B0C935FC83603CE9C84BEE78",
+      "git_blob": "84a9d211b493286fd8a583e78e30228e15424074"
+    },
+    {
+      "path": "MBCX-01-PACKET-SCHEMAS-v7.json",
+      "bytes": 22586,
+      "lines": 129,
+      "lf_count": 129,
+      "sha384": "533C0D3B24160ABF952F4A9F44271CB92C52B09C18603F9B97343644EEF2463CFCC15301EF8FBE2D9FBEDC373997A7FB",
+      "git_blob": "c36447037d27ec9fe62a4fbcd1ef02e56c5822c1"
+    },
+    {
+      "path": "MBCX-01-MEASUREMENT-CONTRACT-v7.json",
+      "bytes": 25380,
+      "lines": 214,
+      "lf_count": 214,
+      "sha384": "C6E829D943303EDB20B996963BF8CC3EDD73B9FF89F29B0425BB6F7EE6D6D6EFA49E3D513497D68A8F019830248EE6C4",
+      "git_blob": "8a8a8b7a4f0b680a1af7201137cad7ec31cf55bc"
+    },
+    {
+      "path": "MBCX-01-INFERENCE-CONTRACT-v8.json",
+      "bytes": 11319,
+      "lines": 153,
+      "lf_count": 153,
+      "sha384": "8104A2F43BDB33B7C3531EE3BF79FD93AD7929EA589F0639B91C58BA7D80A6FDEE6A2C6036B23347E40175329AB05071",
+      "git_blob": "c7ca71329d8e92493b2b4d75f92c3820238f7bdd"
+    },
+    {
+      "path": "MBCX-01-R13-REPAIR-LEDGER.json",
+      "bytes": 7441,
+      "lines": 103,
+      "lf_count": 103,
+      "sha384": "1607F79E4974CF1E355CA07A5FB7C9DBAAAF8E6551398CA21532FD2CC0A6F1EF4D6B968650B163E568812383234B3025",
+      "git_blob": "0df733288d5bf51f2896cb75fbd6bdfae6492fcf"
+    },
+    {
+      "path": "mbcx01_r13_common.py",
+      "bytes": 26801,
+      "lines": 501,
+      "lf_count": 501,
+      "sha384": "8CCF9D6AE3AF58DD6FBE5B73DDA0AF22AB7E252C152CF0491CFEE48D155B6E7604D6B657E97966907568133FB2EF556E",
+      "git_blob": "fcb6afb527c7de5593d1e9aa5ad9b6d540558baf"
+    },
+    {
+      "path": "mbcx01_r13_state_reference.py",
+      "bytes": 33073,
+      "lines": 598,
+      "lf_count": 598,
+      "sha384": "A88248E6B9BEF9B908ED31284477318E1E58E7264F7C2B54D8AC10C34C02876D653DC69AC1937550A26233818EC49A2E",
+      "git_blob": "cc9dec06755a677c8541b9335c4680a78e2578a1"
+    },
+    {
+      "path": "mbcx01_r13_state_oracle.py",
+      "bytes": 32302,
+      "lines": 726,
+      "lf_count": 726,
+      "sha384": "21931E5096F0420744140F5F94830C1E7E8FBF5676C89FD8DDEF0BF8FC7AC7D6147FC54C945DDCF42513E76211A4BD4D",
+      "git_blob": "b406acd92ed9fb1c0b55a782908cc2ae82d049fd"
+    },
+    {
+      "path": "mbcx01_r13_packets.py",
+      "bytes": 79347,
+      "lines": 1389,
+      "lf_count": 1389,
+      "sha384": "0A6393CD8218BC1BD144B0D76C4124261D7E81D5A66FB3B7AFB33DE01FFDFC6FC0BAAD6C95F9BCBCBFCC09E7C93C436B",
+      "git_blob": "152816f6d5c3eae7a78dd1eb0e8dfce633516b03"
+    },
+    {
+      "path": "mbcx01_r13_measurement.py",
+      "bytes": 104751,
+      "lines": 1838,
+      "lf_count": 1838,
+      "sha384": "AFCB0F51C92DF2D8DEFE98D46C9926EBA845614FA7E88F9C0154F57BA6347B5F04800DE271BA897558B43B9259FDA5F1",
+      "git_blob": "93d69a909d637abe0ba2d433557e8ac3baef496c"
+    },
+    {
+      "path": "mbcx01_r13_inference.py",
+      "bytes": 22672,
+      "lines": 457,
+      "lf_count": 457,
+      "sha384": "B3EC134F5F23B07A96B10379E0781EC167B2F46C5BCA1FF75522062C6BA7FDBDD7037036FD029CA796681F3CC8C67DED",
+      "git_blob": "29487b37d0739f9525086e093dbcdcdf70cde1b7"
+    },
+    {
+      "path": "mbcx01_r13_integration.py",
+      "bytes": 10011,
+      "lines": 180,
+      "lf_count": 180,
+      "sha384": "5E276F79D26276E8163A78EFAFE14381E530B990E0D66901074CCC8F3EE4ED83F7CB93EECEF090412A2144B422078049",
+      "git_blob": "a562558f644e35726a5fc6194fb3552c1f6e789a"
+    },
+    {
+      "path": "test_mbcx01_r13_state.py",
+      "bytes": 57399,
+      "lines": 1000,
+      "lf_count": 1000,
+      "sha384": "6CE3011B68863D8A17A66A4FB9D0A34B4B181448064B361F4F1DE864A2282660571279F9985BA129EE462D926A82E42E",
+      "git_blob": "c631bb61b55bd71cc01d004b34940f5354941406"
+    },
+    {
+      "path": "test_mbcx01_r13_packets.py",
+      "bytes": 33981,
+      "lines": 594,
+      "lf_count": 594,
+      "sha384": "E08F16CA3ED1C62171F708D21D0B09711F5904CE64FD86389614D482CD797649C23A54DD0FE5CEE5F2010018071106D0",
+      "git_blob": "753a3293a29c98bec0a9fea23316f9a170303957"
+    },
+    {
+      "path": "test_mbcx01_r13_measurement.py",
+      "bytes": 43803,
+      "lines": 800,
+      "lf_count": 800,
+      "sha384": "88F98C9E4417211D7E6ACD24D875CC70596FC63DE97EBD0F15355C896FDA3161B4B1F026DCD682BECF2241A305E62C10",
+      "git_blob": "6c567e9162a4b35e5c2dd8035cf69e1c30ad1fe8"
+    },
+    {
+      "path": "test_mbcx01_r13_inference.py",
+      "bytes": 10491,
+      "lines": 184,
+      "lf_count": 184,
+      "sha384": "168D396A5B0CD602921AA3F509C9971DD9B94F99670E05BE05806A676F3EB9BADA25D168C26F781244070AD7E42BEE73",
+      "git_blob": "48c64f28265f8c5c41d811370d04fb8daeacd9a9"
+    },
+    {
+      "path": "test_mbcx01_r13_integration.py",
+      "bytes": 2328,
+      "lines": 48,
+      "lf_count": 48,
+      "sha384": "7A035436F8FFAF062FDD7C287198718F870B11F07535576D549368F64B8EB69C8013A1B4CA58CEBC6DEC8C9126F72489",
+      "git_blob": "f6314ad55740d04f71fffa7a302251a599b8ec02"
+    },
+    {
+      "path": "verify-r13-normative-bundle.py",
+      "bytes": 12599,
+      "lines": 274,
+      "lf_count": 274,
+      "sha384": "EE6C8E3E33F78EC977A03A01DA1B4F27DB623268852E52DE1916A1FB2D236B971DBF7AE0483C5ACD63CB628F9BE80B30",
+      "git_blob": "74bd913bf1e62e30a439c895e17e65415e4c420f"
+    },
+    {
+      "path": "verify-r13-schema-ajv.mjs",
+      "bytes": 2919,
+      "lines": 57,
+      "lf_count": 57,
+      "sha384": "B1F44F4D0B1B979504FD00D42D62DFE70993793EB2903D5617C8BA681741EE91ECF6369B9A33899A3F75CA59EA72DE07",
+      "git_blob": "79997c28f894c8e184129df9496cefdf90c0fcb8"
+    },
+    {
+      "path": "verify-r13-receipt-signature.mjs",
+      "bytes": 1146,
+      "lines": 32,
+      "lf_count": 32,
+      "sha384": "C995F8DBAA2483B6732FE523E137F45DC0B8B398AEAEAEFE266F7228D527F0E144E48B8F22D17D22429BE34417E9E83B",
+      "git_blob": "b7f0a5711280356226f90db288a93e082e837193"
+    },
+    {
+      "path": "vendor/ajv-r12.bundle.cjs",
+      "bytes": 274585,
+      "lines": 7144,
+      "lf_count": 7144,
+      "sha384": "D9F48D19276B9ADBEA5A72BDB72F4882C2069B19305505454EB406674E8B338AEC24873F7B679BEB8C2D39F32EAB49C5",
+      "git_blob": "fb4622d52372fea52b5ffb86f6cbb23fa783a583"
+    }
+  ]
+}

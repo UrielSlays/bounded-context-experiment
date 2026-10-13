@@ -1,0 +1,372 @@
+MBCX-01 BUILD B — GREEN WITNESS RUN (producer + admission adapter + exactness authority)
+Date: 2026-08-14
+<personal folder listing redacted from this log>
+Branch: codex/mbcx01-production-build   HEAD: 18864ac8f52afb1dede8cedd0b97a7d8ba1f7f49
+Python: Python 3.11.9   Node: v24.17.0
+
+Command: python -m unittest test_mbcx01_build_measurement -v
+Expectation: every BUILD B witness (44) passes; the frozen r13.2 suites stay green.
+Red baseline for these same 44 witnesses, same test file, unedited:
+  MBCX-01-BUILD-B-RED-WITNESS-RUN-2026-08-14.txt  ->  Ran 44 tests, FAILED (failures=16, errors=46)
+================================================================================
+test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused)
+A CarrierExactnessReceiptV2 fixture receipt cannot become production authority. ... ok
+test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid)
+A production exactness receipt verifies only against recomputed bindings. ... ok
+test_bw11_adversarial_incomplete_thread_attribution_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_incomplete_thread_attribution_is_refused)
+Every counter delta must join a signed PID/start-key/TID lifetime. ... ok
+test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused)
+Multiplexing, counter-owner conflict and any loss counter are fatal. ... ok
+test_bw11_adversarial_sampled_backend_is_unsupported (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_sampled_backend_is_unsupported)
+Only strict ETW_PMC_EVENT_ATTACHED_V1 counts as retired-instruction evidence. ... ok
+test_bw11_adversarial_unavailable_pmc_source_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_unavailable_pmc_source_is_refused)
+An unavailable PMC source is unavailable, never a guessed metric. ... ok
+test_bw11_adversarial_wrong_event_attachment_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_wrong_event_attachment_is_refused)
+InstructionRetired must be attached to CSwitch through the documented classes. ... ok
+test_bw05_adversarial_nonzero_limit_violation_termination_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_adversarial_nonzero_limit_violation_termination_is_refused)
+A Job-limit-violation termination disqualifies the cell. ... ok
+test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted)
+A clean cell exits normally: TotalTerminatedProcesses == 0 is accepted. ... ok
+test_bw06_adversarial_missing_descendant_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_missing_descendant_is_refused)
+TotalProcesses may never exceed the signed membership roster. ... ok
+test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused)
+Same PID with a different 64-bit start key is a substituted member. ... ok
+test_bw07_adversarial_breakaway_evidence_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_breakaway_evidence_is_refused)
+Either breakaway mode enabled breaks descendant accounting. ... ok
+test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence)
+An external worker allowed by candidate-owned policy is not enforcement. ... ok
+test_bw07_adversarial_network_broker_and_helper_flags_are_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_network_broker_and_helper_flags_are_refused)
+Supervisor-owned enforcement must deny network, brokers and helpers. ... ok
+test_bw08_adversarial_active_process_race_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_active_process_race_is_refused)
+A nonzero final active-process count means the run was still alive. ... ok
+test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused)
+Final queries collected before the terminal barrier are out of order. ... ok
+test_bw09_positive_completion_message_loss_stays_diagnostic (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw09_positive_completion_message_loss_stays_diagnostic)
+Lost completion messages do not fail a cell whose load-bearing evidence holds. ... ok
+test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused)
+A scalar that disagrees with the raw returned buffer is fatal. ... ok
+test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown)
+Missing custody documents produce a named closed error. ... ok
+test_bw14_adversarial_malformed_manifest_raises_a_typed_error (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_manifest_raises_a_typed_error)
+A malformed manifest raises MeasurementAuthorityError; a valid one does not. ... ok
+test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused)
+The V2 envelope key set is closed in both directions. ... ok
+test_bw14_adversarial_wrong_types_return_a_closed_error_list (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_wrong_types_return_a_closed_error_list)
+Non-list, non-dict and None inputs return closed errors. ... ok
+test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused)
+Peak committed bytes moved off offset 136 is a rejected perturbation. ... ok
+test_bw04_adversarial_short_basic_and_io_buffer_is_refused (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_short_basic_and_io_buffer_is_refused)
+A 92-byte Basic+IO buffer (fourth DWORD dropped) is not admissible. ... ok
+test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout)
+The produced envelope carries the collector's raw bytes unaltered. ... ok
+test_bw12_adversarial_carrier_artifact_substitution_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_carrier_artifact_substitution_is_refused)
+A substituted candidate/carrier artifact digest breaks grid identity. ... ok
+test_bw12_adversarial_harness_build_and_host_substitution_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_harness_build_and_host_substitution_is_refused)
+Harness build and host/environment are part of the one exact grid identity. ... ok
+test_bw12_adversarial_replay_across_run_and_cell_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_replay_across_run_and_cell_is_refused)
+A grid replayed under another run id fails even fully re-signed. ... ok
+test_bw12_adversarial_unauthorized_key_or_role_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_unauthorized_key_or_role_is_refused)
+A key or producer role outside the injected manifest has no authority. ... ok
+test_bw13_adversarial_key_absent_from_the_manifest_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_key_absent_from_the_manifest_is_refused)
+A signing key not present in the injected manifest cannot admit anything. ... ok
+test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused)
+An r13 fixture envelope relabeled PHYSICAL_HARNESS_RECEIPT stays fixture. ... ok
+test_bw13_adversarial_self_authored_root_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_self_authored_root_is_refused)
+A manifest whose only root is a key the signer minted for itself is refused. ... ok
+test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything)
+Compatibility: the frozen evaluator admits nothing, before and after BUILD B. ... ok
+test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused)
+An elapsed value the QPC lifetimes cannot produce is fatal, not merely > 0. ... ok
+test_bw15_adversarial_forged_qpc_frequency_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_forged_qpc_frequency_is_refused)
+A frequency chosen to make a wrong elapsed value fit is still rejected. ... ok
+test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span)
+Elapsed monotonic ns is reproducible from the signed QPC span and frequency. ... ok
+test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused)
+Flipping production_ready in the committed file cannot mint authority. ... ok
+test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3 (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3)
+The committed V3 instance validates as a closed document and stays fixture-only. ... ok
+test_bw02_adversarial_expired_validity_window_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_expired_validity_window_is_refused)
+A root outside its signed validity window has no authority. ... ok
+test_bw02_adversarial_revoked_root_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_revoked_root_is_refused)
+A revoked key id has no authority even while the manifest still lists it. ... ok
+test_bw02_positive_simulated_manifest_authorizes_one_producer_root (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_positive_simulated_manifest_authorizes_one_producer_root)
+An injected V3 manifest authorizes exactly the reviewed producer role/key. ... ok
+test_bw03_adversarial_signer_and_editor_role_collision_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_and_editor_role_collision_is_refused)
+Signer custodian and trust-root editor may never be the same role. ... ok
+test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused)
+The signing key may never appear in the trust-root editor approval chain. ... ok
+test_bw03_positive_custody_digests_recompute_from_injected_documents (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_positive_custody_digests_recompute_from_injected_documents)
+The four external custody digests are recomputed, never trusted as labels. ... ok
+
+----------------------------------------------------------------------
+Ran 44 tests in 9.133s
+
+OK
+
+================================================================================
+DISCRIMINATION PROBE 1 — the named TotalTerminatedProcesses refusal is load-bearing
+================================================================================
+Break (one line, mbcx01_build_measurement_authority.py:603 in _receipt_errors):
+  -        errors.add("JOB_LIMIT_VIOLATION_TERMINATION")
+  +        pass  # DISCRIMINATION PROBE 1: named termination refusal removed
+Command: python -m unittest test_mbcx01_build_measurement -v   (broken bytes)
+
+test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused)
+A CarrierExactnessReceiptV2 fixture receipt cannot become production authority. ... ok
+test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid)
+A production exactness receipt verifies only against recomputed bindings. ... ok
+test_bw11_adversarial_incomplete_thread_attribution_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_incomplete_thread_attribution_is_refused)
+Every counter delta must join a signed PID/start-key/TID lifetime. ... ok
+test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused)
+Multiplexing, counter-owner conflict and any loss counter are fatal. ... ok
+test_bw11_adversarial_sampled_backend_is_unsupported (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_sampled_backend_is_unsupported)
+Only strict ETW_PMC_EVENT_ATTACHED_V1 counts as retired-instruction evidence. ... ok
+test_bw11_adversarial_unavailable_pmc_source_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_unavailable_pmc_source_is_refused)
+An unavailable PMC source is unavailable, never a guessed metric. ... ok
+test_bw11_adversarial_wrong_event_attachment_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_wrong_event_attachment_is_refused)
+InstructionRetired must be attached to CSwitch through the documented classes. ... ok
+test_bw05_adversarial_nonzero_limit_violation_termination_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_adversarial_nonzero_limit_violation_termination_is_refused)
+A Job-limit-violation termination disqualifies the cell. ... FAIL
+test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted)
+A clean cell exits normally: TotalTerminatedProcesses == 0 is accepted. ... ok
+test_bw06_adversarial_missing_descendant_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_missing_descendant_is_refused)
+TotalProcesses may never exceed the signed membership roster. ... ok
+test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused)
+Same PID with a different 64-bit start key is a substituted member. ... ok
+test_bw07_adversarial_breakaway_evidence_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_breakaway_evidence_is_refused)
+Either breakaway mode enabled breaks descendant accounting. ... ok
+test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence)
+An external worker allowed by candidate-owned policy is not enforcement. ... ok
+test_bw07_adversarial_network_broker_and_helper_flags_are_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_network_broker_and_helper_flags_are_refused)
+Supervisor-owned enforcement must deny network, brokers and helpers. ... ok
+test_bw08_adversarial_active_process_race_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_active_process_race_is_refused)
+A nonzero final active-process count means the run was still alive. ... ok
+test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused)
+Final queries collected before the terminal barrier are out of order. ... ok
+test_bw09_positive_completion_message_loss_stays_diagnostic (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw09_positive_completion_message_loss_stays_diagnostic)
+Lost completion messages do not fail a cell whose load-bearing evidence holds. ... ok
+test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused)
+A scalar that disagrees with the raw returned buffer is fatal. ... ok
+test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown)
+Missing custody documents produce a named closed error. ... ok
+test_bw14_adversarial_malformed_manifest_raises_a_typed_error (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_manifest_raises_a_typed_error)
+A malformed manifest raises MeasurementAuthorityError; a valid one does not. ... ok
+test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused)
+The V2 envelope key set is closed in both directions. ... ok
+test_bw14_adversarial_wrong_types_return_a_closed_error_list (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_wrong_types_return_a_closed_error_list)
+Non-list, non-dict and None inputs return closed errors. ... ok
+test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused)
+Peak committed bytes moved off offset 136 is a rejected perturbation. ... ok
+test_bw04_adversarial_short_basic_and_io_buffer_is_refused (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_short_basic_and_io_buffer_is_refused)
+A 92-byte Basic+IO buffer (fourth DWORD dropped) is not admissible. ... ok
+test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout)
+The produced envelope carries the collector's raw bytes unaltered. ... ok
+test_bw12_adversarial_carrier_artifact_substitution_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_carrier_artifact_substitution_is_refused)
+A substituted candidate/carrier artifact digest breaks grid identity. ... ok
+test_bw12_adversarial_harness_build_and_host_substitution_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_harness_build_and_host_substitution_is_refused)
+Harness build and host/environment are part of the one exact grid identity. ... ok
+test_bw12_adversarial_replay_across_run_and_cell_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_replay_across_run_and_cell_is_refused)
+A grid replayed under another run id fails even fully re-signed. ... ok
+test_bw12_adversarial_unauthorized_key_or_role_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_unauthorized_key_or_role_is_refused)
+A key or producer role outside the injected manifest has no authority. ... ok
+test_bw13_adversarial_key_absent_from_the_manifest_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_key_absent_from_the_manifest_is_refused)
+A signing key not present in the injected manifest cannot admit anything. ... ok
+test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused)
+An r13 fixture envelope relabeled PHYSICAL_HARNESS_RECEIPT stays fixture. ... ok
+test_bw13_adversarial_self_authored_root_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_self_authored_root_is_refused)
+A manifest whose only root is a key the signer minted for itself is refused. ... ok
+test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything)
+Compatibility: the frozen evaluator admits nothing, before and after BUILD B. ... ok
+test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused)
+An elapsed value the QPC lifetimes cannot produce is fatal, not merely > 0. ... ok
+test_bw15_adversarial_forged_qpc_frequency_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_forged_qpc_frequency_is_refused)
+A frequency chosen to make a wrong elapsed value fit is still rejected. ... ok
+test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span)
+Elapsed monotonic ns is reproducible from the signed QPC span and frequency. ... ok
+test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused)
+Flipping production_ready in the committed file cannot mint authority. ... ok
+test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3 (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3)
+The committed V3 instance validates as a closed document and stays fixture-only. ... ok
+test_bw02_adversarial_expired_validity_window_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_expired_validity_window_is_refused)
+A root outside its signed validity window has no authority. ... ok
+test_bw02_adversarial_revoked_root_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_revoked_root_is_refused)
+A revoked key id has no authority even while the manifest still lists it. ... ok
+test_bw02_positive_simulated_manifest_authorizes_one_producer_root (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_positive_simulated_manifest_authorizes_one_producer_root)
+An injected V3 manifest authorizes exactly the reviewed producer role/key. ... ok
+test_bw03_adversarial_signer_and_editor_role_collision_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_and_editor_role_collision_is_refused)
+Signer custodian and trust-root editor may never be the same role. ... ok
+test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused)
+The signing key may never appear in the trust-root editor approval chain. ... ok
+test_bw03_positive_custody_digests_recompute_from_injected_documents (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_positive_custody_digests_recompute_from_injected_documents)
+The four external custody digests are recomputed, never trusted as labels. ... ok
+
+======================================================================
+FAIL: test_bw05_adversarial_nonzero_limit_violation_termination_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_adversarial_nonzero_limit_violation_termination_is_refused)
+A Job-limit-violation termination disqualifies the cell.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 492, in test_bw05_adversarial_nonzero_limit_violation_termination_is_refused
+    self.assertIn("JOB_LIMIT_VIOLATION_TERMINATION", admit(grid))
+AssertionError: 'JOB_LIMIT_VIOLATION_TERMINATION' not found in ['JOB_QUERY_EVIDENCE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+
+----------------------------------------------------------------------
+Ran 44 tests in 8.790s
+
+FAILED (failures=1)
+
+================================================================================
+DISCRIMINATION PROBE 2 — the V2-only exact QPC/elapsed recomputation is load-bearing
+================================================================================
+Break (one line, mbcx01_build_measurement_authority.py:383 in _timing_errors):
+  -            or recomputed != elapsed or elapsed <= 0):
+  +            or elapsed <= 0):  # PROBE 2: exact QPC recomputation dropped
+  (this returns the adapter to the frozen r13 semantics at :1099 — elapsed > 0 only)
+Command: python -m unittest test_mbcx01_build_measurement -v   (broken bytes)
+
+test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused)
+A CarrierExactnessReceiptV2 fixture receipt cannot become production authority. ... ok
+test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid)
+A production exactness receipt verifies only against recomputed bindings. ... ok
+test_bw11_adversarial_incomplete_thread_attribution_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_incomplete_thread_attribution_is_refused)
+Every counter delta must join a signed PID/start-key/TID lifetime. ... ok
+test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused)
+Multiplexing, counter-owner conflict and any loss counter are fatal. ... ok
+test_bw11_adversarial_sampled_backend_is_unsupported (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_sampled_backend_is_unsupported)
+Only strict ETW_PMC_EVENT_ATTACHED_V1 counts as retired-instruction evidence. ... ok
+test_bw11_adversarial_unavailable_pmc_source_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_unavailable_pmc_source_is_refused)
+An unavailable PMC source is unavailable, never a guessed metric. ... ok
+test_bw11_adversarial_wrong_event_attachment_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_wrong_event_attachment_is_refused)
+InstructionRetired must be attached to CSwitch through the documented classes. ... ok
+test_bw05_adversarial_nonzero_limit_violation_termination_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_adversarial_nonzero_limit_violation_termination_is_refused)
+A Job-limit-violation termination disqualifies the cell. ... ok
+test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted)
+A clean cell exits normally: TotalTerminatedProcesses == 0 is accepted. ... ok
+test_bw06_adversarial_missing_descendant_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_missing_descendant_is_refused)
+TotalProcesses may never exceed the signed membership roster. ... ok
+test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused)
+Same PID with a different 64-bit start key is a substituted member. ... ok
+test_bw07_adversarial_breakaway_evidence_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_breakaway_evidence_is_refused)
+Either breakaway mode enabled breaks descendant accounting. ... ok
+test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence)
+An external worker allowed by candidate-owned policy is not enforcement. ... ok
+test_bw07_adversarial_network_broker_and_helper_flags_are_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_network_broker_and_helper_flags_are_refused)
+Supervisor-owned enforcement must deny network, brokers and helpers. ... ok
+test_bw08_adversarial_active_process_race_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_active_process_race_is_refused)
+A nonzero final active-process count means the run was still alive. ... ok
+test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused)
+Final queries collected before the terminal barrier are out of order. ... ok
+test_bw09_positive_completion_message_loss_stays_diagnostic (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw09_positive_completion_message_loss_stays_diagnostic)
+Lost completion messages do not fail a cell whose load-bearing evidence holds. ... ok
+test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused)
+A scalar that disagrees with the raw returned buffer is fatal. ... ok
+test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown)
+Missing custody documents produce a named closed error. ... ok
+test_bw14_adversarial_malformed_manifest_raises_a_typed_error (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_manifest_raises_a_typed_error)
+A malformed manifest raises MeasurementAuthorityError; a valid one does not. ... ok
+test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused)
+The V2 envelope key set is closed in both directions. ... ok
+test_bw14_adversarial_wrong_types_return_a_closed_error_list (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_wrong_types_return_a_closed_error_list)
+Non-list, non-dict and None inputs return closed errors. ... ok
+test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused)
+Peak committed bytes moved off offset 136 is a rejected perturbation. ... ok
+test_bw04_adversarial_short_basic_and_io_buffer_is_refused (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_short_basic_and_io_buffer_is_refused)
+A 92-byte Basic+IO buffer (fourth DWORD dropped) is not admissible. ... ok
+test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout)
+The produced envelope carries the collector's raw bytes unaltered. ... ok
+test_bw12_adversarial_carrier_artifact_substitution_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_carrier_artifact_substitution_is_refused)
+A substituted candidate/carrier artifact digest breaks grid identity. ... ok
+test_bw12_adversarial_harness_build_and_host_substitution_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_harness_build_and_host_substitution_is_refused)
+Harness build and host/environment are part of the one exact grid identity. ... ok
+test_bw12_adversarial_replay_across_run_and_cell_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_replay_across_run_and_cell_is_refused)
+A grid replayed under another run id fails even fully re-signed. ... ok
+test_bw12_adversarial_unauthorized_key_or_role_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_unauthorized_key_or_role_is_refused)
+A key or producer role outside the injected manifest has no authority. ... ok
+test_bw13_adversarial_key_absent_from_the_manifest_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_key_absent_from_the_manifest_is_refused)
+A signing key not present in the injected manifest cannot admit anything. ... ok
+test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused)
+An r13 fixture envelope relabeled PHYSICAL_HARNESS_RECEIPT stays fixture. ... ok
+test_bw13_adversarial_self_authored_root_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_self_authored_root_is_refused)
+A manifest whose only root is a key the signer minted for itself is refused. ... ok
+test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything)
+Compatibility: the frozen evaluator admits nothing, before and after BUILD B. ... ok
+test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused)
+An elapsed value the QPC lifetimes cannot produce is fatal, not merely > 0. ... FAIL
+test_bw15_adversarial_forged_qpc_frequency_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_forged_qpc_frequency_is_refused)
+A frequency chosen to make a wrong elapsed value fit is still rejected. ... FAIL
+test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span)
+Elapsed monotonic ns is reproducible from the signed QPC span and frequency. ... ok
+test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused)
+Flipping production_ready in the committed file cannot mint authority. ... ok
+test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3 (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3)
+The committed V3 instance validates as a closed document and stays fixture-only. ... ok
+test_bw02_adversarial_expired_validity_window_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_expired_validity_window_is_refused)
+A root outside its signed validity window has no authority. ... ok
+test_bw02_adversarial_revoked_root_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_revoked_root_is_refused)
+A revoked key id has no authority even while the manifest still lists it. ... ok
+test_bw02_positive_simulated_manifest_authorizes_one_producer_root (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_positive_simulated_manifest_authorizes_one_producer_root)
+An injected V3 manifest authorizes exactly the reviewed producer role/key. ... ok
+test_bw03_adversarial_signer_and_editor_role_collision_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_and_editor_role_collision_is_refused)
+Signer custodian and trust-root editor may never be the same role. ... ok
+test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused)
+The signing key may never appear in the trust-root editor approval chain. ... ok
+test_bw03_positive_custody_digests_recompute_from_injected_documents (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_positive_custody_digests_recompute_from_injected_documents)
+The four external custody digests are recomputed, never trusted as labels. ... ok
+
+======================================================================
+FAIL: test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused)
+An elapsed value the QPC lifetimes cannot produce is fatal, not merely > 0.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 788, in test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused
+    self.assertIn("MONOTONIC_TIME_CROSS_CHECK_FAILED", admit(grid))
+AssertionError: 'MONOTONIC_TIME_CROSS_CHECK_FAILED' not found in []
+
+======================================================================
+FAIL: test_bw15_adversarial_forged_qpc_frequency_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_forged_qpc_frequency_is_refused)
+A frequency chosen to make a wrong elapsed value fit is still rejected.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>-build\test_mbcx01_build_measurement.py", line 794, in test_bw15_adversarial_forged_qpc_frequency_is_refused
+    self.assertIn("MONOTONIC_TIME_CROSS_CHECK_FAILED", admit(grid))
+AssertionError: 'MONOTONIC_TIME_CROSS_CHECK_FAILED' not found in []
+
+----------------------------------------------------------------------
+Ran 44 tests in 8.959s
+
+FAILED (failures=2)
+
+================================================================================
+PROBE REVERT — both breaks reverted exactly (file byte-identical to the pre-probe bytes)
+================================================================================
+Command: python -m unittest test_mbcx01_build_measurement   (reverted bytes)
+............................................
+----------------------------------------------------------------------
+Ran 44 tests in 8.911s
+
+OK
+
+================================================================================
+FROZEN r13.2 SUITES — untouched-green sweep
+================================================================================
+Command: python -m unittest test_mbcx01_r13_state test_mbcx01_r13_packets \
+         test_mbcx01_r13_measurement test_mbcx01_r13_inference test_mbcx01_r13_integration -v
+(tail only)
+test_cross_artifact_manifest_substitution_fails (test_mbcx01_r13_integration.R13IntegrationTests.test_cross_artifact_manifest_substitution_fails) ... ok
+test_full_valid_authoritative_transition_join (test_mbcx01_r13_integration.R13IntegrationTests.test_full_valid_authoritative_transition_join) ... ok
+test_packet_child_must_equal_actually_applied_integration_event (test_mbcx01_r13_integration.R13IntegrationTests.test_packet_child_must_equal_actually_applied_integration_event) ... ok
+
+----------------------------------------------------------------------
+Ran 145 tests in 25.323s
+
+OK
+
+================================================================================
+SUPPLEMENTARY ADVERSARIAL SELF-AUDIT (not in the witness file; final bytes)
+================================================================================
+A  committed fixture manifest (unmodified) + fully valid grid -> ['MEASUREMENT_CUSTODY_EVIDENCE_INVALID', 'MEASUREMENT_TRUST_ROOT_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+B  ceremony receipt admits the candidate received the private key -> ['MEASUREMENT_CUSTODY_EVIDENCE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+C  manifest production_ready:false -> ['MEASUREMENT_TRUST_ROOT_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+D  trust policy status NOT_ACTIVATED -> ['MEASUREMENT_TRUST_ROOT_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+E  root still fixture_only:true -> ['MEASUREMENT_TRUST_ROOT_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+F  exactness receipt claiming a forged carrier artifact -> CARRIER_EXACTNESS_AUTHORITY_UNAVAILABLE
+G  producer determinism (same collections -> byte-identical envelopes): True

@@ -1,0 +1,103 @@
+{
+  "schema_id": "MBCX01R13InvariantRepairLedgerV1",
+  "governance": "Every I01-I17 row must name executed positive and adversarial witnesses. The verifier enforces exact two-way equality between this ledger and the governed invariant-witness namespace.",
+  "repairs": {
+    "I01_COHORT_TO_MANIFEST": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i01_cohort_manifest_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i01_cohort_manifest_adversarial",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i01_cohort_manifest_action_universe_adversarial",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i01_self_consistent_nonmember_candidate_cannot_mint_authority"
+    ],
+    "I02_MANIFEST_TO_PRESTATE": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i02_manifest_authoritative_prestate_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i02_manifest_authoritative_prestate_adversarial",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i02_same_cut_divergent_manifest_state_receipt_is_rejected"
+    ],
+    "I03_A0_TO_MANIFEST": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i03_a0_manifest_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i03_a0_manifest_adversarial"
+    ],
+    "I04_TASK_TO_A0": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i04_taskpacket_a0_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i04_taskpacket_a0_adversarial"
+    ],
+    "I05_B_TO_LEDGER": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i05_b_response_durable_ledger_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i05_b_response_durable_ledger_adversarial",
+      "test_mbcx01_r13_measurement.R13LedgerTests.test_i05_positive_b_response_and_durable_ledger_are_exactly_bound",
+      "test_mbcx01_r13_measurement.R13LedgerTests.test_i05_adversarial_cross_scenario_or_node_replay_fails",
+      "test_mbcx01_r13_state.R13StateTests.test_i05_durability_identity_binds_exact_handoff_id"
+    ],
+    "I06_PROPOSAL_TO_JOURNAL": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i06_proposal_persisted_prestate_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i06_proposal_persisted_prestate_adversarial"
+    ],
+    "I07_COMMIT_TO_PROPOSAL_PRESTATE": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i07_commit_proposal_prestate_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i07_commit_proposal_prestate_adversarial"
+    ],
+    "I08_POSTSTATE_TO_WRITER": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i08_poststate_writer_receipt_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i08_poststate_writer_receipt_adversarial"
+    ],
+    "I09_POSTSTATE_TO_A1": [
+      "test_mbcx01_r13_packets.R13PacketTests.test_i09_poststate_a1_world_truth_positive",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i09_poststate_a1_world_truth_adversarial"
+    ],
+    "I10_EPISODE_TO_INFERENCE": [
+      "test_mbcx01_r13_measurement.R13LedgerTests.test_i10_positive_episode_receipt_derives_complete_partition",
+      "test_mbcx01_r13_measurement.R13LedgerTests.test_i10_adversarial_ambiguity_is_terminal_whole_pair_missing",
+      "test_mbcx01_r13_inference.R13InferenceTests.test_i10_positive_episode_receipt_has_closed_machine_schema",
+      "test_mbcx01_r13_inference.R13InferenceTests.test_i10_positive_ordered_partition_is_derived_from_episode_receipts",
+      "test_mbcx01_r13_inference.R13InferenceTests.test_i10_adversarial_caller_cannot_omit_ambiguity_or_supply_outcome",
+      "test_mbcx01_r13_inference.R13InferenceTests.test_i10_adversarial_receipt_omission_or_rehash_substitution_fails",
+      "test_mbcx01_r13_packets.R13PacketTests.test_i10_adversarial_outcome_graph_must_equal_the_exact_episode_ledgers",
+      "test_mbcx01_r13_inference.R13InferenceTests.test_i10_adversarial_same_scenario_outcome_from_another_episode_is_rejected"
+    ],
+    "I11_REQUIREMENTS_TO_SCHEMA": [
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_positive_complete_nested_evidence_is_representable_and_checked",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_adversarial_omitted_or_replaced_signed_evidence_is_fatal",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_adversarial_raw_cswitch_delta_is_recomputed"
+    ],
+    "I12_SCHEMA_TO_EVALUATOR": [
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_positive_all_promised_gates_accept_bounded_fixture",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_aggregate_cpu_user_plus_kernel_h_shape_is_executed",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_job_query_bytes_are_fatal_but_completion_messages_are_diagnostic",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_windows_job_basic_accounting_uses_four_dwords",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_normal_exit_does_not_require_a_limit_violation_termination",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_grid_identity_mismatch_is_fatal",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_environment_and_external_enforcement_are_fatal"
+    ],
+    "I13_RECEIPT_TO_TRUST_ROOT": [
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i13_positive_fixture_root_binds_role_policy_subject_and_environment",
+      "test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i13_adversarial_manifest_edit_cannot_activate_production_authority"
+    ],
+    "I14_STATE_RECEIPT_TO_AUTHORITY": [
+      "test_mbcx01_r13_state.R13StateTests.test_i14_positive_fixture_receipt_has_exact_dual_engine_conformance",
+      "test_mbcx01_r13_state.R13StateTests.test_i14_poison_fixture_receipt_never_grants_production_authority",
+      "test_mbcx01_r13_state.R13StateTests.test_i14_adversarial_receipt_mutations_fail_both_verifiers"
+    ],
+    "I15_REDUCER_INDEPENDENCE": [
+      "test_mbcx01_r13_state.R13StateTests.test_i15_positive_replay_and_finalization_are_owned_by_each_reducer",
+      "test_mbcx01_r13_state.R13StateTests.test_i15_poison_shared_finalization_helpers_cannot_affect_either_reducer",
+      "test_mbcx01_r13_state.R13StateTests.test_i15_adversarial_each_finalizer_is_independently_load_bearing",
+      "test_mbcx01_r13_state.R13StateTests.test_i15_adversarial_each_replay_gate_is_independently_load_bearing"
+    ],
+    "I16_ENGINEERING_SELECTION": [
+      "test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_positive_hard_gates_precede_complete_pareto_set",
+      "test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_adversarial_owner_preference_or_dominated_preference_is_rejected",
+      "test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_adversarial_caller_metric_substitution_is_rejected",
+      "test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_adversarial_self_authored_exactness_pass_has_no_authority",
+      "test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_adversarial_exactness_receipt_cannot_replay_across_builds"
+    ],
+    "I17_REPORT_FRESHNESS": [
+      "INTEGRATION.I17.FRESH_REPORT_IS_RUNTIME_OUTPUT",
+      "INTEGRATION.I17.STATIC_R12_REPORT_IS_NONNORMATIVE"
+    ],
+    "BOOTSTRAP_AND_SCHEMA": [
+      "AJV.R13.STRICT_COMPILE_AND_MUTANTS",
+      "INTEGRATION.R13.PINNED_BOOTSTRAP_SOURCE_GUARD",
+      "INTEGRATION.R13.REPAIR_LEDGER_TWO_WAY_TOTAL"
+    ]
+  }
+}

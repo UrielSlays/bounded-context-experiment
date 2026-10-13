@@ -1,0 +1,960 @@
+START Sat 09/26/2026  2:18:37.01 
+...................................................<repo>\test_mbcx01_build_integration.py:698: ResourceWarning: unclosed file <_io.BufferedReader name='<home>\\AppData\\Local\\Temp\\mbcx01-smoke-digest-witness-devbdz1o\\Program Files Witness\\candidate.exe'>
+  expected = self.smoke.measurement.sha384(open(spaced, "rb").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>\test_mbcx01_build_integration.py:705: ResourceWarning: unclosed file <_io.BufferedReader name='<home>\\AppData\\Local\\Temp\\mbcx01-smoke-digest-witness-devbdz1o\\plaindir\\candidate.exe'>
+  self.smoke.measurement.sha384(open(plain, "rb").read()))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 601 tests in 247.673s
+
+OK
+
+bi24 live runtime probe: {"error": null, "guest_integration_services_running": [], "hypervisor_present": true, "probe": "WMI_WIN32_COMPUTERSYSTEM_HYPERVISORPRESENT", "resolved_path": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.EXE"}
+
+ba52 bound module: <repo>\mbcx01_build_state_store.py sha256=ce2c84879f8ca9173e0f7872253077d19357d0109c6bcdd9b608d86319aa85c8
+UNITTEST_EXIT=0 
+pin_manifest: PASS
+test_commit_rechecks_current_target_state (test_mbcx01_r13_state.R13StateTests.test_commit_rechecks_current_target_state) ... ok
+test_correction_and_retraction_do_not_rewrite_historical_cut (test_mbcx01_r13_state.R13StateTests.test_correction_and_retraction_do_not_rewrite_historical_cut) ... ok
+test_correction_requires_strictly_internal_start_and_bounded_end (test_mbcx01_r13_state.R13StateTests.test_correction_requires_strictly_internal_start_and_bounded_end) ... ok
+test_every_event_type_rejects_wrong_payload_types_without_throwing (test_mbcx01_r13_state.R13StateTests.test_every_event_type_rejects_wrong_payload_types_without_throwing) ... ok
+test_explicit_fact_interval_is_not_silently_truncated_at_a_future_row (test_mbcx01_r13_state.R13StateTests.test_explicit_fact_interval_is_not_silently_truncated_at_a_future_row) ... ok
+test_finite_visible_head_can_be_corrected_without_inversion (test_mbcx01_r13_state.R13StateTests.test_finite_visible_head_can_be_corrected_without_inversion) ... ok
+test_full_legal_event_matrix_matches_reference_byte_for_byte (test_mbcx01_r13_state.R13StateTests.test_full_legal_event_matrix_matches_reference_byte_for_byte) ... ok
+test_future_fact_does_not_block_current_interval (test_mbcx01_r13_state.R13StateTests.test_future_fact_does_not_block_current_interval) ... ok
+test_handoff_catalog_must_include_its_named_target_action (test_mbcx01_r13_state.R13StateTests.test_handoff_catalog_must_include_its_named_target_action) ... ok
+test_handoff_rejects_a_reduced_catalog_that_disagrees_with_bound_preimages (test_mbcx01_r13_state.R13StateTests.test_handoff_rejects_a_reduced_catalog_that_disagrees_with_bound_preimages) ... ok
+test_i05_durability_identity_binds_exact_handoff_id (test_mbcx01_r13_state.R13StateTests.test_i05_durability_identity_binds_exact_handoff_id) ... ok
+test_i14_adversarial_receipt_mutations_fail_both_verifiers (test_mbcx01_r13_state.R13StateTests.test_i14_adversarial_receipt_mutations_fail_both_verifiers) ... ok
+test_i14_poison_fixture_receipt_never_grants_production_authority (test_mbcx01_r13_state.R13StateTests.test_i14_poison_fixture_receipt_never_grants_production_authority) ... ok
+test_i14_positive_fixture_receipt_has_exact_dual_engine_conformance (test_mbcx01_r13_state.R13StateTests.test_i14_positive_fixture_receipt_has_exact_dual_engine_conformance) ... ok
+test_i15_adversarial_each_finalizer_is_independently_load_bearing (test_mbcx01_r13_state.R13StateTests.test_i15_adversarial_each_finalizer_is_independently_load_bearing) ... ok
+test_i15_adversarial_each_replay_gate_is_independently_load_bearing (test_mbcx01_r13_state.R13StateTests.test_i15_adversarial_each_replay_gate_is_independently_load_bearing) ... ok
+test_i15_poison_shared_finalization_helpers_cannot_affect_either_reducer (test_mbcx01_r13_state.R13StateTests.test_i15_poison_shared_finalization_helpers_cannot_affect_either_reducer) ... ok
+test_i15_positive_replay_and_finalization_are_owned_by_each_reducer (test_mbcx01_r13_state.R13StateTests.test_i15_positive_replay_and_finalization_are_owned_by_each_reducer) ... ok
+test_late_observation_requires_the_exact_current_knowledge_cut (test_mbcx01_r13_state.R13StateTests.test_late_observation_requires_the_exact_current_knowledge_cut) ... ok
+test_noncanonical_event_id_is_rejected (test_mbcx01_r13_state.R13StateTests.test_noncanonical_event_id_is_rejected) ... ok
+test_oracle_semantics_survive_poisoned_shared_and_reference_helpers (test_mbcx01_r13_state.R13StateTests.test_oracle_semantics_survive_poisoned_shared_and_reference_helpers) ... ok
+test_originating_cut_cannot_claim_future_knowledge (test_mbcx01_r13_state.R13StateTests.test_originating_cut_cannot_claim_future_knowledge) ... ok
+test_proposal_requires_exact_durable_b_response_foreign_key (test_mbcx01_r13_state.R13StateTests.test_proposal_requires_exact_durable_b_response_foreign_key) ... ok
+test_rejection_requires_an_exact_stored_proposal_hash (test_mbcx01_r13_state.R13StateTests.test_rejection_requires_an_exact_stored_proposal_hash) ... ok
+test_response_must_follow_matching_open_handoff_in_same_scope_and_be_unique (test_mbcx01_r13_state.R13StateTests.test_response_must_follow_matching_open_handoff_in_same_scope_and_be_unique) ... ok
+test_response_receipt_identity_cannot_be_replayed_for_a_second_handoff (test_mbcx01_r13_state.R13StateTests.test_response_receipt_identity_cannot_be_replayed_for_a_second_handoff) ... ok
+test_response_refs_provider_ids_and_transactions_cannot_alias_other_bytes (test_mbcx01_r13_state.R13StateTests.test_response_refs_provider_ids_and_transactions_cannot_alias_other_bytes) ... ok
+test_response_timestamps_and_node_stage_are_causal (test_mbcx01_r13_state.R13StateTests.test_response_timestamps_and_node_stage_are_causal) ... ok
+test_response_worker_hash_must_be_derived_from_durable_raw_bytes (test_mbcx01_r13_state.R13StateTests.test_response_worker_hash_must_be_derived_from_durable_raw_bytes) ... ok
+test_retracted_future_fact_does_not_truncate_current_interval (test_mbcx01_r13_state.R13StateTests.test_retracted_future_fact_does_not_truncate_current_interval) ... ok
+test_retro_correction_cannot_invert_interval (test_mbcx01_r13_state.R13StateTests.test_retro_correction_cannot_invert_interval) ... ok
+test_stale_cut_and_overlapping_assertions_are_rejected (test_mbcx01_r13_state.R13StateTests.test_stale_cut_and_overlapping_assertions_are_rejected) ... ok
+test_unserializable_envelope_is_schema_invalid_not_an_exception (test_mbcx01_r13_state.R13StateTests.test_unserializable_envelope_is_schema_invalid_not_an_exception) ... ok
+test_worker_scope_actions_and_manifest_are_bound_to_handoff_and_proposal (test_mbcx01_r13_state.R13StateTests.test_worker_scope_actions_and_manifest_are_bound_to_handoff_and_proposal) ... ok
+test_arbitrary_persisted_proposal_id_cannot_score (test_mbcx01_r13_packets.R13PacketTests.test_arbitrary_persisted_proposal_id_cannot_score) ... ok
+test_bc_builder_has_no_unbound_selection_argument (test_mbcx01_r13_packets.R13PacketTests.test_bc_builder_has_no_unbound_selection_argument) ... ok
+test_call_ids_are_node_unique_and_temporally_ordered (test_mbcx01_r13_packets.R13PacketTests.test_call_ids_are_node_unique_and_temporally_ordered) ... ok
+test_call_record_all_identity_fields_and_one_route_are_admitted (test_mbcx01_r13_packets.R13PacketTests.test_call_record_all_identity_fields_and_one_route_are_admitted) ... ok
+test_call_record_raw_bytes_must_parse_to_the_bound_result (test_mbcx01_r13_packets.R13PacketTests.test_call_record_raw_bytes_must_parse_to_the_bound_result) ... ok
+test_call_record_requires_structured_durability_receipt (test_mbcx01_r13_packets.R13PacketTests.test_call_record_requires_structured_durability_receipt) ... ok
+test_cross_scenario_b_response_cannot_score (test_mbcx01_r13_packets.R13PacketTests.test_cross_scenario_b_response_cannot_score) ... ok
+test_durability_transaction_ids_are_node_unique (test_mbcx01_r13_packets.R13PacketTests.test_durability_transaction_ids_are_node_unique) ... ok
+test_fake_common_packet_hash_cannot_score (test_mbcx01_r13_packets.R13PacketTests.test_fake_common_packet_hash_cannot_score) ... ok
+test_i01_cohort_manifest_action_universe_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i01_cohort_manifest_action_universe_adversarial) ... ok
+test_i01_cohort_manifest_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i01_cohort_manifest_adversarial) ... ok
+test_i01_cohort_manifest_positive (test_mbcx01_r13_packets.R13PacketTests.test_i01_cohort_manifest_positive) ... ok
+test_i01_self_consistent_nonmember_candidate_cannot_mint_authority (test_mbcx01_r13_packets.R13PacketTests.test_i01_self_consistent_nonmember_candidate_cannot_mint_authority) ... ok
+test_i02_manifest_authoritative_prestate_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i02_manifest_authoritative_prestate_adversarial) ... ok
+test_i02_manifest_authoritative_prestate_positive (test_mbcx01_r13_packets.R13PacketTests.test_i02_manifest_authoritative_prestate_positive) ... ok
+test_i02_same_cut_divergent_manifest_state_receipt_is_rejected (test_mbcx01_r13_packets.R13PacketTests.test_i02_same_cut_divergent_manifest_state_receipt_is_rejected) ... ok
+test_i02_same_cut_owner_role_change_is_rejected (test_mbcx01_r13_packets.R13PacketTests.test_i02_same_cut_owner_role_change_is_rejected)
+Amendment-1: the canonical world binds OWNER ROLE. ... ok
+test_i02_same_cut_subject_change_is_rejected (test_mbcx01_r13_packets.R13PacketTests.test_i02_same_cut_subject_change_is_rejected)
+Amendment-1: the canonical world binds SUBJECT. ... ok
+test_i03_a0_manifest_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i03_a0_manifest_adversarial) ... ok
+test_i03_a0_manifest_positive (test_mbcx01_r13_packets.R13PacketTests.test_i03_a0_manifest_positive) ... ok
+test_i04_taskpacket_a0_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i04_taskpacket_a0_adversarial) ... ok
+test_i04_taskpacket_a0_positive (test_mbcx01_r13_packets.R13PacketTests.test_i04_taskpacket_a0_positive) ... ok
+test_i05_b_response_durable_ledger_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i05_b_response_durable_ledger_adversarial) ... ok
+test_i05_b_response_durable_ledger_positive (test_mbcx01_r13_packets.R13PacketTests.test_i05_b_response_durable_ledger_positive) ... ok
+test_i06_proposal_persisted_prestate_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i06_proposal_persisted_prestate_adversarial) ... ok
+test_i06_proposal_persisted_prestate_positive (test_mbcx01_r13_packets.R13PacketTests.test_i06_proposal_persisted_prestate_positive) ... ok
+test_i07_commit_proposal_prestate_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i07_commit_proposal_prestate_adversarial) ... ok
+test_i07_commit_proposal_prestate_positive (test_mbcx01_r13_packets.R13PacketTests.test_i07_commit_proposal_prestate_positive) ... ok
+test_i08_poststate_writer_receipt_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i08_poststate_writer_receipt_adversarial) ... ok
+test_i08_poststate_writer_receipt_positive (test_mbcx01_r13_packets.R13PacketTests.test_i08_poststate_writer_receipt_positive) ... ok
+test_i09_poststate_a1_world_truth_adversarial (test_mbcx01_r13_packets.R13PacketTests.test_i09_poststate_a1_world_truth_adversarial) ... ok
+test_i09_poststate_a1_world_truth_positive (test_mbcx01_r13_packets.R13PacketTests.test_i09_poststate_a1_world_truth_positive) ... ok
+test_i10_adversarial_outcome_graph_must_equal_the_exact_episode_ledgers (test_mbcx01_r13_packets.R13PacketTests.test_i10_adversarial_outcome_graph_must_equal_the_exact_episode_ledgers) ... ok
+test_invented_child_event_cannot_score (test_mbcx01_r13_packets.R13PacketTests.test_invented_child_event_cannot_score) ... ok
+test_manifest_rejects_nonhex_route_contract_hash (test_mbcx01_r13_packets.R13PacketTests.test_manifest_rejects_nonhex_route_contract_hash) ... ok
+test_outcome_bits_are_recomputed_from_two_exact_scorer_graphs (test_mbcx01_r13_packets.R13PacketTests.test_outcome_bits_are_recomputed_from_two_exact_scorer_graphs) ... ok
+test_packet_local_child_must_equal_transition_authority_event (test_mbcx01_r13_packets.R13PacketTests.test_packet_local_child_must_equal_transition_authority_event) ... ok
+test_persisted_proposal_event_bytes_are_exact (test_mbcx01_r13_packets.R13PacketTests.test_persisted_proposal_event_bytes_are_exact) ... ok
+test_postcommit_cut_must_make_child_validly_effective (test_mbcx01_r13_packets.R13PacketTests.test_postcommit_cut_must_make_child_validly_effective) ... ok
+test_precommit_a1_packet_cannot_score (test_mbcx01_r13_packets.R13PacketTests.test_precommit_a1_packet_cannot_score) ... ok
+test_schema_invalid_nested_worker_cannot_score (test_mbcx01_r13_packets.R13PacketTests.test_schema_invalid_nested_worker_cannot_score) ... ok
+test_scorer_is_total_and_fail_closed_for_malformed_nested_values (test_mbcx01_r13_packets.R13PacketTests.test_scorer_is_total_and_fail_closed_for_malformed_nested_values) ... ok
+test_semantically_forged_gold_manifest_is_rejected (test_mbcx01_r13_packets.R13PacketTests.test_semantically_forged_gold_manifest_is_rejected) ... ok
+test_unbound_served_request_hash_cannot_score (test_mbcx01_r13_packets.R13PacketTests.test_unbound_served_request_hash_cannot_score) ... ok
+test_valid_typed_dag_scores_one (test_mbcx01_r13_packets.R13PacketTests.test_valid_typed_dag_scores_one) ... ok
+test_worker_must_be_produced_before_b_acceptance (test_mbcx01_r13_packets.R13PacketTests.test_worker_must_be_produced_before_b_acceptance) ... ok
+test_writer_child_cannot_jump_next_sequence (test_mbcx01_r13_packets.R13PacketTests.test_writer_child_cannot_jump_next_sequence) ... ok
+test_zero_outcome_is_representable_and_bound_to_the_failing_graph (test_mbcx01_r13_packets.R13PacketTests.test_zero_outcome_is_representable_and_bound_to_the_failing_graph) ... ok
+test_cohort_selects_six_by_128_with_bound_provenance (test_mbcx01_r13_measurement.R13CohortTests.test_cohort_selects_six_by_128_with_bound_provenance) ... ok
+test_cut_domain_is_contract_driven (test_mbcx01_r13_measurement.R13CohortTests.test_cut_domain_is_contract_driven) ... ok
+test_generator_digest_is_the_pinned_generator_artifact_digest (test_mbcx01_r13_measurement.R13CohortTests.test_generator_digest_is_the_pinned_generator_artifact_digest) ... ok
+test_source_provenance_rejects_motif_and_action_substitution (test_mbcx01_r13_measurement.R13CohortTests.test_source_provenance_rejects_motif_and_action_substitution) ... ok
+test_i16_adversarial_caller_metric_substitution_is_rejected (test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_adversarial_caller_metric_substitution_is_rejected) ... ok
+test_i16_adversarial_exactness_receipt_cannot_replay_across_builds (test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_adversarial_exactness_receipt_cannot_replay_across_builds) ... ok
+test_i16_adversarial_owner_preference_or_dominated_preference_is_rejected (test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_adversarial_owner_preference_or_dominated_preference_is_rejected) ... ok
+test_i16_adversarial_self_authored_exactness_pass_has_no_authority (test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_adversarial_self_authored_exactness_pass_has_no_authority) ... ok
+test_i16_positive_hard_gates_precede_complete_pareto_set (test_mbcx01_r13_measurement.R13EngineeringSelectionTests.test_i16_positive_hard_gates_precede_complete_pareto_set) ... ok
+test_acceptance_ambiguity_is_terminal_missing_and_never_retryable (test_mbcx01_r13_measurement.R13LedgerTests.test_acceptance_ambiguity_is_terminal_missing_and_never_retryable) ... ok
+test_corrupt_restart_is_rejected (test_mbcx01_r13_measurement.R13LedgerTests.test_corrupt_restart_is_rejected) ... ok
+test_durable_response_is_immutable (test_mbcx01_r13_measurement.R13LedgerTests.test_durable_response_is_immutable) ... ok
+test_durable_transition_requires_exact_response_evidence (test_mbcx01_r13_measurement.R13LedgerTests.test_durable_transition_requires_exact_response_evidence) ... ok
+test_empty_identity_is_rejected (test_mbcx01_r13_measurement.R13LedgerTests.test_empty_identity_is_rejected) ... ok
+test_i05_adversarial_cross_scenario_or_node_replay_fails (test_mbcx01_r13_measurement.R13LedgerTests.test_i05_adversarial_cross_scenario_or_node_replay_fails) ... ok
+test_i05_positive_b_response_and_durable_ledger_are_exactly_bound (test_mbcx01_r13_measurement.R13LedgerTests.test_i05_positive_b_response_and_durable_ledger_are_exactly_bound) ... ok
+test_i10_adversarial_ambiguity_is_terminal_whole_pair_missing (test_mbcx01_r13_measurement.R13LedgerTests.test_i10_adversarial_ambiguity_is_terminal_whole_pair_missing) ... ok
+test_i10_positive_episode_receipt_derives_complete_partition (test_mbcx01_r13_measurement.R13LedgerTests.test_i10_positive_episode_receipt_derives_complete_partition) ... ok
+test_boolean_axis_is_rejected (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_boolean_axis_is_rejected) ... ok
+test_contract_publishes_a_closed_nested_envelope_schema (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_contract_publishes_a_closed_nested_envelope_schema) ... ok
+test_etw_loss_or_incomplete_attribution_is_fatal (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_etw_loss_or_incomplete_attribution_is_fatal) ... ok
+test_fixture_kind_is_inside_the_signed_preimage (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_fixture_kind_is_inside_the_signed_preimage) ... ok
+test_i11_adversarial_omitted_or_replaced_signed_evidence_is_fatal (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_adversarial_omitted_or_replaced_signed_evidence_is_fatal) ... ok
+test_i11_adversarial_overlapping_lifetimes_for_one_thread_id_are_refused (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_adversarial_overlapping_lifetimes_for_one_thread_id_are_refused)
+Reuse is sequential: one TID is never alive twice at the same instant. ... ok
+test_i11_adversarial_raw_cswitch_delta_is_recomputed (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_adversarial_raw_cswitch_delta_is_recomputed) ... ok
+test_i11_adversarial_thread_lifetime_outside_its_process_is_refused (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_adversarial_thread_lifetime_outside_its_process_is_refused)
+A thread must NEST inside the incarnation whose start key it claims. ... ok
+test_i11_positive_a_reused_thread_id_carries_one_lifetime_per_use (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_positive_a_reused_thread_id_carries_one_lifetime_per_use)
+Windows reuses a TID after the thread exits; the validator must read it. ... ok
+test_i11_positive_complete_nested_evidence_is_representable_and_checked (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i11_positive_complete_nested_evidence_is_representable_and_checked) ... ok
+test_i12_adversarial_a_baselineless_undercounting_trace_is_refused (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_a_baselineless_undercounting_trace_is_refused)
+The pre-amendment acceptance is the defect; its shape now refuses. ... ok
+test_i12_adversarial_aggregate_cpu_user_plus_kernel_h_shape_is_executed (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_aggregate_cpu_user_plus_kernel_h_shape_is_executed) ... ok
+test_i12_adversarial_an_empty_baseline_set_beside_observations_is_refused (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_an_empty_baseline_set_beside_observations_is_refused)
+The r7 totality rule: baselined processors must EQUAL observed ... ok
+test_i12_adversarial_an_undercount_cannot_hide_behind_a_present_baseline (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_an_undercount_cannot_hide_behind_a_present_baseline)
+GUARD (recorded as such): trivially green pre-amendment via the key ... ok
+test_i12_adversarial_environment_and_external_enforcement_are_fatal (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_environment_and_external_enforcement_are_fatal) ... ok
+test_i12_adversarial_grid_identity_mismatch_is_fatal (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_grid_identity_mismatch_is_fatal) ... ok
+test_i12_adversarial_malformed_baselines_are_refused_by_shape (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_adversarial_malformed_baselines_are_refused_by_shape)
+A baseline above the first counter (negative interval), a baseline ... ok
+test_i12_job_query_bytes_are_fatal_but_completion_messages_are_diagnostic (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_job_query_bytes_are_fatal_but_completion_messages_are_diagnostic) ... ok
+test_i12_normal_exit_does_not_require_a_limit_violation_termination (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_normal_exit_does_not_require_a_limit_violation_termination) ... ok
+test_i12_positive_all_promised_gates_accept_bounded_fixture (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_positive_all_promised_gates_accept_bounded_fixture) ... ok
+test_i12_positive_capture_start_stays_a_declared_zero_truncation (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_positive_capture_start_stays_a_declared_zero_truncation)
+A capture-start processor's row carries its FIRST record's own ... ok
+test_i12_positive_the_first_member_interval_is_counted_from_the_baseline (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_positive_the_first_member_interval_is_counted_from_the_baseline)
+With the predecessor baseline the truthful receipt is accepted. ... ok
+test_i12_windows_job_basic_accounting_uses_four_dwords (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i12_windows_job_basic_accounting_uses_four_dwords) ... ok
+test_i13_adversarial_manifest_edit_cannot_activate_production_authority (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i13_adversarial_manifest_edit_cannot_activate_production_authority) ... ok
+test_i13_positive_fixture_root_binds_role_policy_subject_and_environment (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_i13_positive_fixture_root_binds_role_policy_subject_and_environment) ... ok
+test_instruction_mode_is_exactly_pinned_and_unsupported_is_fatal (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_instruction_mode_is_exactly_pinned_and_unsupported_is_fatal) ... ok
+test_missing_io_or_job_completion_is_rejected (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_missing_io_or_job_completion_is_rejected) ... ok
+test_mixed_candidate_grid_is_rejected_even_when_test_signed (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_mixed_candidate_grid_is_rejected_even_when_test_signed) ... ok
+test_receipt_mutation_without_resigning_breaks_signature (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_receipt_mutation_without_resigning_breaks_signature) ... ok
+test_receipt_supplied_or_unknown_key_cannot_become_a_trust_root (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_receipt_supplied_or_unknown_key_cannot_become_a_trust_root) ... ok
+test_run_and_cell_identities_are_signed_and_anti_replay_checked (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_run_and_cell_identities_are_signed_and_anti_replay_checked) ... ok
+test_signed_no_paid_fixture_verifies_but_cannot_establish_physical_pass (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_signed_no_paid_fixture_verifies_but_cannot_establish_physical_pass) ... ok
+test_test_key_cannot_sign_a_physical_harness_receipt (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_test_key_cannot_sign_a_physical_harness_receipt) ... ok
+test_total_io_operations_have_an_h_shape_gate (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_total_io_operations_have_an_h_shape_gate) ... ok
+test_total_io_transfer_has_an_h_shape_gate (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_total_io_transfer_has_an_h_shape_gate) ... ok
+test_trust_root_is_separately_loaded_closed_and_fixture_only (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_trust_root_is_separately_loaded_closed_and_fixture_only) ... ok
+test_unmeasured_external_work_is_rejected (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_unmeasured_external_work_is_rejected) ... ok
+test_unsigned_receipts_are_not_admissible (test_mbcx01_r13_measurement.R13SignedMeasurementTests.test_unsigned_receipts_are_not_admissible) ... ok
+test_binomial_cdf_validates_inputs (test_mbcx01_r13_inference.R13InferenceTests.test_binomial_cdf_validates_inputs) ... ok
+test_dp_has_no_missing_count_ceiling (test_mbcx01_r13_inference.R13InferenceTests.test_dp_has_no_missing_count_ceiling) ... ok
+test_exact_missing_dp_matches_small_exhaustive_witnesses (test_mbcx01_r13_inference.R13InferenceTests.test_exact_missing_dp_matches_small_exhaustive_witnesses) ... ok
+test_i10_adversarial_caller_cannot_omit_ambiguity_or_supply_outcome (test_mbcx01_r13_inference.R13InferenceTests.test_i10_adversarial_caller_cannot_omit_ambiguity_or_supply_outcome) ... ok
+test_i10_adversarial_receipt_omission_or_rehash_substitution_fails (test_mbcx01_r13_inference.R13InferenceTests.test_i10_adversarial_receipt_omission_or_rehash_substitution_fails) ... ok
+test_i10_adversarial_same_scenario_outcome_from_another_episode_is_rejected (test_mbcx01_r13_inference.R13InferenceTests.test_i10_adversarial_same_scenario_outcome_from_another_episode_is_rejected) ... ok
+test_i10_positive_episode_receipt_has_closed_machine_schema (test_mbcx01_r13_inference.R13InferenceTests.test_i10_positive_episode_receipt_has_closed_machine_schema) ... ok
+test_i10_positive_ordered_partition_is_derived_from_episode_receipts (test_mbcx01_r13_inference.R13InferenceTests.test_i10_positive_ordered_partition_is_derived_from_episode_receipts) ... ok
+test_known_design_failure_precedes_transport (test_mbcx01_r13_inference.R13InferenceTests.test_known_design_failure_precedes_transport) ... ok
+test_no_missing_preserves_complete_data_decision (test_mbcx01_r13_inference.R13InferenceTests.test_no_missing_preserves_complete_data_decision) ... ok
+test_randomized_completion_property_spot_check_near_twenty_missing (test_mbcx01_r13_inference.R13InferenceTests.test_randomized_completion_property_spot_check_near_twenty_missing) ... ok
+test_randomized_spot_check_validates_sample_count (test_mbcx01_r13_inference.R13InferenceTests.test_randomized_spot_check_validates_sample_count) ... ok
+test_registered_cells_remain_pointwise_planning_diagnostics (test_mbcx01_r13_inference.R13InferenceTests.test_registered_cells_remain_pointwise_planning_diagnostics) ... ok
+test_route_bound_requires_conditional_hazard_not_marginals (test_mbcx01_r13_inference.R13InferenceTests.test_route_bound_requires_conditional_hazard_not_marginals) ... ok
+test_route_plan_reproduces_exact_tail_bounds (test_mbcx01_r13_inference.R13InferenceTests.test_route_plan_reproduces_exact_tail_bounds) ... ok
+test_cross_artifact_manifest_substitution_fails (test_mbcx01_r13_integration.R13IntegrationTests.test_cross_artifact_manifest_substitution_fails) ... ok
+test_full_valid_authoritative_transition_join (test_mbcx01_r13_integration.R13IntegrationTests.test_full_valid_authoritative_transition_join) ... ok
+test_packet_child_must_equal_actually_applied_integration_event (test_mbcx01_r13_integration.R13IntegrationTests.test_packet_child_must_equal_actually_applied_integration_event) ... ok
+
+----------------------------------------------------------------------
+Ran 156 tests in 27.794s
+
+OK
+frozen_suites: PASS
+test_ba34_adversarial_committed_fixture_anchor_cannot_grant_state_production (test_mbcx01_build_state.BuildAFixtureIsolationWitnesses.test_ba34_adversarial_committed_fixture_anchor_cannot_grant_state_production)
+Invariant (codex r2 F1 on BUILD A): the COMMITTED fixture owner anchor, whose ... ok
+test_ba35_adversarial_state_trust_root_stale_at_the_verifier_clock (test_mbcx01_build_state.BuildAFixtureIsolationWitnesses.test_ba35_adversarial_state_trust_root_stale_at_the_verifier_clock)
+Invariant (codex r2 F4 on BUILD A): trust-root freshness is judged at the ... ok
+test_ba36_adversarial_committed_test_signing_key_is_not_state_production_signing_material (test_mbcx01_build_state.BuildAFixtureIsolationWitnesses.test_ba36_adversarial_committed_test_signing_key_is_not_state_production_signing_material)
+Invariant (BUILD acceptance r4 seat finding, EXECUTED on BUILD B and closed on ... ok
+test_ba01_positive_production_transition_discharges_only_the_named_sentinel (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba01_positive_production_transition_discharges_only_the_named_sentinel)
+Invariant: store commit -> independent readback -> V2 receipt is the ONLY way ... ok
+test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged)
+Invariant: a fixture `StateAuthorityReceiptV1` can never express production ... ok
+test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root)
+Invariant: a cryptographically valid signature from a key absent from the ... ok
+test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself)
+Invariant: a trust root named only by the receipt envelope is self-authored; ... ok
+test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics)
+Invariant: the signature covers the whole receipt content; a repaired inner ... ok
+test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint)
+Invariant (I13): the signing-key custodian cannot edit or approve the trust ... ok
+test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused)
+Invariant: relabeling fixture evidence never creates production authority — ... ok
+test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority)
+Invariant: validity window and revocation list are enforced at verification ... ok
+test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence)
+Invariant (r13.2 Opus residual): postcommit authority requires an independently ... ok
+test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected)
+Invariant: store id, namespace, namespace version, and the transaction commit ... ok
+test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected)
+Invariant: the readback cut must be the exact `current_cut` of the readback ... ok
+test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught)
+Invariant: a substituted applied child with every attacker-controlled hash and ... ok
+test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught)
+Invariant: the proposal must be the exact event persisted in the read prestate ... ok
+test_ba14_adversarial_next_sequence_substitution_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba14_adversarial_next_sequence_substitution_is_caught)
+Invariant: `applied_child.next_sequence` is bound to the readback state's ... ok
+test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught)
+Invariant: substituted readback bytes with `state_hash` and `cut` repaired and ... ok
+test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet)
+Invariant: a fully self-consistent production receipt minted over a DIFFERENT ... ok
+test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught)
+Invariant: the read prestate bytes are load bearing — substituting them and ... ok
+test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected)
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is ... ok
+test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing)
+Invariant (crash-window law): a crash before the commit fsync leaves a PENDING ... ok
+test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing)
+Invariant: a proposal row with no applied-child row and no poststate snapshot ... ok
+test_ba21_adversarial_committed_without_readback_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba21_adversarial_committed_without_readback_mints_nothing)
+Invariant: postcommit authority is a durable readback, not the writer's ... ok
+test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges)
+Invariant: reference/oracle reducer independence is load bearing. If the two ... ok
+test_ba23_positive_operator_b_derives_byte_identical_receipt_content (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba23_positive_operator_b_derives_byte_identical_receipt_content)
+Invariant: operator B, sharing only schema and frozen hashing, must derive ... ok
+test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed)
+Invariant: a poisoned operator-B finalizer must surface as DETECTED operator ... ok
+test_ba25_positive_frozen_state_suite_stays_green_alongside_build_modules (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba25_positive_frozen_state_suite_stays_green_alongside_build_modules)
+Invariant: the BUILD-A modules are purely additive. The frozen r13.2 state ... ok
+test_ba26_adversarial_anchors_matching_their_own_labels_but_not_the_durable_row (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba26_adversarial_anchors_matching_their_own_labels_but_not_the_durable_row)
+Invariant (FOLD 1): the anti-replay anchor set is a DURABLE FACT written ... ok
+test_ba27_positive_operator_b_reproduces_the_anchors_from_the_store_alone (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba27_positive_operator_b_reproduces_the_anchors_from_the_store_alone)
+Invariant (FOLD 1): operator B re-derives the anti-replay anchors and the ... ok
+test_ba28_positive_fresh_process_verifies_a_file_backed_receipt_cold (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba28_positive_fresh_process_verifies_a_file_backed_receipt_cold)
+Invariant (FOLD 2): production verification cannot depend on the verifying ... ok
+test_ba29_adversarial_fully_self_authored_state_universe_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba29_adversarial_fully_self_authored_state_universe_is_refused)
+Invariant: a fresh attacker Ed25519 key + an attacker-authored manifest + ... ok
+test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused)
+Invariant: PRODUCTION shape is not authority. The same production-shaped ... ok
+test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param)
+Invariant: the LEGITIMATE authenticated ceremony path is green. The ceremony ... ok
+test_ba32_adversarial_unconfigured_anchor_fails_closed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba32_adversarial_unconfigured_anchor_fails_closed)
+Invariant: "nobody configured a root of trust" must never read as "no root of ... ok
+test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused)
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... ok
+test_ba37_adversarial_a_second_in_memory_store_cannot_answer_the_first_ones_reader (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba37_adversarial_a_second_in_memory_store_cannot_answer_the_first_ones_reader)
+Invariant (codex BUILD acceptance finding on `mbcx01_build_state_store.py:270`): ... ok
+test_ba38_adversarial_two_producer_processes_cannot_mint_the_same_journal_seq (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba38_adversarial_two_producer_processes_cannot_mint_the_same_journal_seq)
+Invariant (codex r3 P1, `mbcx01_build_state_store.py:298-300`): the durable ... ok
+test_ba39_adversarial_an_unrelated_database_is_refused_before_any_ddl_runs (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba39_adversarial_an_unrelated_database_is_refused_before_any_ddl_runs)
+Invariant (codex r3 P2, `mbcx01_build_state_store.py:316-317`): a path that ... ok
+test_ba40_adversarial_unusable_root_material_is_refused_not_raised (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba40_adversarial_unusable_root_material_is_refused_not_raised)
+Invariant (codex r3 P2, `mbcx01_build_state_authority.py:862-866`): the public ... ok
+test_ba41_adversarial_a_foreign_database_is_refused_without_being_written_to (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba41_adversarial_a_foreign_database_is_refused_without_being_written_to)
+Invariant (codex r4 FOLD-2A, `mbcx01_build_state_store.py:330-331`): a path that ... ok
+test_ba42_adversarial_a_second_store_cannot_take_a_live_stores_identity (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba42_adversarial_a_second_store_cannot_take_a_live_stores_identity)
+Invariant (codex r4 FOLD-2B, `mbcx01_build_state_store.py:401`): the identity ... ok
+test_ba43_adversarial_a_malformed_custody_key_list_is_a_named_refusal (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba43_adversarial_a_malformed_custody_key_list_is_a_named_refusal)
+Invariant (codex r4 FOLD-2C, `mbcx01_build_state_authority.py:545`): the public ... ok
+test_ba44_adversarial_a_tableless_database_with_a_user_version_is_not_adopted (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba44_adversarial_a_tableless_database_with_a_user_version_is_not_adopted)
+Invariant (codex r4 FOLD-2A, second discriminator): `user_version` is an ... ok
+test_ba45_adversarial_a_state_shaped_non_state_returns_the_closed_verdict (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba45_adversarial_a_state_shaped_non_state_returns_the_closed_verdict)
+Invariant (codex r5 P2): `verify_state_authority_receipt_v2` answers with a ... ok
+test_ba46_adversarial_mixed_precision_validity_windows_compare_as_instants (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba46_adversarial_mixed_precision_validity_windows_compare_as_instants)
+Invariant (codex r5 P2, second class): a validity window is an interval ... ok
+test_ba47_adversarial_the_root_window_comparison_orders_instants_not_text (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba47_adversarial_the_root_window_comparison_orders_instants_not_text)
+Invariant (codex r5 P2 class — the ENUMERATED remaining member of the same ... ok
+test_ba48_adversarial_a_scope_map_whose_values_are_not_scopes_is_named (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba48_adversarial_a_scope_map_whose_values_are_not_scopes_is_named)
+Invariant (codex-CLI r6 SEAT1 F3, `mbcx01_build_state_authority.py:312`): ... ok
+test_ba49_adversarial_the_closed_verdict_covers_shapes_nobody_enumerated (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba49_adversarial_the_closed_verdict_covers_shapes_nobody_enumerated)
+Invariant (codex-CLI r6 SEAT1 F3/F4 WHOLESALE CLOSE): the closed error list ... ok
+test_ba51_guard_the_untruncated_store_is_untouched_by_the_new_door (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba51_guard_the_untruncated_store_is_untouched_by_the_new_door)
+GUARD — a door that refused a WHOLE store would be a new defect, not a fix. ... ok
+test_ba51_red_a_truncated_store_is_a_verdict_not_a_raw_sqlite_error (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba51_red_a_truncated_store_is_a_verdict_not_a_raw_sqlite_error)
+codex-CLI r9 F2: the public verifier ANSWERS about a store it cannot read. ... ok
+test_ba52_guard_right_paths_are_still_opened_and_still_reopened (test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_guard_right_paths_are_still_opened_and_still_reopened)
+GUARD — refusing RIGHT paths is not a repair. ... ok
+test_ba52_harness_the_bound_module_is_the_one_this_witness_names (test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_harness_the_bound_module_is_the_one_this_witness_names)
+The harness proves itself before it proves anything about the store. ... 
+ba52 bound module: <repo>\mbcx01_build_state_store.py sha256=ce2c84879f8ca9173e0f7872253077d19357d0109c6bcdd9b608d86319aa85c8
+ok
+test_ba52_red_a_headerless_database_of_this_application_is_never_adopted (test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_red_a_headerless_database_of_this_application_is_never_adopted)
+THE RED: pre-fix the open SUCCEEDED and took another store's rows with it. ... ok
+test_ba52_red_an_older_schema_version_is_refused_before_it_is_migrated (test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_red_an_older_schema_version_is_refused_before_it_is_migrated)
+THE RED: a store at another schema version was rewritten, then refused. ... ok
+test_ba52_red_another_stores_bytes_are_identical_after_the_refusal (test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_red_another_stores_bytes_are_identical_after_the_refusal)
+THE RED: pre-fix the refused open had already rewritten the other store. ... ok
+test_ba50_guard_ordinary_paths_and_in_memory_targets_are_untouched (test_mbcx01_build_state.BuildAStoreUriEncodingWitnesses.test_ba50_guard_ordinary_paths_and_in_memory_targets_are_untouched)
+GUARD — an encoder that changed a URI with nothing to encode would be a new ... ok
+test_ba50_red_a_literal_percent_escape_in_the_name_is_not_decoded (test_mbcx01_build_state.BuildAStoreUriEncodingWitnesses.test_ba50_red_a_literal_percent_escape_in_the_name_is_not_decoded)
+The `%` member of the set: `a%23b.sqlite` is a FILE NAME, not an escape. ... ok
+test_ba50_red_a_metacharacter_in_the_path_never_redirects_the_writer (test_mbcx01_build_state.BuildAStoreUriEncodingWitnesses.test_ba50_red_a_metacharacter_in_the_path_never_redirects_the_writer)
+codex-CLI r8 P1: the WRITABLE URI addresses the requested file. ... ok
+test_ba50_red_the_readonly_door_stays_on_the_requested_file_and_stays_readonly (test_mbcx01_build_state.BuildAStoreUriEncodingWitnesses.test_ba50_red_the_readonly_door_stays_on_the_requested_file_and_stays_readonly)
+The read-only URI: same redirection, plus a `?mode=ro` swallowed by a fragment. ... ok
+test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis)
+Invariant: a fresh attacker key + attacker manifest + attacker custody ... ok
+test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid)
+Invariant: the LEGITIMATE authenticated ceremony path is green — a manifest ... ok
+test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back)
+Invariant: every way of reaching admission without THIS owner anchor having ... ok
+test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused)
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... ok
+test_bw21_adversarial_exactness_authority_requires_the_anchored_activation (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw21_adversarial_exactness_authority_requires_the_anchored_activation)
+Invariant: the exactness authority is the THIRD production door and takes the ... ok
+test_bw64_adversarial_a_non_calendar_validity_window_cannot_extend_production_trust (test_mbcx01_build_measurement.BuildCalendarValidityTests.test_bw64_adversarial_a_non_calendar_validity_window_cannot_extend_production_trust)
+Invariant (codex r5 P1): trust-root validity is an interval between two ... ok
+test_bw64_adversarial_every_non_calendar_endpoint_shape_is_refused (test_mbcx01_build_measurement.BuildCalendarValidityTests.test_bw64_adversarial_every_non_calendar_endpoint_shape_is_refused)
+Invariant: the refusal is the CALENDAR, not one hand-picked string. Each ... ok
+test_bw64_positive_parsed_instants_order_by_time_not_by_text (test_mbcx01_build_measurement.BuildCalendarValidityTests.test_bw64_positive_parsed_instants_order_by_time_not_by_text)
+Invariant: `parse_instant` returns the UTC instant a spelling denotes, and ... ok
+test_bw67_adversarial_an_unusable_telemetry_record_is_refused (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw67_adversarial_an_unusable_telemetry_record_is_refused)
+A length that cannot hold the prefix, an absurd one, or a zero key. ... ok
+test_bw67_adversarial_an_unverified_event_version_is_named_not_guessed (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw67_adversarial_an_unverified_event_version_is_named_not_guessed)
+A template this build did not read is a fault, never an offset guess. ... ok
+test_bw67_positive_the_decoder_reads_the_manifest_field_order (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw67_positive_the_decoder_reads_the_manifest_field_order)
+ProcessID is a UINT32 at offset 0; the key is the sequence number at 4. ... ok
+test_bw67_positive_the_root_identity_is_the_quantity_etw_publishes (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw67_positive_the_root_identity_is_the_quantity_etw_publishes)
+`query_process_start_key()` returns ProcessSequenceNumber. ... ok
+test_bw68_adversarial_a_failed_teardown_is_secondary_never_a_mask (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw68_adversarial_a_failed_teardown_is_secondary_never_a_mask)
+A STOP that also fails is NAMED, and never replaces the primary. ... ok
+test_bw68_positive_an_unreadable_loss_counter_still_stops_the_logger (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw68_positive_an_unreadable_loss_counter_still_stops_the_logger)
+The unknown-loss fault is preserved AND the session is torn down. ... ok
+test_bw69_adversarial_a_failed_termination_is_noted_never_silent (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw69_adversarial_a_failed_termination_is_noted_never_silent)
+A TerminateProcess that fails does not mask the setup fault. ... ok
+test_bw69_adversarial_an_assigned_child_is_left_to_the_job (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw69_adversarial_an_assigned_child_is_left_to_the_job)
+Once the Job owns the child, nothing here terminates it. ... ok
+test_bw69_positive_an_unassigned_suspended_child_is_terminated (test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw69_positive_an_unassigned_suspended_child_is_terminated)
+The child dies BEFORE its handle is closed, and only if unassigned. ... ok
+test_bw70_adversarial_a_zero_or_unreadable_instruction_total_is_named (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw70_adversarial_a_zero_or_unreadable_instruction_total_is_named)
+Zero is refused at admission by name; an unreadable delta is a fault. ... ok
+test_bw70_positive_retired_instructions_are_the_summed_attributed_deltas (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw70_positive_retired_instructions_are_the_summed_attributed_deltas)
+The scalar equals the sum the evidence tree carries, by construction. ... ok
+test_bw71_adversarial_the_drain_states_no_barrier_fact_it_cannot_see (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw71_adversarial_the_drain_states_no_barrier_fact_it_cannot_see)
+A message drain may not report the Job's state; only a query can. ... ok
+test_bw71_positive_the_completion_drain_never_waits_for_a_message (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw71_positive_the_completion_drain_never_waits_for_a_message)
+Every completion poll asks for 0 ms, so an absent message costs nothing. ... ok
+test_bw72_adversarial_an_open_barrier_expires_by_name_not_forever (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw72_adversarial_an_open_barrier_expires_by_name_not_forever)
+A Job that never empties exhausts the ONE deadline and is named. ... ok
+test_bw72_positive_the_barrier_is_the_job_query_under_one_deadline (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw72_positive_the_barrier_is_the_job_query_under_one_deadline)
+Active-process zero is waited on by QUERYING the Job, not by a message. ... ok
+test_bw73_adversarial_the_collectors_own_window_is_not_the_signed_span (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw73_adversarial_the_collectors_own_window_is_not_the_signed_span)
+Signing the observation interval instead of the lifetime span is refused. ... ok
+test_bw73_positive_elapsed_derives_from_the_signed_lifetime_endpoints (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw73_positive_elapsed_derives_from_the_signed_lifetime_endpoints)
+The collector and the authority use the SAME two endpoints. ... ok
+test_bw74_positive_the_observation_window_fences_the_signed_span (test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw74_positive_the_observation_window_fences_the_signed_span)
+The collector's own QPC pair stays load-bearing as a containment fence. ... ok
+test_bw29_positive_etw_struct_layout_matches_the_pinned_win32_abi (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw29_positive_etw_struct_layout_matches_the_pinned_win32_abi)
+Every ETW structure size/offset is re-derived from ctypes and pinned. ... ok
+test_bw30_adversarial_etw_abi_drift_is_a_fault_at_verify_time (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw30_adversarial_etw_abi_drift_is_a_fault_at_verify_time)
+A pinned size that no longer matches the structure fails loudly. ... ok
+test_bw31_positive_records_are_emitted_in_per_processor_timestamp_order (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw31_positive_records_are_emitted_in_per_processor_timestamp_order)
+Real-time buffers interleave across processors; the emitted stream does not. ... ok
+test_bw32_adversarial_a_record_missing_a_join_field_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw32_adversarial_a_record_missing_a_join_field_is_refused)
+A record the consumer cannot order or attribute is a fault, not a skip. ... ok
+test_bw33_positive_pmc_counters_are_read_from_the_pinned_extended_item (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw33_positive_pmc_counters_are_read_from_the_pinned_extended_item)
+InstructionRetired comes from EVENT_HEADER_EXT_TYPE_PMC_COUNTERS. ... ok
+test_bw34_adversarial_absent_or_short_pmc_data_is_unavailable_not_zero (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw34_adversarial_absent_or_short_pmc_data_is_unavailable_not_zero)
+No counter is never counter==0: an absent PMC item is a fault. ... ok
+test_bw35_positive_member_lifetimes_cover_every_member_including_terminated (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw35_positive_member_lifetimes_cover_every_member_including_terminated)
+ProcessStart/ProcessStop is the only source that sees an unopened descendant. ... ok
+test_bw36_adversarial_an_unterminated_or_keyless_member_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw36_adversarial_an_unterminated_or_keyless_member_is_refused)
+A member without a terminal, or without a start key, cannot be signed. ... ok
+test_bw37_adversarial_any_nonzero_loss_counter_makes_evidence_unavailable (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw37_adversarial_any_nonzero_loss_counter_makes_evidence_unavailable)
+EventsLost / LogBuffersLost / RealTimeBuffersLost are each fatal alone. ... ok
+test_bw38_adversarial_ungranted_capability_is_unavailable_never_estimated (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw38_adversarial_ungranted_capability_is_unavailable_never_estimated)
+An unavailable source, an owner conflict or no counters is UNAVAILABLE. ... ok
+test_bw39_adversarial_multiplexed_counters_are_unavailable (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw39_adversarial_multiplexed_counters_are_unavailable)
+Multiplexing means the counter did not run for the whole interval. ... ok
+test_bw40_adversarial_a_virtualization_guest_or_nested_host_aborts (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw40_adversarial_a_virtualization_guest_or_nested_host_aborts)
+Root partition or bare metal only; a guest needs a signed PMU receipt. ... ok
+test_bw41_positive_the_factory_yields_a_contract_shaped_etwpmcsession (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw41_positive_the_factory_yields_a_contract_shaped_etwpmcsession)
+`etw_session_factory()` must return exactly what `collect()` consumes. ... ok
+test_bw42_adversarial_unattached_consumer_seams_stay_faults (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw42_adversarial_unattached_consumer_seams_stay_faults)
+An unattached seam is a FAULT, never an empty result — unchanged. ... ok
+test_bw43_positive_capability_evidence_and_capability_facts_are_separate (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw43_positive_capability_evidence_and_capability_facts_are_separate)
+RIDER RED: `_trace_facts` cannot read facts out of the evidence record. ... ok
+test_bw44_adversarial_ungranted_facts_travel_into_the_receipt_unchanged (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw44_adversarial_ungranted_facts_travel_into_the_receipt_unchanged)
+An ungranted capability is RECORDED as ungranted, never repaired. ... ok
+test_bw45_positive_the_trace_window_closes_at_the_terminal_barrier (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw45_positive_the_trace_window_closes_at_the_terminal_barrier)
+`collect()` must close the trace window BEFORE it reads any delta. ... ok
+test_bw46_adversarial_an_unattached_trace_finalizer_is_a_fault (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw46_adversarial_an_unattached_trace_finalizer_is_a_fault)
+No finalizer means the trace window was never closed — never a no-op. ... ok
+test_bw47_positive_collect_tells_the_session_which_root_it_is_measuring (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw47_positive_collect_tells_the_session_which_root_it_is_measuring)
+The root PID/start key reach the session as VALUES, not by patching. ... ok
+test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header)
+Every `VALUE NOT PUBLISHED` ExtType/Flags pin equals the SDK's value. ... ok
+test_bw49_positive_decoded_thread_events_join_the_signed_member_roster (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw49_positive_decoded_thread_events_join_the_signed_member_roster)
+The REAL decoder emits thread events a member roster can join. ... ok
+test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name)
+A thread the ProcessStart stream never explained is a NAMED fault. ... ok
+test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain)
+`CloseTrace`'s return was DISCARDED, so a failed close read as a drain. ... ok
+test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain)
+`join(timeout=30)`'s result was DISCARDED, so a timeout read as a drain. ... ok
+test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops)
+`capture()` queried the loss counters a SECOND time, after the STOP. ... ok
+test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate)
+The wrong CLASSIC_HEADER pin DROPPED records. Show the drop, not the number. ... ok
+test_bw58_positive_a_reused_tid_gets_one_lifetime_per_incarnation (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw58_positive_a_reused_tid_gets_one_lifetime_per_incarnation)
+Windows REUSES thread ids, and the consumer must read that correctly. ... ok
+test_bw59_adversarial_overlapping_lifetimes_for_one_tid_still_fault (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw59_adversarial_overlapping_lifetimes_for_one_tid_still_fault)
+Reuse is SEQUENTIAL. Two lifetimes alive at once are impossible. ... ok
+test_bw60_adversarial_a_thread_outside_every_live_incarnation_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw60_adversarial_a_thread_outside_every_live_incarnation_is_refused)
+A thread must live INSIDE one process incarnation, never beside it. ... ok
+test_bw65_positive_a_live_capture_carries_the_frozen_parent_tuple (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw65_positive_a_live_capture_carries_the_frozen_parent_tuple)
+The decoded stream must produce the parent fields the validator reads. ... ok
+test_bw66_adversarial_foreign_host_events_are_out_of_population (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw66_adversarial_foreign_host_events_are_out_of_population)
+A busy host must not be able to abort or corrupt a measurement. ... ok
+test_bw75_positive_a_reused_tid_inside_a_known_foreign_life_is_excluded (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw75_positive_a_reused_tid_inside_a_known_foreign_life_is_excluded)
+An ordinary TID reuse must not destroy a valid capture. ... ok
+test_bw76_adversarial_a_tid_in_no_known_life_still_faults_and_is_counted (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw76_adversarial_a_tid_in_no_known_life_still_faults_and_is_counted)
+The genuinely ambiguous case keeps its fault AND becomes a number. ... ok
+test_bw77_adversarial_an_unverified_thread_event_version_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw77_adversarial_an_unverified_thread_event_version_is_refused)
+A thread payload template this build never read is never decoded. ... ok
+test_bw78_positive_guard_both_verified_thread_versions_still_decode (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw78_positive_guard_both_verified_thread_versions_still_decode)
+GUARD: the version gate must refuse nothing that was verified. ... ok
+test_bw79_positive_the_foreign_instruction_field_names_its_denominator (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw79_positive_the_foreign_instruction_field_names_its_denominator)
+Two provenance numbers, two different denominators — said out loud. ... ok
+test_bw80_positive_the_pinned_profile_source_is_found_by_its_whole_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw80_positive_the_pinned_profile_source_is_found_by_its_whole_name)
+A present source must resolve, wherever it sits in the chain. ... ok
+test_bw81_adversarial_a_malformed_source_list_is_named_not_looped (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw81_adversarial_a_malformed_source_list_is_named_not_looped)
+A chain this build cannot walk is a fault, never a silent absence. ... ok
+test_bw82_adversarial_an_unreadable_ownership_answer_is_refused (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw82_adversarial_an_unreadable_ownership_answer_is_refused)
+A mis-sized or unknown ownership answer never becomes "nobody owns". ... ok
+test_bw82_positive_free_pmc_counters_are_not_an_ownership_conflict (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw82_positive_free_pmc_counters_are_not_an_ownership_conflict)
+`NumberOfCounters` is metadata; only an owner row is an owner. ... ok
+test_bw83_positive_foreign_switches_are_baselines_never_member_deltas (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw83_positive_foreign_switches_are_baselines_never_member_deltas)
+A busy host must not abort, and must not be counted either. ... ok
+test_bw84_adversarial_member_cswitch_inconsistencies_keep_their_faults (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw84_adversarial_member_cswitch_inconsistencies_keep_their_faults)
+Scoping must not silence a statement about MEMBER evidence. ... ok
+test_bw87_positive_the_first_member_interval_is_counted (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw87_positive_the_first_member_interval_is_counted)
+RED pre-A3: deltas [0, 100], aggregate 100 — the wrong number. ... ok
+test_bw88_positive_capture_start_emits_its_own_counter_as_baseline (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw88_positive_capture_start_emits_its_own_counter_as_baseline)
+A stream that BEGINS at the member switch-out has no predecessor: ... ok
+test_bw89_adversarial_a_malformed_baseline_faults_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw89_adversarial_a_malformed_baseline_faults_by_name)
+A baseline the session cannot trust is a fault, never a silent ... ok
+test_bw90_adversarial_an_omitting_producer_caller_faults_before_signing (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw90_adversarial_an_omitting_producer_caller_faults_before_signing)
+The pre-AMENDMENT-3 caller shape is unconstructible: omitting the ... ok
+test_bw91_positive_a_leading_foreign_stop_is_a_prefix_interval (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw91_positive_a_leading_foreign_stop_is_a_prefix_interval)
+SEAT2's executed r7 shape: a host thread that predates the trace ... ok
+test_bw92_adversarial_member_and_foreign_intervals_cannot_overlap (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw92_adversarial_member_and_foreign_intervals_cannot_overlap)
+SEAT2's r8 shape: one TID claimed alive as BOTH a member and a ... ok
+test_bw93_pin_a_malformed_roster_row_faults_by_name (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw93_pin_a_malformed_roster_row_faults_by_name)
+PIN, NOT A RED — labelled as such (driver-verified: this passes on ... ok
+test_bw95_adversarial_a_stop_from_another_member_cannot_close_a_lifetime (test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw95_adversarial_a_stop_from_another_member_cannot_close_a_lifetime)
+A STOP is an event OF A PROCESS, and the pairing must read that. ... ok
+test_bw96_guard_the_update_call_carries_what_controltracew_documents (test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_guard_the_update_call_carries_what_controltracew_documents)
+GUARD — an UPDATE built like a STOP would FAIL, and a failed update is ... ok
+test_bw96_red_an_early_cswitch_without_pmc_rejects_the_whole_run (test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_red_an_early_cswitch_without_pmc_rejects_the_whole_run)
+What the pre-fix window COSTS, demonstrated on pure functions. ... ok
+test_bw96_red_the_attach_precedes_every_cswitch_generating_enable (test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_red_the_attach_precedes_every_cswitch_generating_enable)
+THE SET, walked instead of the one instance codex reported. ... ok
+test_bw96_red_the_cswitch_flag_is_not_enabled_until_the_counter_is_attached (test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_red_the_cswitch_flag_is_not_enabled_until_the_counter_is_attached)
+codex-CLI r8 P1: the r7 fold's own NEIGHBOUR — StartTraceW is EARLIER. ... ok
+test_bw96_red_the_pmc_counter_is_attached_before_the_pump_opens (test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_red_the_pmc_counter_is_attached_before_the_pump_opens)
+codex-CLI r7 P1: a CSwitch delivered before PMC attachment kills the run. ... ok
+test_bw97_red_the_parent_identity_comes_from_the_payload_not_the_header (test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw97_red_the_parent_identity_comes_from_the_payload_not_the_header)
+codex-CLI r7 P2: the authoritative parent tuple is at payload 20/24. ... ok
+test_bw97_red_the_scoped_roster_follows_the_payload_parent (test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw97_red_the_scoped_roster_follows_the_payload_parent)
+The same defect where it lands: the SIGNED membership roster. ... ok
+test_bw98_guard_the_fixes_refuse_nothing_that_was_right_before (test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw98_guard_the_fixes_refuse_nothing_that_was_right_before)
+GUARD (green both sides where the pre-fix bytes had the behaviour). ... ok
+test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused)
+A CarrierExactnessReceiptV2 fixture receipt cannot become production authority. ... ok
+test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid)
+A production exactness receipt verifies only against recomputed bindings. ... ok
+test_bw63_adversarial_receipt_edited_after_signing_cannot_rebind_the_carrier (test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw63_adversarial_receipt_edited_after_signing_cannot_rebind_the_carrier)
+Invariant I16 (codex r1 P1): the receipt this door BINDS must be the receipt ... ok
+test_bw22_adversarial_committed_fixture_anchor_cannot_grant_production (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw22_adversarial_committed_fixture_anchor_cannot_grant_production)
+Invariant (codex r2 F1, the deciding one): the COMMITTED fixture owner anchor ... ok
+test_bw24_adversarial_expired_manifest_is_refused_at_the_verifier_clock (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw24_adversarial_expired_manifest_is_refused_at_the_verifier_clock)
+Invariant (codex r2 F4): the evaluation instant belongs to the VERIFIER, not ... ok
+test_bw25_adversarial_binding_only_exactness_is_not_labelled_suite_executed (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw25_adversarial_binding_only_exactness_is_not_labelled_suite_executed)
+Invariant (codex r2 F7): this authority BINDS an exactness claim; it does not ... ok
+test_bw26_adversarial_ambiguous_anchor_document_is_refused_at_the_loader (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw26_adversarial_ambiguous_anchor_document_is_refused_at_the_loader)
+Invariant (codex r2 F6): the operator configuration boundary parses strictly. ... ok
+test_bw27_positive_verifier_context_is_immutable_instance_scoped_and_clocked (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw27_positive_verifier_context_is_immutable_instance_scoped_and_clocked)
+Invariant (the r2 COMPLEMENT): production verification accepts EXACTLY one ... ok
+test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root)
+Invariant (BUILD acceptance r3 seat finding, reproduced at the byte): a ... ok
+test_bw55_adversarial_re_encoded_committed_fixture_key_is_not_a_production_root (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw55_adversarial_re_encoded_committed_fixture_key_is_not_a_production_root)
+Invariant (BUILD acceptance r4 seat finding, reproduced at the byte): key ... ok
+test_bw56_adversarial_non_canonical_public_key_carrier_is_refused_at_the_context (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw56_adversarial_non_canonical_public_key_carrier_is_refused_at_the_context)
+Invariant: one production root key has exactly ONE accepted carrier. ... ok
+test_bw57_adversarial_committed_test_signing_key_is_not_production_signing_material (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw57_adversarial_committed_test_signing_key_is_not_production_signing_material)
+Invariant (BUILD acceptance r4 seat finding, EXECUTED): the committed-key ... ok
+test_bw61_positive_rfc7468_eol_conventions_are_one_carrier (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw61_positive_rfc7468_eol_conventions_are_one_carrier)
+A real operator export must not be refused for spelling its newlines. ... ok
+test_bw62_adversarial_eol_normalisation_weakens_no_other_carrier_check (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw62_adversarial_eol_normalisation_weakens_no_other_carrier_check)
+Normalising the TRANSPORT spelling must change nothing else. ... ok
+test_bw11_adversarial_incomplete_thread_attribution_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_incomplete_thread_attribution_is_refused)
+Every counter delta must join a signed PID/start-key/TID lifetime. ... ok
+test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused)
+Multiplexing, counter-owner conflict and any loss counter are fatal. ... ok
+test_bw11_adversarial_sampled_backend_is_unsupported (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_sampled_backend_is_unsupported)
+Only strict ETW_PMC_EVENT_ATTACHED_V1 counts as retired-instruction evidence. ... ok
+test_bw11_adversarial_unavailable_pmc_source_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_unavailable_pmc_source_is_refused)
+An unavailable PMC source is unavailable, never a guessed metric. ... ok
+test_bw11_adversarial_wrong_event_attachment_is_refused (test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_wrong_event_attachment_is_refused)
+InstructionRetired must be attached to CSwitch through the documented classes. ... ok
+test_bw05_adversarial_nonzero_limit_violation_termination_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_adversarial_nonzero_limit_violation_termination_is_refused)
+A Job-limit-violation termination disqualifies the cell. ... ok
+test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted)
+A clean cell exits normally: TotalTerminatedProcesses == 0 is accepted. ... ok
+test_bw06_adversarial_missing_descendant_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_missing_descendant_is_refused)
+TotalProcesses may never exceed the signed membership roster. ... ok
+test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused)
+Same PID with a different 64-bit start key is a substituted member. ... ok
+test_bw07_adversarial_breakaway_evidence_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_breakaway_evidence_is_refused)
+Either breakaway mode enabled breaks descendant accounting. ... ok
+test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence)
+An external worker allowed by candidate-owned policy is not enforcement. ... ok
+test_bw07_adversarial_network_broker_and_helper_flags_are_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_network_broker_and_helper_flags_are_refused)
+Supervisor-owned enforcement must deny network, brokers and helpers. ... ok
+test_bw08_adversarial_active_process_race_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_active_process_race_is_refused)
+A nonzero final active-process count means the run was still alive. ... ok
+test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused)
+Final queries collected before the terminal barrier are out of order. ... ok
+test_bw09_positive_completion_message_loss_stays_diagnostic (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw09_positive_completion_message_loss_stays_diagnostic)
+Lost completion messages do not fail a cell whose load-bearing evidence holds. ... ok
+test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused (test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused)
+A scalar that disagrees with the raw returned buffer is fatal. ... ok
+test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown)
+Missing custody documents produce a named closed error. ... ok
+test_bw14_adversarial_malformed_manifest_raises_a_typed_error (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_manifest_raises_a_typed_error)
+A malformed manifest raises MeasurementAuthorityError; a valid one does not. ... ok
+test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused)
+The V2 envelope key set is closed in both directions. ... ok
+test_bw14_adversarial_wrong_types_return_a_closed_error_list (test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_wrong_types_return_a_closed_error_list)
+Non-list, non-dict and None inputs return closed errors. ... ok
+test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused)
+Peak committed bytes moved off offset 136 is a rejected perturbation. ... ok
+test_bw04_adversarial_short_basic_and_io_buffer_is_refused (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_short_basic_and_io_buffer_is_refused)
+A 92-byte Basic+IO buffer (fourth DWORD dropped) is not admissible. ... ok
+test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout (test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout)
+The produced envelope carries the collector's raw bytes unaltered. ... ok
+test_bw12_adversarial_carrier_artifact_substitution_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_carrier_artifact_substitution_is_refused)
+A substituted candidate/carrier artifact digest breaks grid identity. ... ok
+test_bw12_adversarial_harness_build_and_host_substitution_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_harness_build_and_host_substitution_is_refused)
+Harness build and host/environment are part of the one exact grid identity. ... ok
+test_bw12_adversarial_replay_across_run_and_cell_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_replay_across_run_and_cell_is_refused)
+A grid replayed under another run id fails even fully re-signed. ... ok
+test_bw12_adversarial_unauthorized_key_or_role_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_unauthorized_key_or_role_is_refused)
+A key or producer role outside the injected manifest has no authority. ... ok
+test_bw13_adversarial_key_absent_from_the_manifest_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_key_absent_from_the_manifest_is_refused)
+A signing key not present in the injected manifest cannot admit anything. ... ok
+test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused)
+An r13 fixture envelope relabeled PHYSICAL_HARNESS_RECEIPT stays fixture. ... ok
+test_bw13_adversarial_self_authored_root_is_refused (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_self_authored_root_is_refused)
+A manifest whose only root is a key the signer minted for itself is refused. ... ok
+test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything (test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything)
+Compatibility: the frozen evaluator admits nothing, before and after BUILD B. ... ok
+test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused)
+An elapsed value the QPC lifetimes cannot produce is fatal, not merely > 0. ... ok
+test_bw15_adversarial_forged_qpc_frequency_is_refused (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_forged_qpc_frequency_is_refused)
+A frequency chosen to make a wrong elapsed value fit is still rejected. ... ok
+test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span (test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span)
+Elapsed monotonic ns is reproducible from the signed QPC span and frequency. ... ok
+test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused)
+Flipping production_ready in the committed file cannot mint authority. ... ok
+test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3 (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3)
+The committed V3 instance validates as a closed document and stays fixture-only. ... ok
+test_bw02_adversarial_expired_validity_window_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_expired_validity_window_is_refused)
+A root outside its signed validity window has no authority. ... ok
+test_bw02_adversarial_revoked_root_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_revoked_root_is_refused)
+A revoked key id has no authority even while the manifest still lists it. ... ok
+test_bw02_positive_simulated_manifest_authorizes_one_producer_root (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_positive_simulated_manifest_authorizes_one_producer_root)
+An injected V3 manifest authorizes exactly the reviewed producer role/key. ... ok
+test_bw03_adversarial_signer_and_editor_role_collision_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_and_editor_role_collision_is_refused)
+Signer custodian and trust-root editor may never be the same role. ... ok
+test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused)
+The signing key may never appear in the trust-root editor approval chain. ... ok
+test_bw03_positive_custody_digests_recompute_from_injected_documents (test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_positive_custody_digests_recompute_from_injected_documents)
+The four external custody digests are recomputed, never trusted as labels. ... ok
+test_bi01_positive_one_connected_flow_admits_state_measurement_and_exactness (test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi01_positive_one_connected_flow_admits_state_measurement_and_exactness)
+Invariant: the complete authority graph connects. The frozen ... ok
+test_bi02_adversarial_fixture_evidence_cannot_cross_production_admission (test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi02_adversarial_fixture_evidence_cannot_cross_production_admission)
+Invariant: nowhere in the connected graph can fixture-labelled evidence buy ... ok
+test_bi03_positive_the_connected_run_executes_no_network_provider_or_harness_call (test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi03_positive_the_connected_run_executes_no_network_provider_or_harness_call)
+Invariant: the connected authority run is inert. Executed under live guards, ... ok
+test_bi04_positive_python_and_node_canonicalization_agree_byte_for_byte (test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi04_positive_python_and_node_canonicalization_agree_byte_for_byte)
+Invariant: `canonical_json`/`sha384` computed in Python equal the digest a ... ok
+test_bi05_adversarial_the_integration_fixture_does_not_leak_its_verifier_context (test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi05_adversarial_the_integration_fixture_does_not_leak_its_verifier_context)
+Invariant (codex r2 F3): the connected fixture is an ASSEMBLER, not an ... ok
+test_bi06_adversarial_drifted_pinned_bytes_fail_by_name_while_the_suite_total_holds (test_mbcx01_build_integration.BuildPinManifestReconciliationWitnesses.test_bi06_adversarial_drifted_pinned_bytes_fail_by_name_while_the_suite_total_holds)
+Invariant: the BUILD verifier reconciles MBCX-01-BUILD-PIN-MANIFEST.json against ... ok
+test_bi07_adversarial_an_unreconcilable_pin_manifest_is_never_a_silent_skip (test_mbcx01_build_integration.BuildPinManifestReconciliationWitnesses.test_bi07_adversarial_an_unreconcilable_pin_manifest_is_never_a_silent_skip)
+Invariant: "could not check" must never read as "checked and clean". ... ok
+test_bi08_positive_a_clean_crlf_work_tree_reconciles_every_pinned_subject (test_mbcx01_build_integration.BuildPinManifestReconciliationWitnesses.test_bi08_positive_a_clean_crlf_work_tree_reconciles_every_pinned_subject)
+Invariant: the arm admits the RIGHT tree as readily as it refuses a drifted one. ... ok
+test_bi09_positive_a_quoted_spaced_executable_path_digests_the_real_binary (test_mbcx01_build_integration.SmokeCandidateDigestWitnesses.test_bi09_positive_a_quoted_spaced_executable_path_digests_the_real_binary) ... ok
+test_bi10_adversarial_unparseable_or_absent_candidates_abort_by_name (test_mbcx01_build_integration.SmokeCandidateDigestWitnesses.test_bi10_adversarial_unparseable_or_absent_candidates_abort_by_name) ... ok
+test_bi19_red_a_bare_extensionless_name_has_no_bare_fallback (test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi19_red_a_bare_extensionless_name_has_no_bare_fallback)
+The r6 fold's own tail: `(token + ".exe", token)` tried the bare name. ... ok
+test_bi19_red_a_path_carrying_extensionless_token_is_used_verbatim (test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi19_red_a_path_carrying_extensionless_token_is_used_verbatim)
+codex-CLI r7 P1: `.exe` is appended to a BARE name, never to a path. ... ok
+test_bi19_red_a_path_carrying_token_never_falls_back_to_the_exe (test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi19_red_a_path_carrying_token_never_falls_back_to_the_exe)
+The other sign: certifying a file the launch would never reach. ... ok
+test_bi20_guard_the_refusal_cannot_eat_a_shape_that_works (test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi20_guard_the_refusal_cannot_eat_a_shape_that_works)
+GUARD — a refusal that swallowed the runbook's own command line would ... ok
+test_bi20_red_an_unquoted_extensionless_path_with_arguments_is_refused (test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi20_red_an_unquoted_extensionless_path_with_arguments_is_refused)
+The shape on which the two documented paragraphs DISAGREE. ... ok
+test_bi20_red_an_unquoted_spaced_path_is_refused_by_name (test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi20_red_an_unquoted_spaced_path_is_refused_by_name)
+codex-CLI r7 P2: the successive-whitespace search is REFUSED, not faked. ... ok
+test_bi21_red_every_documented_resolution_rule_is_closed_by_name (test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi21_red_every_documented_resolution_rule_is_closed_by_name)
+THE SET TABLE — one row per documented rule, each implemented or refused. ... ok
+test_bi22_red_the_bare_name_search_sequence_has_all_six_documented_steps (test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi22_red_the_bare_name_search_sequence_has_all_six_documented_steps)
+The set member NOBODY named: the 16-bit Windows system directory. ... ok
+test_bi25_guard_the_default_and_the_documented_variants_are_untouched (test_mbcx01_build_integration.SmokeFixedCandidateIdentityWitnesses.test_bi25_guard_the_default_and_the_documented_variants_are_untouched)
+GUARD — the runbook's own invocation must still run. ... ok
+test_bi25_red_a_different_image_under_the_same_id_is_refused_too (test_mbcx01_build_integration.SmokeFixedCandidateIdentityWitnesses.test_bi25_red_a_different_image_under_the_same_id_is_refused_too)
+The other axis: the arguments agree and the IMAGE does not. ... ok
+test_bi25_red_a_different_invocation_is_not_this_candidate (test_mbcx01_build_integration.SmokeFixedCandidateIdentityWitnesses.test_bi25_red_a_different_invocation_is_not_this_candidate)
+THE RED: `cmd.exe /c whoami` proceeded under the fixed identity. ... ok
+test_bw80_red_resigned_membership_complete_false_fails_the_smoke_criterion (test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw80_red_resigned_membership_complete_false_fails_the_smoke_criterion) ... ok
+test_bw81_red_resigned_perturbed_retired_instructions_fails_the_smoke_criterion (test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw81_red_resigned_perturbed_retired_instructions_fails_the_smoke_criterion) ... ok
+test_bw82_guard_the_honest_fixture_envelope_still_meets_the_criterion (test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw82_guard_the_honest_fixture_envelope_still_meets_the_criterion)
+GUARD (green both sides by design) — SEAT2's executed positive control. ... ok
+test_bw83_guard_the_real_smoke_path_shape_is_not_falsely_refused (test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw83_guard_the_real_smoke_path_shape_is_not_falsely_refused)
+GUARD — the shape the RUNBOOK's own default invocation produces. ... ok
+test_bw84_red_preflight_aborts_when_node_cannot_be_resolved (test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw84_red_preflight_aborts_when_node_cannot_be_resolved) ... ok
+test_bw84_red_preflight_reports_node_and_the_verifier_and_fails_loudly (test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw84_red_preflight_reports_node_and_the_verifier_and_fails_loudly) ... ok
+test_bw85_red_raw_evidence_is_persisted_before_the_signer_runs (test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw85_red_raw_evidence_is_persisted_before_the_signer_runs)
+A post-collection certification failure must not destroy the capture. ... ok
+test_bw86_red_the_launcher_refuses_a_shell_with_no_node_before_elevation (test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw86_red_the_launcher_refuses_a_shell_with_no_node_before_elevation)
+The launcher's OWN precondition list names the toolchain (FOLD-B2 rider). ... ok
+test_bi11_adversarial_an_empty_or_hollowed_envelope_is_never_a_pass (test_mbcx01_build_integration.SmokePassCriterionWitnesses.test_bi11_adversarial_an_empty_or_hollowed_envelope_is_never_a_pass) ... ok
+test_bi12_positive_a_real_fixture_signed_smoke_envelope_still_meets_the_criterion (test_mbcx01_build_integration.SmokePassCriterionWitnesses.test_bi12_positive_a_real_fixture_signed_smoke_envelope_still_meets_the_criterion) ... ok
+test_bi13_adversarial_a_failed_pass_criterion_never_exits_zero (test_mbcx01_build_integration.SmokePassCriterionWitnesses.test_bi13_adversarial_a_failed_pass_criterion_never_exits_zero) ... ok
+test_bi13_positive_a_met_pass_criterion_still_reports_ok_with_exit_zero (test_mbcx01_build_integration.SmokePassCriterionWitnesses.test_bi13_positive_a_met_pass_criterion_still_reports_ok_with_exit_zero) ... ok
+test_bi14_red_an_extensionless_command_resolves_instead_of_being_refused (test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi14_red_an_extensionless_command_resolves_instead_of_being_refused)
+FOLD-3B: `cmd /c exit 0` is what the RUNBOOK may hand this driver. ... ok
+test_bi15_red_the_envelope_binds_the_pre_launch_bytes_not_the_post_run_bytes (test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi15_red_the_envelope_binds_the_pre_launch_bytes_not_the_post_run_bytes)
+FOLD-3A: an image replaced DURING the run must not be what gets signed. ... ok
+test_bi16_guard_the_forms_that_already_worked_still_work_and_still_refuse (test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi16_guard_the_forms_that_already_worked_still_work_and_still_refuse)
+GUARD (green both sides by design) — no right evidence is refused. ... ok
+test_bi17_red_the_hashed_image_is_the_one_createprocessw_would_have_launched (test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi17_red_the_hashed_image_is_the_one_createprocessw_would_have_launched)
+codex-CLI r6 SEAT1 F1: PATHEXT is the SHELL's rule, not this launcher's. ... ok
+test_bi18_guard_a_failing_session_stop_with_nothing_in_flight_is_the_error (test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi18_guard_a_failing_session_stop_with_nothing_in_flight_is_the_error)
+GUARD for bi18: the primary-preserving cleanup never SWALLOWS a failure. ... ok
+test_bi18_red_a_failing_session_stop_never_replaces_the_primary_fault (test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi18_red_a_failing_session_stop_never_replaces_the_primary_fault)
+codex-CLI r6 SEAT1 F5: the cleanup is not allowed to eat the diagnosis. ... ok
+test_bi23_guard_the_wider_refusal_still_cannot_eat_a_shape_that_works (test_mbcx01_build_integration.SmokeRelativeSpacedPathWitnesses.test_bi23_guard_the_wider_refusal_still_cannot_eat_a_shape_that_works)
+GUARD — widening a refusal is where a fix becomes the next defect. ... ok
+test_bi23_red_a_relative_spaced_path_with_a_pathless_first_token_is_refused (test_mbcx01_build_integration.SmokeRelativeSpacedPathWitnesses.test_bi23_red_a_relative_spaced_path_with_a_pathless_first_token_is_refused)
+codex-CLI r8 P2: the named refusal, not a generic not-found. ... ok
+test_bi23_red_the_extended_prefixes_are_the_documented_possibilities (test_mbcx01_build_integration.SmokeRelativeSpacedPathWitnesses.test_bi23_red_the_extended_prefixes_are_the_documented_possibilities)
+The enumeration itself, asserted rather than trusted. ... ok
+test_bi24_guard_the_runtime_probe_is_expressible_on_this_host (test_mbcx01_build_integration.SmokeRuntimeEnvironmentEvidenceWitnesses.test_bi24_guard_the_runtime_probe_is_expressible_on_this_host)
+GUARD — a probe that only exists on paper is not a runtime fact. ... 
+bi24 live runtime probe: {"error": null, "guest_integration_services_running": [], "hypervisor_present": true, "probe": "WMI_WIN32_COMPUTERSYSTEM_HYPERVISORPRESENT", "resolved_path": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.EXE"}
+ok
+test_bi24_red_a_guest_is_not_a_root_partition_because_the_role_is_installed (test_mbcx01_build_integration.SmokeRuntimeEnvironmentEvidenceWitnesses.test_bi24_red_a_guest_is_not_a_root_partition_because_the_role_is_installed)
+THE RED: `a guest can classify as root`. ... ok
+test_bi24_red_an_unanswerable_probe_is_undetermined_not_bare_metal (test_mbcx01_build_integration.SmokeRuntimeEnvironmentEvidenceWitnesses.test_bi24_red_an_unanswerable_probe_is_undetermined_not_bare_metal)
+THE RED: `None` must never fall through to the cheapest classification. ... ok
+test_bi24_red_installed_but_inactive_components_are_not_a_running_hypervisor (test_mbcx01_build_integration.SmokeRuntimeEnvironmentEvidenceWitnesses.test_bi24_red_installed_but_inactive_components_are_not_a_running_hypervisor)
+THE RED: install-time evidence signed as a runtime fact. ... ok
+test_bw23_negative_delegation_fresh_duplicates_are_not_duplicate_noop (test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw23_negative_delegation_fresh_duplicates_are_not_duplicate_noop)
+§2.1 DELEGATION_IDEMPOTENT_HANDOFF negative matrix: a FRESH duplicate propose is ... ok
+test_bw64_positive_delegation_rejection_is_applied_rejected_and_carries_its_code (test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw64_positive_delegation_rejection_is_applied_rejected_and_carries_its_code)
+§2.1 DELEGATION_IDEMPOTENT_HANDOFF rejection realization: the TRIPLE — result code ... ok
+test_bw94_positive_correction_restoration_reasserts_a_prior_value_at_a_later_cut (test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw94_positive_correction_restoration_reasserts_a_prior_value_at_a_later_cut)
+§2.1 CORRECTION_RESTORATION: assert -> correct -> retract(correction) -> REASSERT, ... ok
+test_bw95_positive_obligation_lifecycle_transitions_are_observed_off_the_target (test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw95_positive_obligation_lifecycle_transitions_are_observed_off_the_target)
+§2.1 OBLIGATION_LIFECYCLE: open -> reschedule -> {complete | cancel} -> reopen on ... ok
+test_bw96_positive_dependency_reversal_flips_the_target_on_prerequisite_order (test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw96_positive_dependency_reversal_flips_the_target_on_prerequisite_order)
+§2.1 DEPENDENCY_REVERSAL: link (`APPLIED`) makes the target ILLEGAL and completing ... ok
+test_bw97_positive_cross_scope_collision_keeps_the_scored_projection_zero_foreign (test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw97_positive_cross_scope_collision_keeps_the_scored_projection_zero_foreign)
+§2.1 CROSS_SCOPE_COLLISION: foreign-scope events `APPLIED` on a genuinely ... ok
+test_bw98_positive_delegation_duplicates_are_byte_identical_replay_noops (test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw98_positive_delegation_duplicates_are_byte_identical_replay_noops)
+§2.1 DELEGATION_IDEMPOTENT_HANDOFF: owner-role rewrite visible, `record_call_response` ... ok
+test_bw99_positive_mixed_delayed_continuity_flips_target_legality_across_cuts (test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw99_positive_mixed_delayed_continuity_flips_target_legality_across_cuts)
+§2.1 MIXED_DELAYED_CONTINUITY: the target opened at an early cut with ... ok
+test_bc01_adversarial_no_observation_field_carries_an_action_literal (test_mbcx01_build_cohort.BuildCohortObservationNonLeakageWitnesses.test_bc01_adversarial_no_observation_field_carries_an_action_literal)
+W15 class LITERAL_LEAK: no observation field, on any surface, contains the ... ok
+test_bc02_adversarial_perturbing_each_forbidden_input_moves_no_observation (test_mbcx01_build_cohort.BuildCohortObservationNonLeakageWitnesses.test_bc02_adversarial_perturbing_each_forbidden_input_moves_no_observation)
+W15 class DERIVABLE_ENCODING: with the ALLOWED PROJECTION HELD FIXED, EACH ... ok
+test_bc03_positive_relabelling_identifiers_leaves_the_observation_unchanged (test_mbcx01_build_cohort.BuildCohortObservationNonLeakageWitnesses.test_bc03_positive_relabelling_identifiers_leaves_the_observation_unchanged)
+W15 class RELABEL_DRIFT: an identifier/action relabelling that preserves the ... ok
+test_bc04_adversarial_observation_families_are_not_a_cardinality_codebook (test_mbcx01_build_cohort.BuildCohortObservationNonLeakageWitnesses.test_bc04_adversarial_observation_families_are_not_a_cardinality_codebook)
+W15 class CARDINALITY_OR_ORDER_CODEBOOK: the observation family distribution ... ok
+test_bw70_red_w2_declared_eligibility_boolean_is_refused_by_name (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw70_red_w2_declared_eligibility_boolean_is_refused_by_name)
+§2.3/§4 W2: green = the cohort authority POPS a supplied eligibility Boolean and ... ok
+test_bw71_red_w6_determinism_and_the_ghost_fact_discriminator (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw71_red_w6_determinism_and_the_ghost_fact_discriminator)
+§2.2/§4 W6+W21: green = byte-identical re-generation, post-generation mutation ... ok
+test_bw72_red_w7_the_build_population_joins_the_build_authority_path (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw72_red_w7_the_build_population_joins_the_build_authority_path)
+§3/§4 W7: green = 768 candidates, 6x128 per motif, retained positions, retained root ... ok
+test_bw73_red_w10_the_structural_half_of_the_falsification_sentinel (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw73_red_w10_the_structural_half_of_the_falsification_sentinel)
+§4 W10: green = gold read-sets take at least the declared number of distinct values, ... ok
+test_bw74_red_w11_different_catalogs_produce_different_served_manifests (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw74_red_w11_different_catalogs_produce_different_served_manifests)
+§4 W11: green = two candidates with different action catalogs render DIFFERENT served ... ok
+test_bw75_red_w12_a_journal_only_mutation_fails_the_build_provenance_gate (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw75_red_w12_a_journal_only_mutation_fails_the_build_provenance_gate)
+§2/§4 W12: green = mutating only the event journal (`event_program_hash`) fails the ... ok
+test_bw76_red_w13_all_six_renders_succeed_across_the_retained_population (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw76_red_w13_all_six_renders_succeed_across_the_retained_population)
+§2.5/§4 W13: green = `render_served_input` SUCCEEDS for all six nodes (BC and OM x ... ok
+test_bw77_red_w18_authoritative_state_is_supplied_never_defaulted (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw77_red_w18_authoritative_state_is_supplied_never_defaulted)
+§2/§4 W18: green = the BUILD packet SUPPLIES `authoritative_state` from the replayed ... ok
+test_bw78_red_w19_the_build_inference_ingress_and_membership_substitution (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw78_red_w19_the_build_inference_ingress_and_membership_substitution)
+§2/§4 W19: green = a full 768-position BUILD receipt set reaches the frozen numerical ... ok
+test_bw79_red_w20_a_governed_stratum_below_its_declared_floor_is_red (test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw79_red_w20_a_governed_stratum_below_its_declared_floor_is_red)
+§2.3/§4 W20: green = the joint census reports declared strata and a governed stratum ... ok
+test_bc05_positive_one_retained_candidate_scores_end_to_end_on_the_build_path (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc05_positive_one_retained_candidate_scores_end_to_end_on_the_build_path)
+§4 W16 (dedicated): ONE retained BUILD candidate through the whole scoring ... ok
+test_bc06_positive_coverage_recomputes_against_the_registered_denominator (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc06_positive_coverage_recomputes_against_the_registered_denominator)
+§2.6 / §4 W17 (dedicated): the coverage record in PROVENANCE carries the ... ok
+test_bc07_adversarial_dropping_or_substituting_one_member_fails_the_root (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc07_adversarial_dropping_or_substituting_one_member_fails_the_root)
+§4 W1 (membership discrimination): drop ONE retained candidate, or ... ok
+test_bc08_positive_the_planned_ineligible_quota_is_exact_and_stratified (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc08_positive_the_planned_ineligible_quota_is_exact_and_stratified)
+§2.3 / §4 W3: the SEQUENCED total-admission arithmetic, checked as numbers. ... ok
+test_bc09_adversarial_thirty_three_unplanned_refusals_refuse_the_plan (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc09_adversarial_thirty_three_unplanned_refusals_refuse_the_plan)
+§2.3 / §4 W3 (the e=33 red, banked BUILD material): a shape whose unplanned ... ok
+test_bc10_adversarial_an_illegal_event_program_faults_with_the_reducer_code (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc10_adversarial_an_illegal_event_program_faults_with_the_reducer_code)
+§2.7 / §4 W5 (supplement): an ILLEGAL event program does not quietly produce ... ok
+test_bc11_positive_the_committed_identity_equals_the_recomputed_root (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc11_positive_the_committed_identity_equals_the_recomputed_root)
+§3 / §4 W8: the COMMITTED identity block in ... ok
+test_bc12_adversarial_a_drifted_generator_spec_artifact_is_refused (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc12_adversarial_a_drifted_generator_spec_artifact_is_refused)
+§3 / §4 W8 (the red half): every way the committed spec artifact can drift ... ok
+test_bc13_positive_registration_totality_holds_at_all_four_levels (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc13_positive_registration_totality_holds_at_all_four_levels)
+§3 / §4 W14: the four-level registration totality the BUNDLE enforces — ... ok
+test_bc14_adversarial_every_registration_totality_level_fails_by_name (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc14_adversarial_every_registration_totality_level_fails_by_name)
+§3 / §4 W14 (the red half): each of the four levels is driven to failure ... ok
+test_bc15_adversarial_ghost_fact_cannot_reach_the_serving_boundary (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc15_adversarial_ghost_fact_cannot_reach_the_serving_boundary)
+FOLD 1(c) (cohort-BUILD r1 R5): a ghost FACT row — evidence with NO journal ... ok
+test_bc16_adversarial_a_non_derived_observation_record_cannot_serve (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc16_adversarial_a_non_derived_observation_record_cannot_serve)
+FOLD 1(a)+(b) (cohort-BUILD r1 R6): an observation authority record whose ... ok
+test_bc17_adversarial_a_stray_pin_only_subject_fails_by_name (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc17_adversarial_a_stray_pin_only_subject_fails_by_name)
+§3 W14 level (b), the constrained difference: a subject that is PINNED but is ... ok
+test_bc18_red_the_retained_population_carries_distinct_gold_answers (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc18_red_the_retained_population_carries_distinct_gold_answers)
+cohort-BUILD r1 FOLD 2(a)/(b), class POPULATION_ANSWER_KEY_DEGENERACY: the ... ok
+test_bc19_red_the_census_reports_the_signature_motif_crosstab (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc19_red_the_census_reports_the_signature_motif_crosstab)
+cohort-BUILD r1 FOLD 2(c), class POPULATION_MOTIF_CODEBOOK: the census ... ok
+test_bc20_red_a_placement_shortfall_refuses_the_plan (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc20_red_a_placement_shortfall_refuses_the_plan)
+cohort-BUILD r1 FOLD 3, class PLAN_RECORD_TOTALITY: the plan record signs ... ok
+test_bc21_red_the_coverage_numerator_counts_legal_noop_events (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc21_red_the_coverage_numerator_counts_legal_noop_events)
+cohort-BUILD r1 FOLD 4, class COVERAGE_NUMERATOR_RULE: the §2.6 numerator ... ok
+test_bc22_red_a_false_coverage_record_cannot_bind_into_retained_authority (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc22_red_a_false_coverage_record_cannot_bind_into_retained_authority)
+cohort-BUILD r2 FOLD A (council r2 seat 3 F1), class ... ok
+test_bc23_red_an_unhashable_scenario_id_refuses_by_name (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc23_red_an_unhashable_scenario_id_refuses_by_name)
+codex r5 P2: `validate_build_source_provenance` promises a CLOSED ERROR LIST, ... ok
+test_bc24_red_a_cut_map_that_is_not_a_map_refuses_by_name (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc24_red_a_cut_map_that_is_not_a_map_refuses_by_name)
+codex-CLI r6 SEAT1 F4 (`mbcx01_build_cohort_authority.py:516`): the ... ok
+test_bc25_red_the_closed_verdict_covers_shapes_nobody_enumerated (test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc25_red_the_closed_verdict_covers_shapes_nobody_enumerated)
+codex-CLI r6 SEAT1 F3/F4 WHOLESALE CLOSE: the closed error list is a ... ok
+
+----------------------------------------------------------------------
+Ran 289 tests in 212.536s
+
+OK
+build_suites: PASS
+ledger: PASS
+registration_totality: PASS
+schemas: PASS
+canonical_parity: PASS
+no_production_activation: PASS
+execution_posture: PASS
+{
+  "blocking_prerequisites": [
+    "PRODUCTION_STATE_TRUST_ROOT_NOT_ACTIVATED",
+    "PRODUCTION_MEASUREMENT_TRUST_ROOT_NOT_ACTIVATED",
+    "PHYSICAL_HARNESS_NOT_EXECUTED"
+  ],
+  "experiment_executed": false,
+  "paid_calls": 0,
+  "physical_harness_executed": false,
+  "production_activation": false,
+  "provider_calls": 0,
+  "report_id": "MBCX-01-BUILD-LIVE-NO-PAID-VERIFICATION",
+  "route_qualification_executed": false,
+  "scientific_calls": 0,
+  "sections": {
+    "build_suites": {
+      "modules": [
+        "test_mbcx01_build_state",
+        "test_mbcx01_build_measurement",
+        "test_mbcx01_build_integration",
+        "test_mbcx01_build_cohort"
+      ],
+      "status": "PASS",
+      "tests": 289
+    },
+    "canonical_parity": {
+      "boundary": "python:mbcx01_r13_common vs node:verify-build-canonical-parity.mjs",
+      "documents": 6,
+      "hash_algorithm": "SHA-384",
+      "out_of_domain_control_refused": "MBCX-01-R13.2-NO-PAID-VERIFICATION-REPORT.json",
+      "status": "PASS",
+      "value_domain": "object/array/string/boolean/null/safe-integer"
+    },
+    "execution_posture": {
+      "claim": "EXECUTABLE_SET_ONLY_ARGUMENTS_NOT_ADJUDICATED",
+      "permitted_executables": [
+        "git",
+        "git.exe",
+        "node",
+        "node.exe",
+        "powershell",
+        "powershell.exe",
+        "pwsh",
+        "pwsh.exe",
+        "python.exe"
+      ],
+      "spawned_processes": 1145,
+      "status": "PASS"
+    },
+    "frozen_suites": {
+      "expected": 156,
+      "modules": [
+        "test_mbcx01_r13_state",
+        "test_mbcx01_r13_packets",
+        "test_mbcx01_r13_measurement",
+        "test_mbcx01_r13_inference",
+        "test_mbcx01_r13_integration"
+      ],
+      "status": "PASS",
+      "tests": 156
+    },
+    "ledger": {
+      "invariants": 118,
+      "status": "PASS",
+      "two_way_total": true,
+      "witnesses": 289
+    },
+    "no_production_activation": {
+      "committed_manifests_production_ready": false,
+      "committed_owner_trust_anchor_fixture_only": true,
+      "physical_collection_env_flag_present": false,
+      "signing_ceremony_performed": false,
+      "status": "PASS",
+      "trust_root_activated": false
+    },
+    "pin_manifest": {
+      "governing_commit": "d347553671deedbe6cbbe4b38a8708404281098e",
+      "governing_commit_is_head": false,
+      "head_commit": "5630b6a8253ae9754447c67daf266bc33c702b88",
+      "identities_checked": [
+        "git_blob",
+        "bytes",
+        "lf_count",
+        "lines",
+        "sha384"
+      ],
+      "mode": "GIT_WORK_TREE",
+      "pin_manifest": "MBCX-01-BUILD-PIN-MANIFEST.json",
+      "reconciliation_performed": true,
+      "status": "PASS",
+      "subjects_reconciled": 76,
+      "uncommitted_drift": false
+    },
+    "registration_totality": {
+      "design": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL section 3",
+      "level_a_module_glob_two_way": 18,
+      "level_a_test_glob_two_way": 4,
+      "level_b_declared_pins_beyond_required": [
+        "MBCX-01-COUNCIL-R12-SYNTHESIS-AND-CLOSURE-COMMISSION.md",
+        "MBCX-01-EXPERIMENT-DESIGN-r9.md",
+        "MBCX-01-INFERENCE-CONTRACT-v8.json",
+        "MBCX-01-MEASUREMENT-CONTRACT-v7.json",
+        "MBCX-01-PACKET-SCHEMAS-v7.json",
+        "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md",
+        "MBCX-01-R13-AUTHORITY-INVARIANT-MATRIX.md",
+        "MBCX-01-R13-CARRIER-EXACTNESS-SUITE.json",
+        "MBCX-01-R13-CLOSURE-ARCHITECTURE.md",
+        "MBCX-01-R13-MEASUREMENT-TRUST-ROOTS.json",
+        "MBCX-01-R13-PHYSICAL-HARNESS-REQUIREMENTS.md",
+        "MBCX-01-R13-PRIOR-ART-AND-ENVIRONMENT-ADDENDUM.md",
+        "MBCX-01-R13-SYNTHETIC-COHORT-GENERATOR.json",
+        "MBCX-01-R13.1-SHELF-QUERY-LOG.md",
+        "MBCX-01-STATE-TRANSITION-CONTRACT-v8.json",
+        "mbcx01_r13_common.py",
+        "mbcx01_r13_inference.py",
+        "mbcx01_r13_integration.py",
+        "mbcx01_r13_measurement.py",
+        "mbcx01_r13_packets.py",
+        "mbcx01_r13_state_oracle.py",
+        "mbcx01_r13_state_reference.py",
+        "mbcx01_smoke_cell.py",
+        "run-smoke-cell.ps1",
+        "test_mbcx01_r13_inference.py",
+        "test_mbcx01_r13_integration.py",
+        "test_mbcx01_r13_measurement.py",
+        "test_mbcx01_r13_packets.py",
+        "test_mbcx01_r13_state.py",
+        "verify-r13-schema-ajv.mjs"
+      ],
+      "level_b_pending_first_pin": [],
+      "level_b_pin_manifest_is_subset_not_equal": [
+        "MBCX-01-COUNCIL-R12-SYNTHESIS-AND-CLOSURE-COMMISSION.md",
+        "MBCX-01-EXPERIMENT-DESIGN-r9.md",
+        "MBCX-01-INFERENCE-CONTRACT-v8.json",
+        "MBCX-01-MEASUREMENT-CONTRACT-v7.json",
+        "MBCX-01-PACKET-SCHEMAS-v7.json",
+        "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md",
+        "MBCX-01-R13-AUTHORITY-INVARIANT-MATRIX.md",
+        "MBCX-01-R13-CARRIER-EXACTNESS-SUITE.json",
+        "MBCX-01-R13-CLOSURE-ARCHITECTURE.md",
+        "MBCX-01-R13-MEASUREMENT-TRUST-ROOTS.json",
+        "MBCX-01-R13-PHYSICAL-HARNESS-REQUIREMENTS.md",
+        "MBCX-01-R13-PRIOR-ART-AND-ENVIRONMENT-ADDENDUM.md",
+        "MBCX-01-R13-SYNTHETIC-COHORT-GENERATOR.json",
+        "MBCX-01-R13.1-SHELF-QUERY-LOG.md",
+        "MBCX-01-STATE-TRANSITION-CONTRACT-v8.json",
+        "mbcx01_r13_common.py",
+        "mbcx01_r13_inference.py",
+        "mbcx01_r13_integration.py",
+        "mbcx01_r13_measurement.py",
+        "mbcx01_r13_packets.py",
+        "mbcx01_r13_state_oracle.py",
+        "mbcx01_r13_state_reference.py",
+        "mbcx01_smoke_cell.py",
+        "run-smoke-cell.ps1",
+        "test_mbcx01_r13_inference.py",
+        "test_mbcx01_r13_integration.py",
+        "test_mbcx01_r13_measurement.py",
+        "test_mbcx01_r13_packets.py",
+        "test_mbcx01_r13_state.py",
+        "verify-r13-schema-ajv.mjs"
+      ],
+      "level_b_pinned_at_governing_commit": true,
+      "level_b_pins_beyond_required_are_declared": "EVERY_PINNED_SUBJECT_IS_REQUIRED_OR_NAMED_IN_PIN_MANIFEST_SUBJECTS_BEYOND_REQUIRED",
+      "level_b_registered_for_pinning": true,
+      "level_b_required": 46,
+      "level_c_derivation": "UNION_OF_THE_REGISTRATION_LISTS_NEVER_A_GLOB",
+      "level_c_governed_artifacts": 48,
+      "level_d_modules_covered": 15,
+      "level_d_nontriviality_enforced": "EVERY_NAMED_MODULE_HAS_A_ROW_THAT_STATES_A_BEHAVIOUR_AND_CARRIES_A_PASSING_WITNESS",
+      "level_d_nontriviality_not_enforced": "REPLACEMENT_SENSITIVITY_IS_NOT_MECHANICALLY_CHECKED: the ledger schema has no field that ties a witness to the module code path it would fail on, so this arm cannot prove a declared witness FLIPS when the named module is replaced. That half is carried by the red-first discipline of each witness, not by this check.",
+      "level_d_rows_naming_modules": 106,
+      "status": "PASS"
+    },
+    "schemas": {
+      "mutants_rejected": 12,
+      "status": "PASS",
+      "strict_compile": true,
+      "subjects": 2
+    }
+  },
+  "top_level_readiness": "BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED"
+}
+BUNDLE_EXIT=0 
+DONE Sat 09/26/2026  2:26:46.84 

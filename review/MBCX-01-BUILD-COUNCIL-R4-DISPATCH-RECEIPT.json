@@ -1,0 +1,52 @@
+{
+  "receipt_id": "MBCX-01-BUILD-COUNCIL-R4-DISPATCH-RECEIPT",
+  "round": "BUILD acceptance r4 (whole-instrument validity round)",
+  "packet_path": "MBCX-01-BUILD-ACCEPTANCE-COUNCIL-PACKET-r4.md",
+  "packet_commit": "de49049c92c53f9bde7c6ba7451d4a84e1c814d9",
+  "review_target_commit": "4c7056e524b16a8b0395d8853f71e4a9ac6982fc",
+  "packet_check": "GREEN (itemsChecked=9; classes: internal-consistency, maintainer, author-blind-spot only; no REAL class declared — the design of record carries no threat model, settling grep re-run 0 hits this session)",
+  "register": "neutral CS register; neutralize-register.py dry-run applied to this packet only (7 folds); remaining hits are code spans and citations the tool exempts",
+  "driver_predispatch_execution": {
+    "build_suite": "114/114 OK",
+    "frozen_suite": "145/145 OK",
+    "verify_build_bundle": "exit 0, seven sections PASS, ledger 44 invariants / 114 witnesses two_way_total, readiness BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED",
+    "clean_room": "verify-build-pinned -Commit 3527f510... -ManifestBlob 23009028... -> PINNED RECONSTRUCTION COMPLETE",
+    "probes_rerun": "trustboot, fixturekey, fixtureiso - refusals fire by name on current bytes; fixture lane green"
+  },
+  "seats": [
+    {
+      "seat": "SEAT1_OUTSIDE_OPUS5",
+      "conversation_id": "<id>",
+      "url": "https://claude.ai/chat/<id>",
+      "cdp_port": <council-browser-port>,
+      "fresh_seat": true,
+      "model_at_mint": "Opus 5 Extra (composer aria label read back before message one)",
+      "read_probe": "PASS - sha256 33e086bd659c4b551b4e677477e7638ccbd88828fb6bd6194be5282081c76914 / 21975 bytes, matches local compute",
+      "ack": "Council Mode ready",
+      "packet_sent_utc": "2026-08-15T09:30:10Z"
+    },
+    {
+      "seat": "SEAT2_CHATGPT_SOL",
+      "conversation_id": "<id>",
+      "url": "https://chatgpt.com/g/<chatgpt-project>/c/<id>",
+      "cdp_port": <council-browser-port>,
+      "fresh_seat": true,
+      "minted_inside_project": true,
+      "read_probe": "PASS - same sha256/size as SEAT1; the Moonwalker connector that failed 'Unknown tool' at r3 is WORKING again (byte-witnessed this session)",
+      "ack": "Council Mode ready",
+      "packet_sent_utc": "2026-08-15T09:30:19Z"
+    },
+    {
+      "seat": "SEAT3_CODEX_EXEC",
+      "model": "gpt-5.6-sol",
+      "service_tier": "default",
+      "reasoning_effort": "xhigh",
+      "prompt_path": "MBCX-01-BUILD-SEAT3-CODEX-EXEC-PROMPT-r4.txt",
+      "prompt_generated_from_card_by_extractor": true,
+      "log_path": "MBCX-01-BUILD-SEAT3-CODEX-EXEC-r4.log",
+      "dispatched_utc": "2026-08-15T09:23:00Z"
+    }
+  ],
+  "sealing": "blind round - no seat sees another; verdicts banked by the driver from each thread",
+  "next": "bank three verdicts, driver byte-reproduces every finding and every closure before synthesis; then codex-CLI review to GREEN; then the remote decision (owner) before any PR"
+}

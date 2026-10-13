@@ -1,0 +1,24 @@
+You are the codex-CLI REVIEW GATE (not a council seat) for a DESIGN document in a scientific
+measurement lane. Design-review round 2 of 2 — THE FINAL DESIGN GATE (the drop-dead cap is exhausted after this round; the lane goes to code regardless, with any remaining edges banked as BUILD red-witness material).
+
+Read `MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md` (r5, GO-TO-CODE) at commit
+60e6c5b724560f04e62d5ee6e56f9a02efcfc23b in this repository, and the frozen bytes it cites.
+Council record: three completed rounds, all verdicts banked in-tree beside the syntheses
+(`MBCX-01-COHORT-DESIGN-COUNCIL-R{1,2,3}-SYNTHESIS.md`); round 3's ROUND CALL was 2-1 GO-TO-CODE; r4 was the closing council fold and r5 folds YOUR OWN round-1 gate findings (all five + the non-blocking phrase; your round-1 verdict is banked at MBCX-01-COHORT-DESIGN-CODEX-GATE-r1.stdout.log). FIRST verify each of your five folds landed faithfully at the byte; then sweep for any remaining edge.
+
+CONTEXT THAT GOVERNS YOUR REVIEW: this lane's design of record carries NO threat model — it is
+a research measurement harness; the only valid finding is one you can name as making the
+experiment produce a WRONG NUMBER, admit WRONG EVIDENCE, or refuse RIGHT evidence. Do not
+propose actor-blocking machinery, new subsystems, or completeness proofs. The frozen r13.2
+layer is untouchable. The council owns classes; you own EDGES: internal inconsistencies,
+citation errors (does each cited frozen line say what the design claims), witness-list gaps
+against the design's own text, ambiguous sentences a builder would mis-implement, and
+registration/checklist omissions.
+
+Scope of this gate: the DESIGN DOCUMENT's edges only. Findings a red-first BUILD witness would
+mechanically catch (constant values, exact spellings the design already routes to W4's code
+triples) are noted as BUILD material, not blockers.
+
+VERDICT CONTRACT: first line GO / GO-WITH-FIXES(class) / NO-GO. Then per-finding: the design
+line, the byte evidence (path:line), the consequence in the wrong-number vocabulary, and the
+fix class. Label findings EXECUTED or READ-ONLY. Your final message IS the banked verdict.

@@ -1,0 +1,214 @@
+{
+  "contract_id": "MBCX-01-MEASUREMENT-CONTRACT-v7",
+  "normative": true,
+  "closure_revision": "r13.2",
+  "cohort": {
+    "motifs": 6,
+    "source_scenarios_per_motif": 160,
+    "retained_per_motif": 128,
+    "retained_total": 768,
+    "one_cut_hash_domain": "stage2-cut-r13",
+    "retention_hash_domain": "stage2-retain-r13",
+    "authority": "RetainedScenarioAuthorityV2 recomputes the pinned generator and selection, then binds the full byte-exact candidate, generator/source provenance, retained position, candidate hash, and retained_set_root over all 768 candidate hashes."
+  },
+  "grid": {
+    "H": [128, 1024, 10000, 100000],
+    "D": [1, 4, 16, 64, 256],
+    "F": [1, 4, 16, 64, 256],
+    "cells": 100,
+    "integer_rule": "Exact integers; JSON/Python Booleans are rejected.",
+    "identity_rule": "One signed run, candidate, candidate/carrier artifact digest, generator, harness artifact/build/configuration, host/environment, signing key, producer role, fixture kind and trust policy across all cells."
+  },
+  "signed_measurement_envelope": {
+    "schema_id": "SignedMeasurementReceiptV1",
+    "domain": "MBCX01.SIGNED-MEASUREMENT-RECEIPT.V1",
+    "version": 1,
+    "algorithm": "ED25519",
+    "signed_preimage": ["domain", "version", "algorithm", "signing_key_id", "run_id", "cell_id", "fixture_kind", "producer_role", "trust_policy_digest", "subject_digest", "environment_digest", "receipt"],
+    "anti_replay": "The run ID and exact CELL.H{H}.D{D}.F{F} identity are signed and evaluator-checked.",
+    "authority_rule": "A valid signature establishes integrity and the separately pinned root's authorized producer class. It does not by itself establish that the OS facts are true. Production authority additionally requires a custody-separated root ceremony and harness provenance outside the receipt producer.",
+    "trust_root": "Only MBCX-01-R13-MEASUREMENT-TRUST-ROOTS.json is consulted. Envelope-supplied keys are forbidden.",
+    "retirement_rule": "R13 has no production activation path. Editing production_ready cannot retire PHYSICAL_HARNESS_UNAVAILABLE. A future reviewed implementation must verify independent key-custodian and trust-root-editor approvals, distinct roles, harness build provenance and a production signing-ceremony receipt; failure is loud."
+  },
+  "supported_environment": {
+    "native": ["BARE_METAL_WINDOWS", "HYPER_V_ROOT_PARTITION"],
+    "guest": "HYPER_V_GUEST is admitted only with an explicit signed PMU-exposure capability receipt.",
+    "nested_virtualization": "unsupported and fatal",
+    "abi": "WINDOWS_64BIT",
+    "failure": "UNSUPPORTED_MEASUREMENT_ENVIRONMENT"
+  },
+  "physical_receipt": {
+    "implementation_status": "PHYSICAL_HARNESS_UNAVAILABLE",
+    "containment": "Create the root suspended, associate a completion port and assign it to the non-breakaway Job before resume. Signed membership binds PID plus the 64-bit ETW-published ProcessSequenceNumber for root and every descendant (AMENDMENT-3, 2026-08-16: the boot-tagged ProcessStartKey appears in no Kernel-Process payload; the historical process_start_key field-name family is retained deliberately and carries the sequence number).",
+    "queries": "After the signed all-members-terminal barrier, retain NTSTATUS, information class, ABI/version, expected and returned size, raw bytes and SHA-384 for JobObjectBasicAndIoAccountingInformation (96 bytes: four LARGE_INTEGER, four DWORD, six ULONGLONG fields) and JobObjectExtendedLimitInformation (144 bytes). The fourth DWORD TotalTerminatedProcesses counts Job-limit-violation terminations, not normal exits; a clean accepted run requires zero. Membership completion instead uses signed terminal PID/start-key lifetimes plus final ActiveProcesses zero. The evaluator decodes the exact Windows 64-bit ABI and compares every governing scalar.",
+    "completion": "Final active-process zero, a successful final query, and signed terminal PID/start-key lifetimes are authoritative. Completion-port message counts and the active-zero message are diagnostics only because delivery is not guaranteed.",
+    "external_work": "Supervisor-owned enforcement must predate resume, deny outbound network, external compute brokers and preexisting-helper delegation, show zero endpoints, and bind policy plus validation digests.",
+    "identity": "Harness artifact, build, configuration and host-environment SHA-384 digests are inside the signed preimage."
+  },
+  "retired_instruction_mode": {
+    "status": "required; unsupported or incomplete is a hard failure, never diagnostic-only",
+    "backend": "ETW_PMC_EVENT_ATTACHED_V1",
+    "profile_source": "INSTRUCTIONRETIRED",
+    "event_list": "CSWITCH",
+    "collection_semantics": "TracePmcCounterListInfo InstructionRetired is attached to TracePmcEventListInfo CSwitch in strict mode. Sampled PmcProfile estimates and multiplexed counters are not interchangeable.",
+    "attribution": "Retain ordered raw per-processor counter observations. Recompute consecutive InstructionRetired deltas at CSwitch, attribute each to outgoing OldThreadId, and join it to signed Job-member PID/start-key/TID lifetimes including terminated processes.",
+    "fatal": ["INSTRUCTION_ACCOUNTING_UNSUPPORTED", "INSTRUCTION_ACCOUNTING_INCOMPLETE"]
+  },
+  "absolute_gates": {
+    "retired_instructions_max": 3000000,
+    "aggregate_cpu_time_user_plus_kernel_max_ns": 150000000,
+    "elapsed_monotonic_max_ns": 300000000,
+    "peak_committed_max_bytes": 201326592,
+    "total_io_transfer_max_bytes": 67108864,
+    "failure": "AFFORDABILITY_LIMIT"
+  },
+  "boundedness_gates": {
+    "conditional_rule": "For every fixed D,F, max minus min across the four registered H values.",
+    "retired_instructions_H_range_max": 500000,
+    "aggregate_cpu_time_user_plus_kernel_H_range_max_ns": 75000000,
+    "aggregate_cpu_threshold_lineage": "Frozen value restored from MBCX-01-MEASUREMENT-CONTRACT-v4.json; not selected after observing r13 data.",
+    "elapsed_monotonic_H_range_max_ns": 75000000,
+    "peak_committed_H_range_max_bytes": 67108864,
+    "total_io_transfer_H_range_max_bytes": 16777216,
+    "total_io_operations_H_range_max": 4096,
+    "failure": "H_SHAPE_LIMIT"
+  },
+  "call_ledger_and_episode": {
+    "call_schema": "CallLedgerV3",
+    "identity_fields": ["scenario_id", "condition", "node", "handoff_id", "task_packet_hash", "served_request_hash", "request_parameters_hash", "idempotency_token", "route_contract_hash"],
+    "b_binding": "DurableBResponseBindingV1 embeds the exact full ledger and exact full B response, including transaction ID, full DurabilityReceiptV1 and its receipt hash. Any inequality is B_LEDGER_MISMATCH.",
+    "ambiguity": "ACCEPTANCE_AMBIGUOUS and PROVEN_PRE_ACCEPT_FAILURE are terminal whole-pair missing states. No retry authority exists.",
+    "episode": "EpisodeReceiptV1 contains exactly BC A0/B/A1 then OM A0/B/A1 as EpisodeCallV2 rows. Each row is either one terminal launched CallLedgerV3 or NOT_LAUNCHED_UPSTREAM_TERMINAL bound to the exact prior terminal ledger in the same condition. Six durable terminals mean COMPLETE_PAIR; any failure/skip means WHOLE_PAIR_MISSING. ScenarioOutcomeReceiptV2 additionally binds its two scorer graphs to this exact episode hash and all six ordered ledger/call-record identities."
+  },
+  "engineering_selection": {
+    "hard_gate_order": ["exactness", "accounting completeness", "finite H-shape boundedness", "absolute affordability"],
+    "pareto_objective_order": ["retired_instructions", "aggregate_cpu_time_ns", "elapsed_monotonic_ns", "peak_committed_bytes", "total_io_transfer_bytes", "total_io_operations"],
+    "evidence_schema": "EngineeringCandidateEvidenceV1 embeds CarrierExactnessReceiptV2 plus the exact signed 100-cell envelopes and derives every gate Boolean and worst-cell metric. The exactness receipt must match the pinned suite and witness-set digests, exact signed carrier artifact digest and exact full-grid identity. Fixture conformance cannot activate production authority. Caller summaries have no authority.",
+    "exactness_authority": "MBCX-01-R13-CARRIER-EXACTNESS-SUITE.json is pinned and fixture-only. Editing authority_mode, supplying arbitrary suite/witness digests, or replaying PASS across another carrier or harness build fails. The reviewed physical BUILD must supply the production exactness verifier; r13.2 contains no label-based activation path.",
+    "rule": "Recompute evidence before selection and report the complete nondominated survivor set. Multiple survivors require OWNER_SELECTION_REQUIRED; owner preference is policy, never evidence."
+  },
+  "carrier_exactness_receipt_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://moonwalker.local/schema/mbcx01/r13/carrier-exactness-receipt-v2",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schema_id", "candidate_id", "carrier_artifact_digest", "measurement_grid_identity_hash", "suite_id", "suite_artifact_hash", "witness_set_hash", "result", "authority_mode", "producer_id", "trust_root_id", "receipt_hash"],
+    "properties": {
+      "schema_id": {"const": "CarrierExactnessReceiptV2"},
+      "candidate_id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+      "carrier_artifact_digest": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "measurement_grid_identity_hash": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "suite_id": {"const": "MBCX01.R13.CARRIER.EXACTNESS.SUITE"},
+      "suite_artifact_hash": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "witness_set_hash": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "result": {"const": "PASS"},
+      "authority_mode": {"const": "FIXTURE_CONFORMANCE"},
+      "producer_id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+      "trust_root_id": {"type": ["string", "null"]},
+      "receipt_hash": {"type": "string", "pattern": "^[0-9A-F]{96}$"}
+    }
+  },
+  "signed_measurement_envelope_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://moonwalker.local/schema/mbcx01/r13/signed-measurement-receipt-v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schema_id", "domain", "version", "algorithm", "signing_key_id", "run_id", "cell_id", "receipt", "receipt_preimage_b64", "receipt_digest", "signature_b64", "fixture_kind", "producer_role", "trust_policy_digest", "subject_digest", "environment_digest"],
+    "properties": {
+      "schema_id": {"const": "SignedMeasurementReceiptV1"},
+      "domain": {"const": "MBCX01.SIGNED-MEASUREMENT-RECEIPT.V1"},
+      "version": {"const": 1},
+      "algorithm": {"const": "ED25519"},
+      "signing_key_id": {"$ref": "#/$defs/semantic"},
+      "run_id": {"$ref": "#/$defs/semantic"},
+      "cell_id": {"type": "string", "pattern": "^CELL\\.H(128|1024|10000|100000)\\.D(1|4|16|64|256)\\.F(1|4|16|64|256)$"},
+      "receipt": {"$ref": "#/$defs/measurementReceiptV3"},
+      "receipt_preimage_b64": {"type": "string", "minLength": 1, "contentEncoding": "base64"},
+      "receipt_digest": {"$ref": "#/$defs/sha384"},
+      "signature_b64": {"type": "string", "minLength": 1, "contentEncoding": "base64"},
+      "fixture_kind": {"enum": ["NO_PAID_TEST_FIXTURE", "PHYSICAL_HARNESS_RECEIPT"]},
+      "producer_role": {"$ref": "#/$defs/semantic"},
+      "trust_policy_digest": {"$ref": "#/$defs/sha384"},
+      "subject_digest": {"$ref": "#/$defs/sha384"},
+      "environment_digest": {"$ref": "#/$defs/sha384"}
+    },
+    "$defs": {
+      "semantic": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+      "sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "nullableSha384": {"type": ["string", "null"], "pattern": "^[0-9A-F]{96}$"},
+      "startKey": {"type": "string", "pattern": "^[0-9A-F]{16}$"},
+      "measurementReceiptV3": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "candidate_id", "candidate_artifact_digest", "generator_digest", "H", "D", "F", "external_work_policy", "job_receipt"],
+        "properties": {
+          "schema_id": {"const": "MeasurementReceiptV3"}, "candidate_id": {"$ref": "#/$defs/semantic"}, "candidate_artifact_digest": {"$ref": "#/$defs/sha384"},
+          "generator_digest": {"$ref": "#/$defs/sha384"}, "H": {"enum": [128, 1024, 10000, 100000]},
+          "D": {"enum": [1, 4, 16, 64, 256]}, "F": {"enum": [1, 4, 16, 64, 256]},
+          "external_work_policy": {"const": "NETWORK_EGRESS_DENIED_NO_EXTERNAL_COMPUTE"},
+          "job_receipt": {"$ref": "#/$defs/jobReceiptV3"}
+        }
+      },
+      "jobReceiptV3": {
+        "type": "object", "additionalProperties": false,
+        "required": ["receipt_source", "job_object_id", "root_process_id", "created_suspended", "completion_port_associated_before_resume", "assigned_before_resume", "breakaway_enabled", "silent_breakaway_enabled", "active_processes_at_final_query", "completion_port_drained", "total_page_faults", "total_processes", "total_terminated_processes", "user_time_ns", "kernel_time_ns", "read_operations", "write_operations", "other_operations", "read_transfer_bytes", "write_transfer_bytes", "other_transfer_bytes", "peak_committed_bytes", "elapsed_monotonic_ns", "retired_instructions", "instruction_backend", "instruction_profile_source", "instruction_event_list", "instruction_attribution", "etw_capability_query_succeeded", "etw_pmc_source_available", "etw_max_pmc_counters", "etw_counter_owner_conflict_count", "etw_pmc_strict_mode", "etw_pmc_multiplexing_detected", "etw_events_lost", "etw_log_buffers_lost", "etw_realtime_buffers_lost", "etw_attribution_complete", "evidence"],
+        "properties": {
+          "receipt_source": {"const": "WINDOWS_JOB_OBJECT_HARNESS_V2"}, "job_object_id": {"$ref": "#/$defs/semantic"}, "root_process_id": {"type": "integer", "minimum": 1},
+          "created_suspended": {"const": true}, "completion_port_associated_before_resume": {"const": true}, "assigned_before_resume": {"const": true}, "breakaway_enabled": {"const": false}, "silent_breakaway_enabled": {"const": false}, "active_processes_at_final_query": {"const": 0}, "completion_port_drained": {"const": true}, "total_page_faults": {"type": "integer", "minimum": 0}, "total_processes": {"type": "integer", "minimum": 1}, "total_terminated_processes": {"const": 0},
+          "user_time_ns": {"type": "integer", "minimum": 0}, "kernel_time_ns": {"type": "integer", "minimum": 0}, "read_operations": {"type": "integer", "minimum": 0}, "write_operations": {"type": "integer", "minimum": 0}, "other_operations": {"type": "integer", "minimum": 0}, "read_transfer_bytes": {"type": "integer", "minimum": 0}, "write_transfer_bytes": {"type": "integer", "minimum": 0}, "other_transfer_bytes": {"type": "integer", "minimum": 0}, "peak_committed_bytes": {"type": "integer", "minimum": 0}, "elapsed_monotonic_ns": {"type": "integer", "minimum": 1}, "retired_instructions": {"type": "integer", "minimum": 1},
+          "instruction_backend": {"const": "ETW_PMC_EVENT_ATTACHED_V1"}, "instruction_profile_source": {"const": "INSTRUCTIONRETIRED"}, "instruction_event_list": {"const": "CSWITCH"}, "instruction_attribution": {"const": "SUM_INSTRUCTIONRETIRED_CSWITCH_DELTAS_BY_OLD_THREAD_JOINED_TO_SIGNED_JOB_PID_TID_LIFETIMES_INCLUDING_TERMINATED"},
+          "etw_capability_query_succeeded": {"const": true}, "etw_pmc_source_available": {"const": true}, "etw_max_pmc_counters": {"type": "integer", "minimum": 1}, "etw_counter_owner_conflict_count": {"const": 0}, "etw_pmc_strict_mode": {"const": true}, "etw_pmc_multiplexing_detected": {"const": false}, "etw_events_lost": {"const": 0}, "etw_log_buffers_lost": {"const": 0}, "etw_realtime_buffers_lost": {"const": 0}, "etw_attribution_complete": {"const": true},
+          "evidence": {"$ref": "#/$defs/physicalEvidenceV1"}
+        }
+      },
+      "physicalEvidenceV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["harness_identity", "environment", "process_membership", "job_queries", "completion", "external_enforcement", "trace"],
+        "properties": {"harness_identity": {"$ref": "#/$defs/harnessIdentityV1"}, "environment": {"$ref": "#/$defs/environmentEvidenceV1"}, "process_membership": {"$ref": "#/$defs/processMembershipEvidenceV1"}, "job_queries": {"$ref": "#/$defs/jobQueriesV1"}, "completion": {"$ref": "#/$defs/completionEvidenceV1"}, "external_enforcement": {"$ref": "#/$defs/externalEnforcementEvidenceV1"}, "trace": {"$ref": "#/$defs/traceEvidenceV1"}}
+      },
+      "harnessIdentityV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["harness_artifact_digest", "harness_build_digest", "host_environment_digest", "harness_configuration_digest"],
+        "properties": {"harness_artifact_digest": {"$ref": "#/$defs/sha384"}, "harness_build_digest": {"$ref": "#/$defs/sha384"}, "host_environment_digest": {"$ref": "#/$defs/sha384"}, "harness_configuration_digest": {"$ref": "#/$defs/sha384"}}
+      },
+      "environmentEvidenceV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["execution_environment", "host_architecture", "nested_virtualization", "guest_pmu_exposure", "guest_pmu_capability_receipt_digest"],
+        "properties": {"execution_environment": {"enum": ["BARE_METAL_WINDOWS", "HYPER_V_ROOT_PARTITION", "HYPER_V_GUEST"]}, "host_architecture": {"const": "WINDOWS_64BIT"}, "nested_virtualization": {"const": false}, "guest_pmu_exposure": {"enum": ["NOT_APPLICABLE", "EXPLICITLY_ENABLED"]}, "guest_pmu_capability_receipt_digest": {"$ref": "#/$defs/nullableSha384"}}
+      },
+      "processMembershipEvidenceV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["root_process_id", "root_process_start_key", "membership_complete", "membership_snapshot_digest", "processes"],
+        "properties": {"root_process_id": {"type": "integer", "minimum": 1}, "root_process_start_key": {"$ref": "#/$defs/startKey"}, "membership_complete": {"const": true}, "membership_snapshot_digest": {"$ref": "#/$defs/sha384"}, "processes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/processEvidenceV1"}}}
+      },
+      "processEvidenceV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["process_id", "process_start_key", "parent_process_id", "parent_process_start_key", "job_object_id", "assigned_before_resume", "membership_source", "started_qpc", "ended_qpc", "terminal_status"],
+        "properties": {"process_id": {"type": "integer", "minimum": 1}, "process_start_key": {"$ref": "#/$defs/startKey"}, "parent_process_id": {"type": ["integer", "null"], "minimum": 1}, "parent_process_start_key": {"type": ["string", "null"], "pattern": "^[0-9A-F]{16}$"}, "job_object_id": {"$ref": "#/$defs/semantic"}, "assigned_before_resume": {"const": true}, "membership_source": {"const": "JOB_ASSIGNMENT_PROCESS_ETW_AND_FINAL_QUERY"}, "started_qpc": {"type": "integer", "minimum": 0}, "ended_qpc": {"type": "integer", "minimum": 1}, "terminal_status": {"const": "EXITED"}}
+      },
+      "jobQueriesV1": {
+        "type": "object", "additionalProperties": false, "required": ["basic_and_io", "extended_limit"],
+        "properties": {"basic_and_io": {"$ref": "#/$defs/jobQueryEvidenceV1"}, "extended_limit": {"$ref": "#/$defs/jobQueryEvidenceV1"}}
+      },
+      "jobQueryEvidenceV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["query_status_code", "information_class", "structure_version", "abi", "structure_size_bytes", "returned_size_bytes", "collected_after_terminal_barrier", "raw_bytes_b64", "raw_bytes_sha384"],
+        "properties": {"query_status_code": {"const": 0}, "information_class": {"enum": ["JobObjectBasicAndIoAccountingInformation", "JobObjectExtendedLimitInformation"]}, "structure_version": {"const": 1}, "abi": {"const": "WINDOWS_64BIT"}, "structure_size_bytes": {"enum": [96, 144]}, "returned_size_bytes": {"enum": [96, 144]}, "collected_after_terminal_barrier": {"const": true}, "raw_bytes_b64": {"type": "string", "minLength": 1, "contentEncoding": "base64"}, "raw_bytes_sha384": {"$ref": "#/$defs/sha384"}}
+      },
+      "completionEvidenceV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["completion_port_drained", "active_zero_message_seen", "new_process_messages", "exit_process_messages", "diagnostic_messages_complete", "diagnostics_query_succeeded", "final_active_processes", "all_members_terminal"],
+        "properties": {"completion_port_drained": {"type": "boolean"}, "active_zero_message_seen": {"type": "boolean"}, "new_process_messages": {"type": "integer", "minimum": 0}, "exit_process_messages": {"type": "integer", "minimum": 0}, "diagnostic_messages_complete": {"type": "boolean"}, "diagnostics_query_succeeded": {"const": true}, "final_active_processes": {"const": 0}, "all_members_terminal": {"const": true}}
+      },
+      "externalEnforcementEvidenceV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["policy_id", "policy_artifact_digest", "applied_before_resume", "enforcement_owner_role", "deny_outbound_network", "deny_external_compute_brokers", "deny_preexisting_helper_delegation", "external_compute_endpoint_count", "validation_receipt_digest"],
+        "properties": {"policy_id": {"$ref": "#/$defs/semantic"}, "policy_artifact_digest": {"$ref": "#/$defs/sha384"}, "applied_before_resume": {"const": true}, "enforcement_owner_role": {"const": "SUPERVISOR"}, "deny_outbound_network": {"const": true}, "deny_external_compute_brokers": {"const": true}, "deny_preexisting_helper_delegation": {"const": true}, "external_compute_endpoint_count": {"const": 0}, "validation_receipt_digest": {"$ref": "#/$defs/sha384"}}
+      },
+      "traceEvidenceV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["mode", "profile_source", "event_list", "attribution", "capability_query_succeeded", "pmc_source_available", "max_pmc_counters", "counter_owner_conflict_count", "strict_mode", "multiplexing_detected", "events_lost", "log_buffers_lost", "realtime_buffers_lost", "attribution_complete", "capability_query", "event_attachment", "thread_lifetimes", "cswitch_observations", "cswitch_first_member_baselines", "aggregate_retired_instructions"],
+        "properties": {"mode": {"const": "ETW_PMC_EVENT_ATTACHED_V1"}, "profile_source": {"const": "INSTRUCTIONRETIRED"}, "event_list": {"const": "CSWITCH"}, "attribution": {"const": "SUM_INSTRUCTIONRETIRED_CSWITCH_DELTAS_BY_OLD_THREAD_JOINED_TO_SIGNED_JOB_PID_TID_LIFETIMES_INCLUDING_TERMINATED"}, "capability_query_succeeded": {"const": true}, "pmc_source_available": {"const": true}, "max_pmc_counters": {"type": "integer", "minimum": 1}, "counter_owner_conflict_count": {"const": 0}, "strict_mode": {"const": true}, "multiplexing_detected": {"const": false}, "events_lost": {"const": 0}, "log_buffers_lost": {"const": 0}, "realtime_buffers_lost": {"const": 0}, "attribution_complete": {"const": true}, "capability_query": {"type": "object", "additionalProperties": false, "required": ["query_status_code", "counter_information_class", "event_information_class", "source_id", "counter_width_bits"], "properties": {"query_status_code": {"const": 0}, "counter_information_class": {"const": "TracePmcCounterListInfo"}, "event_information_class": {"const": "TracePmcEventListInfo"}, "source_id": {"type": "integer", "minimum": 0}, "counter_width_bits": {"const": 64}}}, "event_attachment": {"type": "object", "additionalProperties": false, "required": ["counter_query_class", "event_query_class", "profile_source", "event_list", "attached"], "properties": {"counter_query_class": {"const": "TracePmcCounterListInfo"}, "event_query_class": {"const": "TracePmcEventListInfo"}, "profile_source": {"const": "INSTRUCTIONRETIRED"}, "event_list": {"const": "CSWITCH"}, "attached": {"const": true}}}, "thread_lifetimes": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["process_id", "process_start_key", "thread_id", "started_qpc", "ended_qpc"], "properties": {"process_id": {"type": "integer", "minimum": 1}, "process_start_key": {"$ref": "#/$defs/startKey"}, "thread_id": {"type": "integer", "minimum": 1}, "started_qpc": {"type": "integer", "minimum": 0}, "ended_qpc": {"type": "integer", "minimum": 1}}}}, "cswitch_observations": {"type": "array", "minItems": 2, "items": {"type": "object", "additionalProperties": false, "required": ["sequence", "processor", "qpc", "old_thread_id", "counter_value", "delta_from_previous", "process_id", "process_start_key"], "properties": {"sequence": {"type": "integer", "minimum": 0}, "processor": {"type": "integer", "minimum": 0}, "qpc": {"type": "integer", "minimum": 0}, "old_thread_id": {"type": "integer", "minimum": 1}, "counter_value": {"type": "integer", "minimum": 0}, "delta_from_previous": {"type": "integer", "minimum": 0}, "process_id": {"type": "integer", "minimum": 1}, "process_start_key": {"$ref": "#/$defs/startKey"}}}}, "cswitch_first_member_baselines": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["processor", "counter_value"], "properties": {"processor": {"type": "integer", "minimum": 0}, "counter_value": {"type": "integer", "minimum": 0}}}}, "aggregate_retired_instructions": {"type": "integer", "minimum": 1}}
+      }
+    }
+  }
+}

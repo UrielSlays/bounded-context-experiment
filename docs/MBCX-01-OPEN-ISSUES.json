@@ -1,0 +1,481 @@
+{
+  "schema": "moonwalker.repo_local_open_issues.v1",
+  "project": "MBCX-01",
+  "generated_at": "2026-08-15T06:40:00-07:00",
+  "source_head": "5269375",
+  "tracking_note": "REMOTE RESOLVED 2026-08-15 (owner named it in live chat): origin = <private-repo> (PRIVATE, verified empty before the first push, so nothing was clobbered). Both branches are now off-box. This committed ledger remains the durable tracker; GitHub issues ARE now in use for the ACTIONABLE rows (owner asked 2026-08-15 once the remote existed): each such row carries `github_issue`. The JSON remains the DETAILED record - it holds the four fields and the executed evidence and it reconstructs from the pin manifest, which an issue does not. EVERY row that is not CLOSED is on the board - 16 of 16. The driver first withheld three as 'disclosure only', which was a carve-out he invented: the playbook's ONLY exemption from filing is the THEATER carve-out (box-owner findings), and none of the three was that. One of them was actionable by its own discharge condition. Owner corrected it the same session. RECUT 2026-08-14 after the OWNER challenged the premise and was right: the MBCX-01 design of record carries NO threat model (grep over the three governing docs returns ZERO), its invariants are a SCIENTIFIC-VALIDITY device, and every caller of these authorities is the harness and its own tests - so the 'api-caller' untrusted party declared in the r1 BUILD packet and INHERITED unchecked into r2/r3 DOES NOT EXIST, and the in-process findings built on it are OUT-OF-MODEL under the T2 ceiling. What survives is real and maps onto the DoR's own rows I13/I14/I16. OPEN-OWNER-DECISIONS row 68 is WITHDRAWN by the driver. | R4 2026-08-15: council round 4 complete at 3/3, all EXECUTED, outcome NO-GO. Seven findings added as rows, each driver-reproduced. The deciding one is in the FROZEN r13.2 layer and is an OWNER call.",
+  "issues": [
+    {
+      "id": "MBCX01-SMOKE-RUN-OUTSTANDING",
+      "status": "open_owner_action_elevated_run_required",
+      "load_bearing": true,
+      "problem": "The one-cell smoke proof has not been run, so SEVEN platform facts remain unverified and every one of them is a thing only real execution can settle: (1) EVENT_HEADER_EXT_TYPE_PMC_COUNTERS=0x0008 - the most load-bearing unpublished ordinal; Microsoft names the field and its payload struct but publishes no number; wrong => every CSwitch looks counter-less => ETW_PMC_EXTENDED_DATA_ABSENT (a fault), never a zero. (2) ProcessTelemetryIdInformation=64, flagged in-source since the original build. (3) The Microsoft-Windows-Kernel-Process provider GUID 22FB2CD6-0E7B-422B-A0C7-2FAD1FD0E716, its event ids and its payload offsets - NO Microsoft page exists (manifest provider), so these are UNVERIFIABLE at a primary source, the same flag class as the telemetry ordinal. (4) THE SAME-SESSION CLAIM: EtwPmcSession's contract requires ProcessStart/ProcessStop from the SAME session as the PMC-attached CSwitch stream, and no opened page confirms an EVENT_TRACE_SYSTEM_LOGGER_MODE session accepts a manifest provider - nt-kernel-logger-constants says the deprecated kernel logger does NOT, and Microsoft's own recording-pmu-events xperf example uses TWO sessions. The code attempts the documented single-session config and FAULTS on refusal; it never silently opens a second session, because that would void the evidence claim. (5) Whether the platform grants InstructionRetired, how many counters, and whether another owner holds them. (6) Whether ProcessStart for a CREATE_SUSPENDED root lands inside the trace window; if not => ETW_PROCESS_LIFETIME_ROOT_ABSENT, abort, not a partial roster. (7) All DERIVED struct sizes (EVENT_TRACE_LOGFILEW==448 etc.) - Microsoft publishes no sizeof, so only a real OpenTraceW write-back proves them.",
+      "why_deferred": "Not deferred by choice - the driver CANNOT run it. ETW kernel PMC requires an ELEVATED session and the driver's shell is not elevated (verified 2026-08-14). This is an owner action. The authorization document is already written and banked with the marker line, naming binary, host, cell, evidence destination and cleanup: <vault> Driver preflight that DID pass unelevated: verify_struct_layout() against the frozen 96/144-byte Job ABI, and BOTH layers of the two-factor guard refusing by name.",
+      "discharge_condition": "Owner runs run-smoke-cell.ps1 from an ELEVATED PowerShell per SMOKE-RUNBOOK SS3, supplying the fixture signing key path (the driver embeds no key material by design; the committed fixture measurement key lives only in test_mbcx01_build_measurement.SIMULATED_PRIVATE_KEY_PEM and a driver must not import a test module). ABORT if the host is a virtualization GUEST or nested - root partition / bare metal only. THE PASS CRITERION IS AN HONEST RED AT ADMISSION: a structurally valid signed envelope that the BUILD verifier then REFUSES for production with the fixture-kind / no-production-roots sentinels. A GREEN admission would be a DEFECT. Capability gaps - unsupported PMU, counter losses, a refused ordinal - are FINDINGS to record verbatim, not failures to hide. Bank the transcript and envelope digests beside the authorization.",
+      "full_picture_pointers": [
+        "<vault>",
+        "MBCX-01-BUILD-SMOKE-RUNBOOK.md SS3",
+        "run-smoke-cell.ps1 + mbcx01_smoke_cell.py",
+        "mbcx01_build_etw_consumer.py (the constants table and every FLAGGED value)",
+        "MBCX-01-BUILD-ETW-CONSUMER-GREEN-WITNESS-RUN-2026-08-14.txt"
+      ],
+      "github_issue": "#2",
+      "github_issue_url": "<private-repo>/issues/2"
+    },
+    {
+      "id": "MBCX01-BUILD-B-ETW-CONSUMER-UNBUILT",
+      "status": "discharged_consumer_built_pending_elevated_smoke_run",
+      "load_bearing": true,
+      "problem": "The one-cell smoke proof CANNOT EXECUTE: the real ETW consumer does not exist. mbcx01_build_win32.collect() takes `etw_session_factory: Callable[[], EtwPmcSession]` as a parameter, and NOTHING in the lane provides one - `grep -rn 'EtwPmcSession('` returns ZERO constructors, and the only occurrence of ProcessTrace/EventRecordCallback in the entire lane is inside a COMMENT at mbcx01_build_win32.py:406 describing the seam. There is no StartTrace, no OpenTrace, no EVENT_TRACE_PROPERTIES, no session creation anywhere. EtwPmcSession's own comment says so deliberately: `record_stream` and `member_lifetimes` are 'BUILD ITEM (the ETW consumer seam)... seams so the ordering/delta/join discipline below is reviewable WITHOUT opening an ETW session', and an unattached seam faults (ETW_CONSUMER_NOT_ATTACHED / ETW_PROCESS_LIFETIME_STREAM_NOT_ATTACHED) rather than returning empty. So the collector is genuinely reviewable-but-unrunnable, exactly as the handoff said ('NOT executed'), but the SMOKE RUNBOOK reads as though the collector is runnable once authorized, and it is not.",
+      "why_deferred": "NOT deferred - discovered 2026-08-14 by the driver while executing the owner's authorization to run the smoke proof. The authorization document was written, the environment was preflighted, and the blocker surfaced at the point of invocation. This is the class this lane already knows by name: source review structurally cannot see what only execution reveals.",
+      "discharge_condition": "Build the ETW consumer: create/configure the session (StartTrace + TraceSetInformation(TracePmcCounterListInfo) pinning InstructionRetired, then TracePmcEventListInfo attaching it to CSwitch - the two documented calls the class already names), consume via OpenTrace/ProcessTrace/EventRecordCallback yielding raw CSwitch/PMC records in per-processor timestamp order for `record_stream`, and build `member_lifetimes` from the Microsoft-Windows-Kernel-Process ProcessStart/ProcessStop stream of the SAME session (per the class comment, the only source that observes a descendant the collector never opened a handle to). Honour the existing posture: any unavailable source, counter-owner conflict, multiplexing, or nonzero EventsLost/LogBuffersLost/RealTimeBuffersLost is UNAVAILABLE evidence, never a diagnostic success and never an estimated instruction count. THEN the smoke proof can run, and it is what verifies the flagged ProcessTelemetryIdInformation=64 ordinal.",
+      "full_picture_pointers": [
+        "mbcx01_build_win32.py:404-425 (the seam and its two fault codes)",
+        "mbcx01_build_win32.py:508-514 (collect() takes the factory as a parameter)",
+        "MBCX-01-BUILD-SMOKE-RUNBOOK.md:30-60 (the runbook this blocks)",
+        "MBCX-01-BUILD-COMPLETION-HANDOFF.md:29-32 (handoff: 'NOT executed', accurate)",
+        "<vault> (the authorization written for the attempt)"
+      ],
+      "driver_preflight_that_DID_pass": "Not elevation-blocked only - these ran fine unelevated: verify_struct_layout() PASS (96/144-byte Job ABI matches the frozen packer); the two-factor guard refuses correctly at BOTH layers (no env var -> PhysicalCollectionNotAuthorized 'MBCX01_BUILD_ALLOW_PHYSICAL=1 is required'; env var but no authorization file -> 'a runbook authorization file path is required'). A SECOND blocker also stands: ETW kernel PMC needs an ELEVATED session and the driver's shell is not elevated.",
+      "discharge_evidence": "Built at c2e011b: mbcx01_build_etw_consumer.py (session create/configure/consume/teardown), mbcx01_smoke_cell.py (runbook SS3 driver), run-smoke-cell.ps1 (operator runner). Red-first: 16/16 witnesses ModuleNotFoundError before, 114/114 BUILD tests after (was 95); frozen 145/145; verify-build-bundle exit 0 all seven sections PASS (ledger 44 invariants / 114 witnesses, two_way_total true); clean-room verify-build-pinned PINNED RECONSTRUCTION COMPLETE at 3527f51 / manifest blob 23009028. BUILDING IT EXPOSED THREE LATENT DEFECTS IN THE ALREADY-DELIVERED COLLECTOR, each red-witnessed and none visible to source review: (1) the capability record could not carry both the frozen evidence shape and the platform facts, so a real run would have signed retired_instructions>0 beside etw_pmc_source_available=False; (2) configure() raised KeyError 'event_id_blob_size'; (3) the CSwitch attachment blob was ALL ZEROES, so TraceSetInformation(TracePmcEventListInfo) would have attached the counter to GUID_NULL/type 0 and NO PMC data would ever have arrived - driver-verified post-fix, the blob now decodes to 3d6fa8d1-fe05-11d0-9dda-00c04fd7ba7c / Type 36. collect() also could not host a live session at all (no close_trace_window seam, no root identity). Verified ordinals discharge an in-source BUILD REVIEW ITEM: TracePmcEventListInfo=8, TracePmcCounterListInfo=9, opened at the Microsoft TRACE_QUERY_INFO_CLASS page.",
+      "remaining": "The consumer has NEVER EXECUTED. A green suite means the LOGIC is right IF the platform behaves as documented - it does NOT mean the consumer works. See MBCX01-SMOKE-RUN-OUTSTANDING for what only the elevated run can settle."
+    },
+    {
+      "id": "MBCX01-BUILD-R3-DOOR-CONTRACT",
+      "status": "void_false_premise_withdrawn_no_work_owed",
+      "load_bearing": false,
+      "problem": "Three consecutive rounds have closed the instance each round reported, against one unchanging untrusted party: a caller-supplied object with BEHAVIOUR whose callbacks reach authority state. r1 = the caller supplies its own root; r2 = our own committed fixture material is a root; r3 = the caller's behaving object edits the anchor/context around both checks (codex F1/F2 EXECUTED and driver-reproduced; also F3 overlapping thread scopes restore the WRONG global on exit, F4 exactness reads caller-controlled receipt fields BEFORE resolving the context, F5 validity endpoints disagree across doors, F6 internal prior art missed, F7 the totality claim is syntactic not semantic). Per TAR-PIT Q3 the instance set is UNBOUNDED - the space of sequences a untrusted callback can execute is not enumerable - so per-instance folding cannot terminate, and the fold's own machinery is now authoring the findings (the r2 freeze rider is what F3 probes).",
+      "why_deferred": "NOT deferred - ESCALATED, deliberately, with no fold dispatched. ANTI-DRIFT SS1: at the third partial fix stop folding entirely and go one level up; if that is bigger than the slice it is an OWNER call, never a fold (TAR-PIT Lesson 14). The level up is the DOOR CONTRACT and it changes the public interface of all three production doors on a lane whose next gates are a physical smoke run and a key ceremony. REACHABILITY, stated honestly so the owner can size it: none of this is reachable by an api-caller today - there is no production runtime, every installer of trust material is fixture/demo/test/verifier code, and readiness is BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED. The exposure begins at the ceremony.",
+      "discharge_condition": "OWNER RULES OPEN-OWNER-DECISIONS row 68 (A/B/C/D). Driver recommendation (A): every production door accepts exactly one thing - INERT DATA, values that survive a JSON round-trip into exact built-in containers - refused at the door before any authority state is read. A COMPLEMENT (TAR-PIT Q4), not an enumeration; ADOPTED prior art (parse-don't-validate; serde deny_unknown_fields; this repo already holds it twice at seal-chain.ts's own-key walk with the ownKeys-vs-descriptor cross-check, and authorization-json.ts:rejectUnknownKeys). Expected to DELETE the wiring freeze and the emulated immutability rather than add machinery - that flip from 'add X' to 'delete X' is the convergence signature absent for three rounds. Then a fresh acceptance round with all three seats reachable.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-ACCEPTANCE-ROUND-r3-SYNTHESIS.md:1",
+        "MBCX-01-BUILD-SEAT3-CODEX-VERDICT-r3.md:1",
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r3.md:1",
+        "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-CAPABILITY-REPORT-r3.md:1",
+        "<vault> row 68",
+        "mbcx01_build_trust_anchor.py:233-291@aa3d0b1a (context class + the __init__-only refusal)",
+        "mbcx01_build_trust_anchor.py:438-444@aa3d0b1a (configure_production_verifier_context isinstance-only check)"
+      ],
+      "recut_2026_08_14": "VOID. This issue existed only because three rounds of packets declared an api-caller untrusted party that the design of record does not have. The proposed close (an inert-data door contract) was gold-plating against a nonexistent actor - the #341 shape, and the TAR-PIT matrix rules a out-of-model class ACCEPT-THE-RESIDUAL, name it, ZERO grind. The residual, named: an actor who can run code inside the verifier's process can edit trust state; that actor is the box owner; this harness has no untrusted caller; we are tamper-EVIDENT, not tamper-proof. NO WORK IS OWED. The wiring-freeze rider built at r2 against that phantom is being REVERTED (ANTI-DRIFT SS1: revert self-inflicted machinery rather than complete it) - it can only ever FALSE-fire in a long unattended run, since its depth counter is a plain module int and threading is never imported."
+    },
+    {
+      "id": "MBCX01-BUILD-R2-FIXTURE-ISOLATION",
+      "status": "closed_serves_the_DoR_validity_invariants",
+      "load_bearing": true,
+      "problem": "The r2 fold's production authentication does not refuse a FIXTURE anchor, and the anchor is a mutable process global. authenticate_production_activation parses and stores OwnerTrustAnchor.fixture_only (mbcx01_build_trust_anchor.py:154,162,192) but never consults it, so the COMMITTED fixture anchor - whose private key is committed at mbcx01_build_ceremony_fixture.py:39 and is therefore public to anyone with the repo - authorizes production admission at all three doors (codex F1, EXECUTED: measurement=[], state=[], exactness PASS). mbcx01_build_integration.py:141 installs that fixture anchor process-wide and never restores it (F3). Because the authorities accept Any and re-read mapping objects during evaluation, a caller-supplied mapping whose .get/__getitem__ reconfigure the global anchor can substitute it mid-evaluation (F2, EXECUTED; bounded - unavailable if callers deserialize JSON into built-in containers). Two further items are RE-FINDS of residuals the r2 packet itself declared: the default validity instant is the manifest's own published_at rather than a verifier clock, so an expired manifest admits (F4), and a binding-only exactness evaluation presents as PASS without the suite having run (F7). Loader parse ambiguity at the operator config boundary is the leaf (F6).",
+      "why_deferred": "Not deferred - next work item. Caught at BUILD acceptance r2 = GO-WITH-FIXES. REACHABILITY settled at the byte by the driver: every importer of mbcx01_build_ceremony_fixture is fixture/demo/test/verifier code and no production runtime exists (readiness BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED), so this is NOT reachable by the packet's api-caller-via-data untrusted party today - which is why SEAT2 ruled it operator discipline (P2) and SEAT3 ruled it Critical. Both are right about different questions; it becomes reachable the moment a real ceremony happens or a production evaluation shares an interpreter with the fixture graph, so it is folded BEFORE acceptance, not after.",
+      "discharge_condition": "ONE COMPLEMENT-shaped invariant (TAR-PIT Q4), adopted from Go crypto/x509 VerifyOptions + TUF out-of-band root per MBCX-01-BUILD-R2-TRUSTCONTEXT-SWEEP-LOG.md: production verification accepts exactly one thing - an immutable, INSTANCE-SCOPED verifier context whose anchor is operator-supplied and NOT fixture-marked, carrying its own current time - and refuses everything else. That collapses F1+F2+F3. Plus: verifier-controlled clock whose fallback is the real clock never the artifact's published_at (F4); exactness binding-only results must not present as PASS for suite execution (F7); strict anchor-document parse (F6). RED witnesses required per item, in particular: the committed fixture anchor + committed fixture private key must FAIL every production door while the fixture LANE (require_production=False structural parsing) stays green; an expired manifest must refuse by name. Then re-run verify-build-bundle.py + the clean-room launcher and take BUILD acceptance r3.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-ACCEPTANCE-ROUND-r2-SYNTHESIS.md:1@f7f84ee",
+        "MBCX-01-BUILD-SEAT3-CODEX-VERDICT-r2.md:1@c5cce3f",
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r2.md:1@f7f84ee",
+        "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-VERDICT-r2.md:1",
+        "MBCX-01-BUILD-R2-TRUSTCONTEXT-SWEEP-LOG.md:1@0ec1b4b",
+        "mbcx01_build_trust_anchor.py:293-345@6622bcd9",
+        "mbcx01_build_ceremony_fixture.py:39@6622bcd9",
+        "mbcx01_build_integration.py:141@6622bcd9"
+      ],
+      "discharge_evidence": "Fold e89168b5, red-first on REAL committed bytes (the worker reconstructed HEAD via `git -c core.autocrlf=false checkout-index` after finding `git archive` writes CRLF under this clone's autocrlf=true and is NOT byte-identical to the blobs; 356 tracked files verified identical). Deciding pre-fix reds, verbatim: fixture anchor + COMMITTED fixture private key -> measurement `[]`, state `[]`, exactness `ADMITTED result='PASS'`; mapping-object gadget swapped the anchor with swaps_fired=15 and admitted; the integration fixture left `fixture_only=True` installed and a later production evaluation returned `[]`; an expired manifest admitted; a binding-only exactness receipt emitted `result='PASS'`; a duplicate-member anchor document was ACCEPTED with the flag flipped. Post-fix all six refuse by name (PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY / STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY / *_REWIRED_DURING_VERIFICATION / TRUST_ROOT_VALIDITY_EXPIRED / STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED / AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED + CARRIER_EXACTNESS_SUITE_NOT_EXECUTED / OWNER_TRUST_ANCHOR_AMBIGUOUS) while the fixture LANE (require_production=False) stays green. DRIVER re-ran the probe, BUILD 95/95, frozen 145/145, verify-build-bundle exit 0 (ledger 42 invariants / 95 witnesses, two_way_total), the prior trustboot probes (no regression), and the clean-room launcher at aa3d0b1a -> PINNED RECONSTRUCTION COMPLETE. Zero frozen r13.2 files touched; no new private key committed; the committed anchor fixture is byte-unchanged.",
+      "residuals_disclosed_by_the_fold": [
+        "RIDER (flagged, own red): a wiring FREEZE for the length of a verification (PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION). Snapshot-alone left the gadget able to contaminate the process BETWEEN doors - the worker caught it when the exactness leg passed only because the measurement leg had already re-wired the process. A reviewer may contest that 'rewired' earns its own error name.",
+        "Bounded, named: an untrusted party who can define a Python class inside the verifier's process is already past the packet's api-caller-via-DATA boundary. The fold makes the specific gadget inert and non-poisoning; it cannot contain arbitrary in-process code. Operator wiring remains a process global that in-process code may change BETWEEN verifications (T2 operator boundary).",
+        "NEW TIME DEPENDENCE: witness ba28 resolves its anchor from the OS path, carries no injected instant, and judges at the real clock - so it WILL go red when the committed fixture manifest's window closes (not_after 2027-08-13). That is a correct refusal, not a verifier defect, but a previously time-independent suite is now time-dependent. Discharge before that date.",
+        "NOT DONE, larger than this issue: codex's 'inert bytes or verified immutable model' at the data boundary (exact built-in container enforcement on manifests/custody). Strict parse was scoped to the ANCHOR DOCUMENT only (duplicate members + NaN/Infinity), because manifests and custody arrive as Python objects through the API, not as files.",
+        "Judgment calls a reviewer should probe: two new ANCHOR-class error codes per authority (the single ACTIVATION_UNAUTHENTICATED code was deliberately NOT fragmented); BUILD A judges the manifest validity window at the verifier instant while every other instant remains the receipt's attested knowledge_time, reusing STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED rather than minting a name; mbcx01_build_integration.py reclassified from BUILD_MODULES to BUILD_FIXTURE_SUPPORT in verify-build-bundle.py (classification only, REQUIRED unchanged).",
+        "NOT VERIFIED by the worker: that no consumer OUTSIDE this lane calls authenticate_production_activation, whose signature now requires the context keyword. In-lane the only two callers are the measurement and state authorities, both updated."
+      ],
+      "r3_outcome": "r3 NO-GO. The fold's NAMED closes hold (SEAT1 and SEAT3 agree C-R3-4 and C-R3-5 pass; the committed fixture key dies at all three doors through the ORDINARY constructors). What does NOT hold is the fold's headline that a fixture anchor is 'NOT REPRESENTABLE' as a production context and that the context is immutable. DRIVER-REPRODUCED at the byte, twice: (1) object.__new__ + object.__setattr__ builds a context carrying the COMMITTED fixture anchor and the PUBLIC configure_production_verifier_context accepts it - it checks only isinstance, so the refusal that lives in __init__ is reachable-around; resolve_production_verifier_context then returns code=None with fixture_only=True. (2) object.__setattr__ on a LEGITIMATELY installed context swaps its anchor mid-flight to the committed fixture key with fixture_only flipped False; the resolver returns it as valid. SEAT1 found the same two sequences and excluded them as in-process/T2; SEAT3 answered that the exclusion is incoherent because the packet's own C-R2/C-R3-2 admits caller-supplied BEHAVING objects into scope and the r2 freeze rider exists to defend against exactly such an object - 'the same callback capability cannot be in scope when it invokes the public rewire function but out of scope when it invokes object.__setattr__.' The driver rules SEAT3 correct. SEAT1's failed-verification check was also too weak: it proved wiring OBJECT IDENTITY was preserved, while SEAT3 mutated that object's CONTENTS.",
+      "recut_2026_08_14": "CLOSED and CORRECTLY BUILT - but for the DoR's reason, not the security reason the packets gave. Fixture material must not be able to create an experiment-eligible score or a physical pass: DoR authority-modes SS3, matrix I13 ('flip production flag'), I16 ('flips production mode' / 'self-authors PASS'). The r1 close maps the same way onto I14, whose own falsification witness is literally 'packet builder self-signs/injects its root'. These are SELF-DECEPTION guards for the experiment, and they are built, red-witnessed and clean-room verified. The parts of the r2/r3 rounds that chased in-process object mutation are out-of-model and are being reverted."
+    },
+    {
+      "id": "MBCX01-BUILD-R1-TRUST-BOOTSTRAP",
+      "status": "discharged_by_r2_fold_confirmed_by_council",
+      "load_bearing": false,
+      "problem": "Production authority admission is self-authorable. evaluate_production_measurement (mbcx01_build_measurement_authority.py) and verify_production_scorer_input (mbcx01_build_state_authority.py) take trust_root_manifest and custody_evidence as CALLER-SUPPLIED PARAMETERS; no owner-preconfigured trust anchor is loaded, and custody validation only checks that the caller's manifest hash-matches the caller's own custody documents plus role-string distinctness. A bounded api-caller untrusted party (the packet's declared class; reaches via DATA it supplies, not a box owner) can present a fully self-authored manifest + custody documents + fresh independent Ed25519 key and clear production admission (both authorities return []). BUILD A additionally has the inverse defect: it REJECTS the ceremony spec's own published production-shaped manifest (STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED) while ACCEPTING an untrusted caller's fixture-shaped self-authored root.",
+      "why_deferred": "Caught at BUILD acceptance council r1 = NO-GO. Two of three seats (SEAT2 ChatGPT Sol, SEAT3 codex-exec) independently converged on this P0 by EXECUTING the probe; SEAT1 Opus returned GO-WITH-FIXES but never probed the caller-supplied-root surface. The driver REPRODUCED the core at the byte (inspect.signature confirms the params; no owner root file is loaded; the suite's own admit(simulated_production_grid()) clears a caller-supplied production stack). Owner directed a clean closeout this session rather than an immediate fold. It is a bounded security-architecture fold, not an experiment change; r13.2 remains CONFIRMED and untouched.",
+      "discharge_condition": "Implement AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP red-first: (1) a pre-existing owner/operator trust anchor the API request cannot supply or substitute (a pinned owner root public key / OS-controlled config identity the verifier LOADS, not a parameter) - T2 unchanged, this separates the bounded api-caller from the operator, not the box owner; (2) authenticate the four custody documents by SIGNATURE against that anchor, not hash-match of caller-supplied documents against caller-supplied digests; (3) bind editor approval AND owner ceremony receipt to the EXACT canonical manifest digest (+ signing-key identity, provenance digest, validity window, activation generation), not manifest_id; (4) BUILD A: split structural parsing (fixture, production_ready:false) from production activation (authenticated, production_ready:true), fixing both the false-accept and the false-reject. Mandatory NEW red witnesses: fresh independent Ed25519 key + fully self-authored manifest/custody + signed 100-cell grid must FAIL before any store/grid/scientific analysis, while the legitimate authenticated ceremony path is GREEN. Then pass BUILD acceptance r2 council (security/interface finding re-enters the design/council gate per the packet). TAR-PIT: one invariant closes the class wholesale - do not grind fake-role permutations.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-ACCEPTANCE-ROUND-r1-SYNTHESIS.md:1@966d922",
+        "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-VERDICT-r1.md:1@966d922",
+        "MBCX-01-BUILD-SEAT3-CODEX-VERDICT-r1.md:1@966d922",
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r1.md:1@966d922",
+        "mbcx01_build_measurement_authority.py:evaluate_production_measurement@2fd38972",
+        "mbcx01_build_state_authority.py:306-360@2fd38972",
+        "MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md:29-55@2fd38972",
+        "MBCX-01-BUILD-COMPLETION-HANDOFF.md:1@e6f7bdb"
+      ],
+      "discharge_evidence": "Fold 4b84d7b (AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP), red-first: MBCX-01-BUILD-TRUSTBOOT-RED-WITNESS-RUN-2026-08-14.txt reproduces all four r1 probes on pre-fix bytes 4e58f9b5; GREEN bank + 86/86 BUILD + 145/145 frozen + clean-room exit 0 at 6622bcd9. r2 council: SEAT1 and SEAT2 each built INDEPENDENT fresh-key self-authored universes and were refused at measurement/state/exactness with named errors; SEAT2 additionally reproduced the pre-fix defects itself before testing the fix. SEAT3 concurred the r1 class is closed on its own axis. Driver re-ran all four probes post-fix."
+    },
+    {
+      "id": "MBCX01-BUILD-R1-SIGNATURE-CARRIER",
+      "status": "discharged_by_r2_fold_confirmed_by_council",
+      "load_bearing": false,
+      "problem": "Ed25519 signature base64 carrier is malleable: the Node verifier (verify-r13-receipt-signature.mjs) decodes signature_b64 with permissive Buffer.from(value,'base64'), which ignores whitespace and accepts the base64url alphabet, so multiple accepted carrier strings map to one signature. Does not forge authority but creates receipt-identity / dedup / audit-log ambiguity.",
+      "why_deferred": "Leaf finding (codex F6, EXECUTED); canonical-encoding fix, independent of the deciding trust-bootstrap defect. Codex-gate class, folds alongside the r2 work.",
+      "discharge_condition": "Strict base64 grammar/padding/length + decode/re-encode equality on signature_b64 before cryptographic verification; add a red witness (whitespace-injected valid signature must be refused).",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-SEAT3-CODEX-VERDICT-r1.md:1@966d922",
+        "verify-r13-receipt-signature.mjs:15-23@2fd38972"
+      ],
+      "discharge_evidence": "Strict base64 grammar + decode/re-encode equality before cryptographic verification, in the BUILD-side verify-build-receipt-signature.mjs (frozen verify-r13-receipt-signature.mjs untouched) and the Python doors. All three r2 seats EXECUTED carrier mutations (whitespace / newline / base64url / unpadded) and all were refused; SEAT2 opened the Node Buffer docs establishing why the check is load-bearing."
+    },
+    {
+      "id": "MBCX01-BUILD-R1-WIN32-ORDINAL",
+      "status": "open_smoke_stage_check",
+      "load_bearing": false,
+      "problem": "mbcx01_build_win32.py uses ProcessTelemetryIdInformation = 64 as the PROCESSINFOCLASS ordinal for ProcessStartKey acquisition; Microsoft documents the structure/field but not that private ordinal. Flagged in-source; faults loudly on disagreement.",
+      "why_deferred": "The real collector is UNEXECUTED reviewable code, double-gated behind MBCX01_BUILD_ALLOW_PHYSICAL + a marker-bearing authorization file. Not deciding in any no-physical round.",
+      "discharge_condition": "Verify the ordinal on the target SDK/OS before first authorized physical (smoke) execution, per MBCX-01-BUILD-SMOKE-RUNBOOK.md.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-SMOKE-RUNBOOK.md:1@2fd38972",
+        "mbcx01_build_win32.py:119-123@2fd38972"
+      ],
+      "github_issue": "#12",
+      "github_issue_url": "<private-repo>/issues/12"
+    },
+    {
+      "id": "MBCX01-R6-AND-R7-SERIES",
+      "status": "superseded_by_r13.2_confirmed",
+      "load_bearing": false,
+      "problem": "The r6/r7 design-council issues (SEAT1 absence, seat independence, r6 fold, r7 3x NO-GO).",
+      "why_deferred": "The design review continued through r8-r13.2.",
+      "discharge_condition": "Superseded: the r13.2 targeted-closure council reached 3/3 CONFIRMED, authorizing the two production BUILD prerequisites. This BUILD lane is that authorized work.",
+      "full_picture_pointers": [
+        "MBCX-01-SEAT1-OUTSIDE-OPUS5-VERDICT-r13.2.md:1@91329b2",
+        "MBCX-01-SEAT2-CHATGPT-SOL-VERDICT-r13.2.md:1@91329b2",
+        "MBCX-01-SEAT3-CODEX-VERDICT-r13.2.md:1"
+      ]
+    },
+    {
+      "id": "MBCX01-REVIEW-GATES-OWED-ON-CURRENT-BYTES",
+      "status": "council_r4_COMPLETE_3of3_NO-GO_codex_cli_and_bot_still_owed",
+      "load_bearing": true,
+      "problem": "No review gate has been completed against the CURRENT bytes. (a) COUNCIL: the r3 round was INCOMPLETE at 2/3 - SEAT2 could not execute (connector) - and its NO-GO was out-of-model-driven and does not stand; five commits have landed since (freeze revert, fixture-key fold, ETW consumer, pin regen), so r3's verdicts do not describe what is on disk. (b) CODEX-CLI: never run on this lane at all. (c) BOT: never run, and cannot be - there is no git remote (verified: `git remote -v` empty in both the worktree and its parent). The owner asked for exactly this sequence: fresh seats, depth check, codex CLI, draft PR, bot green.",
+      "why_deferred": "Sequencing, not avoidance. The owner's order was smoke-first; attempting the smoke run surfaced the unbuilt ETW consumer, which had to be built before any review could describe a complete instrument. Reviewing the incomplete build would have burned seat time on bytes about to change - and the ETW build then proved the point by exposing three latent collector defects that would have invalidated any earlier round.",
+      "discharge_condition": "Fresh council seats minted INSIDE the working project with the model SET AT MINT (Opus 5 extended) and the composer label READ BACK before message one, plus a READ-PROBE first since file access is unverified this session. \u26d4 THE PACKET MUST ASK THE RIGHT QUESTION: this lane's design of record has NO threat model - the untrusted party is THE EXPERIMENT FOOLING ITSELF, not an outside party. FALSIFY the VALIDITY invariants I01-I17 (can a non-member candidate be rehashed into the retained set? can a scorer graph from another episode substitute? can fixture evidence reach a real score?), and the NEW surface: the ETW consumer's loss/unavailability posture and its unverified constants. \u26d4 Do NOT re-declare an outside-caller threat class - see MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md. Then codex-CLI to GREEN, then the remote decision, then draft PR + `@codex review` to bot-clean. \u26d4 REGISTER: write the packet in the NEUTRAL CS register - this lane is a measurement harness and the sharp register is what ends a reader at cold start (method: Gravity memory fable-neutral-framing; tool <vault> dry-run first). \u26d4 Do NOT copy r1/r2/r3 as a template: all three carry a CLOSED-ROUND banner because they declared a threat class this design does not have and are written in the sharp register. Keep exact only the packet field names packet:check enforces - widening those is owner-ruled register row 65.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md (the framing the packet must use)",
+        "MBCX-01-R13-AUTHORITY-INVARIANT-MATRIX.md SS1/SS3 (the invariants to probe)",
+        "MBCX-01-BUILD-ACCEPTANCE-ROUND-r3-SYNTHESIS.md (what r3 got wrong and why)",
+        "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-CAPABILITY-REPORT-r3.md (the connector failure)",
+        "CC-DEV-WORKFLOW-GUIDE.md steps 3-9"
+      ],
+      "r4_outcome": "Round 4 ran 3/3 with every verdict EXECUTED - the lane's first complete BUILD round. SEAT1 GO-WITH-FIXES (conditional: NO-GO if read as authorising the ceremony), SEAT2 NO-GO, SEAT3 NO-GO. Outcome NO-GO. Seven findings tracked as their own rows; all driver-reproduced at the byte. The ChatGPT connector that failed at r3 is working again (read-probe byte-witnessed). Still owed after the folds: codex-CLI to GREEN, then the remote decision, then draft PR plus bot.",
+      "r5_outcome": "Council round 5 COMPLETE 3/3, all EXECUTED: SEAT1 GO-WITH-FIXES (conditional NO-GO on the ceremony), SEAT2 NO-GO, SEAT3 NO-GO. Outcome NO-GO. Two seats CONVERGED independently on three classes (TID reuse false refusal, process/thread interval containment admitting wrong evidence, RFC 7468 carrier false refusal); SEAT1 found a fourth nobody else did (the committed-key harvest suffix). All four driver-reproduced at the byte and folded at 5269375 (AMENDMENT-2 + the harvest subtraction). STILL OWED: codex-CLI has NEVER been run on this lane and is the last local gate; then the draft PR + @codex bot, now reachable for the first time since the remote landed.",
+      "github_issue": "#1",
+      "github_issue_url": "<private-repo>/issues/1"
+    },
+    {
+      "id": "MBCX01-NO-GIT-REMOTE",
+      "status": "CLOSED_owner_named_the_remote_and_both_branches_are_pushed",
+      "load_bearing": true,
+      "problem": "The lane has NO git remote - verified `git remote -v` returns zero rows in both the build worktree and its parent repository. ~35 commits of the scientific bundle, the BUILD, and every banked verdict exist on ONE disk with no off-box copy. This also blocks the `@codex` bot gate entirely, since the bot reviews a GitHub PR and there is nowhere to push.",
+      "why_deferred": "It is an owner call, not a driver one: it is his experiment IP, and a standing ruling keeps blueprints vault-side. The driver will not push anything anywhere without that decision. `gh` is authenticated (account UrielSlays) so any of the options can be executed immediately once chosen.",
+      "discharge_condition": "Owner picks one: (A) a NEW PRIVATE GitHub repo for the MBCX-01 bundle - driver's recommendation, keeps it out of Moonwalker, enables the bot, and gets ~35 commits off a single disk; (B) a review-only branch pushed into agentvault-mcp-bridge that never merges - gets the bot but drops Python into a TypeScript repo and fires the billed CI fleet for nothing; (C) skip the bot, rely on council + codex-CLI. Then push and open the draft PR per CC-DEV step 7-8.",
+      "full_picture_pointers": [
+        "CC-DEV-WORKFLOW-GUIDE.md steps 7-9",
+        "MBCX-01-OPEN-ISSUES.json tracking_note"
+      ],
+      "discharge_evidence": "Owner supplied the destination in live chat 2026-08-15: <private-repo>. DRIVER CHECKED THE TARGET BEFORE PUSHING RATHER THAN TRUSTING THE NAME - gh reported visibility=PRIVATE, isEmpty=true, diskUsage=0, no default branch, created minutes earlier. That mattered: 'Selene' is also the name of the S8 wake-word surface (OPEN-OWNER-DECISIONS VAULT-ROAM-2), so an occupied repo would have meant pushing the experiment into another project's history. It was empty, so nothing was clobbered. PUSHED both branches: codex/mbcx01-production-build (128 commits, the BUILD + every banked verdict) and codex/mbcx01-design-council (the frozen r13.2 design base at 91329b2). VERIFIED OFF-BOX, not assumed: git ls-remote --heads returns both refs and origin/codex/mbcx01-production-build == local HEAD d122ee10 exactly; repo re-checked after the push and is still PRIVATE and no longer empty. The single-disk risk this row existed for is discharged.",
+      "note_on_committed_key_material": "Stated plainly because it sounds alarming out of context: the pushed history contains COMMITTED FIXTURE PRIVATE KEYS (mbcx01_build_ceremony_fixture.py). These are deliberately-public test keys that were already in the git history before any push, their whole purpose is to be known, and the r4 folds exist precisely to guarantee they can never authorize production evidence on any door. The destination is a PRIVATE repo, so the push added no exposure that the committed history did not already carry. No NEW secret was created or published, and no production key exists yet - the ceremony has not happened.",
+      "remaining": "The @codex BOT gate is now REACHABLE for the first time in this lane. Per CC-DEV step 7 the draft PR opens only once the council is GO and codex-CLI is GREEN - neither holds yet (r5 is in flight, codex-CLI unrun), so no PR has been opened. Owner also directed 'green without a CI', which this destination satisfies: the repo has no workflows, so no billed fleet fires."
+    },
+    {
+      "id": "MBCX01-FIXTUREKEY-NAMED-GAPS",
+      "status": "open_leaf_named_not_claimed_closed",
+      "load_bearing": false,
+      "problem": "Three named gaps the fixture-key fold deliberately did NOT close, recorded so no one reads that fold as total: (1) FIXTURE_NON_ANCHOR_PRIVATE_KEY_PEM - a second committed fixture private key whose public half appears in no committed document - is NOT in the derived known-key set; deriving public-from-private would need Ed25519 and would put a node subprocess on the production construction path. (2) The analogous 'committed test SIGNING key copied into a production trust-root manifest' is NOT closed and is explicitly unclaimed - test_bw01 refuses a flipped committed manifest, but for MEASUREMENT_CUSTODY_EVIDENCE_INVALID, not because the key is committed material. (3) `resolve_production_verifier_context` now RAISES on a committed-key anchor delivered via the OS-config path rather than returning a named code; that matches the module's existing malformed-anchor rule, but it is a judgment call a seat should look at.",
+      "why_deferred": "Each is bounded and named in code, in the ceremony doc and in the GREEN witness bank rather than left silent. Gap (1) trades a real new failure mode (a subprocess during context construction) against a key nobody reaches by copying a file. Gap (2) was out of the fold's scope and no claim is made about it.",
+      "discharge_condition": "Put all three in front of the next council round as explicit questions. Close (2) only if a seat shows the copy path is reachable in the ceremony; close (1) only if the ceremony makes that key copyable in practice.",
+      "full_picture_pointers": [
+        "mbcx01_build_trust_anchor.py:418 public_key_identity, :436 committed_fixture_key_material",
+        "MBCX-01-BUILD-FIXTUREKEY-GREEN-WITNESS-RUN-2026-08-14.txt",
+        "MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md SS3 step 0"
+      ],
+      "fold_recorded_here": "The FOLD ITSELF (commit b5e00ee) is recorded by this row: a committed fixture KEY can no longer become a production root whatever the flag says, refused by name (PRODUCTION_VERIFIER_CONTEXT_FIXTURE_KEY_MATERIAL) on BOTH the in-code wiring path and the MBCX01_BUILD_OWNER_TRUST_ANCHOR OS-config path - the second arm being one the worker found and the driver's own reproduction had missed. Known-key set DERIVED by scanning the module's own directory for *.fixture.json anchor documents; zero literal key material in source (driver grep confirmed). Red-first on real archived bytes (370 files byte-verified). Driver re-ran: refusal fires on both paths, the in-memory per-run TEST production anchor still builds and admits [], the fixture LANE still returns []. Prior art MITRE CWE-1291, PeerOf CWE-321.",
+      "github_issue": "#14",
+      "github_issue_url": "<private-repo>/issues/14"
+    },
+    {
+      "id": "MBCX01-BA28-TIME-DEPENDENCE-2027-08-13",
+      "status": "open_dated_landmine",
+      "load_bearing": false,
+      "problem": "Witness ba28 resolves its anchor from the OS path, carries no injected instant, and therefore judges at the REAL clock. It will go RED when the committed fixture manifest's validity window closes on 2027-08-13. That is a CORRECT refusal, not a verifier defect - but a suite that was previously time-independent now has a shelf life.",
+      "why_deferred": "Deliberate: the whole point of that witness is that the cold-process path judges at the verifier's real clock rather than a date carried inside the artifact. Pinning an instant there would delete the property being tested.",
+      "discharge_condition": "Before 2027-08-13, either extend the committed fixture manifest's validity window or give ba28 an injected instant AND add a separate witness that keeps the real-clock property under test.",
+      "full_picture_pointers": [
+        "test_mbcx01_build_state.py ba28 (fresh_process_verify)",
+        "MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json validity window"
+      ],
+      "github_issue": "#13",
+      "github_issue_url": "<private-repo>/issues/13"
+    },
+    {
+      "id": "MBCX01-EXACTNESS-SUITE-RUNNER-UNBUILT",
+      "status": "open_deferred_to_the_physical_stage_no_runner_exists",
+      "load_bearing": true,
+      "problem": "The per-witness exactness SUITE RUNNER does not exist. MBCX-01-BUILD-EXACTNESS-PRODUCTION-VERIFIER-SPEC.md SS3 ('What is DEFERRED to the physical stage - stated, not papered over') defers execution of CARRIER.EXACTNESS.CANONICAL_INPUT / CANONICAL_OUTPUT / REPLAY / BUILD_IDENTITY against the real carrier binary. A repo-wide search for a suite runner returns only mbcx01_build_exactness_authority.py, which is the identity-BINDING verifier and says in its own docstring that it is 'necessary, not sufficient': it binds the pinned suite, the exact carrier artifact digest and the exact measured grid identity, and refuses relabels - it does NOT bless carrier behaviour. So 'exactness' is currently a binding claim with no execution behind it. This is the same shape as the ETW consumer gap that was just closed: a declared seam nobody had filled.",
+      "why_deferred": "Deliberately deferred by the spec, not overlooked - and the deferral is honest, since the authority already refuses to present a binding-only result as PASS (it emits AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED and rejects a receipt claiming PASS). The runner needs the real carrier binary and the physical stage to exist, so it is genuinely downstream of the smoke run.",
+      "discharge_condition": "Build the per-witness runner that executes the four CARRIER.EXACTNESS witnesses against the real carrier artifact and produces evidence the authority can bind. SS4 of the same spec names a coupled hardening item to land with it: 'give the exactness verifier its own custody parameter when the suite runner lands'. Until both land, no exactness claim may be read as suite-executed.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-EXACTNESS-PRODUCTION-VERIFIER-SPEC.md SS3 (the deferral) and SS4 (the coupled custody item)",
+        "mbcx01_build_exactness_authority.py (binding-only; AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED)",
+        "MBCX01-SMOKE-RUN-OUTSTANDING (upstream of this)"
+      ],
+      "github_issue": "#7",
+      "github_issue_url": "<private-repo>/issues/7"
+    },
+    {
+      "id": "MBCX01-R4-I02-STATE-BINDING-FROZEN-LAYER",
+      "status": "CLOSED_owner_ruled_amendment_executed_red_first",
+      "load_bearing": true,
+      "problem": "The canonical experiment world omits two fields the design of record requires. MBCX-01-R13-AUTHORITY-INVARIANT-MATRIX.md:35 says the world carries each obligation's SUBJECT and OWNER ROLE; mbcx01_r13_packets.py:83-87 projects only lifecycle/critical/due_at/completion_action_id/prerequisite_obligation_ids, and :365 supplies subject_id/owner_role as flat defaults that the reduced field set then overwrites. DRIVER-REPRODUCED: changing owner_role to ROLE.FRESH.ADVERSARY and subject_id to SUB.SUBSTITUTED leaves the projection byte-identical (hash D743C7834F09AE52... on both sides). The field is NOT a constant of the experiment: mbcx01_r13_state_reference.py:222 (delegate_obligation) and :216 (reopen_obligation) legally mutate owner_role, so a legal transition produces a state change the manifest-cut check cannot see. Found by SEAT2 (EXECUTED), reproduced independently by the driver.",
+      "why_deferred": "NOT deferred - ESCALATED. Closing it edits a FROZEN r13.2 artifact (either the projection gains two fields or the matrix prose drops them), and the freeze rests on a 3/3 CONFIRMED council. The driver's own r4 packet listed 'zero frozen files may change' as an immutable truth. That is an owner scope call, not a driver fold (TAR-PIT Lesson 14; BEFORE-YOU-ASK category E).",
+      "discharge_condition": "Owner rules which frozen artifact moves. Driver recommendation: ADD subject_id and owner_role to project_state_world rather than weaken the matrix - the matrix is the scientific contract and the code drifted from it; the change is additive. Mandatory red witness: a legal delegate_obligation event must produce MANIFEST_CUT_STATE_MISMATCH, RED on pre-fix bytes. Note the banked I02 witness mutates critical, one of the five projected fields, which is why 145/145 stays green over this hole.",
+      "bounded_honestly": "No banked score is wrong today: because the fields are not projected they also cannot feed legal_action_ids_from_world, so no gold answer changes. What is false is the DoR's claim about what the canonical world binds, and I02's promise about legal same-cut changes.",
+      "full_picture_pointers": [
+        "MBCX-01-R13-AUTHORITY-INVARIANT-MATRIX.md:35",
+        "mbcx01_r13_packets.py:83-87",
+        "mbcx01_r13_packets.py:365",
+        "mbcx01_r13_state_reference.py:216,222",
+        "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-VERDICT-r4.md F1",
+        "MBCX-01-BUILD-ACCEPTANCE-ROUND-r4-SYNTHESIS.md D1"
+      ],
+      "discharge_evidence": "Owner ruled live 2026-08-15 ('Put them in as amendment. its Fine.') = option A as a recorded amendment. EXECUTED same turn: MBCX-01-R13-AMENDMENT-1-CANONICAL-WORLD-BINDING-2026-08-15.md, commit 9c197e3. project_state_world now binds subject_id + owner_role; _candidate_world's three obligation rows declare them with SUB.SHARED/WORKER - the values initial_state() already assigns and packets.py:365 already defaulted, so no obligation's owner or subject changed. RED FIRST with source verified untouched (git diff --stat empty on both source files): test_i02_same_cut_owner_role_change_is_rejected and test_i02_same_cut_subject_change_is_rejected both failed 'AssertionError: True is not false'. GREEN after: frozen 147/147, BUILD 114/114, verify-build-bundle exit 0 (seven sections PASS, ledger 44/114 two_way_total), clean-room verify-build-pinned at -Commit 9c197e3 -ManifestBlob 55256a0c = PINNED RECONSTRUCTION COMPLETE. The freeze guard fired correctly in between (BUILD VERIFICATION FAILED: frozen r13.2 suite total changed: 147 != 145, real exit 1); FROZEN_TEST_TOTAL was raised deliberately with the reason recorded at the constant. No score, estimand, route or n changes.",
+      "re_review": "Changes an invariant consumer, so the r4 packet's section 13 trigger fires: the amended frozen bytes go back to council together with the remaining r4 folds, not straight to a gate."
+    },
+    {
+      "id": "MBCX01-R4-TRUST-ROOT-KEY-IDENTITY",
+      "status": "CLOSED_folded_red_first_including_the_der_envelope_variant",
+      "load_bearing": true,
+      "problem": "Trust-root identity is computed over the key's TEXT ENCODING, not the key. public_key_identity (mbcx01_build_trust_anchor.py:418-433) returns the base64 body as text; RFC 4648 section 3.5 guarantees that is not one-to-one where non-significant trailing bits are not zeroed. DRIVER-REPRODUCED against the committed anchor document: body ending DvZ8zY= and variant ending DvZ8zZ= decode to the SAME 44-byte SPKI, but the canonical body is in the derived committed-key set and the variant is NOT, and the two identities differ. SEAT1 executed the end-to-end admission through the documented MBCX01_BUILD_OWNER_TRUST_ANCHOR OS-config door: the verbatim committed key is refused PRODUCTION_VERIFIER_CONTEXT_FIXTURE_KEY_MATERIAL while the re-encoded same key is ADMITTED (ctx=True, code=None). The fixture-key fold's own claim - a fact about the key it carries - is falsified: it is a fact about one text encoding of that key. MITRE CWE-1291.",
+      "why_deferred": "Not deferred - next work item, but it gates the ceremony rather than the smoke run. Not an in-process/T2 finding: it goes through a documented door with an operator-authored document.",
+      "discharge_condition": "Compute identity over the DECODED key bytes (ideally the raw Ed25519 point, not any DER or text envelope - SEAT1 notes a differently-encoded SPKI DER carrying the same point is a further, unprobed variant), plus a canonical-carrier refusal on public_key_pem mirroring strict_signature_carrier_ok (:654-673), which already does grammar+padding+length+decode/re-encode equality one field away. ADOPT the internal shelf pattern SEAT1 found and this lane's shelf log missed: agentvault-mcp-bridge/src/crl/crl-authenticate.ts:15-18,109-120 loads the public key from raw SPKI octets. RED witness must be constructed INDEPENDENTLY of public_key_identity (see the bw28 row).",
+      "full_picture_pointers": [
+        "mbcx01_build_trust_anchor.py:418-433",
+        "mbcx01_build_trust_anchor.py:236-248",
+        "mbcx01_build_trust_anchor.py:654-673",
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r4.md F1",
+        "MBCX-01-BUILD-ACCEPTANCE-ROUND-r4-SYNTHESIS.md D2"
+      ],
+      "discharge_evidence": "Key identity is now computed from the DECODED key, not any text envelope: a structural SPKI walk (SEQUENCE -> AlgorithmIdentifier -> OID 1.3.101.112 with absent params -> BIT STRING, 0 unused bits) yields ED25519:<hex of the 32-byte point>, with an SPKI-SHA384:<hex> fallback for a future key type. THE DER-ENVELOPE VARIANT SEAT1 LEFT AS AN UNPROBED HYPOTHESIS IS CLOSED TOO, not deferred: a long-form re-encoded SPKI carrying the same point now resolves to the same identity (witnessed as a separate arm). A canonical-carrier refusal was added on public_key_pem mirroring strict_signature_carrier_ok (PRODUCTION_VERIFIER_CONTEXT_KEY_CARRIER_INVALID), enforced AFTER the committed-material check so a re-encoded committed key is named as committed material rather than as a malformed carrier. Internal shelf pattern ADOPTED, the one the lane's own shelf log had missed: agentvault-mcp-bridge/src/crl/crl-authenticate.ts:15-18,109-120 + src/crl/der-reader.ts:227. DRIVER-VERIFIED RED, independently of the builder's harness: pre-fix authority modules forced to win the import (mbcx01_build_trust_anchor sha256 ea7371c6, strict_public_key_carrier_ok ABSENT, derived committed key set = 1), fixture JSON + node verifier copied beside them so the set was non-empty and the red could not be fake. All four new witnesses failed there. DRIVER-VERIFIED COLLATERAL CONTROL (the blast-radius question): the NEW test files - including the positive lanes moved to in-memory generated signing keys - run against PRE-FIX authorities give 120 tests with EXACTLY 5 failures (the 4 new witnesses + the rebuilt bw28 sub-case) and ZERO collateral, which is what establishes that the positive-lane key swap did not silently weaken any pre-existing witness.",
+      "re_review": "Changes admission semantics at a production door \u21d2 the r4 packet's section 13 trigger fires."
+    },
+    {
+      "id": "MBCX01-R4-ETW-CONSUMER-CLASSES",
+      "status": "CLOSED_all_three_folded_red_first",
+      "load_bearing": true,
+      "problem": "Three confirmed classes in the ETW consumer, all driver-verified at the byte. (1) WRONG SDK CONSTANT ON A LIVE PATH: EVENT_HEADER_FLAG_CLASSIC_HEADER is 0x0040 in code but 0x0100 in the installed SDK (evntcons.h:156); 0x0040 is EVENT_HEADER_FLAG_64_BIT_HEADER (:154). It is USED at mbcx01_build_etw_consumer.py:1746 on the CSwitch path and its failure mode is a bare return - a SILENT RECORD DROP, not a fault. Two further mismatches are dead constants (PROCESS_START_KEY code 0x000A vs SDK 0x000D; EVENT_KEY code 0x000B vs SDK 0x000A) - defined, never read. PMC_COUNTERS 0x0008 is correct. (2) THREAD-LIFETIME JOIN CANNOT SUCCEED: :1833 hard-codes process_start_key=None for every thread event; _start_key_text (:844-845) raises ETW_PROCESS_START_KEY_INVALID:None before the membership check. A control arm with a real key returns normally, isolating the cause to the literal. (3) LOSS QUERIED AFTER STOP: stop() does CloseTrace (:1518, return unchecked) then join (:1521, result unchecked) then _query_loss (:1522) then ControlTraceW STOP (:1525-1527) without invalidating the handle; capture() (:1864-1870) queries loss AGAIN on that same handle.",
+      "why_deferred": "Not deferred - found by SEAT2 and SEAT3 independently and reproduced by the driver. The consumer has never executed against a live session, which is exactly why source review missed all three.",
+      "discharge_condition": "Verify EVERY ETW constant against the installed Windows SDK headers (not against doc pages, which do not publish the numbers) and make a wrong value fault rather than silently return; capture and bind the real process start key for thread events, or refuse before collection is presented as runnable; check the CloseTrace return and the join result, and do not query a stopped session's loss counters. Red witnesses per class: a non-successful CloseTrace, a join timeout, and a still-running ProcessTrace must each make capture UNAVAILABLE.",
+      "honest_bound": "On (3) the finalizer overwrites post-stop counters with pre-stop ones (:1311), so a silently zeroed second read cannot corrupt the SIGNED loss; the defect is that the second query aborts the finalizer on any status outside (0,234). The real Windows status for QUERY on a stopped session is pending until the elevated run. On (1) the silent-return path is the one that breaks the fail-loud promise.",
+      "full_picture_pointers": [
+        "mbcx01_build_etw_consumer.py:166-168,175,1746",
+        "mbcx01_build_etw_consumer.py:1829-1833,844-845,937-966",
+        "mbcx01_build_etw_consumer.py:1517-1527,1864-1870,1311",
+        "C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/um/evntcons.h:58,60,63,154,156",
+        "MBCX-01-BUILD-ACCEPTANCE-ROUND-r4-SYNTHESIS.md D4"
+      ],
+      "discharge_evidence": "Fold 6331a02, red-first. The driver re-ran the reds INDEPENDENTLY of the builder's harness, forcing the pre-fix module to win the import and proving it was in play (sha256 4ecbaa18, CLASSIC_HEADER=0x40): all 7 new witnesses failed on pre-fix bytes. (1) EVENT_HEADER_FLAG_CLASSIC_HEADER 0x0040 -> 0x0100 per evntcons.h:156, plus the two DEAD ExtType pins corrected (PROCESS_START_KEY 0x000A->0x000D, EVENT_KEY 0x000B->0x000A); PMC_COUNTERS 0x0008 was already right. SEVERITY SHARPENED during the fold and it cuts against the original framing: on x64 a classic record ALSO carries 0x0040, so the wrong pin passed FOR THE WRONG REASON most of the time - the guaranteed silent drop is every record whose header is not a 64-bit header. (2) The hard-coded process_start_key=None is gone; keys bind from the already-decoded ProcessStart stream by PID + QPC interval, the same source assemble_member_lifetimes keys members from, so both rosters carry the same key by construction; unbindable is refused by name (ETW_THREAD_START_KEY_UNBINDABLE), never guessed, never dropped. (3) CloseTrace's return is read (ERROR_SUCCESS or ERROR_CTX_CLOSE_PENDING only), the pump is checked for still being alive after a now-named join timeout, either makes the drain INCOMPLETE (ETW_TRACE_DRAIN_INCOMPLETE) raised AFTER teardown so a fault never leaves a system logger running; counters are read once pre-STOP and carried; any post-stop query is refused (ETW_LOSS_QUERY_AFTER_SESSION_STOP) and the handle is zeroed while surviving as evidence. Driver addition on audit: bw48 no longer skips its SDK re-derivation silently - on a host with no SDK it says so on stderr, because the green covers less there (proven by simulating an absent SDK, not asserted). BUILD 121/121, frozen 147/147 untouched, verify-build-bundle REAL exit 0, ledger 45 invariants / 121 witnesses two_way_total true (new row BB-17 declares the 7 witnesses).",
+      "re_review": "Changes the consumer's fault/unavailability posture, so the r4 packet's section 13 trigger fires."
+    },
+    {
+      "id": "MBCX01-R4-PRODUCTION-SIGNING-KEY-FIXTURE-ISOLATION",
+      "status": "CLOSED_folded_red_first_both_planes",
+      "load_bearing": true,
+      "problem": "Q9 gap #2, previously unclaimed, is now EXECUTED and reachable. SEAT2 used the committed Ed25519 test signing pair (test_mbcx01_build_measurement.py:74-84) as the PRODUCTION measurement signing root, with an independently generated owner anchor, and cleared production admission: root_fixture_only=False, production_ready=True, root_is_committed_test_public=True, custody_claim_private_never_left=True, production_admission_errors=[]. The ceremony prose forbids exactly this (MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md:168-177) but the mechanical admission path does not enforce it for the signing-key class. Prose is not a control.",
+      "why_deferred": "Not deferred - the packet asked council to rule the three named gaps and this one resolved to REACHABLE, so by the packet's own rule it must close before the ceremony. Gaps 1 and 3 were ruled disclosure-sufficient by both seats that examined them.",
+      "discharge_condition": "Extend the committed-key-material refusal to the production SIGNING key class, not only the anchor class, on every admission path. Red witness: the committed test signing pair must be refused as production signing material by name while the fixture lane stays green.",
+      "full_picture_pointers": [
+        "test_mbcx01_build_measurement.py:74-84,180-241,387-404",
+        "MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md:168-177",
+        "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-VERDICT-r4.md F4"
+      ],
+      "discharge_evidence": "committed_fixture_key_material now harvests EVERY public_key_pem in EVERY committed *.fixture.json (anchor documents only, before) - the derived set went 1 -> 5 keys (anchor + measurement root + 3 state roots). New named refusals on BOTH planes: PRODUCTION_SIGNING_KEY_FIXTURE_MATERIAL (measurement, and it covers the exactness door) and STATE_AUTHORITY_V2_SIGNING_KEY_FIXTURE_MATERIAL (state, production-only path so require_production=False is untouched). The pre-fix consequence reproduced on both planes under an INDEPENDENTLY generated owner anchor - so this was never the anchor class already closed at r2: production_admission_errors=[] with root_is_committed_test_public=True and custody asserting private_key_never_leaves_custody=True. DRIVER-VERIFIED RED, independently of the builder's harness: pre-fix authority modules forced to win the import (mbcx01_build_trust_anchor sha256 ea7371c6, strict_public_key_carrier_ok ABSENT, derived committed key set = 1), fixture JSON + node verifier copied beside them so the set was non-empty and the red could not be fake. All four new witnesses failed there. DRIVER-VERIFIED COLLATERAL CONTROL (the blast-radius question): the NEW test files - including the positive lanes moved to in-memory generated signing keys - run against PRE-FIX authorities give 120 tests with EXACTLY 5 failures (the 4 new witnesses + the rebuilt bw28 sub-case) and ZERO collateral, which is what establishes that the positive-lane key swap did not silently weaken any pre-existing witness.",
+      "blast_radius_note": "FORCED, not incidental: the pre-fix POSITIVE lanes of both suites used exactly the material this class refuses, so no fix could refuse the class and leave them green. Both lanes moved to in-memory generated signing keys (mbcx01_build_ceremony_fixture.test_production_signing_keypair). The keygen shells out to node and therefore adds subprocess time to the suites - it sits in the FIXTURE/TEST module only; the driver verified no authority module imports it, so nothing was added to the production construction path (the only node call in trust_anchor is the pre-existing signature verifier at :915)."
+    },
+    {
+      "id": "MBCX01-R4-PIN-MANIFEST-STALE-AND-FALSE-PACKET-CLAIM",
+      "status": "half_closed_manifest_regenerated_bundle_arm_still_owed",
+      "load_bearing": false,
+      "problem": "The pin manifest governs 3527f510 while the review target is 4c7056e, and mbcx01_build_win32.py - executable BUILD source - changed at 0521752, AFTER the pin. The change is comment-only (the discharged-ordinal note), so no runtime byte differs and no scientific bypass follows. But the r4 packet's own section 14 asserted that the four commits after the manifest pin are records/ledger files, not BUILD source, and offered git log --stat 331f25b..HEAD as the check - the command that falsifies it. Both SEAT1 and SEAT3 caught it independently. The banked PINNED RECONSTRUCTION COMPLETE is a true statement about the wrong commit.",
+      "why_deferred": "Recorded rather than quietly fixed because it is a DRIVER defect in a packet the seats were asked to trust, and the lane's re-entry doc already named regenerate-pins-after-any-content-commit as a trap that had bitten once - it bit again in the commit that added the warning.",
+      "discharge_condition": "Regenerate the pin manifest at the accepted commit, and add an arm to verify-build-bundle.py that reconciles the manifest against CURRENT bytes so staleness is loud without requiring a clean-room run. Then re-state the clean-room claim against the accepted commit.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-PIN-MANIFEST.json governing_commit",
+        "verify-build-pinned.ps1:44-61",
+        "MBCX-01-BUILD-ACCEPTANCE-ROUND-r4-SYNTHESIS.md D3"
+      ],
+      "discharge_evidence": "Pin manifest regenerated at the amendment commit (9327f07): governing_commit now 9c197e3, 38 subjects, and verify-build-pinned reconstructs the ACTUAL reviewed bytes (PINNED RECONSTRUCTION COMPLETE, real exit 0). STILL OWED: the bundle arm that reconciles the manifest against CURRENT bytes so staleness is loud without a clean-room run - without it this defect can silently recur on the next content commit, which is exactly how it recurred the first time.",
+      "crlf_trap_for_the_owed_arm": "SEAT1 r5, unprompted and worth more than the finding it rode on: the manifest records LF blobs while core.autocrlf=true checks the 32 frozen dependencies out as CRLF, so a manifest-freshness arm written against the WORKING TREE rather than the git object store would FALSE-FIRE on all 32. Whoever builds the owed arm must read blobs via git cat-file, not the working tree, and should carry this sentence in the arm's comment.",
+      "github_issue": "#6",
+      "github_issue_url": "<private-repo>/issues/6"
+    },
+    {
+      "id": "MBCX01-R4-BW28-WITNESS-CANNOT-DISCRIMINATE-ITS-CLASS",
+      "status": "CLOSED_witness_rebuilt_independently_of_the_normalizer",
+      "load_bearing": false,
+      "problem": "Witness bw28's sub-case at test_mbcx01_build_measurement.py:1400-1406 (the same key, re-wrapped by a hand edit, is the same key) constructs its variant FROM public_key_identity - the normalizer under test - so it can only ever confirm that function's fixed points. It tests re-wrapping (handled) and can never reach re-encoding (the key-identity defect). Found by SEAT1 while answering Q8; it is the author-blind-spot that let that defect live behind 114/114 green.",
+      "why_deferred": "Folds with the key-identity fix; a witness built from the output of the thing it tests is not a separate work item.",
+      "discharge_condition": "Rebuild the witness variant independently of public_key_identity (derive it from the decoded key bytes), and confirm it goes RED on pre-fix bytes.",
+      "full_picture_pointers": [
+        "test_mbcx01_build_measurement.py:1362-1432",
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r4.md F5"
+      ],
+      "discharge_evidence": "bw28's defective sub-case is rebuilt from the DECODED key point via a long-form BIT STRING SPKI helper, never from public_key_identity - so it can no longer merely confirm that function's own fixed points. It is red on pre-fix bytes (driver-verified: 'TrustAnchorError not raised', i.e. pre-fix the re-encoded committed key was ADMITTED) and green after."
+    },
+    {
+      "id": "MBCX01-R4-CWE-1291-CITATION-PHASE-WRONG",
+      "status": "CLOSED_corrected_at_six_live_sites_after_driver_opened_the_primary",
+      "load_bearing": false,
+      "problem": "Three places state that MITRE places the CWE-1291 mitigation at Architecture-and-Design. The page says Potential Mitigations Phase: IMPLEMENTATION (use different keys for Production and Debug); Architecture or Design Review appears under Detection Methods. PeerOf CWE-321 is correct. Opened at cwe.mitre.org by SEAT1 this session.",
+      "why_deferred": "Leaf; nothing behavioural turns on it. Recorded because the record is headed for external readers and a correct quote with a wrong pointer is still a false citation.",
+      "discharge_condition": "Correct the phase in mbcx01_build_trust_anchor.py:453-455, test_mbcx01_build_measurement.py:1372-1374, and the next packet.",
+      "full_picture_pointers": [
+        "mbcx01_build_trust_anchor.py:448-455",
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r4.md F3"
+      ],
+      "discharge_evidence": "The DRIVER opened cwe.mitre.org/data/definitions/1291.html (CWE 4.20) rather than propagating a correction on the seat's word, and confirmed it: the Potential Mitigations table carries exactly ONE row - Phase: IMPLEMENTATION, 'Use different keys for Production and Debug.' 'Architecture or Design Review' appears under DETECTION METHODS, not mitigations. PeerOf CWE-321 confirmed and kept. SIX live sites corrected (the seat found three; a grep found six): mbcx01_build_fixturekey_probe.py, mbcx01_build_trust_anchor.py x3, test_mbcx01_build_measurement.py, MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md. The false part was never the citation - it was ATTRIBUTING our choice of guard site to MITRE. Each rewrite keeps the citation, states the real phase, and says that placing the guard at context construction is OUR call, not something MITRE prescribes.",
+      "deliberately_not_edited": "Banked seat verdicts (r3/r4), the codex-exec log, and the 2026-08-14 FIXTUREKEY green witness bank still carry the old wording. Those are dated RECORDS of what was said and run; rewriting them would desync the record from the evidence it describes. The correction is discoverable through this row and the r4 synthesis instead."
+    },
+    {
+      "id": "MBCX01-SMOKE-MACHINE-WIDE-KERNEL-PROCESS-PROVIDER",
+      "status": "open_blocks_the_first_real_smoke_run",
+      "load_bearing": true,
+      "problem": "The consumer enables Microsoft-Windows-Kernel-Process MACHINE-WIDE (_enable_process_provider) and has NO member filter, so a live session receives ProcessStart/ThreadStart events for every foreign process on the host. Those foreign thread events cannot bind to the signed Job member roster, so they now hit ETW_THREAD_START_KEY_UNBINDABLE (and previously hit ETW_THREAD_LIFETIME_UNKNOWN_MEMBER in assemble_thread_lifetimes) - either way a FAULT. Consequence, stated plainly: on any machine that is not otherwise idle, the smoke run is expected to ABORT rather than complete, and that abort is the code behaving as designed rather than a new defect. Surfaced during the r4 ETW fold; it is a PRE-EXISTING scoping gap, not something the fold introduced (both the pre-fold and post-fold paths fault, only the error name moved earlier).",
+      "why_deferred": "Out of scope of the three r4 ETW classes and it has no red witness yet, so it was named rather than folded blind. It is also the kind of question the elevated smoke run answers definitively - how much foreign traffic actually arrives, and whether filtering belongs at the provider, the callback, or the assembler.",
+      "discharge_condition": "Decide where membership filtering belongs and build it with a red witness: a synthetic stream carrying BOTH the Job's own processes and foreign ones must yield a complete roster for the members and must NOT fault on the foreigners. Candidates: an ETW provider-side filter (EVENT_FILTER by PID where supported), a callback-side drop of non-member PIDs before assembly, or an assembler that partitions rather than faults. ANY option must preserve the fail-loud property for a member that is genuinely missing - a filter must never become a way to hide an absent member.",
+      "full_picture_pointers": [
+        "mbcx01_build_etw_consumer.py _enable_process_provider",
+        "mbcx01_build_etw_consumer.py bind_thread_start_keys / ETW_THREAD_START_KEY_UNBINDABLE",
+        "mbcx01_build_etw_consumer.py assemble_thread_lifetimes / ETW_THREAD_LIFETIME_UNKNOWN_MEMBER",
+        "MBCX01-SMOKE-RUN-OUTSTANDING (this is a precondition for it succeeding)"
+      ],
+      "github_issue": "#3",
+      "github_issue_url": "<private-repo>/issues/3"
+    },
+    {
+      "id": "MBCX01-R5-COHORT-ROOT-UNRECORDED",
+      "status": "open_owner_ratifies_the_number_then_a_bounded_edit",
+      "load_bearing": true,
+      "problem": "AMENDMENT-1 changed the retained-cohort identity root and NOTHING anywhere records what it was, so a future generator edit that changes cohort MEMBERSHIP (not just adds fields) would produce a different 768 with every internal check still green. SEAT1 EXECUTED the differential: retained_set_root moved B51F85FF8958EAEF...C264D663 -> 38A62E8C26224FC7...3012AE6F, and a search of every committed *.json/*.md/*.py/*.txt/*.ps1 found NEITHER value anywhere. retained_set_root is used at mbcx01_r13_packets.py:152,189,530,1353 purely as a MUTUAL binding (manifest <-> authority <-> receipt, all recomputed from the same code and compared only to each other), and verify-r13-normative-bundle.py:127 asserts only len(selected)==768. The join is self-consistent BY CONSTRUCTION: a generator change re-roots every party at once and every equality still holds. AMENDMENT-1 is the live demonstration - the root moved and no verifier noticed.",
+      "why_deferred": "NOT deferred for convenience: pinning retained_set_root writes a SCIENTIFIC CONSTANT into the record, and the value to pin is the one AMENDMENT-1 just produced. SEAT1 explicitly declined to fold it for that reason and the driver agrees - a driver choosing which cohort identity is canonical is a scientific call, not a bounded edit. It is also genuinely latent rather than live: the pin manifest already hashes mbcx01_r13_measurement.py and the generator JSON by sha384, so a CODE change is caught by the pinned run; the missing piece is only 'and did that change the cohort'.",
+      "discharge_condition": "Owner ratifies the post-AMENDMENT-1/2 value of retained_set_root (plus retained_total=768 and the scenario-ids digest e02fd62a...) as the pinned cohort identity. Then a bounded edit: record the triple in the pin manifest or repair ledger and add ONE bundle assertion comparing the recomputed root to it. Red witness: mutate the generator's candidate set (not its fields) and confirm the bundle goes RED where today it stays green.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r5.md F3 (the executed differential table)",
+        "mbcx01_r13_packets.py:152,189,530,1353 (retained_set_root as a mutual binding only)",
+        "verify-r13-normative-bundle.py:127 (asserts only the count)",
+        "MBCX-01-R13-AMENDMENT-1-CANONICAL-WORLD-BINDING-2026-08-15.md"
+      ],
+      "github_issue": "#4",
+      "github_issue_url": "<private-repo>/issues/4"
+    },
+    {
+      "id": "MBCX01-R5-CEREMONY-DOC-STALE-AND-SILENT-ON-CARRIER",
+      "status": "open_doc_fix_before_the_ceremony",
+      "load_bearing": true,
+      "problem": "Two defects in MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md, both found by SEAT1. (1) STALE, in the safe direction: :152-153 and :161-162 still say the known-key set derives from committed ANCHOR documents; since the r4 fold it covers every public_key_pem in every committed fixture document, and since the r5 fold every committed *.json. The doc UNDERSTATES what the code refuses. (2) SILENT, in the risky direction: the doc has NO line anywhere naming the carrier requirement for the operator's exported key - grepping it for CRLF / line ending / newline returns nothing, and step 2 says only 'exports ONLY the public key (SPKI PEM)'. Separately, a PEM-shape refusal surfaces as the generic OWNER_TRUST_ANCHOR_INVALID, the same code a typo'd anchor_id or a wrong algorithm produces, so the custodian gets a refusal that does not point at the field.",
+      "why_deferred": "Not deferred - it is a documentation + message-text change with no code semantics behind it, so it was not bundled into the AMENDMENT-2 code fold where every other change carried a red witness. Its urgency is real but its risk is zero: it cannot corrupt a number and it cannot pass silently.",
+      "discharge_condition": "One line in ceremony section 3 step 2 naming the accepted carrier (LF/CRLF/CR all accepted and normalized since AMENDMENT-2, single body line, canonical base64) with a one-line normalisation command; correct :152-153 and :161-162 to describe the current harvest scope (every committed *.json document beside the module); optionally split the PEM-shape refusal out of OWNER_TRUST_ANCHOR_INVALID so the message names the field. Rides the codex-CLI gate, no council re-round.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r5.md F2",
+        "MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md:152-153,161-162 and section 3 step 2",
+        "mbcx01_build_trust_anchor.py OwnerTrustAnchor.__init__ (the generic refusal code)"
+      ],
+      "github_issue": "#5",
+      "github_issue_url": "<private-repo>/issues/5"
+    },
+    {
+      "id": "MBCX01-R5-LITERAL-LF-PEM-ASSUMPTIONS-REMAIN",
+      "status": "open_named_scope_limit_of_amendment_2",
+      "load_bearing": false,
+      "problem": "AMENDMENT-2 normalizes RFC 7468 EOL conventions at the OWNER TRUST ANCHOR door only. Literal-LF PEM assumptions survive elsewhere: mbcx01_build_measurement_authority.py:324-325, mbcx01_r13_measurement.py:148, and the `pattern` fields in MBCX-01-BUILD-MEASUREMENT-TRUST-ROOTS-V3.schema.json:48 and MBCX-01-BUILD-STATE-TRUST-ROOTS-V1.schema.json:14. So the sentence 'we handle RFC 7468 carriers' is NOT true of the lane as a whole - only of the operator-facing anchor path.",
+      "why_deferred": "Deliberate scope limit, declared by the builder rather than discovered later: those sites govern MANIFESTS THIS LANE GENERATES ITSELF, not operator keyboard input, so no honest-operator transport accident reaches them. Widening the fold to them would have been scope creep past the defect the council actually found, and one of them is a frozen-layer schema.",
+      "discharge_condition": "Either (a) confirm by inspection that every producer of those manifests is lane-internal and emits LF, and record that as the reason the assumption is safe, or (b) if any manifest can ever be operator-authored, extend normalization to those sites - noting the schema `pattern` change would touch the frozen layer and therefore needs an amendment.",
+      "full_picture_pointers": [
+        "mbcx01_build_measurement_authority.py:324-325",
+        "mbcx01_r13_measurement.py:148",
+        "MBCX-01-BUILD-MEASUREMENT-TRUST-ROOTS-V3.schema.json:48",
+        "MBCX-01-BUILD-STATE-TRUST-ROOTS-V1.schema.json:14",
+        "MBCX-01-R13-AMENDMENT-2-THREAD-IDENTITY-AND-PEM-TRANSPORT-2026-08-15.md"
+      ],
+      "github_issue": "#9",
+      "github_issue_url": "<private-repo>/issues/9"
+    },
+    {
+      "id": "MBCX01-R5-COMMITTED-KEY-CENSUS-IS-A-DIRECTORY-SCAN",
+      "status": "open_residual_named_not_chased",
+      "load_bearing": false,
+      "problem": "Two things the committed-key census does NOT cover, both named rather than chased. (1) It scans the LIVE MODULE DIRECTORY, not Git objects (SEAT2 and SEAT3 both raised this): a future PACKAGED deployment that strips fixture documents would silently shrink the refused set, so 'committed-key census' would no longer mean the pinned committed census. (2) After the r5 subtraction it covers every committed *.json beside the module - so a key whose public half is published only in a .md, a .txt, or a witness-run bank is still outside the set.",
+      "why_deferred": "OWNER-RULED 2026-08-15, verbatim: do not build machinery to protect an experiment that has no adversary. The complement that would close (2) totally is a repository-wide key scanner, and the actor is an operator copying a committed template during a one-time supervised ceremony - a footgun, not an adversary. The close chosen was a SUBTRACTION (delete the .fixture.json filename filter), and the remainder is disclosed at the finding site instead of chased. For (1), under the currently defined run path the pinned reconstruction contains the committed fixture documents, so the census matches the pin today.",
+      "discharge_condition": "Re-review ONLY IF the deployment shape changes (a packaged artifact that strips fixture documents) or if a key is ever found published in a non-JSON committed file. The durable alternative, if it is ever wanted, is not a scanner: compare the ceremony's step-2 exported key against the repository ONCE, at ceremony time, as a human-run step.",
+      "full_picture_pointers": [
+        "mbcx01_build_trust_anchor.py committed_fixture_key_material (the deleted suffix filter + its residual comment)",
+        "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-VERDICT-r5.md Items 4-5 note",
+        "MBCX-01-BUILD-SEAT3-CODEX-VERDICT-r5.md Item 5 residual",
+        "memory: no-adversary-means-delete-a-restriction-not-add-a-scanner"
+      ],
+      "github_issue": "#15",
+      "github_issue_url": "<private-repo>/issues/15"
+    },
+    {
+      "id": "MBCX01-R5-AMENDMENT2-JUDGMENT-CALLS-FOR-THE-NEXT-SEAT",
+      "status": "open_disclosed_for_the_next_review_round",
+      "load_bearing": false,
+      "problem": "Six choices inside AMENDMENT-2 that a reviewer should challenge rather than inherit. (1) BARE CR IS ACCEPTED - broader than openssl, which rejects a CR-only document (exit 1, probe-verified); we follow RFC 7468's parser guidance instead. (2) The anchor STORES THE NORMALISED carrier, so anchor.public_key_pem is not byte-identical to a CRLF source document's field. (3) Fault vocabulary moved: ETW_THREAD_LIFETIME_DUPLICATE_START now means only a second START at the SAME QPC; overlap gets the new ETW_THREAD_LIFETIME_OVERLAPPING_REUSE; and two starts + one stop now yields ETW_THREAD_LIFETIME_INCOMPLETE where it used to yield DUPLICATE_START - NO BANKED TEST ASSERTED THAT NAME, so nothing caught the change. (4) TOUCHING intervals are refused (A ends 30, B starts 30) in both layers, because observation containment is inclusive at both ends and the join must stay a function. (5) ETW_PROCESS_INCARNATION_AMBIGUOUS is a NEW name for two live incarnations of one PID; the alternative was folding it into UNBINDABLE. (6) A stop-less incarnation is treated as OPEN-ENDED by the binder; roster completeness stays assemble_member_lifetimes' fault.",
+      "why_deferred": "These are not defects - they are judgment calls where a different reviewer could reasonably choose the other branch, and the builder surfaced them rather than burying them. They are recorded so the next round inherits the CHOICE, not just the code: an unchallenged judgment call becomes an unexamined assumption.",
+      "discharge_condition": "Next council round rules each one explicitly (accept as-is or name the change). Item (3) additionally deserves a witness that asserts the INCOMPLETE name, since nothing currently pins it.",
+      "full_picture_pointers": [
+        "MBCX-01-R13-AMENDMENT-2-THREAD-IDENTITY-AND-PEM-TRANSPORT-2026-08-15.md",
+        "mbcx01_build_etw_consumer.py (assemble_thread_lifetimes, bind_thread_start_keys, normalize_pem_eol)",
+        "mbcx01_r13_measurement.py (_process_intervals + the per-TID lifetime list)"
+      ],
+      "github_issue": "#8",
+      "github_issue_url": "<private-repo>/issues/8"
+    },
+    {
+      "id": "MBCX01-R5-FROZEN-WITNESSES-BYPASS-THE-SIGNATURE-PATH",
+      "status": "open_witness_quality_note",
+      "load_bearing": false,
+      "problem": "AMENDMENT-2's three frozen witnesses call _validate_physical_evidence DIRECTLY - a private seam - rather than driving a signed envelope through the public admission path. That makes them faster and more discriminating about the containment logic, but it means they do NOT exercise the signature/authority path that a real receipt travels, so they cannot catch a defect that lives between the envelope and the validator. Separately, one of the three (test_i11_adversarial_overlapping_lifetimes_for_one_thread_id_are_refused) is a GUARD, not a red witness: it PASSED pre-fix, because everything duplicate was refused then. The builder stated this rather than claiming 3/3 reds.",
+      "why_deferred": "The two genuine reds carry the class; the guard exists to prove the fix did not over-loosen, which is exactly the risk a loosening fix carries, and it does that job. Driving the full signed path in a frozen witness is a larger change to frozen test scaffolding than the amendment warranted.",
+      "discharge_condition": "Add or extend one witness that drives a signed production-shaped envelope carrying a non-contained thread lifetime through the PUBLIC admission path, confirming the refusal survives the envelope layer. SEAT2 already executed exactly this shape by hand in r5 (production_admission_errors == [] pre-fix), so the input is known.",
+      "full_picture_pointers": [
+        "test_mbcx01_r13_measurement.py (the three i11 witnesses)",
+        "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-VERDICT-r5.md F2 (the signed-path reproduction)"
+      ],
+      "github_issue": "#10",
+      "github_issue_url": "<private-repo>/issues/10"
+    },
+    {
+      "id": "MBCX01-R5-SMOKE-FIXTURE-CONTAINMENT-UNEXECUTED",
+      "status": "open_verify_before_the_smoke_run",
+      "load_bearing": false,
+      "problem": "mbcx01_smoke_cell.py's dry-run fixture (thread 900 alive 11..29 inside process 4100 alive 10..30, CSwitch records at qpc 12 and 20) satisfies BOTH new AMENDMENT-2 containment rules BY INSPECTION ONLY. It was never executed, because executing the smoke cell is prohibited without a fresh owner authorization.",
+      "why_deferred": "The prohibition is the reason, and it is the correct one: running the smoke driver is an owner-authorized physical action. Inspection is the strongest evidence available without crossing that line, and it was labelled as inspection rather than presented as a pass.",
+      "discharge_condition": "The elevated smoke run (MBCX01-SMOKE-RUN-OUTSTANDING) settles it as a side effect. If the fixture ever fails containment, the smoke run aborts by name rather than producing a number - the correct posture - but it would waste the owner's elevated session, so a dry-run of just the fixture assembly is worth doing first.",
+      "full_picture_pointers": [
+        "mbcx01_smoke_cell.py (the dry-run fixture)",
+        "MBCX01-SMOKE-RUN-OUTSTANDING",
+        "MBCX-01-R13-AMENDMENT-2-THREAD-IDENTITY-AND-PEM-TRANSPORT-2026-08-15.md"
+      ],
+      "github_issue": "#11",
+      "github_issue_url": "<private-repo>/issues/11"
+    },
+    {
+      "id": "MBCX01-R5-DRIVER-PACKET-CLAIMS-FALSIFIED",
+      "status": "open_recorded_driver_defect_no_code_owed",
+      "load_bearing": false,
+      "problem": "Two claims the DRIVER wrote into council packets were falsified by execution, and both are recorded rather than quietly corrected. (1) r4 packet section 14 asserted 'the four commits after the manifest pin are records/ledger files, not BUILD source' and offered a command that FALSIFIES it - mbcx01_build_win32.py changed at 0521752 (comment-only). Caught independently by SEAT1 and SEAT3. (2) r5 packet item 7 asserted 'the guard still fails on any frozen-suite change' - SEAT3 executed a wholly REPLACED 147-test suite through check_frozen_suites and it PASSED, and the driver confirmed at the byte that verify-build-bundle.py does no byte-checking of frozen modules at all (its only digest work is JSON parity). (3) The r5 packet also repeated the fold's own docstring claim that the binder binds by 'PID + QPC interval' without checking the code matched it; the code never read ProcessStop.",
+      "why_deferred": "No code is owed for (1) and (2): (1) was discharged by regenerating the pin manifest, and (2) resolves to the already-tracked owed bundle arm. (3) was discharged by the AMENDMENT-2 fold, which also corrected the docstring. The row exists because a packet claim that seats were asked to trust turned out false three times, and the pattern - asserting a fold's own claim without re-deriving it - is the thing to carry forward, not the individual corrections.",
+      "discharge_condition": "Standing behavioural correction, not a code change: every load-bearing claim a packet makes about what the code DOES gets re-derived from the code before the packet ships, not copied from the fold's own docstring or commit message.",
+      "full_picture_pointers": [
+        "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r5.md F4 driver adjudication",
+        "MBCX-01-BUILD-SEAT3-CODEX-VERDICT-r5.md finding 4",
+        "MBCX01-R4-PIN-MANIFEST-STALE-AND-FALSE-PACKET-CLAIM (the owed bundle arm)"
+      ],
+      "github_issue": "#16",
+      "github_issue_url": "<private-repo>/issues/16"
+    }
+  ]
+}

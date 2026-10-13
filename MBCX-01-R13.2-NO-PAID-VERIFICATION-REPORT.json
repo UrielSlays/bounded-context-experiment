@@ -1,0 +1,140 @@
+{
+  "blocking_prerequisites": [
+    "STATE_AUTHORITY_UNAVAILABLE",
+    "PHYSICAL_HARNESS_UNAVAILABLE"
+  ],
+  "experiment_executed": false,
+  "paid_calls": 0,
+  "physical_harness_executed": false,
+  "provider_calls": 0,
+  "report_id": "MBCX-01-R13.2-LIVE-NO-PAID-VERIFICATION",
+  "sections": {
+    "cohort": {
+      "selected": 768,
+      "status": "PASS",
+      "tests": 4
+    },
+    "inference": {
+      "planning_diagnostics": {
+        "cells": [
+          {
+            "branch_counts": {
+              "INCONCLUSIVE_OR_UNDERFUNDED": 22,
+              "PROMOTE_TO_COORDINATION_STAGE": 9978
+            },
+            "expected_branch": "PROMOTE_TO_COORDINATION_STAGE",
+            "expected_branch_frequency": 0.9978,
+            "id": "OM90_EQUAL",
+            "replicates": 10000
+          },
+          {
+            "branch_counts": {
+              "INCONCLUSIVE_OR_UNDERFUNDED": 25,
+              "PROMOTE_TO_COORDINATION_STAGE": 9975
+            },
+            "expected_branch": "PROMOTE_TO_COORDINATION_STAGE",
+            "expected_branch_frequency": 0.9975,
+            "id": "LOW_DISCORD_EQUAL",
+            "replicates": 10000
+          },
+          {
+            "branch_counts": {
+              "INCONCLUSIVE_OR_UNDERFUNDED": 27,
+              "MODEL_INTERFACE_FAIL": 9973
+            },
+            "expected_branch": "MODEL_INTERFACE_FAIL",
+            "expected_branch_frequency": 0.9973,
+            "id": "DELTA_NEG20_OM90",
+            "replicates": 10000
+          },
+          {
+            "branch_counts": {
+              "INCONCLUSIVE_OR_UNDERFUNDED": 575,
+              "MODEL_OR_INTERFACE_CEILING": 9425
+            },
+            "expected_branch": "MODEL_OR_INTERFACE_CEILING",
+            "expected_branch_frequency": 0.9425,
+            "id": "CEILING_OM70_EQUAL",
+            "replicates": 10000
+          },
+          {
+            "branch_counts": {
+              "INCONCLUSIVE_OR_UNDERFUNDED": 2932,
+              "MODEL_INTERFACE_FAIL": 7068
+            },
+            "expected_branch": "MODEL_INTERFACE_FAIL",
+            "expected_branch_frequency": 0.7068,
+            "id": "R10_COUNTEREXAMPLE",
+            "replicates": 10000
+          }
+        ],
+        "claim_kind": "DETERMINISTIC_PLANNING_FREQUENCY",
+        "experiment_evidence": false,
+        "n": 768,
+        "replicates_per_cell": 10000,
+        "schema_id": "MBCX01R13DeterministicPlanningFrequencyV1",
+        "seed": "MBCX01-R11-OC-V1"
+      },
+      "route": {
+        "accept_failures_at_most": 4,
+        "bad_route_acceptance_max": 0.04943332980758838,
+        "good_route_acceptance_min": 0.9190668746549461,
+        "good_route_rejection_max": 0.08093312534505392,
+        "proof": "FINITE_HORIZON_CONDITIONAL_EXPECTATION_RECURSION",
+        "trials": 456
+      },
+      "status": "PASS",
+      "tests": 15
+    },
+    "integration": {
+      "declared_witnesses": 61,
+      "repairs": 18,
+      "status": "PASS"
+    },
+    "measurement": {
+      "cells": 100,
+      "physical_harness_status": "PHYSICAL_HARNESS_UNAVAILABLE",
+      "status": "DESIGN_OR_IMPLEMENTATION_FAIL",
+      "synthetic_rows_are_evidence": false,
+      "tests": 43,
+      "verification_status": "PASS"
+    },
+    "packets": {
+      "fixture_conformance": "PASS",
+      "scientific_admission": "STATE_AUTHORITY_UNAVAILABLE",
+      "served_bytes": 65536,
+      "status": "PASS",
+      "tests": 46
+    },
+    "pipeline": {
+      "a1_postcommit_cut_bound": true,
+      "action_catalog_bound": true,
+      "dual_reducer_replay_bound": true,
+      "durability_schema_joined": true,
+      "episode_outcome_ledger_bound": true,
+      "episode_partition_authority_bound": true,
+      "inference_order_bound": true,
+      "outcome_receipt_authority_bound": true,
+      "packet_score": 1,
+      "postcommit_state_hash_bound": true,
+      "proposal_authority_bound": true,
+      "retained_population_join_count": 768,
+      "scenario_id": "SCENARIO.1.105",
+      "scientific_score": 0,
+      "selected": 768,
+      "state_authority_available": false,
+      "state_result": "APPLIED",
+      "status": "PASS",
+      "tests": 3,
+      "writer_state_event_bound": true
+    },
+    "state": {
+      "event_types": 17,
+      "post_ingress_semantics_shared": false,
+      "state_authority_status": "STATE_AUTHORITY_UNAVAILABLE",
+      "status": "PASS",
+      "tests": 34
+    }
+  },
+  "top_level_readiness": "DESIGN_OR_IMPLEMENTATION_FAIL"
+}

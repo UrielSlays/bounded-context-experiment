@@ -1,0 +1,116 @@
+{
+  "contract_id": "MBCX-01-INFERENCE-CONTRACT-v2",
+  "normative": true,
+  "estimands": {
+    "population": "the frozen motif-balanced Stage-2 manifest in SHA256 scenario order",
+    "delta": "average conditional mean over the frozen manifest of BC_i - OM_i",
+    "om": "average conditional mean over the frozen manifest of OM_i",
+    "support": {"delta": [-1, 0, 1], "om": [0, 1]},
+    "independence": "scenario pairs are generated independently before provider calls; within-pair BC/OM dependence is unrestricted",
+    "heterogeneity": "conditional means may vary arbitrarily by scenario and motif"
+  },
+  "method": {
+    "name": "three-look bounded-martingale Hoeffding intervals",
+    "theorem": "for independent bounded X_i in [a,b] with possibly varying conditional means, Hoeffding's inequality bounds the average conditional mean; Bonferroni over three fixed looks and two streams gives family coverage at least 0.95",
+    "family_alpha": 0.05,
+    "stream_alpha": 0.025,
+    "look_count": 3,
+    "look_alpha": 0.008333333333333333,
+    "looks": [96, 192, 384],
+    "delta_radius": "2 * sqrt(log(2/look_alpha)/(2*n))",
+    "om_radius": "sqrt(log(2/look_alpha)/(2*n))",
+    "interval_clip": {"delta": [-1, 1], "om": [0, 1]},
+    "running_intersection": false,
+    "optional_stopping_claim": "none beyond the three preregistered Bonferroni-protected looks",
+    "independent_implementation": "a separately written exact formula evaluator must match every frozen vector within 1e-12"
+  },
+  "decision_thresholds": {
+    "noninferiority_margin": -0.1,
+    "oracle_floor": 0.8,
+    "PROMOTE_TO_COORDINATION_STAGE": "delta_lower > -0.10 AND om_lower >= 0.80 AND every deterministic hard gate holds",
+    "MODEL_INTERFACE_FAIL": "delta_upper < -0.10 AND om_lower >= 0.80 AND every deterministic hard gate holds",
+    "MODEL_OR_INTERFACE_CEILING": "om_upper < 0.80",
+    "INCONCLUSIVE_OR_UNDERFUNDED": "none of the other branches holds at the terminal look",
+    "precedence": ["TRANSPORT_INCONCLUSIVE", "DESIGN_OR_IMPLEMENTATION_FAIL", "MODEL_OR_INTERFACE_CEILING", "MODEL_INTERFACE_FAIL", "PROMOTE_TO_COORDINATION_STAGE", "INCONCLUSIVE_OR_UNDERFUNDED"]
+  },
+  "stopping": {
+    "look_96": {"PROMOTE_TO_COORDINATION_STAGE": "binding if reachable", "MODEL_INTERFACE_FAIL": "binding if reachable", "MODEL_OR_INTERFACE_CEILING": "binding", "otherwise": "continue"},
+    "look_192": {"PROMOTE_TO_COORDINATION_STAGE": "binding if reachable", "MODEL_INTERFACE_FAIL": "binding if reachable", "MODEL_OR_INTERFACE_CEILING": "binding", "otherwise": "continue"},
+    "look_384": {"all_branches": "terminal by precedence"},
+    "reachability_report_required": true,
+    "cost_report": "publish expected and maximum accepted calls under this exact stopping law"
+  },
+  "missingness": {
+    "whole_pair_missing": "any accepted/no-body or route-identity failure in any of six nodes makes the pair missing",
+    "completion_space": "{00,01,10,11}^m",
+    "feasibility": "enumerate every binary BC/OM completion for each missing pair; no delta-only shortcut",
+    "branch_invariance_required": true,
+    "hard_ceiling_count_at_n384": 7,
+    "hard_ceiling_fraction": 0.02,
+    "terminal_rule": "eight or more missing pairs or any branch variation across feasible completions yields TRANSPORT_INCONCLUSIVE",
+    "no_substitution": true,
+    "placement_modes": ["front_loaded", "uniform_hash_positions", "back_loaded"],
+    "association_modes": ["MCAR", "BC_FAILURE_ENRICHED", "OM_FAILURE_ENRICHED", "DISCORDANT_ENRICHED"]
+  },
+  "operating_characteristics": {
+    "parameterization": "explicit valid paired cell probabilities",
+    "derived": {
+      "delta_mean": "p10 - p01",
+      "discordance_rate": "p10 + p01",
+      "om_success_rate": "p01 + p11"
+    },
+    "cells": [
+      {"id": "OM70_EQUAL", "p00": 0.25, "p01": 0.05, "p10": 0.05, "p11": 0.65},
+      {"id": "OM80_EQUAL", "p00": 0.15, "p01": 0.05, "p10": 0.05, "p11": 0.75},
+      {"id": "OM90_EQUAL", "p00": 0.05, "p01": 0.05, "p10": 0.05, "p11": 0.85},
+      {"id": "DELTA_NEG25", "p00": 0.1, "p01": 0.3, "p10": 0.05, "p11": 0.55},
+      {"id": "DELTA_NEG12", "p00": 0.12, "p01": 0.17, "p10": 0.05, "p11": 0.66},
+      {"id": "DELTA_NEG10", "p00": 0.1, "p01": 0.15, "p10": 0.05, "p11": 0.7},
+      {"id": "DELTA_POS10", "p00": 0.1, "p01": 0.05, "p10": 0.15, "p11": 0.7},
+      {"id": "HIGH_DISCORD_EQUAL", "p00": 0.25, "p01": 0.25, "p10": 0.25, "p11": 0.25},
+      {"id": "LOW_DISCORD_EQUAL", "p00": 0.09, "p01": 0.01, "p10": 0.01, "p11": 0.89}
+    ],
+    "missing_counts": [0, 4, 7, 8],
+    "replicates_per_cell_mode": 10000,
+    "cell_manifest": "canonical JSON of cells crossed with missing counts, placement modes, and association modes; SHA-384 frozen before simulation",
+    "runtime_filtering": "forbidden"
+  },
+  "reference_vectors": {
+    "formula_environment": {"language": "Python 3.13", "numeric": "IEEE-754 binary64", "external_dependencies": "none"},
+    "periodic_indexing": "zero_based_indices_0_10_20",
+    "inputs": {
+      "delta_all_zero": "n copies of 0",
+      "delta_every_tenth_minus_one": "array initialized 0; set zero-based indices 0,10,20,... to -1",
+      "delta_every_tenth_plus_one": "array initialized 0; set zero-based indices 0,10,20,... to +1",
+      "om_ninety_percent_pattern": "for each n, first floor(0.9*n) elements 1 and remainder 0; then deterministic SHA256 fixture permutation",
+      "om_eighty_percent_pattern": "for each n, first floor(0.8*n) elements 1 and remainder 0; then deterministic SHA256 fixture permutation"
+    },
+    "method_radius_vectors": {
+      "delta_all_zero": [[96, -0.33790527899, 0.33790527899], [192, -0.238935114173, 0.238935114173], [384, -0.168952639495, 0.168952639495]],
+      "om_point_0_8": [[96, 0.631047360505, 0.968952639495], [192, 0.680532442914, 0.919467557086], [384, 0.715523680252, 0.884476319748]],
+      "om_point_0_9": [[96, 0.731047360505, 1.0], [192, 0.780532442914, 1.0], [384, 0.815523680252, 0.984476319748]]
+    },
+    "input_arrays_sha384": "generated and frozen by Stage-0 before any simulation; mismatch is fatal"
+  },
+  "reference_sources": {
+    "role": "historical comparator only; not the primary r7 interval",
+    "repository": "https://github.com/gostevehoward/confseq",
+    "commit": "5ffe733ca2447a2e28c2c91f3b00086173f2ab2c",
+    "predmix_py": {"path": "src/confseq/predmix.py", "git_blob": "f7c3b4bf17411596d1434e3330796f3e8c8ff884", "bytes": 9952, "sha384_over_git_blob_bytes": "3302EBE5AB637A11DF780614CC1E10089EE22B4F1C1F78DD4F11681973003109A9BFCF1408ACF61FDFF2C434AF0CDBC6"},
+    "betting_strategies_py": {"path": "src/confseq/betting_strategies.py", "git_blob": "89f433fd24274e7c74d7d93fe054399fb87cfaca", "bytes": 4172, "sha384_over_git_blob_bytes": "CAAD5BB36CCFDCD88C6C530FA0363671886EAFED53978401564CB215463EBB483010CDB1F9F51D64E9BE049D15B27486"},
+    "import_graph_assertion": "predmix_empbern_twosided_cs and every transitive inner default are enumerated from the pinned checkout before comparison",
+    "http_response_body_pin": "not authoritative"
+  },
+  "power_and_authorization": {
+    "publish_before_paid_run": ["branch probability by OC cell and look", "inconclusive probability", "per-look reachability", "expected and maximum calls", "per-call reliability requirement", "dead/inconclusive region around OM floor"],
+    "owner_accepts_inconclusive_region_explicitly": true,
+    "paid_authorization_separate": true
+  },
+  "transport_soak": {
+    "paid_calls": 0,
+    "measures": ["accepted_no_body", "route_identity_missing", "fallback", "cache", "transform", "parameter_rejection"],
+    "minimum_attempts_per_route": 1000,
+    "pass": "upper 95 percent confidence bound on per-call pair-breaking failure satisfies the published six-node missingness budget"
+  },
+  "red_witnesses": ["IMPOSSIBLE_OC_CELL", "MISSING_OM_BRANCH_FLIP", "PERIODIC_INDEX_AMBIGUITY", "INFERENCE_IMPLEMENTATION_MISMATCH"]
+}

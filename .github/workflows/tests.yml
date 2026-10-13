@@ -1,0 +1,74 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Windows / full suite
+    runs-on: windows-latest
+    steps:
+      # The verifier is written for a checkout with core.autocrlf=true
+      # (verify-build-bundle.py); set it rather than rely on the runner image.
+      - name: Check out with CRLF conversion
+        run: git config --global core.autocrlf true
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Outcome checker's own tests
+        run: python -m unittest discover -s .github/scripts -p "test_*.py"
+
+      # One test cannot pass in this export (docs/PUBLIC-EXPORT-NOTES.md), so
+      # this step checks the outcome instead of the exit code: 601 tests run,
+      # none is skipped, and bc14 is the only one that does not pass.
+      - name: Full suite, outcome as documented
+        run: >
+          python .github/scripts/expect_suite_outcome.py
+          --ran 601
+          --not-passing
+          test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc14_adversarial_every_registration_totality_level_fails_by_name
+
+  linux:
+    name: Linux / Windows-independent modules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Outcome checker's own tests
+        run: python -m unittest discover -s .github/scripts -p "test_*.py"
+
+      - name: Round r11 to r13 tests
+        run: python -m unittest discover -s . -p "test_mbcx01_r1*.py"
+
+      - name: State store tests
+        run: python -m unittest test_mbcx01_build_state

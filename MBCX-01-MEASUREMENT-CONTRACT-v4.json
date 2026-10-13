@@ -1,0 +1,76 @@
+{
+  "contract_id": "MBCX-01-MEASUREMENT-CONTRACT-v4",
+  "normative": true,
+  "claim_scope": "finite-range practical boundedness over every registered cell; no asymptotic complexity claim",
+  "axis_values": {
+    "H": [128, 1024, 10000, 100000],
+    "D": [1, 4, 16, 64, 256],
+    "F": [1, 4, 16, 64, 256]
+  },
+  "required_cells": 100,
+  "process_tree_accounting": {
+    "platform": "Windows Job Object",
+    "containment": "candidate root is assigned before candidate code runs; descendants inherit; breakaway is disabled and audited",
+    "aggregate": "root plus every descendant, including terminated descendants",
+    "required_counters": ["root_instructions", "child_instructions", "root_cpu_time_ns", "child_cpu_time_ns", "peak_committed_bytes"],
+    "missing_or_escaped": "DESCENDANT_ACCOUNTING_MISSING"
+  },
+  "counter_row_schema": {
+    "required": ["candidate_id", "H", "D", "F", "descendant_accounted", "child_escape", "counters"],
+    "additionalProperties": false,
+    "coverage": "exactly one row for each registered cell",
+    "counter_values": "nonnegative safe integers"
+  },
+  "boundedness_gates": {
+    "aggregate_instruction_H_range_max": 500000,
+    "aggregate_cpu_time_H_range_max_ns": 75000000,
+    "peak_committed_H_range_max_bytes": 67108864,
+    "conditional_rule": "for each fixed D,F, max over all four H values minus min over all four H values",
+    "failure": "H_SHAPE_LIMIT"
+  },
+  "affordability_gates": {
+    "aggregate_instructions_absolute_max": 3000000,
+    "aggregate_cpu_time_absolute_max_ns": 150000000,
+    "peak_committed_absolute_max_bytes": 201326592,
+    "failure": "AFFORDABILITY_LIMIT",
+    "separation": "an affordable failure does not imply a boundedness failure and vice versa"
+  },
+  "source_and_cohort_freeze": {
+    "motifs": ["CORRECTION_RESTORATION", "OBLIGATION_LIFECYCLE", "DEPENDENCY_REVERSAL", "CROSS_SCOPE_COLLISION", "DELEGATION_IDEMPOTENT_HANDOFF", "MIXED_DELAYED_CONTINUITY"],
+    "generated_unique_scenarios_per_motif": 160,
+    "retained_unique_scenarios_per_motif": 128,
+    "selected_total": 768,
+    "preselection_rejections": ["unknown motif", "duplicate scenario ID anywhere", "wrong motif total", "missing cut authority"],
+    "order": ["validate global IDs and motif totals", "choose one cut deterministically", "recompute eligibility from canonical state", "rank eligible rows", "retain exactly 128 per motif"],
+    "supplied_eligibility_boolean": "delete and ignore",
+    "one_cut_hash_domain": "stage2-cut-r10",
+    "retention_hash_domain": "stage2-retain-r10",
+    "estimand_population": "the complete frozen retained manifest; no random-sample claim"
+  },
+  "call_ledger": {
+    "states": ["PREPARED", "DISPATCHED", "RESPONSE_DURABLY_RECORDED", "PROVEN_PRE_ACCEPT_FAILURE", "ACCEPTANCE_AMBIGUOUS"],
+    "events": ["DISPATCH_CONFIRMED", "PROVEN_NOT_ACCEPTED", "CONNECTION_LOST_AFTER_DISPATCH", "RESPONSE_BYTES_FSYNCED", "RETRY_REQUESTED"],
+    "transition_matrix": {
+      "PREPARED": {"DISPATCH_CONFIRMED": "DISPATCHED", "PROVEN_NOT_ACCEPTED": "PROVEN_PRE_ACCEPT_FAILURE", "CONNECTION_LOST_AFTER_DISPATCH": "ILLEGAL", "RESPONSE_BYTES_FSYNCED": "ILLEGAL", "RETRY_REQUESTED": "ILLEGAL"},
+      "DISPATCHED": {"DISPATCH_CONFIRMED": "ILLEGAL", "PROVEN_NOT_ACCEPTED": "PROVEN_PRE_ACCEPT_FAILURE", "CONNECTION_LOST_AFTER_DISPATCH": "ACCEPTANCE_AMBIGUOUS", "RESPONSE_BYTES_FSYNCED": "RESPONSE_DURABLY_RECORDED", "RETRY_REQUESTED": "ILLEGAL"},
+      "RESPONSE_DURABLY_RECORDED": {"DISPATCH_CONFIRMED": "ILLEGAL", "PROVEN_NOT_ACCEPTED": "ILLEGAL", "CONNECTION_LOST_AFTER_DISPATCH": "ILLEGAL", "RESPONSE_BYTES_FSYNCED": "RESPONSE_DURABLY_RECORDED", "RETRY_REQUESTED": "ILLEGAL"},
+      "PROVEN_PRE_ACCEPT_FAILURE": {"DISPATCH_CONFIRMED": "ILLEGAL", "PROVEN_NOT_ACCEPTED": "PROVEN_PRE_ACCEPT_FAILURE", "CONNECTION_LOST_AFTER_DISPATCH": "ILLEGAL", "RESPONSE_BYTES_FSYNCED": "ILLEGAL", "RETRY_REQUESTED": "PREPARED"},
+      "ACCEPTANCE_AMBIGUOUS": {"DISPATCH_CONFIRMED": "ILLEGAL", "PROVEN_NOT_ACCEPTED": "ILLEGAL", "CONNECTION_LOST_AFTER_DISPATCH": "ACCEPTANCE_AMBIGUOUS", "RESPONSE_BYTES_FSYNCED": "RESPONSE_DURABLY_RECORDED", "RETRY_REQUESTED": "PREPARED_IF_ROUTE_ATTESTS_EXACT_IDEMPOTENCY"}
+    },
+    "retry_guard": "identical request hash and idempotency token; only PROVEN_PRE_ACCEPT_FAILURE, or ACCEPTANCE_AMBIGUOUS on an exactly attested idempotent route",
+    "durability_order": "response bytes and response hash fsync before parse"
+  },
+  "red_candidates": {
+    "ROOT_LINEAR_10H": {"expected": ["H_SHAPE_LIMIT"]},
+    "HIDDEN_CHILD_LINEAR_10H": {"expected": ["H_SHAPE_LIMIT"]},
+    "ROOT_LINEAR_5H": {"expected_not": ["H_SHAPE_LIMIT"], "reason": "499360 is inside the frozen 500000 finite-range tolerance"},
+    "CHILD_ESCAPE": {"expected": ["DESCENDANT_ACCOUNTING_MISSING"]},
+    "CONSTANT_OVER_BUDGET": {"expected": ["AFFORDABILITY_LIMIT"], "expected_not": ["H_SHAPE_LIMIT"]}
+  },
+  "performance": {
+    "cold_repetitions": 30,
+    "warmups": 1,
+    "latency_statistic": "Hyndman-Fan type 7 p95 within cell; maximum across cells",
+    "latency_not_boundedness_substitute": true
+  }
+}

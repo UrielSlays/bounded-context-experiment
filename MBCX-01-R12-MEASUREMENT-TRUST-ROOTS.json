@@ -1,0 +1,12 @@
+{
+  "schema_id": "MeasurementTrustRootManifestV1",
+  "production_ready": false,
+  "roots": [
+    {
+      "key_id": "MBCX01.R12.NO-PAID.ED25519.TEST.1",
+      "algorithm": "ED25519",
+      "fixture_only": true,
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA11qYAYKxCrfVS/7TyWQHOg7hcvPapiMlrwIaaPcHURo=\n-----END PUBLIC KEY-----\n"
+    }
+  ]
+}

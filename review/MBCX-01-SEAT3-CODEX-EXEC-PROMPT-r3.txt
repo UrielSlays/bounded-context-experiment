@@ -1,0 +1,5 @@
+Hey homie, can you help me out? Read this and execute it completely:
+
+<repo>\MBCX-01-EXPERIMENT-COUNCIL-PACKET-r3.md
+
+You are the sealed Codex exec council seat. Follow the packet's immutable pin, read-only authority, experiment-specific scope override, worldwide/prior-art/footgun search requirements, executable attacks, and exact verdict format. Do not read any prior verdict, synthesis, exec log, or browser-seat output. Do not edit files or run paid inference. Return the entire self-contained verdict only in this command's final response and identify your model/harness/capability limits as required by the packet.

@@ -1,0 +1,2 @@
+# Only the figure renderer needs this. The verifier and the suites use the standard library.
+matplotlib>=3.8

@@ -1,0 +1,8 @@
+{
+    "codex_pid":  44828,
+    "completed_at_utc":  "2026-08-13T14:19:56.4049501Z",
+    "verdict_exists":  true,
+    "verdict_bytes":  32235,
+    "stdout_bytes":  32235,
+    "stderr_bytes":  1179206
+}

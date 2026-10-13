@@ -1,0 +1,59 @@
+{
+  "experiment_evidence": false,
+  "paid_calls": 0,
+  "report_id": "MBCX-01-R10-NO-PAID-VERIFICATION",
+  "verification_scope": "deterministic no-model gates only",
+  "sections": {
+    "cohort": {
+      "per_motif": {
+        "CORRECTION_RESTORATION": 128,
+        "CROSS_SCOPE_COLLISION": 128,
+        "DELEGATION_IDEMPOTENT_HANDOFF": 128,
+        "DEPENDENCY_REVERSAL": 128,
+        "MIXED_DELAYED_CONTINUITY": 128,
+        "OBLIGATION_LIFECYCLE": 128
+      },
+      "selected": 768,
+      "status": "PASS"
+    },
+    "inference": {
+      "scientific_n": 768,
+      "status": "PASS",
+      "transport_plan": [
+        456,
+        4
+      ]
+    },
+    "integration": {
+      "differential_event_types": 17,
+      "status": "PASS"
+    },
+    "measurement": {
+      "cells": 100,
+      "ledger_pairs": 25,
+      "status": "PASS"
+    },
+    "packets": {
+      "schemas": 6,
+      "served_bytes": 65536,
+      "status": "PASS"
+    },
+    "state": {
+      "event_types": 17,
+      "mutants": {
+        "ACTION_ID_HASH_GUARD": true,
+        "DROP_DELEGATE_EFFECT": true,
+        "DROP_RESCHEDULE_EFFECT": true,
+        "EXPIRED_FACT_VISIBLE": true,
+        "FORGED_HANDOFF_HASH": true,
+        "FUTURE_EFFECTIVE_VISIBLE": true,
+        "FUTURE_KNOWLEDGE_VISIBLE": true,
+        "PAYLOAD_HASH_IDEMPOTENCY": true,
+        "SEEN_ONLY_EFFECT": true,
+        "SKIP_ORIGINATING_CUT": true,
+        "TWO_CYCLE_ONLY": true
+      },
+      "status": "PASS"
+    }
+  }
+}

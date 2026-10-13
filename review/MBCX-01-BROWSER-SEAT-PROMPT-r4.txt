@@ -1,0 +1,5 @@
+Hey homie, can you help me out? Read this and execute it completely:
+
+<repo>\MBCX-01-EXPERIMENT-COUNCIL-PACKET-r4.md
+
+You are a fresh sealed browser council seat. Use only the exact explicit files authorized by the packet; do not recursively grep or inspect the repository. Return the complete self-contained verdict in this conversation, with your model/harness name in the report title and seat identity section. Do not edit local files and do not run paid inference.

@@ -1,0 +1,31 @@
+{
+  "schema_id": "MeasurementTrustRootManifestV2",
+  "production_ready": false,
+  "retirement_policy": {
+    "schema_id": "ProductionMeasurementTrustRetirementPolicyV1",
+    "status": "NOT_RETIRED",
+    "fail_loud_sentinel": "PHYSICAL_HARNESS_UNAVAILABLE",
+    "signer_custodian_role": "MEASUREMENT_KEY_CUSTODIAN",
+    "trust_root_editor_role": "DESIGN_CONFIGURATION_EDITOR",
+    "roles_must_be_distinct": true,
+    "manifest_edit_cannot_activate_production": true,
+    "activation_authority": "NONE_IN_R13",
+    "required_external_evidence": [
+      "SEPARATE_KEY_CUSTODY_ATTESTATION",
+      "SEPARATE_TRUST_ROOT_EDITOR_APPROVAL",
+      "HARNESS_BUILD_PROVENANCE",
+      "PRODUCTION_SIGNING_CEREMONY_RECEIPT"
+    ]
+  },
+  "roots": [
+    {
+      "key_id": "MBCX01.R13.NO-PAID.ED25519.TEST.1",
+      "algorithm": "ED25519",
+      "fixture_only": true,
+      "authorized_fixture_kind": "NO_PAID_TEST_FIXTURE",
+      "authorized_producer_role": "NO_PAID_TEST_HARNESS",
+      "trust_policy_digest": "90D0104E044F68A4BD1DE6653B89EE36C7F99FD87D1F96AAA4FB7619834762A5038F2C214654903207135F6BB8861C49",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA11qYAYKxCrfVS/7TyWQHOg7hcvPapiMlrwIaaPcHURo=\n-----END PUBLIC KEY-----\n"
+    }
+  ]
+}

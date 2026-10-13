@@ -1,0 +1,13 @@
+{
+  "schema_id": "CarrierExactnessSuiteV1",
+  "suite_id": "MBCX01.R13.CARRIER.EXACTNESS.SUITE",
+  "production_ready": false,
+  "activation_authority": "NONE_IN_R13_2",
+  "fixture_producer_id": "FIXTURE.MBCX01.CARRIER.EXACTNESS",
+  "witness_ids": [
+    "CARRIER.EXACTNESS.CANONICAL_INPUT",
+    "CARRIER.EXACTNESS.CANONICAL_OUTPUT",
+    "CARRIER.EXACTNESS.REPLAY",
+    "CARRIER.EXACTNESS.BUILD_IDENTITY"
+  ]
+}

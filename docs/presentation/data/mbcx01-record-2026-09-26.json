@@ -1,0 +1,984 @@
+{
+  "schema": "mbcx01-presentation-record/1",
+  "generated": "2026-09-26",
+  "provenance": "Every number below was read from the files of this repository or from its git history on 2026-09-26. Each block names the file it was read from, with line ranges where a range exists, or says that it was derived by counting; the council's r1 verdicts (council-logs/) re-derived the ledger series, the gate counts, the seat tables and the banked-file hashes. Nothing here is a measurement of the experiment, which has not run.",
+  "today": {
+    "branch": "presentation/mbcx01-2026-09-26",
+    "base_commit": "d002b41",
+    "unittest_discover": {
+      "tests": 601,
+      "result": "OK",
+      "seconds": 247.7,
+      "command": "python -m unittest discover -s . -p \"test_*.py\"",
+      "seconds_note": "247.7 s on the driver's run; two seats measured 231.4 s and 322.9 s on the same box; a box-and-load number, not a threshold"
+    },
+    "verify_build_bundle": {
+      "exit": 0,
+      "frozen_tests": 156,
+      "build_tests": 289,
+      "ledger_invariants": 118,
+      "ledger_witnesses": 289,
+      "top_level_readiness": "BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED",
+      "command": "python verify-build-bundle.py"
+    },
+    "source": "docs/presentation/data/suite-run-2026-09-26.log (the driver's detached run on the clone, 2026-09-26 02:18 to 02:26 local, committed byte-exact; also banked in the vault at <vault>): the 'Ran 601 tests' / 'OK' lines and the bundle report JSON; the council seats re-ran both (601 OK in 231 s and 323 s on the same box; identical bundle totals)"
+  },
+  "prereg": {
+    "source": "MBCX-01-EXPERIMENT-DESIGN-r9.md lines 52-60; MBCX-01-R10-ARCHITECTURE-SPEC.md lines 57-60; MBCX-01-R13-CLOSURE-ARCHITECTURE.md lines 91-98; MBCX-01-EXPERIMENT-COUNCIL-PACKET-r9.md lines 64-91",
+    "generated_candidates": 960,
+    "n_pairs": 768,
+    "motifs": 6,
+    "per_motif": 128,
+    "nodes_per_condition": [
+      "A0",
+      "B",
+      "A1"
+    ],
+    "conditions": [
+      "BC",
+      "OM"
+    ],
+    "call_positions_per_pair": 6,
+    "scheduled_call_positions": 4608,
+    "route_trials": 456,
+    "route_max_failures": 4,
+    "route_scheduled_positions": 2736,
+    "bad_route_acceptance_max": 0.04943332980758838,
+    "good_route_acceptance_min": 0.9190668746549461,
+    "route_bounds_source": "MBCX-01-INFERENCE-CONTRACT-v8.json; displayed bounds are rounded outward (the upper bound up, the lower bound down)",
+    "superseded_r8_soak_calls": 98868,
+    "physical_cells": 100,
+    "H_values": [
+      128,
+      1024,
+      10000,
+      100000
+    ],
+    "D_F_values": [
+      1,
+      4,
+      16,
+      64,
+      256
+    ],
+    "family_error": 0.05,
+    "noninferiority_margin": -0.1,
+    "om_floor": 0.8,
+    "cold_reconstructions": 1536,
+    "power_n768": [
+      0.9976,
+      0.9984,
+      0.9972,
+      0.943
+    ],
+    "power_n384_approx": [
+      0.56,
+      0.67,
+      0.5,
+      0.39
+    ],
+    "physical_gates": {
+      "retired_instructions": 500000,
+      "cpu_ns": 75000000,
+      "elapsed_ns": 75000000,
+      "peak_memory_bytes": 67108864,
+      "io_bytes": 16777216,
+      "io_ops": 4096
+    },
+    "paid_calls": 0,
+    "provider_calls": 0,
+    "cost_usd": null
+  },
+  "rounds": [
+    {
+      "arc": "design",
+      "round": "r1",
+      "date": "2026-08-11",
+      "s1": "GWF",
+      "s2": null,
+      "s3": "NOGO",
+      "findings": null,
+      "source": "CLAUDE-OPUS5-SEAT-VERDICT-r1.md:4,8; MBCX-01-SEAT3-CODEX-VERDICT-r1.md:1,3; no synthesis; seat-2 verdict not banked"
+    },
+    {
+      "arc": "design",
+      "round": "r2",
+      "date": "2026-08-11",
+      "s1": "GWF",
+      "s2": "GWF",
+      "s3": "NOGO",
+      "findings": 23,
+      "folded": 18,
+      "source": "MBCX-01-COUNCIL-ROUND2-SYNTHESIS.md:3-52 (findings 27-44 accepted, 48-52 not adopted)"
+    },
+    {
+      "arc": "design",
+      "round": "r3",
+      "date": "2026-08-12",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s2_seal_breached": true,
+      "s3": "NOGO",
+      "findings": 22,
+      "folded": 16,
+      "note": "seat 2 not countable as a sealed vote: its report disclosed exposure to prohibited prior-verdict files; kept as technical evidence",
+      "source": "MBCX-01-COUNCIL-ROUND3-SYNTHESIS.md:5-48 (seat table 12-15; findings 27-48)"
+    },
+    {
+      "arc": "design",
+      "round": "r4",
+      "date": "2026-08-12",
+      "s1": "NOGO",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "findings": null,
+      "source": "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r4.md:5; MBCX-01-SEAT2-CHATGPT-SOL-VERDICT-r4.md:4; MBCX-01-SEAT3-CODEX-VERDICT-r4.md:1; no synthesis"
+    },
+    {
+      "arc": "design",
+      "round": "r5",
+      "date": "2026-08-12",
+      "s1": "GWF",
+      "s1_seal_breached": true,
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "findings": 20,
+      "folded": 17,
+      "note": "seat 1 disclosed prior-round contamination; its repeated recommendations were not counted as independent confirmation, its new executed attacks were kept as evidence",
+      "source": "MBCX-01-COUNCIL-R5-SYNTHESIS-AND-DISPOSITION.md:13-49 (contamination 15; adopted 19-35; rejected 39-49)"
+    },
+    {
+      "arc": "design",
+      "round": "r6",
+      "date": "2026-08-12",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "findings": 25,
+      "folded": 25,
+      "note": "25 demonstrated defects adopted as 5 repair classes; three scope items declined as r7 blockers",
+      "source": "MBCX-01-COUNCIL-R6-SYNTHESIS-AND-DISPOSITION.md:13-121 (seat table 13-15; classes 34-96; not adopted 98-102)"
+    },
+    {
+      "arc": "design",
+      "round": "r7",
+      "date": "2026-08-12",
+      "s1": "NOGO",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "findings": 11,
+      "folded": 11,
+      "source": "MBCX-01-EXPERIMENT-COUNCIL-PACKET-r8.md:57-71 (the r7 verdicts and the 11 blockers)"
+    },
+    {
+      "arc": "design",
+      "round": "r8",
+      "date": "2026-08-12",
+      "s1": null,
+      "s2": null,
+      "s3": "NOGO",
+      "findings": 12,
+      "folded": 12,
+      "aggregate": "one GO-WITH-FIXES and two NO-GO",
+      "note": "seat 1 and seat 2 verdict files are not banked; the r9 packet records the round in aggregate as one GO-WITH-FIXES and two NO-GO, and the Codex log carries its own NO-GO. Which browser seat gave the GO-WITH-FIXES is unknown, so neither browser seat is assigned a verdict here.",
+      "source": "MBCX-01-EXPERIMENT-COUNCIL-PACKET-r9.md:49-66 (one GO-WITH-FIXES and two NO-GO in aggregate; 12 blockers); MBCX-01-SEAT3-CODEX-VERDICT-r8.md:1"
+    },
+    {
+      "arc": "design",
+      "round": "r9",
+      "date": "2026-08-12",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "findings": 13,
+      "folded": 13,
+      "source": "MBCX-01-EXPERIMENT-COUNCIL-PACKET-r10.md:55-71 (the r9 verdicts and the 13 blockers)"
+    },
+    {
+      "arc": "design",
+      "round": "r10",
+      "date": "2026-08-13",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "findings": 14,
+      "folded": 14,
+      "source": "MBCX-01-COUNCIL-R10-SYNTHESIS-AND-DISPOSITION.md:10-31"
+    },
+    {
+      "arc": "design",
+      "round": "r11",
+      "date": "2026-08-13",
+      "s1": "GO",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "findings": 7,
+      "folded": 7,
+      "source": "MBCX-01-COUNCIL-R11-SYNTHESIS-AND-DISPOSITION.md:10-24"
+    },
+    {
+      "arc": "design",
+      "round": "r12",
+      "date": "2026-08-13",
+      "s1": "GO",
+      "s2": "GWF",
+      "s3": "NOGO",
+      "findings": 13,
+      "folded": 13,
+      "note": "seat 2 reclassified from NO-GO after an owner discussion",
+      "source": "MBCX-01-COUNCIL-R12-SYNTHESIS-AND-CLOSURE-COMMISSION.md:9-50"
+    },
+    {
+      "arc": "design",
+      "round": "r13",
+      "date": "2026-08-13",
+      "s1": "GO",
+      "s2": "GWF",
+      "s2_seal_breached": true,
+      "s3": "GWF",
+      "findings": 6,
+      "folded": 6,
+      "note": "seat 2 lateral seal procedurally breached by incidental current-Codex-log snippets; its report is technical evidence, not a clean independent vote",
+      "source": "MBCX-01-COUNCIL-R13-SYNTHESIS-AND-DISPOSITION.md:7-64"
+    },
+    {
+      "arc": "design",
+      "round": "r13.1",
+      "date": "2026-08-14",
+      "s1": "GO",
+      "s2": "GWF",
+      "s3": "GWF",
+      "findings": 3,
+      "folded": 3,
+      "note": "seat 2 label banked only as 'bounded fixes'",
+      "source": "MBCX-01-TARGETED-CLOSURE-CONFIRMATION-PACKET-r13.2.md:32 ('Opus returned GO at r13.1. The two OpenAI seats returned bounded fixes, not a conceptual NO-GO.'); MBCX-01-SEAT3-CODEX-VERDICT-r13.1.md:1"
+    },
+    {
+      "arc": "design",
+      "round": "r13.2",
+      "date": "2026-08-14",
+      "s1": "GO",
+      "s2": "GO",
+      "s3": "GO",
+      "findings": 0,
+      "folded": 0,
+      "note": "all three seats: CONFIRMED",
+      "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md:42; MBCX-01-SEAT3-CODEX-VERDICT-r13.2.md:1"
+    },
+    {
+      "arc": "build",
+      "round": "r1",
+      "date": "2026-08-14",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r1-SYNTHESIS.md (seat table in the first 30 lines)"
+    },
+    {
+      "arc": "build",
+      "round": "r2",
+      "date": "2026-08-14",
+      "s1": "GO",
+      "s2": "GO",
+      "s3": "NOGO",
+      "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r2-SYNTHESIS.md (seat table in the first 30 lines)"
+    },
+    {
+      "arc": "build",
+      "round": "r3",
+      "date": "2026-08-14",
+      "s1": "GO",
+      "s2": null,
+      "s3": "NOGO",
+      "note": "seat 2: capability failure, no verdict; the round's NO-GO was later ruled void (theater)",
+      "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r3-SYNTHESIS.md (seat table in the first 30 lines)"
+    },
+    {
+      "arc": "build",
+      "round": "r4",
+      "date": "2026-08-15",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r4-SYNTHESIS.md (seat table in the first 30 lines)"
+    },
+    {
+      "arc": "build",
+      "round": "r5",
+      "date": "2026-08-15",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r5-SYNTHESIS.md (seat table in the first 30 lines)"
+    },
+    {
+      "arc": "build",
+      "round": "r6",
+      "date": "2026-08-16",
+      "s1": "GWF",
+      "s2": "GWF",
+      "s3": "NOGO",
+      "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r6-SYNTHESIS.md (seat table in the first 30 lines)"
+    },
+    {
+      "arc": "build",
+      "round": "r7",
+      "date": "2026-08-16",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r7-SYNTHESIS.md (seat table in the first 30 lines)"
+    },
+    {
+      "arc": "build",
+      "round": "r8",
+      "date": "2026-08-16",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "note": "fold surfaces confirmed; arc closed",
+      "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r8-SYNTHESIS.md (seat table in the first 30 lines)"
+    },
+    {
+      "arc": "cohort_design",
+      "round": "r1",
+      "date": "2026-08-16",
+      "s1": "NOGO",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "source": "MBCX-01-COHORT-DESIGN-COUNCIL-R1-SYNTHESIS.md:3-5"
+    },
+    {
+      "arc": "cohort_design",
+      "round": "r2",
+      "date": "2026-08-16",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "source": "MBCX-01-COHORT-DESIGN-COUNCIL-R2-SYNTHESIS.md:3-5"
+    },
+    {
+      "arc": "cohort_design",
+      "round": "r3",
+      "date": "2026-08-16",
+      "s1": "GTC",
+      "s2": "CD",
+      "s3": "GTC",
+      "note": "round calls, verbatim from the synthesis: GO-TO-CODE (seat 1), GO-TO-CODE (seat 3), CONTINUE-DESIGN (seat 2, scoped to one function); GO-TO-CODE outranks and the design phase ended at r4",
+      "source": "MBCX-01-COHORT-DESIGN-COUNCIL-R3-SYNTHESIS.md:3-5"
+    },
+    {
+      "arc": "cohort_build",
+      "round": "r1",
+      "date": "2026-08-16",
+      "s1": "GWF",
+      "s2": "NOGO",
+      "s3": "NOGO",
+      "source": "MBCX-01-COHORTBUILD-ROUND-r1-SYNTHESIS.md:3-6"
+    },
+    {
+      "arc": "cohort_build",
+      "round": "r2",
+      "date": "2026-08-16",
+      "s1": "GO",
+      "s2": "GO",
+      "s3": "GWF",
+      "source": "MBCX-01-COHORTBUILD-ROUND-r2-SYNTHESIS.md:3-6"
+    }
+  ],
+  "premise_correction": {
+    "source": "MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md:31-32 (the declared api-caller; 'There is no such caller') and :64 (the r2 wiring-freeze rider being reverted); the revert commit fd26275's message (the mechanism AuthorityWiringDuringVerification and its four call sites); MBCX-01-RE-ENTRY-2026-08-14.md:37-38 ('three council rounds, nine seat-verdicts'); MBCX-01-BUILD-ACCEPTANCE-ROUND-r3-SYNTHESIS.md seat table (seat 2: capability failure, no verdict) for the eight-verdicts-plus-one-report split",
+    "rounds_spent": 3,
+    "verdicts_spent": 8,
+    "capability_reports": 1,
+    "mechanism_built_then_reverted": "wiring freeze (AuthorityWiringDuringVerification)",
+    "revert_commit": "fd26275",
+    "build_tests_before_after": [
+      95,
+      94
+    ],
+    "caught_by": "the owner, in live chat",
+    "verdicts_note": "the re-entry says nine seat-verdicts; the r3 seat table shows eight verdicts and one capability report, which this record uses"
+  },
+  "codex_cli_gate": {
+    "source": "docs/presentation/data/codex-gate-findings-2026-09-26.md (this public copy): the FINAL findings block of each of the nine gate logs, excerpted at the line ranges below from the working repository's MBCX-01-CODEXCLI-r1..r9-FULL-LOG-*.log, which are withheld here; ranges read on 2026-09-26",
+    "rounds": [
+      "r1",
+      "r2",
+      "r3",
+      "r4",
+      "r5",
+      "r6",
+      "r7",
+      "r8",
+      "r9"
+    ],
+    "total": [
+      5,
+      7,
+      10,
+      6,
+      4,
+      5,
+      4,
+      3,
+      4
+    ],
+    "p1": [
+      3,
+      5,
+      4,
+      1,
+      1,
+      1,
+      2,
+      2,
+      0
+    ],
+    "p2": [
+      2,
+      2,
+      6,
+      5,
+      3,
+      4,
+      2,
+      1,
+      4
+    ],
+    "fold_commits": [
+      "0639fcf",
+      "eb04365",
+      "e1dc539",
+      "ca41f2b",
+      "e70d169",
+      "78fb4b6",
+      "bd16f8a",
+      "c885af3",
+      "d13ab7b"
+    ],
+    "r10": "not run",
+    "findings_block_lines": {
+      "r1": "12202-12214",
+      "r2": "15854-15872",
+      "r3": "20511-20538",
+      "r4": "51092-51107",
+      "r5": "53129-53138",
+      "r6": "29947-29959",
+      "r7": "18950-18959",
+      "r8": "17412-17418",
+      "r9": "34402-34411"
+    },
+    "log_files": {
+      "r1": "MBCX-01-CODEXCLI-r1-FULL-LOG-2026-08-15.log",
+      "r2": "MBCX-01-CODEXCLI-r2-FULL-LOG-2026-08-15.log",
+      "r3": "MBCX-01-CODEXCLI-r3-FULL-LOG-2026-08-15.log",
+      "r4": "MBCX-01-CODEXCLI-r4-FULL-LOG-2026-08-16.log",
+      "r5": "MBCX-01-CODEXCLI-r5-FULL-LOG-2026-08-16.log",
+      "r6": "MBCX-01-CODEXCLI-r6-FULL-LOG-2026-08-16.log",
+      "r7": "MBCX-01-CODEXCLI-r7-FULL-LOG-2026-08-16.log",
+      "r8": "MBCX-01-CODEXCLI-r8-FULL-LOG-2026-08-17.log",
+      "r9": "MBCX-01-CODEXCLI-r9-FULL-LOG-2026-08-17.log"
+    },
+    "reverted": "one r4 fix (the authorization gate) reverted in full at 24c7f17; MBCX-01-RE-ENTRY-2026-08-16.md:79-92"
+  },
+  "suite": {
+    "source": "MBCX-01-BUILD-REPAIR-LEDGER.json at each listed commit (rows and unique witnesses, derived, 24 of 24 re-verified 2026-09-26); frozen totals from the receipts and verify-build-bundle.py FROZEN_TEST_TOTAL",
+    "build_series": [
+      [
+        "2fd3897",
+        34,
+        76,
+        "BUILD content-final"
+      ],
+      [
+        "4b84d7b",
+        37,
+        86,
+        "acceptance r1 fold"
+      ],
+      [
+        "e89168b",
+        42,
+        95,
+        "acceptance r2 fold"
+      ],
+      [
+        "fd26275",
+        42,
+        94,
+        "wiring freeze reverted"
+      ],
+      [
+        "b5e00ee",
+        43,
+        95,
+        "fixture-key fold"
+      ],
+      [
+        "c2e011b",
+        44,
+        114,
+        "ETW consumer built"
+      ],
+      [
+        "6331a02",
+        45,
+        121,
+        "acceptance r4 fold"
+      ],
+      [
+        "0970b3e",
+        46,
+        125,
+        "acceptance r4 fold"
+      ],
+      [
+        "5269375",
+        48,
+        130,
+        "acceptance r5 fold"
+      ],
+      [
+        "0639fcf",
+        50,
+        137,
+        "codex r1"
+      ],
+      [
+        "eb04365",
+        57,
+        154,
+        "codex r2"
+      ],
+      [
+        "e1dc539",
+        65,
+        170,
+        "codex r3"
+      ],
+      [
+        "0d1a6a7",
+        72,
+        186,
+        "acceptance r6 fold"
+      ],
+      [
+        "575fb38",
+        73,
+        188,
+        "acceptance r7 fold"
+      ],
+      [
+        "c19a9ad",
+        74,
+        190,
+        "acceptance r8 fold"
+      ],
+      [
+        "ca41f2b",
+        79,
+        197,
+        "codex r4"
+      ],
+      [
+        "f35851e",
+        98,
+        229,
+        "cohort engine slice"
+      ],
+      [
+        "cd07ebf",
+        101,
+        236,
+        "cohort build r1 fold"
+      ],
+      [
+        "0800b9d",
+        101,
+        237,
+        "cohort build r2 fold"
+      ],
+      [
+        "e70d169",
+        103,
+        244,
+        "codex r5"
+      ],
+      [
+        "78fb4b6",
+        110,
+        252,
+        "codex r6"
+      ],
+      [
+        "bd16f8a",
+        113,
+        265,
+        "codex r7"
+      ],
+      [
+        "c885af3",
+        114,
+        275,
+        "codex r8"
+      ],
+      [
+        "d13ab7b",
+        118,
+        289,
+        "codex r9"
+      ]
+    ],
+    "frozen_series": [
+      [
+        "d97d654",
+        145,
+        "r13.2 freeze"
+      ],
+      [
+        "9c197e3",
+        147,
+        "amendment 1"
+      ],
+      [
+        "5269375",
+        150,
+        "amendment 2"
+      ],
+      [
+        "0d1a6a7",
+        155,
+        "amendment 3"
+      ],
+      [
+        "575fb38",
+        156,
+        "acceptance r7 fold"
+      ]
+    ],
+    "design_side": [
+      [
+        "r11",
+        69
+      ],
+      [
+        "r12",
+        87
+      ],
+      [
+        "r13",
+        132
+      ],
+      [
+        "r13.1",
+        140
+      ],
+      [
+        "r13.2",
+        145
+      ]
+    ],
+    "frozen_series_note": "the frozen TEST count; the four commits after the r13.2 freeze that touched the frozen mbcx01_r13_*.py / test_mbcx01_r13_*.py files are 9c197e3, 5269375, 0d1a6a7, 575fb38 (git log d97d654..19c16b3 over those globs). One further commit, 07b11b1 (2026-08-16, owner-ratified), amended three frozen DOCUMENTS and no test: see frozen_document_amendments",
+    "frozen_document_amendments": {
+      "source": "git show 07b11b1 (message and diff); MBCX-01-EXPERIMENT-DESIGN-r9.md:40,52; MBCX-01-R13-CLOSURE-ARCHITECTURE.md:54,67,68; MBCX-01-R13-PHYSICAL-HARNESS-REQUIREMENTS.md:82-83",
+      "commit": "07b11b1",
+      "date": "2026-08-16",
+      "ratified": "owner, verbatim in the commit message: 'Anyways, ratify. And then continue.' (#23)",
+      "items": [
+        "A1: the physical harness is BUILT and witness-covered but has never executed against a live trace session (closure architecture)",
+        "A2: the retained-set root is a flat SHA-384 list digest over the 768 ordered candidate hashes; a Merkle tree was considered and declined (closure architecture)",
+        "A3: the authority order's concrete artifacts are superseded by the r13.2 closure and the build pin-manifest lineage; the principle stands (design r9)",
+        "A4: the Kernel-Process trace provider is machine-wide; membership is enforced by downstream filtering; a capture on a busy host may abort, which is the correct fail-loud outcome (physical harness requirements)",
+        "C1: the scientific population excludes target-reopen episodes by generator constraint; measuring the reopen class is the declared first follow-up, MBCX-02, conditional on a positive primary result (closure architecture)",
+        "C2: motif content semantics are owned by the build cohort content design; the frozen layer constrains the taxonomy to the six motifs and their totals (design r9)"
+      ]
+    },
+    "build_series_source": "MBCX-01-BUILD-REPAIR-LEDGER.json at each commit (invariants keys and unique positive+adversarial witness names, derived); labels from the commit messages; the values are witness NAMES parsed from the ledger, and every named witness is a test the bundle verifier runs at HEAD (289 of 289 today); nothing was executed at the historical commits for this figure"
+  },
+  "ledger_final": {
+    "invariants": 118,
+    "witnesses": 289,
+    "positive": 88,
+    "adversarial": 201,
+    "accepted_residual_rows": 5,
+    "source": "MBCX-01-BUILD-REPAIR-LEDGER.json at 19c16b3: the totals field (118 invariants, 289 witnesses); positive/adversarial and accepted_residual counts derived from the rows"
+  },
+  "pins": {
+    "R10": 21,
+    "R11": 31,
+    "R12": 31,
+    "R13": 34,
+    "BUILD_subjects": 44,
+    "BUILD_frozen_dependencies": 32,
+    "source": "MBCX-01-R10-PIN-MANIFEST.json, MBCX-01-R11-PIN-MANIFEST.json, MBCX-01-R12-PIN-MANIFEST.json, MBCX-01-R13-PIN-MANIFEST.json (subject counts derived by listing); MBCX-01-BUILD-PIN-MANIFEST.json:15 and :369"
+  },
+  "issues": {
+    "source": "MBCX-01-OPEN-ISSUES.json, a committed snapshot: generated_at 2026-08-15T06:40:00-07:00, source_head 5269375, last commit 41cb3a9 (2026-08-15); 29 items; state derived from each status string",
+    "items": [
+      [
+        "SMOKE-RUN-OUTSTANDING",
+        "smoke",
+        "open",
+        true
+      ],
+      [
+        "BUILD-B-ETW-CONSUMER-UNBUILT",
+        "build",
+        "closed",
+        true
+      ],
+      [
+        "BUILD-R3-DOOR-CONTRACT",
+        "build",
+        "void",
+        false
+      ],
+      [
+        "BUILD-R2-FIXTURE-ISOLATION",
+        "build",
+        "closed",
+        true
+      ],
+      [
+        "BUILD-R1-TRUST-BOOTSTRAP",
+        "build",
+        "closed",
+        false
+      ],
+      [
+        "BUILD-R1-SIGNATURE-CARRIER",
+        "build",
+        "closed",
+        false
+      ],
+      [
+        "BUILD-R1-WIN32-ORDINAL",
+        "smoke",
+        "open",
+        false
+      ],
+      [
+        "R6-AND-R7-SERIES",
+        "design",
+        "void",
+        false
+      ],
+      [
+        "REVIEW-GATES-OWED-ON-CURRENT-BYTES",
+        "gates",
+        "open",
+        true
+      ],
+      [
+        "NO-GIT-REMOTE",
+        "repo",
+        "closed",
+        true
+      ],
+      [
+        "FIXTUREKEY-NAMED-GAPS",
+        "keys",
+        "open",
+        false
+      ],
+      [
+        "BA28-TIME-DEPENDENCE-2027-08-13",
+        "keys",
+        "open",
+        false
+      ],
+      [
+        "EXACTNESS-SUITE-RUNNER-UNBUILT",
+        "physical",
+        "open",
+        true
+      ],
+      [
+        "R4-I02-STATE-BINDING-FROZEN-LAYER",
+        "r4",
+        "closed",
+        true
+      ],
+      [
+        "R4-TRUST-ROOT-KEY-IDENTITY",
+        "r4",
+        "closed",
+        true
+      ],
+      [
+        "R4-ETW-CONSUMER-CLASSES",
+        "r4",
+        "closed",
+        true
+      ],
+      [
+        "R4-PRODUCTION-SIGNING-KEY-FIXTURE-ISOLATION",
+        "r4",
+        "closed",
+        true
+      ],
+      [
+        "R4-PIN-MANIFEST-STALE-AND-FALSE-PACKET-CLAIM",
+        "r4",
+        "partial",
+        false
+      ],
+      [
+        "R4-BW28-WITNESS-CANNOT-DISCRIMINATE-ITS-CLASS",
+        "r4",
+        "closed",
+        false
+      ],
+      [
+        "R4-CWE-1291-CITATION-PHASE-WRONG",
+        "r4",
+        "closed",
+        false
+      ],
+      [
+        "SMOKE-MACHINE-WIDE-KERNEL-PROCESS-PROVIDER",
+        "smoke",
+        "open",
+        true
+      ],
+      [
+        "R5-COHORT-ROOT-UNRECORDED",
+        "r5",
+        "open",
+        true
+      ],
+      [
+        "R5-CEREMONY-DOC-STALE-AND-SILENT-ON-CARRIER",
+        "r5",
+        "open",
+        true
+      ],
+      [
+        "R5-LITERAL-LF-PEM-ASSUMPTIONS-REMAIN",
+        "r5",
+        "open",
+        false
+      ],
+      [
+        "R5-COMMITTED-KEY-CENSUS-IS-A-DIRECTORY-SCAN",
+        "r5",
+        "open",
+        false
+      ],
+      [
+        "R5-AMENDMENT2-JUDGMENT-CALLS-FOR-THE-NEXT-SEAT",
+        "r5",
+        "open",
+        false
+      ],
+      [
+        "R5-FROZEN-WITNESSES-BYPASS-THE-SIGNATURE-PATH",
+        "r5",
+        "open",
+        false
+      ],
+      [
+        "R5-SMOKE-FIXTURE-CONTAINMENT-UNEXECUTED",
+        "smoke",
+        "open",
+        false
+      ],
+      [
+        "R5-DRIVER-PACKET-CLAIMS-FALSIFIED",
+        "r5",
+        "open",
+        false
+      ]
+    ],
+    "snapshot_date": "2026-08-15"
+  },
+  "github_issues": {
+    "source": "docs/presentation/data/github-issues-2026-09-26.json (the committed listing captured 2026-09-26T10:11:58Z by gh issue list --repo <private-repo> --state all --limit 200; the live tracker since the remote was named on 2026-08-15; 31 issues dated 2026-08-15 to 2026-08-17 plus #33, filed 2026-09-26 by the presentation lane: the pin-witness temp-dir leak in test_mbcx01_build_integration.py, a test-hygiene item outside the readiness sets below)",
+    "as_of": "2026-09-26",
+    "filed": 32,
+    "open": 23,
+    "closed": 9,
+    "smoke_run_blockers": [
+      [
+        2,
+        "SMOKE-RUN-OUTSTANDING: the elevated smoke run, an owner action"
+      ],
+      [
+        3,
+        "SMOKE-MACHINE-WIDE-KERNEL-PROCESS-PROVIDER"
+      ]
+    ],
+    "unbuilt_before_the_route_gate": [
+      [
+        7,
+        "EXACTNESS-SUITE-RUNNER-UNBUILT: the per-witness exactness suite runner does not exist"
+      ],
+      [
+        18,
+        "BUILD-CARRIER-FD: the frontier-digest carrier, the experiment's subject, zero lines"
+      ],
+      [
+        19,
+        "BUILD-CARRIER-FC: the frontier-cache carrier, zero lines"
+      ],
+      [
+        20,
+        "BUILD-CARRIER-TN: the temporal-normalization carrier, zero lines"
+      ],
+      [
+        21,
+        "BUILD-GRID-RUNNER: the 100-cell grid runner; a one-cell stub exists"
+      ],
+      [
+        22,
+        "BUILD-ROUTE-CLIENT: the provider route client; no network code in the lane"
+      ]
+    ],
+    "review_gate_owed": [
+      [
+        1,
+        "REVIEW-GATES-OWED-ON-CURRENT-BYTES (its title predates the nine codex rounds; still open)"
+      ]
+    ],
+    "closed_since_the_snapshot": [
+      [
+        4,
+        "cohort root ratified"
+      ],
+      [
+        6,
+        "pin-manifest bundle arm"
+      ],
+      [
+        8,
+        "amendment-2 judgment calls"
+      ],
+      [
+        14,
+        "fixture-key named gaps"
+      ],
+      [
+        17,
+        "scenario generator built"
+      ],
+      [
+        23,
+        "DoR reconciliation sweep ratified"
+      ],
+      [
+        24,
+        "council round on folded bytes"
+      ],
+      [
+        27,
+        "amendment 3 ratified"
+      ],
+      [
+        28,
+        "authorization gate closed won't-do"
+      ]
+    ],
+    "captured_at": "2026-09-26T10:11:58Z"
+  }
+}

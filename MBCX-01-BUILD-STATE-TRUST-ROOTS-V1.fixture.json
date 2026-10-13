@@ -1,0 +1,94 @@
+{
+  "schema_id": "StateTrustRootManifestV1",
+  "manifest_id": "STATE.TRUST.MBCX01.BUILD.FIXTURE.1",
+  "production_ready": false,
+  "store_binding": {
+    "store_id": "STORE.MBCX01.BUILD.STATE.1",
+    "namespace": "MBCX01.STATE",
+    "namespace_version": 1
+  },
+  "custody_roles": {
+    "signer_custodian_role": "STATE_KEY_CUSTODIAN",
+    "trust_root_editor_role": "STATE_TRUST_ROOT_EDITOR",
+    "readback_reader_role": "STATE_READBACK_READER",
+    "writer_producer_role": "STATE_OWNER_WRITER"
+  },
+  "trust_policy": {
+    "schema_id": "ProductionStateTrustPolicyV1",
+    "status": "NOT_ACTIVATED",
+    "fail_loud_sentinel": "STATE_AUTHORITY_UNAVAILABLE",
+    "signer_custodian_role": "STATE_KEY_CUSTODIAN",
+    "trust_root_editor_role": "STATE_TRUST_ROOT_EDITOR",
+    "writer_role": "STATE_OWNER_WRITER",
+    "reader_role": "STATE_READBACK_READER",
+    "roles_must_be_distinct": true,
+    "signer_cannot_edit_root": true,
+    "manifest_edit_cannot_activate_production": true,
+    "activation_authority": "NONE_IN_BUILD_A",
+    "required_external_evidence": [
+      "SEPARATE_STATE_KEY_CUSTODY_ATTESTATION",
+      "SEPARATE_TRUST_ROOT_EDITOR_APPROVAL",
+      "STATE_STORE_BUILD_PROVENANCE",
+      "PRODUCTION_SIGNING_CEREMONY_RECEIPT"
+    ]
+  },
+  "trust_policy_digest": "05F28911A7D4FD50EFBEE9ED4C7CAB4B1D17C76A17202A68A0EB3D78E19397BAB2B489B4FA8B22F1E043CC964153F36F",
+  "validity": {
+    "not_before": "2026-08-13T00:00:00.000000Z",
+    "not_after": "2027-08-13T00:00:00.000000Z"
+  },
+  "revocation_list": [
+    {
+      "key_id": "MBCX01.BUILD.STATE.FIXTURE.ED25519.WRITER.RETIRED.1",
+      "revoked_at": "2026-08-13T00:00:00.000000Z",
+      "reason_code": "FIXTURE.ROTATED"
+    }
+  ],
+  "roots": [
+    {
+      "key_id": "MBCX01.BUILD.STATE.FIXTURE.ED25519.WRITER.1",
+      "algorithm": "ED25519",
+      "fixture_only": true,
+      "authorized_role": "STATE_OWNER_WRITER",
+      "authorized_producer_id": "MBCX01.BUILD.STATE.OWNER.FIXTURE",
+      "authorized_subject_identity": "SUBJECT.MBCX01.BUILD.STATE.FIXTURE",
+      "trust_policy_digest": "05F28911A7D4FD50EFBEE9ED4C7CAB4B1D17C76A17202A68A0EB3D78E19397BAB2B489B4FA8B22F1E043CC964153F36F",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAlqgdgD6ugLtyL8eln9Bn7xQwPw4AC+o5VaUnW2fCoyc=\n-----END PUBLIC KEY-----\n",
+      "validity": {
+        "not_before": "2026-08-13T00:00:00.000000Z",
+        "not_after": "2027-08-13T00:00:00.000000Z"
+      },
+      "revocation_state": "NOT_REVOKED"
+    },
+    {
+      "key_id": "MBCX01.BUILD.STATE.FIXTURE.ED25519.READER.1",
+      "algorithm": "ED25519",
+      "fixture_only": true,
+      "authorized_role": "STATE_READBACK_READER",
+      "authorized_producer_id": "MBCX01.BUILD.STATE.READER.FIXTURE",
+      "authorized_subject_identity": "SUBJECT.MBCX01.BUILD.STATE.FIXTURE",
+      "trust_policy_digest": "05F28911A7D4FD50EFBEE9ED4C7CAB4B1D17C76A17202A68A0EB3D78E19397BAB2B489B4FA8B22F1E043CC964153F36F",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAKr0DENn/yFEbgn6NfAD+RJV9tRgYPsU3clCgoemcGTI=\n-----END PUBLIC KEY-----\n",
+      "validity": {
+        "not_before": "2026-08-13T00:00:00.000000Z",
+        "not_after": "2027-08-13T00:00:00.000000Z"
+      },
+      "revocation_state": "NOT_REVOKED"
+    },
+    {
+      "key_id": "MBCX01.BUILD.STATE.FIXTURE.ED25519.WRITER.RETIRED.1",
+      "algorithm": "ED25519",
+      "fixture_only": true,
+      "authorized_role": "STATE_OWNER_WRITER",
+      "authorized_producer_id": "MBCX01.BUILD.STATE.OWNER.FIXTURE",
+      "authorized_subject_identity": "SUBJECT.MBCX01.BUILD.STATE.FIXTURE",
+      "trust_policy_digest": "05F28911A7D4FD50EFBEE9ED4C7CAB4B1D17C76A17202A68A0EB3D78E19397BAB2B489B4FA8B22F1E043CC964153F36F",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA8gZ7/vdtOXO6fz40cRsKa2slevNqUuGw2Kq+XdGXApE=\n-----END PUBLIC KEY-----\n",
+      "validity": {
+        "not_before": "2026-08-13T00:00:00.000000Z",
+        "not_after": "2027-08-13T00:00:00.000000Z"
+      },
+      "revocation_state": "REVOKED"
+    }
+  ]
+}

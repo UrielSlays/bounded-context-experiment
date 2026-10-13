@@ -1,0 +1,18 @@
+{
+  "schema_id": "SyntheticCohortGeneratorSpecV1",
+  "generator_id": "GENERATOR.R11.SYNTHETIC",
+  "candidate_count_per_motif": 160,
+  "cut_labels": ["A", "B", "C"],
+  "scenario_id_template": "SCENARIO.{motif_index}.{index:03d}",
+  "cut_id_template": "CUT.{index}.{label}",
+  "scope_id": "SCOPE.SHARED",
+  "target_obligation_id": "OBL.SHARED",
+  "prerequisite_obligation_id": "OBL.PREREQ",
+  "target_lifecycle": "OPEN",
+  "prerequisite_lifecycle": "COMPLETED",
+  "cut": {
+    "journal_seq": 1,
+    "knowledge_time": "2026-08-13T00:00:00.000000Z",
+    "valid_time": "2026-08-13T00:00:00.000000Z"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "contract_id": "MBCX-01-INFERENCE-CONTRACT-v6",
+  "normative": true,
+  "estimands": {
+    "population": "the complete frozen 768-scenario retained manifest in SHA-256 scenario order",
+    "delta": "average conditional mean of BC_i minus OM_i",
+    "om": "average conditional mean of OM_i",
+    "within_pair_dependence": "unrestricted",
+    "cross_scenario_rule": "future outcomes and provider randomness are unavailable to the past filtration"
+  },
+  "method": {
+    "name": "exact-mixture empirical-Bernstein confidence sequence",
+    "source": "Chugg and Ramdas, Proposition 3.1, arXiv:2512.21300",
+    "family_alpha": 0.05,
+    "stream_alpha": 0.025,
+    "kappa": 0.25,
+    "kappa_source_rule": "source default, not OC tuned",
+    "scientific_n": 768
+  },
+  "decision_precedence": [
+    "DESIGN_OR_IMPLEMENTATION_FAIL",
+    "TRANSPORT_INCONCLUSIVE",
+    "MODEL_OR_INTERFACE_CEILING",
+    "MODEL_INTERFACE_FAIL",
+    "PROMOTE_TO_COORDINATION_STAGE",
+    "INCONCLUSIVE_OR_UNDERFUNDED"
+  ],
+  "missingness": {
+    "algorithm": "EXACT_DYNAMIC_PROGRAMMING_HULL",
+    "maximum_missing_pairs": null,
+    "exhaustive_cross_check_maximum": 7,
+    "no_resample_or_substitution": true
+  },
+  "operating_characteristics": {
+    "synthetic_only": true,
+    "experiment_evidence": false,
+    "claim_kind": "DETERMINISTIC_PLANNING_FREQUENCY",
+    "n": 768,
+    "replicates_per_cell": 10000,
+    "rng": "SHA-256 counter stream",
+    "no_region_wide_probability_claim": true,
+    "cells": [
+      {"id": "OM90_EQUAL", "p00": 0.05, "p01": 0.05, "p10": 0.05, "p11": 0.85, "expected_branch": "PROMOTE_TO_COORDINATION_STAGE"},
+      {"id": "LOW_DISCORD_EQUAL", "p00": 0.09, "p01": 0.01, "p10": 0.01, "p11": 0.89, "expected_branch": "PROMOTE_TO_COORDINATION_STAGE"},
+      {"id": "DELTA_NEG20_OM90", "p00": 0.10, "p01": 0.20, "p10": 0.00, "p11": 0.70, "expected_branch": "MODEL_INTERFACE_FAIL"},
+      {"id": "CEILING_OM70_EQUAL", "p00": 0.25, "p01": 0.05, "p10": 0.05, "p11": 0.65, "expected_branch": "MODEL_OR_INTERFACE_CEILING"},
+      {"id": "R10_COUNTEREXAMPLE", "p00": 0.00, "p01": 0.30, "p10": 0.10, "p11": 0.60, "expected_branch": "MODEL_INTERFACE_FAIL", "diagnostic_only": true}
+    ]
+  },
+  "transport_readiness": {
+    "unit": "one complete execution of the exact frozen six-call route and retry policy",
+    "failure": "abort, incomplete, ambiguity, or unclassified outcome counts as failure; no replacement",
+    "hypotheses": {
+      "bad": "P(F_i=1 | entire observed past) >= 0.02 almost surely for every scheduled trial",
+      "good": "P(F_i=1 | entire observed past) <= 0.005 almost surely for every scheduled trial"
+    },
+    "proof": "FINITE_HORIZON_CONDITIONAL_EXPECTATION_RECURSION",
+    "iid_required": false,
+    "marginals_alone_sufficient": false,
+    "trials": 456,
+    "accept_failures_at_most": 4,
+    "bad_route_acceptance_max": 0.049433329807588314,
+    "good_route_acceptance_min": 0.9190668746549462,
+    "good_route_rejection_max": 0.08093312534505381,
+    "scheduled_call_positions_before_retries": 2736,
+    "early_accept": false,
+    "early_reject_on_fifth_failure": true,
+    "schedule_interpretation": "defines the qualification window; does not prove hazards or future stationarity"
+  },
+  "cost": {
+    "scheduled_scientific_call_positions": 4608,
+    "paid_authorization": "separate owner decision after council go and frozen route/model/pricing/token/retry/dollar ceilings"
+  }
+}

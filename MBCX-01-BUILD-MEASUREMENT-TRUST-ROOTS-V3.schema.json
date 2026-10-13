@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonwalker.local/mbcx01/build/measurement-trust-roots-v3.schema.json",
+  "title": "MeasurementTrustRootManifestV3",
+  "description": "Closed BUILD B measurement trust-root manifest. A committed instance is always production_ready:false with fixture_only roots; a production instance can exist only as the output of the reviewed signing/approval ceremony and is never committed to this repository. Editing this document cannot activate production authority: the admission adapter also requires the four external custody-evidence digests, distinct signer/editor roles, a signer key absent from the editor-approval chain, an unexpired validity window and a non-revoked root.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "manifest_id",
+    "production_ready",
+    "activation_authority",
+    "trust_policy",
+    "validity",
+    "revocation",
+    "roots"
+  ],
+  "properties": {
+    "schema_id": {"const": "MeasurementTrustRootManifestV3"},
+    "manifest_id": {"$ref": "#/$defs/semantic"},
+    "production_ready": {"type": "boolean"},
+    "activation_authority": {"$ref": "#/$defs/semantic"},
+    "trust_policy": {"$ref": "#/$defs/trustPolicyV2"},
+    "validity": {"$ref": "#/$defs/validityWindow"},
+    "revocation": {"$ref": "#/$defs/revocationList"},
+    "roots": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/trustRootV3"}
+    }
+  },
+  "$defs": {
+    "semantic": {
+      "type": "string",
+      "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"
+    },
+    "sha384": {
+      "type": "string",
+      "pattern": "^[0-9A-F]{96}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "publicKeyPem": {
+      "type": "string",
+      "pattern": "^-----BEGIN PUBLIC KEY-----\\n[A-Za-z0-9+/=\\n]+-----END PUBLIC KEY-----\\n$"
+    },
+    "validityWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["not_before", "not_after"],
+      "properties": {
+        "not_before": {"$ref": "#/$defs/timestamp"},
+        "not_after": {"$ref": "#/$defs/timestamp"}
+      }
+    },
+    "trustPolicyV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_id",
+        "status",
+        "fail_loud_sentinel",
+        "signer_custodian_role",
+        "trust_root_editor_role",
+        "roles_must_be_distinct",
+        "manifest_edit_cannot_activate_production",
+        "required_external_evidence",
+        "key_custodian_attestation_digest",
+        "trust_root_editor_approval_digest",
+        "harness_build_provenance_digest",
+        "signing_ceremony_receipt_digest",
+        "editor_approval_key_ids"
+      ],
+      "properties": {
+        "schema_id": {"const": "ProductionMeasurementTrustPolicyV2"},
+        "status": {"enum": ["NOT_ACTIVATED", "ACTIVATED"]},
+        "fail_loud_sentinel": {"const": "PHYSICAL_HARNESS_UNAVAILABLE"},
+        "signer_custodian_role": {"$ref": "#/$defs/semantic"},
+        "trust_root_editor_role": {"$ref": "#/$defs/semantic"},
+        "roles_must_be_distinct": {"const": true},
+        "manifest_edit_cannot_activate_production": {"const": true},
+        "required_external_evidence": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "prefixItems": [
+            {"const": "SEPARATE_KEY_CUSTODY_ATTESTATION"},
+            {"const": "SEPARATE_TRUST_ROOT_EDITOR_APPROVAL"},
+            {"const": "HARNESS_BUILD_PROVENANCE"},
+            {"const": "PRODUCTION_SIGNING_CEREMONY_RECEIPT"}
+          ],
+          "items": false
+        },
+        "key_custodian_attestation_digest": {"$ref": "#/$defs/sha384"},
+        "trust_root_editor_approval_digest": {"$ref": "#/$defs/sha384"},
+        "harness_build_provenance_digest": {"$ref": "#/$defs/sha384"},
+        "signing_ceremony_receipt_digest": {"$ref": "#/$defs/sha384"},
+        "editor_approval_key_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/semantic"}
+        }
+      }
+    },
+    "revocationList": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_id",
+        "revocation_list_id",
+        "published_at",
+        "revoked_key_ids",
+        "revocation_list_digest"
+      ],
+      "properties": {
+        "schema_id": {"const": "MeasurementTrustRootRevocationListV1"},
+        "revocation_list_id": {"$ref": "#/$defs/semantic"},
+        "published_at": {"$ref": "#/$defs/timestamp"},
+        "revoked_key_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/semantic"}
+        },
+        "revocation_list_digest": {"$ref": "#/$defs/sha384"}
+      }
+    },
+    "trustRootV3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key_id",
+        "algorithm",
+        "fixture_only",
+        "authorized_producer_role",
+        "authorized_fixture_kind",
+        "signer_custodian_role",
+        "authorized_harness_build_digest",
+        "trust_policy_digest",
+        "public_key_pem",
+        "validity",
+        "revocation_state"
+      ],
+      "properties": {
+        "key_id": {"$ref": "#/$defs/semantic"},
+        "algorithm": {"const": "ED25519"},
+        "fixture_only": {"type": "boolean"},
+        "authorized_producer_role": {"const": "PHYSICAL_MEASUREMENT_PRODUCER"},
+        "authorized_fixture_kind": {"const": "PHYSICAL_HARNESS_RECEIPT"},
+        "signer_custodian_role": {"$ref": "#/$defs/semantic"},
+        "authorized_harness_build_digest": {"$ref": "#/$defs/sha384"},
+        "trust_policy_digest": {"$ref": "#/$defs/sha384"},
+        "public_key_pem": {"$ref": "#/$defs/publicKeyPem"},
+        "validity": {"$ref": "#/$defs/validityWindow"},
+        "revocation_state": {"enum": ["ACTIVE", "SUSPENDED", "REVOKED"]}
+      }
+    }
+  }
+}

@@ -1,0 +1,274 @@
+MBCX-01 BUILD - COMMITTED FIXTURE KEY MATERIAL - GREEN WITNESS RUN
+Date: 2026-08-14
+Class: OPERATOR FOOTGUN / self-deception guard (NOT an attacker path)
+Discharges: MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r3.md section 4 residual P3-1
+Named refusal: PRODUCTION_VERIFIER_CONTEXT_FIXTURE_KEY_MATERIAL
+Worktree: <repo>-build
+Branch: codex/mbcx01-production-build   Base HEAD: aadd71a (bbc432b at fold start)
+Python: Python 3.11.9  Node: v24.17.0
+
+THE ONE INVARIANT THIS FOLD ADDS
+--------------------------------
+A production root of trust is recognised by its KEY, not by a flag in a document.
+A ProductionVerifierContext refuses, by name, any anchor whose public key is
+COMMITTED TO THIS REPOSITORY - whatever fixture_only says, through in-code wiring or
+through the MBCX01_BUILD_OWNER_TRUST_ANCHOR configuration path, and regardless of
+how the PEM is line-wrapped. The known-key set is DERIVED from the committed
+*.fixture.json anchor documents themselves
+(mbcx01_build_trust_anchor.committed_fixture_key_material), never hand-listed.
+
+Placement is not invented: MITRE CWE-1291 ("Public Key Re-Use for Signing both Debug
+and Production Code", PeerOf CWE-321) puts the mitigation at Architecture-and-Design,
+i.e. at CONTEXT CONSTRUCTION.
+
+Same framing as the RED bank: MBCX-01 has no threat model and no untrusted caller
+(MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md). This is a
+scientific-validity / self-deception guard - the ceremony is when a human hand-writes
+the anchor document, and copying the committed example is the obvious way to do it -
+not an access-control boundary. Anything running arbitrary Python in the verifying
+interpreter still reaches past it (object.__new__ + object.__setattr__ around a
+context, and configure_production_verifier_context is an isinstance check); that
+actor is the box owner and remains a NAMED, ACCEPTED residual under the T2 ceiling.
+
+================================================================================
+1. THE DECIDING GREEN - the identical probe, unchanged, on the post-fix tree
+================================================================================
+
+The probe file is byte-identical to the one that produced the RED bank; only the
+tree under it changed.
+
+=== COMMAND: python mbcx01_build_fixturekey_probe.py   (cwd = the worktree) ===
+
+MBCX-01 BUILD — COMMITTED-FIXTURE-KEY probe (operator footgun, MITRE CWE-1291)
+cwd: <repo>-build
+committed fixture anchor: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1' fixture_only=True
+
+== P1: the committed fixture anchor document, RELABELLED by hand ==
+  edits: fixture_only true->false, anchor_id -> 'MBCX01.RELABELLED.ANCHOR.1'; public_key_pem UNCHANGED
+  (the private half of that public key is committed at mbcx01_build_ceremony_fixture.py:39)
+  new_production_verifier_context -> TrustAnchorError: PRODUCTION_VERIFIER_CONTEXT_FIXTURE_KEY_MATERIAL:MBCX01.RELABELLED.ANCHOR.1:MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json
+  context BUILT from relabelled doc : False
+
+== P2: the same relabelled document delivered as OS configuration ==
+  MBCX01_BUILD_OWNER_TRUST_ANCHOR=<tmp>/owner-trust-anchor.json (no in-code wiring at all)
+  resolve_production_verifier_context -> TrustAnchorError: PRODUCTION_VERIFIER_CONTEXT_FIXTURE_KEY_MATERIAL:MBCX01.RELABELLED.ANCHOR.1:MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json
+  context BUILT from relabelled doc : False
+
+== C3 CONTROL: the in-memory TEST PRODUCTION anchor (key generated per run) ==
+  anchor_id: MBCX01.BUILD.OWNER.ANCHOR.TEST.PRODUCTION.1 | fixture_only: False
+  its public key == COMMITTED fixture public key : False
+  context BUILT: True | current_instant=2026-08-14T12:00:00Z
+  resolve_production_verifier_context -> anchor_id='MBCX01.BUILD.OWNER.ANCHOR.TEST.PRODUCTION.1' refusal=None
+  measurement door (legitimate operator-anchored grid) -> []
+
+== C4 CONTROL: the FIXTURE LANE (documents, not authority) ==
+  committed fixture measurement manifest parses: roots=1 fixture_only=[True]
+  committed anchor document still loads: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1' fixture_only=True
+  state FIXTURE lane (require_production=False) -> []
+
+READ THIS AS (compare line for line with the RED bank):
+  P1 - the relabelled document no longer builds anything. The refusal NAMES the
+       committed document the key came from, so the operator's log line says which
+       file they copied. Was: "context BUILT from relabelled doc : True".
+  P2 - the same refusal at the OS-configuration seam, before any door is reached.
+       Consistent with the module's existing rule that a configured-but-unusable
+       anchor RAISES rather than being silently downgraded to "unanchored"
+       (load_owner_trust_anchor already behaves this way for a malformed document).
+  C3 - the legitimate path is UNCHANGED: the in-memory production-shaped TEST key
+       builds a context, resolves, and admits ([]). It is in no committed document,
+       which is exactly what the derived set keys off.
+  C4 - the FIXTURE LANE is UNCHANGED: fixture DOCUMENTS still parse and still verify
+       with require_production=False. Only fixture AUTHORITY is refused.
+
+================================================================================
+2. THE NEW WITNESS (bw28)
+================================================================================
+
+=== COMMAND: python -m unittest -v test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root ===
+
+test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root (test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root)
+Invariant (BUILD acceptance r3 seat finding, reproduced at the byte): a ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 4.357s
+
+OK
+
+What bw28 asserts, arm by arm:
+  (a) the known-key set is DERIVED - committed_fixture_key_material() maps the
+      committed anchor document's key identity to that document's own filename, and
+      the module source contains NO copy of that key body (assertNotIn), so nobody
+      pasted a literal;
+  (b) three shapes of the same key are refused by name: the relabelled DOCUMENT, an
+      OwnerTrustAnchor OBJECT carrying the key with fixture_only=False, and the same
+      key RE-WRAPPED at a different PEM line length;
+  (c) the same document delivered through MBCX01_BUILD_OWNER_TRUST_ANCHOR is refused
+      at the same seam;
+  (d) CONTROL - the in-memory production-shaped TEST anchor is not in the derived
+      set, and still admits the grid ([]);
+  (e) CONTROL - the fixture LANE still parses the committed fixture manifest and
+      still loads the committed anchor document as fixture_only.
+
+================================================================================
+3. THE THREE BUILD SUITES (94 before this fold -> 95 with bw28)
+================================================================================
+
+=== COMMAND: python -m unittest test_mbcx01_build_state ===
+Ran 35 tests in 9.481s
+OK
+=== COMMAND: python -m unittest test_mbcx01_build_measurement ===
+Ran 55 tests in 19.921s
+OK
+=== COMMAND: python -m unittest test_mbcx01_build_integration ===
+Ran 5 tests in 6.134s
+OK
+=== COMMAND: python -m unittest test_mbcx01_build_state test_mbcx01_build_measurement test_mbcx01_build_integration ===
+Ran 95 tests in 32.934s
+OK
+
+================================================================================
+4. THE FROZEN r13.2 SUITES - 145/145, UNTOUCHED
+================================================================================
+
+=== COMMAND: python -m unittest test_mbcx01_r13_state test_mbcx01_r13_packets test_mbcx01_r13_measurement test_mbcx01_r13_inference test_mbcx01_r13_integration ===
+Ran 145 tests in 25.867s
+OK
+
+================================================================================
+5. THE TWO EXISTING PROBES - EVERY REFUSAL UNCHANGED
+================================================================================
+
+Both probes were run twice: once in the byte-verified PRE-FIX reconstruction and
+once in the post-fix worktree, and the outputs were diffed.
+
+=== COMMAND: python mbcx01_build_fixtureiso_probe.py  (pre-fix vs post-fix) ===
+  IDENTICAL
+=== COMMAND: python mbcx01_build_trustboot_probe.py   (pre-fix vs post-fix) ===
+  IDENTICAL
+
+Two values were normalized before diffing, and they are the only ones:
+  * swaps_fired=<n>  - the fixtureiso P2 gadget counter, which is run-dependent and
+    has been since the wiring-freeze revert (it varied 15/13/27 vs 15/14/25 across
+    runs of the SAME bytes);
+  * the temporary directory path in the P6 OWNER_TRUST_ANCHOR_AMBIGUOUS message.
+Every refusal CODE and every door verdict matched exactly.
+
+NOTE for a reader diffing against MBCX-01-BUILD-FIXTUREISO-GREEN-WITNESS-RUN-2026-08-14.txt:
+that bank predates the 2026-08-14 wiring-freeze revert, so its P2 block still shows
+*_REWIRED_DURING_VERIFICATION. The comparison above is against the CURRENT committed
+bytes, which is the comparison that means anything for this fold.
+
+The post-fix fixtureiso run, in full, for the record:
+
+  == P1 (F1): the COMMITTED fixture-only owner anchor, whose private half is committed ==
+    configured anchor: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1' fixture_only=True
+    measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY']
+    exactness door   -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY
+    state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+    state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+    state FIXTURE lane (require_production=False) -> []
+    fixture LANE: committed fixture manifest parses, roots=1 fixture_only=[True]
+  == P4 (F4) == measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'TRUST_ROOT_VALIDITY_EXPIRED']
+  == P5 (F7) == result='AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED'; claimed PASS -> CARRIER_EXACTNESS_SUITE_NOT_EXECUTED
+  == P6 (F6) == loader -> TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<tmp>
+
+================================================================================
+6. THE BUILD BUNDLE VERIFIER (report written OUTSIDE the repository, as required)
+================================================================================
+
+=== COMMAND: python verify-build-bundle.py --output-report <scratchpad>/MBCX-01-BUILD-VERIFICATION-REPORT.json ===
+exit=0
+Ran 145 tests in 26.994s   OK
+frozen_suites: PASS
+Ran 95 tests in 30.916s    OK
+build_suites: PASS
+ledger: PASS
+schemas: PASS
+canonical_parity: PASS
+no_production_activation: PASS
+execution_posture: PASS
+
+--- report sections (fresh runtime output) ---
+top_level_readiness : BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED
+experiment_executed : False  paid_calls: 0  provider_calls: 0
+physical_harness_executed: False  production_activation: False
+build_suites             {"modules": ["test_mbcx01_build_state", "test_mbcx01_build_measurement", "test_mbcx01_build_integration"], "status": "PASS", "tests": 95}
+canonical_parity         {"boundary": "python:mbcx01_r13_common vs node:verify-build-canonical-parity.mjs", "documents": 5, "hash_algorithm": "SHA-384", "out_of_domain_control_refused": "MBCX-01-R13.2-NO-PAID-VERIFICATION-REPORT.json", "status": "PASS", "value_domain": "object/array/string/boolean/null/safe-integer"}
+execution_posture        {"permitted_executables": ["node", "python.exe"], "spawned_processes": 729, "status": "PASS"}
+frozen_suites            {"expected": 145, "modules": ["test_mbcx01_r13_state", "test_mbcx01_r13_packets", "test_mbcx01_r13_measurement", "test_mbcx01_r13_inference", "test_mbcx01_r13_integration"], "status": "PASS", "tests": 145}
+ledger                   {"invariants": 43, "status": "PASS", "two_way_total": true, "witnesses": 95}
+no_production_activation {"committed_manifests_production_ready": false, "committed_owner_trust_anchor_fixture_only": true, "physical_collection_env_flag_present": false, "signing_ceremony_performed": false, "status": "PASS", "trust_root_activated": false}
+schemas                  {"mutants_rejected": 12, "status": "PASS", "strict_compile": true, "subjects": 2}
+
+Ledger two-way totality is maintained: the new row
+AB-09_COMMITTED_FIXTURE_KEY_MATERIAL_IS_NEVER_A_PRODUCTION_ROOT declares bw28 as its
+adversarial witness and points at AB-01 for its positive (the anchored ceremony
+admission, which after the r2 fold already runs under the in-memory production-shaped
+TEST key), so no witness is counted twice; totals 43/95.
+
+================================================================================
+7. FROZEN-FILE CHECK - zero files committed at/under the council base 91329b2 were
+   modified, staged or deleted
+================================================================================
+
+=== git status --short ===
+ M MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md
+ M MBCX-01-BUILD-REPAIR-LEDGER.json
+ M mbcx01_build_trust_anchor.py
+ M test_mbcx01_build_measurement.py
+?? mbcx01_build_fixturekey_probe.py
+(plus this bank and the RED bank, both untracked)
+
+=== git diff --stat (tracked, unstaged) ===
+ MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md |  27 ++++++-
+ MBCX-01-BUILD-REPAIR-LEDGER.json      |  14 +++-
+ mbcx01_build_trust_anchor.py          | 136 ++++++++++++++++++++++++++++++++++
+ test_mbcx01_build_measurement.py      |  87 ++++++++++++++++++++++
+ 4 files changed, 261 insertions(+), 3 deletions(-)
+
+=== per-path frozen classification: git cat-file -e 91329b2:<path> ===
+  non-zero (post-base, editable)  MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md
+  non-zero (post-base, editable)  MBCX-01-BUILD-REPAIR-LEDGER.json
+  non-zero (post-base, editable)  mbcx01_build_trust_anchor.py
+  non-zero (post-base, editable)  test_mbcx01_build_measurement.py
+  non-zero (post-base, editable)  mbcx01_build_fixturekey_probe.py
+
+=== staged changes (must be empty; nothing was committed or added) ===
+(no output = nothing staged; this fold ran no git commit and no git add)
+
+================================================================================
+8. WHAT CHANGED
+================================================================================
+
+mbcx01_build_trust_anchor.py
+  + PRODUCTION_VERIFIER_CONTEXT_FIXTURE_KEY_MATERIAL, FIXTURE_DOCUMENT_SUFFIX
+  + public_key_identity()          PEM -> base64 body, whitespace removed, so line
+                                   wrapping is not a way past the check
+  + committed_fixture_key_material()  the DERIVED set: every *.fixture.json beside
+                                   this module that is an OwnerTrustAnchorV1
+                                   contributes its public key; the fixture_only flag
+                                   inside those documents is deliberately not
+                                   consulted, because it is the field this refusal
+                                   exists to stop trusting. Cached; no literal.
+  ~ ProductionVerifierContext.__init__  refuses committed key material by name, after
+                                   the existing fixture_only refusal
+  ~ module + class docstrings      the finding, the framing, and the named scope gap
+test_mbcx01_build_measurement.py   bw28 (five arms, above)
+MBCX-01-BUILD-REPAIR-LEDGER.json   new row AB-09; totals 42/94 -> 43/95
+MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md  section 3 step 0 (the anchor-authoring step,
+                                   where the copy-the-example footgun lives) carries
+                                   the refusal by name, how the set is derived, why,
+                                   and the named scope gap; step 3 cross-references it
+
+NAMED SCOPE GAP, not papered over: the derived set covers key material carried by
+committed anchor DOCUMENTS. mbcx01_build_ceremony_fixture.FIXTURE_NON_ANCHOR_PRIVATE_
+KEY_PEM is a committed test PRIVATE key whose public half appears in no committed
+document; deriving a public key from a private one needs an Ed25519 implementation
+this module does not have, and nobody reaches that key by copying a file. It is
+recorded in the code, in the ceremony doc and here rather than left silent.
+
+NOT CHANGED BY THIS FOLD: MBCX-01-OPEN-ISSUES.json, MBCX-01-BUILD-PIN-MANIFEST.json
+(a driver artifact regenerated at commit time; it pins blobs at governing_commit
+fd26275, so verify-build-pinned.ps1 in PINNED mode will not authenticate this
+working tree until the driver regenerates it - the same state every previous fold
+was handed over in), and nothing was committed, staged or added to git.

@@ -1,0 +1,153 @@
+{
+  "contract_id": "MBCX-01-INFERENCE-CONTRACT-v8",
+  "normative": true,
+  "closure_revision": "r13.2",
+  "estimands": {
+    "population": "the complete frozen 768-scenario retained manifest in SHA-256 scenario order",
+    "delta": "average conditional mean of BC_i minus OM_i",
+    "om": "average conditional mean of OM_i",
+    "within_pair_dependence": "unrestricted",
+    "cross_scenario_rule": "future outcomes and provider randomness are unavailable to the past filtration"
+  },
+  "method": {
+    "name": "exact-mixture empirical-Bernstein confidence sequence",
+    "source": "Chugg and Ramdas, Proposition 3.1, arXiv:2512.21300",
+    "family_alpha": 0.05,
+    "stream_alpha": 0.025,
+    "kappa": 0.25,
+    "kappa_source_rule": "source default, not OC tuned",
+    "scientific_n": 768
+  },
+  "decision_precedence": [
+    "DESIGN_OR_IMPLEMENTATION_FAIL",
+    "TRANSPORT_INCONCLUSIVE",
+    "MODEL_OR_INTERFACE_CEILING",
+    "MODEL_INTERFACE_FAIL",
+    "PROMOTE_TO_COORDINATION_STAGE",
+    "INCONCLUSIVE_OR_UNDERFUNDED"
+  ],
+  "missingness": {
+    "algorithm": "EXACT_DYNAMIC_PROGRAMMING_HULL",
+    "maximum_missing_pairs": null,
+    "exhaustive_cross_check_maximum": 7,
+    "randomized_property_spot_check": {
+      "missing_pairs": 20,
+      "samples": 128,
+      "claim_kind": "RANDOMIZED_PROPERTY_SPOT_CHECK_NOT_EXHAUSTIVE_PROOF"
+    },
+    "no_resample_or_substitution": true,
+    "authority_interface": "ordered_decision_from_episode_receipts",
+    "episode_receipt_schema": "EpisodeReceiptV1",
+    "episode_positions": ["BC.A0", "BC.B", "BC.A1", "OM.A0", "OM.B", "OM.A1"],
+    "partition_rule": "Inference accepts exactly one valid terminal EpisodeReceiptV1 for each frozen scenario in manifest order and derives complete_ids and missing_ids. It exposes no missing-ID input on this interface.",
+    "complete_rule": "All six EpisodeCallV2 rows are launched exact CallLedgerV3 snapshots in RESPONSE_DURABLY_RECORDED.",
+    "whole_pair_missing_rule": "Any terminal failure and its exact downstream NOT_LAUNCHED_UPSTREAM_TERMINAL rows make the whole pair missing; no outcome is accepted for that scenario.",
+    "invalid_rule": "A nonterminal, duplicate, omitted, reordered, cross-scenario, bad-hash or otherwise altered ledger/episode raises EPISODE_PARTITION_MISMATCH.",
+    "outcome_join": "Complete scenarios must supply ScenarioOutcomeReceiptV2 in frozen order. The receipt binds the exact EpisodeReceiptV1 hash plus all six ordered CallLedgerV3 hashes to the exact six DurableCallRecordV1 graphs before BC and OM are recomputed. Inference exposes no free outcome-bit or same-scenario graph-substitution input. Supplying a receipt for another episode, for a missing episode, or omitting one for a complete episode fails loud."
+  },
+  "episode_receipt_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://moonwalker.local/schema/mbcx01/r13/episode-receipt-v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schema_id", "episode_id", "scenario_id", "manifest_position", "calls", "terminal_class", "missing_positions", "episode_hash"],
+    "properties": {
+      "schema_id": {"const": "EpisodeReceiptV1"},
+      "episode_id": {"type": "string", "pattern": "^EPISODE\\.[0-9A-F]{64}$"},
+      "scenario_id": {"$ref": "#/$defs/semantic"},
+      "manifest_position": {"type": "integer", "minimum": 0, "maximum": 767},
+      "calls": {
+        "type": "array", "minItems": 6, "maxItems": 6,
+        "prefixItems": [
+          {"allOf": [{"$ref": "#/$defs/episodeCallV2"}, {"type": "object", "properties": {"position": {"const": "BC.A0"}}}]},
+          {"allOf": [{"$ref": "#/$defs/episodeCallV2"}, {"type": "object", "properties": {"position": {"const": "BC.B"}}}]},
+          {"allOf": [{"$ref": "#/$defs/episodeCallV2"}, {"type": "object", "properties": {"position": {"const": "BC.A1"}}}]},
+          {"allOf": [{"$ref": "#/$defs/episodeCallV2"}, {"type": "object", "properties": {"position": {"const": "OM.A0"}}}]},
+          {"allOf": [{"$ref": "#/$defs/episodeCallV2"}, {"type": "object", "properties": {"position": {"const": "OM.B"}}}]},
+          {"allOf": [{"$ref": "#/$defs/episodeCallV2"}, {"type": "object", "properties": {"position": {"const": "OM.A1"}}}]}
+        ],
+        "items": false
+      },
+      "terminal_class": {"enum": ["COMPLETE_PAIR", "WHOLE_PAIR_MISSING"]},
+      "missing_positions": {"type": "array", "uniqueItems": true, "items": {"enum": ["BC.A0", "BC.B", "BC.A1", "OM.A0", "OM.B", "OM.A1"]}},
+      "episode_hash": {"$ref": "#/$defs/sha384"}
+    },
+    "$defs": {
+      "semantic": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+      "sha256": {"type": "string", "pattern": "^[0-9A-F]{64}$"},
+      "sha384": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "nullableSemantic": {"type": ["string", "null"], "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+      "nullableSha384": {"type": ["string", "null"], "pattern": "^[0-9A-F]{96}$"},
+      "episodeCallV2": {
+        "oneOf": [{"$ref": "#/$defs/launchedEpisodeCallV2"}, {"$ref": "#/$defs/skippedEpisodeCallV2"}]
+      },
+      "launchedEpisodeCallV2": {
+        "type": "object", "additionalProperties": false,
+        "required": ["position", "condition", "node", "launch_status", "ledger_snapshot", "ledger_hash"],
+        "properties": {"position": {"enum": ["BC.A0", "BC.B", "BC.A1", "OM.A0", "OM.B", "OM.A1"]}, "condition": {"enum": ["BC", "OM"]}, "node": {"enum": ["A0", "B", "A1"]}, "launch_status": {"const": "LAUNCHED"}, "ledger_snapshot": {"$ref": "#/$defs/callLedgerV3"}, "ledger_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "skippedEpisodeCallV2": {
+        "type": "object", "additionalProperties": false,
+        "required": ["position", "condition", "node", "launch_status", "upstream_terminal_position", "upstream_terminal_ledger_hash", "reason", "skip_hash"],
+        "properties": {"position": {"enum": ["BC.A0", "BC.B", "BC.A1", "OM.A0", "OM.B", "OM.A1"]}, "condition": {"enum": ["BC", "OM"]}, "node": {"enum": ["A0", "B", "A1"]}, "launch_status": {"const": "NOT_LAUNCHED_UPSTREAM_TERMINAL"}, "upstream_terminal_position": {"enum": ["BC.A0", "BC.B", "BC.A1", "OM.A0", "OM.B", "OM.A1"]}, "upstream_terminal_ledger_hash": {"$ref": "#/$defs/sha384"}, "reason": {"const": "UPSTREAM_TERMINAL"}, "skip_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "callLedgerV3": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "scenario_id", "condition", "node", "handoff_id", "task_packet_hash", "served_request_hash", "request_parameters_hash", "idempotency_token", "route_contract_hash", "state", "raw_response_b64", "raw_response_hash", "response_ref", "provider_request_id", "durability_receipt", "preaccept_failure_receipt", "ledger_hash"],
+        "properties": {
+          "schema_id": {"const": "CallLedgerV3"}, "scenario_id": {"$ref": "#/$defs/semantic"}, "condition": {"enum": ["BC", "OM"]}, "node": {"enum": ["A0", "B", "A1"]}, "handoff_id": {"$ref": "#/$defs/semantic"}, "task_packet_hash": {"$ref": "#/$defs/sha384"}, "served_request_hash": {"$ref": "#/$defs/sha256"}, "request_parameters_hash": {"$ref": "#/$defs/sha384"}, "idempotency_token": {"$ref": "#/$defs/semantic"}, "route_contract_hash": {"$ref": "#/$defs/sha384"}, "state": {"enum": ["RESPONSE_DURABLY_RECORDED", "PROVEN_PRE_ACCEPT_FAILURE", "ACCEPTANCE_AMBIGUOUS"]}, "raw_response_b64": {"type": ["string", "null"]}, "raw_response_hash": {"$ref": "#/$defs/nullableSha384"}, "response_ref": {"$ref": "#/$defs/nullableSemantic"}, "provider_request_id": {"$ref": "#/$defs/nullableSemantic"}, "durability_receipt": {"anyOf": [{"$ref": "#/$defs/durabilityReceiptV1"}, {"type": "null"}]}, "preaccept_failure_receipt": {"anyOf": [{"$ref": "#/$defs/preacceptFailureReceiptV1"}, {"type": "null"}]}, "ledger_hash": {"$ref": "#/$defs/sha384"}
+        }
+      },
+      "durabilityReceiptV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "ledger_identity_hash", "raw_response_hash", "response_ref", "provider_request_id", "transaction_id", "fsync_completed", "commit_completed", "receipt_hash"],
+        "properties": {"schema_id": {"const": "DurabilityReceiptV1"}, "ledger_identity_hash": {"$ref": "#/$defs/sha384"}, "raw_response_hash": {"$ref": "#/$defs/sha384"}, "response_ref": {"$ref": "#/$defs/semantic"}, "provider_request_id": {"$ref": "#/$defs/semantic"}, "transaction_id": {"$ref": "#/$defs/semantic"}, "fsync_completed": {"const": true}, "commit_completed": {"const": true}, "receipt_hash": {"$ref": "#/$defs/sha384"}}
+      },
+      "preacceptFailureReceiptV1": {
+        "type": "object", "additionalProperties": false,
+        "required": ["schema_id", "ledger_identity_hash", "failure_code", "dispatch_probe_ref", "receipt_hash"],
+        "properties": {"schema_id": {"const": "PreacceptFailureReceiptV1"}, "ledger_identity_hash": {"$ref": "#/$defs/sha384"}, "failure_code": {"const": "TRANSPORT_PROVED_NOT_ACCEPTED"}, "dispatch_probe_ref": {"$ref": "#/$defs/semantic"}, "receipt_hash": {"$ref": "#/$defs/sha384"}}
+      }
+    }
+  },
+  "operating_characteristics": {
+    "synthetic_only": true,
+    "experiment_evidence": false,
+    "claim_kind": "DETERMINISTIC_PLANNING_FREQUENCY",
+    "n": 768,
+    "replicates_per_cell": 10000,
+    "rng": "SHA-256 counter stream",
+    "no_region_wide_probability_claim": true,
+    "cells": [
+      {"id": "OM90_EQUAL", "p00": 0.05, "p01": 0.05, "p10": 0.05, "p11": 0.85, "expected_branch": "PROMOTE_TO_COORDINATION_STAGE"},
+      {"id": "LOW_DISCORD_EQUAL", "p00": 0.09, "p01": 0.01, "p10": 0.01, "p11": 0.89, "expected_branch": "PROMOTE_TO_COORDINATION_STAGE"},
+      {"id": "DELTA_NEG20_OM90", "p00": 0.10, "p01": 0.20, "p10": 0.00, "p11": 0.70, "expected_branch": "MODEL_INTERFACE_FAIL"},
+      {"id": "CEILING_OM70_EQUAL", "p00": 0.25, "p01": 0.05, "p10": 0.05, "p11": 0.65, "expected_branch": "MODEL_OR_INTERFACE_CEILING"},
+      {"id": "R10_COUNTEREXAMPLE", "p00": 0.00, "p01": 0.30, "p10": 0.10, "p11": 0.60, "expected_branch": "MODEL_INTERFACE_FAIL", "diagnostic_only": true}
+    ]
+  },
+  "transport_readiness": {
+    "unit": "one complete execution of the exact frozen six-call route and retry policy",
+    "failure": "abort, incomplete, ambiguity, or unclassified outcome counts as failure; no replacement",
+    "hypotheses": {
+      "bad": "P(F_i=1 | entire observed past) >= 0.02 almost surely for every scheduled trial",
+      "good": "P(F_i=1 | entire observed past) <= 0.005 almost surely for every scheduled trial"
+    },
+    "proof": "FINITE_HORIZON_CONDITIONAL_EXPECTATION_RECURSION",
+    "iid_required": false,
+    "marginals_alone_sufficient": false,
+    "trials": 456,
+    "accept_failures_at_most": 4,
+    "bad_route_acceptance_max": 0.049433329807588314,
+    "good_route_acceptance_min": 0.9190668746549462,
+    "good_route_rejection_max": 0.08093312534505381,
+    "scheduled_call_positions_before_retries": 2736,
+    "early_accept": false,
+    "early_reject_on_fifth_failure": true,
+    "schedule_interpretation": "defines the qualification window; does not prove hazards or future stationarity"
+  },
+  "cost": {
+    "scheduled_scientific_call_positions": 4608,
+    "paid_authorization": "separate owner decision after council go and frozen route/model/pricing/token/retry/dollar ceilings"
+  }
+}

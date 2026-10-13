@@ -1,0 +1,97 @@
+{
+  "contract_id": "MBCX-01-MEASUREMENT-CONTRACT-v5",
+  "normative": true,
+  "cohort": {
+    "motifs": 6,
+    "source_scenarios_per_motif": 160,
+    "retained_per_motif": 128,
+    "retained_total": 768,
+    "one_cut_hash_domain": "stage2-cut-r11",
+    "retention_hash_domain": "stage2-retain-r11",
+    "authority": "SourceProvenanceManifestV1 binds generator digest and every scenario motif, complete cut set, and action universe"
+  },
+  "grid": {
+    "H": [128, 1024, 10000, 100000],
+    "D": [1, 4, 16, 64, 256],
+    "F": [1, 4, 16, 64, 256],
+    "cells": 100,
+    "integer_rule": "exact integers; JSON/Python Booleans are rejected",
+    "identity_rule": "one candidate ID and one generator digest across all cells"
+  },
+  "physical_receipt": {
+    "implementation_status": "PHYSICAL_HARNESS_UNAVAILABLE",
+    "synthetic_fixture_policy": "baseline_receipt_rows exercises the evaluator only and can never establish a candidate physical pass",
+    "source": "WINDOWS_JOB_OBJECT_HARNESS_V1",
+    "containment": "create root suspended, associate completion port and assign to job before resume; neither breakaway flag enabled",
+    "completion": "active-process-zero, drained completion port, then final job accounting query",
+    "job_aggregates": ["user/kernel CPU ns", "read/write/other operations", "read/write/other transfer bytes", "peak committed bytes", "monotonic elapsed ns"],
+    "instructions": "root plus descendants from one pinned retired-instruction backend with process attribution",
+    "external_work": "network egress denied and no external compute, else EXTERNAL_WORK_UNMEASURED"
+  },
+  "call_ledger": {
+    "schema_id": "CallLedgerV1",
+    "states": ["PREPARED", "DISPATCHED", "RESPONSE_DURABLY_RECORDED", "PROVEN_PRE_ACCEPT_FAILURE", "ACCEPTANCE_AMBIGUOUS"],
+    "identity": ["scenario_id", "condition", "node", "task_packet_hash", "served_request_hash", "request_parameters_hash", "idempotency_token", "route_contract_hash"],
+    "durability": "nonempty raw response bytes/hash/ref/provider ID plus transaction, fsync, commit, and receipt digest",
+    "recovery": "outer ledger digest and all nested response/durability digests must verify",
+    "ambiguous_retry": "requires a digest-bound structured route attestation proving same token plus same parameters returns the first result; Boolean authority is invalid"
+  },
+  "measurement_receipt_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://moonwalker.local/schema/mbcx01/r11/measurement-receipt-v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schema_id", "candidate_id", "generator_digest", "H", "D", "F", "external_work_policy", "job_receipt", "measurement_receipt_hash"],
+    "properties": {
+      "schema_id": {"const": "MeasurementReceiptV1"},
+      "candidate_id": {"type": "string", "minLength": 1},
+      "generator_digest": {"type": "string", "pattern": "^[0-9A-F]{96}$"},
+      "H": {"enum": [128, 1024, 10000, 100000]},
+      "D": {"enum": [1, 4, 16, 64, 256]},
+      "F": {"enum": [1, 4, 16, 64, 256]},
+      "external_work_policy": {"const": "NETWORK_EGRESS_DENIED_NO_EXTERNAL_COMPUTE"},
+      "job_receipt": {"$ref": "#/$defs/jobReceipt"},
+      "measurement_receipt_hash": {"type": "string", "pattern": "^[0-9A-F]{96}$"}
+    },
+    "$defs": {
+      "jobReceipt": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "receipt_source", "job_object_id", "root_process_id", "created_suspended",
+          "completion_port_associated_before_resume", "assigned_before_resume",
+          "breakaway_enabled", "silent_breakaway_enabled", "active_processes_at_final_query",
+          "completion_port_drained", "user_time_ns", "kernel_time_ns", "read_operations",
+          "write_operations", "other_operations", "read_transfer_bytes", "write_transfer_bytes",
+          "other_transfer_bytes", "peak_committed_bytes", "elapsed_monotonic_ns",
+          "retired_instructions", "instruction_backend", "instruction_attribution"
+        ],
+        "properties": {
+          "receipt_source": {"const": "WINDOWS_JOB_OBJECT_HARNESS_V1"},
+          "job_object_id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9:._/-]{0,127}$"},
+          "root_process_id": {"type": "integer", "minimum": 1},
+          "created_suspended": {"const": true},
+          "completion_port_associated_before_resume": {"const": true},
+          "assigned_before_resume": {"const": true},
+          "breakaway_enabled": {"const": false},
+          "silent_breakaway_enabled": {"const": false},
+          "active_processes_at_final_query": {"const": 0},
+          "completion_port_drained": {"const": true},
+          "user_time_ns": {"type": "integer", "minimum": 0},
+          "kernel_time_ns": {"type": "integer", "minimum": 0},
+          "read_operations": {"type": "integer", "minimum": 0},
+          "write_operations": {"type": "integer", "minimum": 0},
+          "other_operations": {"type": "integer", "minimum": 0},
+          "read_transfer_bytes": {"type": "integer", "minimum": 0},
+          "write_transfer_bytes": {"type": "integer", "minimum": 0},
+          "other_transfer_bytes": {"type": "integer", "minimum": 0},
+          "peak_committed_bytes": {"type": "integer", "minimum": 0},
+          "elapsed_monotonic_ns": {"type": "integer", "minimum": 1},
+          "retired_instructions": {"type": "integer", "minimum": 1},
+          "instruction_backend": {"const": "ETW_PMC_RETIRED_INSTRUCTIONS_V1"},
+          "instruction_attribution": {"const": "JOB_MEMBER_PROCESS_SUM_INCLUDING_TERMINATED"}
+        }
+      }
+    }
+  }
+}

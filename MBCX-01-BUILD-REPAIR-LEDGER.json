@@ -1,0 +1,1704 @@
+{
+ "governance": "Every BUILD invariant row names the EXECUTED witnesses that establish it. verify-build-bundle.py enforces exact two-way totality by introspecting the unittest test names of the four BUILD suites: every declared witness must exist, every discovered witness must appear in exactly one row, no row may be empty, and a row that declares no positive (or no adversarial) witness must name an existing row that carries it, so a shared end-to-end path is counted once and never silently missing. 2026-08-16, cohort registration: rows also carry an optional `modules` list naming the production modules the row's behaviour belongs to, and W14 level (d) requires every BUILD_MODULES entry to appear in at least one row that also states a requirement and carries a witness. For the rows that predate this change, `modules` was DERIVED MECHANICALLY from the source of each declared witness method (import aliases plus one level of module-level test-helper expansion), not asserted by hand; for the BC-* cohort rows it is stated with the row, because the row and the module were written together. W14 level (d) cannot prove replacement sensitivity - see BC-19's accepted_residual.",
+ "invariants": {
+  "AB-01_AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba29_adversarial_fully_self_authored_state_universe_is_refused",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw21_adversarial_exactness_authority_requires_the_anchored_activation"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_exactness_authority.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_state_adapter.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid"
+   ],
+   "requirement": "Production admission of either authority begins from a verifier-controlled root of trust the API request cannot supply or substitute: an owner anchor the OPERATOR preconfigures (mbcx01_build_trust_anchor), which must have signed an activation binding the EXACT canonical manifest digest, its validity window, the authorized signing-key identity, the trust-root editor key set, the build-provenance digest and the four custody-evidence digests. Structural parsing of a fixture manifest stays available and activates nothing; the ceremony spec's own production-shaped manifest is admissible when, and only when, it is anchored.",
+   "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r1-SYNTHESIS.md fix class AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP (points 1-4); MBCX-01-OPEN-ISSUES.json MBCX01-BUILD-R1-TRUST-BOOTSTRAP discharge_condition; MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md sections 1-3"
+  },
+  "AB-02_TRUST_ANCHOR_FAILS_CLOSED": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba32_adversarial_unconfigured_anchor_fails_closed",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_state_adapter.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_trust_anchor.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "note": "The positive path is the anchored ceremony admission declared once in AB-01, so no witness is counted twice.",
+   "positive": [],
+   "positive_covered_by": "AB-01_AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP",
+   "requirement": "An anchor that was never configured, an activation signed by a key that is not the anchor, an activation that binds another manifest, and an activation from below the operator's current activation generation are all NAMED refusals that keep the fail-loud sentinel. Absence of configured trust is never absence of a trust requirement.",
+   "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r1-SYNTHESIS.md fix class point 5; SLSA v1.2 'Verifying artifacts' step 1; TUF specification sections 2.1 and 5.3"
+  },
+  "AB-03_CANONICAL_SIGNATURE_CARRIER": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused",
+    "test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_trust_anchor.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "note": "The positive path is the anchored ceremony admission declared once in AB-01, which verifies canonical carriers end to end.",
+   "positive": [],
+   "positive_covered_by": "AB-01_AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP",
+   "requirement": "One Ed25519 signature has exactly ONE accepted base64 carrier: standard alphabet, correct padding, length a multiple of four, 64 decoded bytes, and decode/re-encode equality, all checked BEFORE cryptographic verification, on receipts and on owner activation statements alike.",
+   "source": "MBCX-01-OPEN-ISSUES.json MBCX01-BUILD-R1-SIGNATURE-CARRIER discharge_condition; MBCX-01-BUILD-SEAT3-CODEX-VERDICT-r1.md F6"
+  },
+  "AB-04_INSTANCE_SCOPED_IMMUTABLE_VERIFIER_CONTEXT": {
+   "accepted_residual": "An in-process actor can edit a live context (object.__setattr__), build one around a fixture anchor (object.__new__ + object.__setattr__ past the public isinstance-only configure entry point), or re-wire the process between calls. That actor is the BOX OWNER: MBCX-01 has no API, no production runtime and no external submitter, so on-box walls against it are theatre under the permanent T2 ceiling (DESIGN-SHELF-MAP.md section 1). NAMED, ACCEPTED, zero grind: tamper-EVIDENT, not tamper-proof.",
+   "adversarial": [
+    "test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi05_adversarial_the_integration_fixture_does_not_leak_its_verifier_context"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_exactness_authority.py",
+    "mbcx01_build_integration.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_trust_anchor.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "note": "The r2 wiring-FREEZE rider (PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION / STATE_AUTHORITY_V2_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION) and its sole witness test_bw23_adversarial_mapping_object_cannot_swap_the_anchor_mid_evaluation were REVERTED on 2026-08-14 (MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md): the adversary it defended against does not exist in the design of record, and its depth counter was a plain module int that could only ever false-fire. What remains in this row is the part that serves scientific validity - snapshot-once and assembler restore.",
+   "positive": [
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw27_positive_verifier_context_is_immutable_instance_scoped_and_clocked"
+   ],
+   "requirement": "Production verification accepts exactly one thing: a guarded, INSTANCE-SCOPED ProductionVerifierContext whose anchor is operator-supplied and not fixture-marked, carrying its own current time. Each door resolves it ONCE, before any caller-supplied object is read, and carries that value through the whole evaluation, so re-wiring the process while the caller's data is being walked cannot change the decision IN FLIGHT; and a fixture ASSEMBLER installs its context for the length of its assembly and restores the operator's own on exit. The context's __setattr__/__delattr__ guards emulate immutability against ordinary use; they are not a boundary against an in-process actor (see accepted_residual).",
+   "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r2-SYNTHESIS.md section 5 items 1 and 3; MBCX-01-OPEN-ISSUES.json MBCX01-BUILD-R2-FIXTURE-ISOLATION discharge_condition; MBCX-01-BUILD-R2-TRUSTCONTEXT-SWEEP-LOG.md (Go crypto/x509 VerifyOptions; TUF out-of-band trusted root); codex r2 finding F3; MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md (F2's gadget-defence half void)"
+  },
+  "AB-05_FIXTURE_ANCHOR_NEVER_GRANTS_PRODUCTION": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAFixtureIsolationWitnesses.test_ba34_adversarial_committed_fixture_anchor_cannot_grant_state_production",
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw22_adversarial_committed_fixture_anchor_cannot_grant_production"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_exactness_authority.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_trust_anchor.py"
+   ],
+   "note": "The positive path is the anchored ceremony admission declared once in AB-01, which after this fold runs under a production-shaped TEST anchor generated in memory, so no witness is counted twice.",
+   "positive": [],
+   "positive_covered_by": "AB-01_AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP",
+   "requirement": "An owner anchor marked fixture_only grants NOTHING in production: it cannot be built into a production verifier context at all, and all three production doors refuse it by name even when it correctly signs an activation binding the exact manifest and custody set. The committed fixture anchor - whose private half is committed and therefore public - is the instance under test. The fixture LANE is unaffected: structural parsing of fixture manifests and require_production=False verification stay green, because refusing fixture AUTHORITY is not refusing fixture DOCUMENTS.",
+   "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r2-SYNTHESIS.md section 5 item 2; codex r2 finding F1 (EXECUTED: measurement=[], state=[], exactness PASS under the committed fixture anchor); MITRE CWE-321 as the footgun class"
+  },
+  "AB-06_VERIFIER_CONTROLLED_CURRENT_TIME": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAFixtureIsolationWitnesses.test_ba35_adversarial_state_trust_root_stale_at_the_verifier_clock",
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw24_adversarial_expired_manifest_is_refused_at_the_verifier_clock",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba46_adversarial_mixed_precision_validity_windows_compare_as_instants"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_trust_anchor.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "note": "The positive path is the anchored ceremony admission declared once in AB-01, which runs under a context carrying an injected instant.",
+   "positive": [],
+   "positive_covered_by": "AB-01_AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP",
+   "requirement": "Trust-root validity is judged at an instant the VERIFIER controls, carried on its context. The fallback when the operator injects no instant is the REAL clock, never a value read out of the artifact under verification (the manifest's own revocation published_at on BUILD B, the receipt's attested knowledge_time on BUILD A). An operator may inject a fixed instant, which is what keeps a deterministic suite deterministic. Window comparisons parse both sides to instants first: the state layer's six-fractional-digit spelling and the context's whole-second spelling order by TIME, so a legal window is never read expired early and a non-calendar window never admits (codex r5 P2).",
+   "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r2-SYNTHESIS.md section 5 item 3; codex r2 finding F4 (EXECUTED: a manifest valid only 2000-2001 admitted at the default instant); Go crypto/x509 isValid - opts.CurrentTime falling back to time.Now(); TUF sections 5.2-5.3 fixed update-start time"
+  },
+  "AB-07_EXACTNESS_BINDING_IS_NOT_SUITE_EXECUTION": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw25_adversarial_binding_only_exactness_is_not_labelled_suite_executed"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_exactness_authority.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "note": "The positive path is the production exactness binding declared once in BB-15.",
+   "positive": [],
+   "positive_covered_by": "BB-15_PRODUCTION_CARRIER_EXACTNESS_AUTHORITY",
+   "requirement": "The carrier-exactness authority BINDS an exactness claim to a pinned suite, an exact carrier artifact, an exact harness build, an exact grid identity and an authenticated production root; it does NOT execute the suite. The emitted result is therefore AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED and never PASS, and a receipt claiming PASS is refused CARRIER_EXACTNESS_SUITE_NOT_EXECUTED. The deferred runner stays an explicit residual rather than a label a reader can over-read.",
+   "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r2-SYNTHESIS.md section 5 item 4; MBCX-01-BUILD-EXACTNESS-PRODUCTION-VERIFIER-SPEC.md section 3 (per-witness suite execution deferred); codex r2 finding F7"
+  },
+  "AB-08_STRICT_ANCHOR_DOCUMENT_PARSE": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw26_adversarial_ambiguous_anchor_document_is_refused_at_the_loader"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_trust_anchor.py"
+   ],
+   "note": "The positive path is the anchored ceremony admission declared once in AB-01, which loads an unambiguous anchor document through the same loader.",
+   "positive": [],
+   "positive_covered_by": "AB-01_AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP",
+   "requirement": "The operator configuration boundary parses anchor documents strictly: a duplicate member is an AMBIGUOUS document and is refused OWNER_TRUST_ANCHOR_AMBIGUOUS rather than resolved last-member-wins, and JSON's non-standard constants are refused. An unambiguous document still loads, so this is strictness rather than breakage.",
+   "source": "MBCX-01-BUILD-ACCEPTANCE-ROUND-r2-SYNTHESIS.md section 5 item 5; codex r2 finding F6 (EXECUTED: duplicate_member ACCEPTED fixture_only=True); RFC 8785 section 3.1 duplicate-property exclusion, cited as a non-controlling parser comparison"
+  },
+  "AB-09_COMMITTED_FIXTURE_KEY_MATERIAL_IS_NEVER_A_PRODUCTION_ROOT": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw28_adversarial_relabelled_committed_fixture_key_is_not_a_production_root",
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw55_adversarial_re_encoded_committed_fixture_key_is_not_a_production_root",
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw56_adversarial_non_canonical_public_key_carrier_is_refused_at_the_context"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_trust_anchor.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "note": "OPERATOR FOOTGUN class, not an attacker path: MBCX-01 has no threat model and no untrusted caller (MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md). The ceremony is exactly when a human hand-writes an anchor document, and copying the committed example is the obvious way to write one. The positive path is the anchored ceremony admission declared once in AB-01, which runs under an in-memory production-shaped TEST key that is in no committed document, so no witness is counted twice; bw28, bw55 and bw56 carry their own controls for that path and for the fixture lane. bw55 and bw56 close the 2026-08-15 re-encoding sub-class; bw28's own re-wrap sub-case was rebuilt from the DECODED key bytes at the same time, because a variant built from the output of public_key_identity could only ever confirm that function's fixed points (MBCX01-R4-BW28-WITNESS-CANNOT-DISCRIMINATE-ITS-CLASS).",
+   "positive": [],
+   "positive_covered_by": "AB-01_AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP",
+   "requirement": "A production root of trust is recognised by its KEY BYTES, not by a flag in a document and not by the text that carries them. A ProductionVerifierContext refuses, by name (PRODUCTION_VERIFIER_CONTEXT_FIXTURE_KEY_MATERIAL, naming the committed document the key came from), any anchor whose public key is committed to this repository - whatever fixture_only says, through in-code wiring or through the MBCX01_BUILD_OWNER_TRUST_ANCHOR configuration path, and regardless of PEM line wrapping, base64 re-encoding (RFC 4648 section 3.5 trailing-bit malleability) or SPKI DER re-wrapping: identity is the decoded 32-byte Ed25519 public point, read structurally out of the SubjectPublicKeyInfo. The anchor's public_key_pem must in addition be the ONE canonical carrier of that key (PRODUCTION_VERIFIER_CONTEXT_KEY_CARRIER_INVALID), which is strict_signature_carrier_ok's property applied to the field that names the root of trust. The known-key set is DERIVED from the committed *.fixture.json documents themselves (trust_anchor.committed_fixture_key_material), never hand-listed, and the witness proves no key literal sits in the module. The fixture LANE and the legitimate in-memory production-shaped TEST anchor are untouched.",
+   "source": "MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r3.md section 4 residual P3-1 'the fixture key is recognised by a FLAG in a document, not by its key material' (driver-reproduced at the byte: the committed fixture anchor document relabelled fixture_only:false with a new anchor_id built a PRODUCTION context whose public_key_pem is byte-equal to the committed fixture public key, private half committed at mbcx01_build_ceremony_fixture.py:39); MBCX-01-BUILD-SEAT1-OUTSIDE-OPUS5-VERDICT-r4.md F1 and F5 (driver-reproduced at the byte: the committed anchor body ...DvZ8zY= and the body ...DvZ8zZ= decode to the same 44-octet SPKI, and the re-encoded copy built a PRODUCTION context at both the in-code and the MBCX01_BUILD_OWNER_TRUST_ANCHOR doors); MITRE CWE-1291 'Public Key Re-Use for Signing both Debug and Production Code' (PeerOf CWE-321), mitigation phase Architecture-and-Design; MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md section 3 step 0; RFC 4648 section 3.5; RFC 8410 section 4"
+  },
+  "AB-10_COMMITTED_KEY_MATERIAL_IS_NEVER_PRODUCTION_SIGNING_MATERIAL": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw57_adversarial_committed_test_signing_key_is_not_production_signing_material",
+    "test_mbcx01_build_state.BuildAFixtureIsolationWitnesses.test_ba36_adversarial_committed_test_signing_key_is_not_state_production_signing_material"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_exactness_authority.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_trust_anchor.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "note": "The SIGNING half of AB-09's anchor class, and the reason the positive lanes of both BUILD suites now generate their signing pairs IN MEMORY per run (mbcx01_build_ceremony_fixture.test_production_signing_keypair) exactly as the r2 fold did for the owner anchor - a committed key can no longer stand in for a production root anywhere. The positive path is the anchored ceremony admission declared once in AB-01, so no witness is counted twice; bw57 and ba36 each carry their own generated-key control and their own fixture-lane control.",
+   "positive": [],
+   "positive_covered_by": "AB-01_AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP",
+   "requirement": "The committed-key-material refusal covers the production SIGNING key class, not only the anchor class, on every admission path. A production-shaped manifest whose roots carry key material published in a committed *.fixture.json document is refused BY NAME - PRODUCTION_SIGNING_KEY_FIXTURE_MATERIAL at evaluate_production_measurement and at verify_production_carrier_exactness, STATE_AUTHORITY_V2_SIGNING_KEY_FIXTURE_MATERIAL at verify_state_authority_receipt_v2 and verify_production_scorer_input - and the fail-loud sentinel is kept. The refusal is independent of the anchor class: it fires under a correctly wired, independently generated owner anchor. The FIXTURE lane is untouched: structural validation of the committed manifests and require_production=False verification of the same receipt stay green.",
+   "source": "MBCX-01-BUILD-SEAT2-CHATGPT-SOL-VERDICT-r4.md F4 (EXECUTED: the committed Ed25519 test signing pair at test_mbcx01_build_measurement.py:74-84 used as the PRODUCTION measurement signing root under an independently generated owner anchor returned production_admission_errors=[], root_fixture_only=False, production_ready=True, root_is_committed_test_public=True; driver-reproduced at the byte on BOTH planes, the state plane returning [] at verify_state_authority_receipt_v2 and at verify_production_scorer_input); MBCX-01-OPEN-ISSUES.json MBCX01-R4-PRODUCTION-SIGNING-KEY-FIXTURE-ISOLATION discharge_condition; MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md section 3 step 0 and step 3 ('it must be a key generated in step 2, never one copied out of a committed fixture document')"
+  },
+  "AB-11_RFC7468_TRANSPORT_SPELLING_IS_NOT_KEY_IDENTITY": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw62_adversarial_eol_normalisation_weakens_no_other_carrier_check"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_trust_anchor.py"
+   ],
+   "note": "The mirror image of AB-09/AB-10, and the reason it is its own row: those refuse WRONG key material, this one refuses to refuse RIGHT key material. Both directions are scientific-validity failures for a harness whose ceremony is performed by a human on a Windows box; neither is an attacker path (MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md). bw62 re-runs every refusal bw55/bw56 establish through CRLF and through a missing final EOL, so the normalisation cannot become a laundering path.",
+   "positive": [
+    "test_mbcx01_build_measurement.BuildFixtureIsolationTests.test_bw61_positive_rfc7468_eol_conventions_are_one_carrier"
+   ],
+   "requirement": "The RFC 7468 line-ending conventions and the optional final EOL are TRANSPORT, not identity: an operator's own Ed25519 public key export is admitted whether it is spelled with LF, CRLF or CR, and whether or not an EOL follows the final -----END PUBLIC KEY----- boundary (RFC 7468 section 2, and the section 3 ABNF in which that EOL is optional). The spelling is normalised BEFORE canonical validation and nothing else is relaxed: canonical base64 (standard alphabet, correct padding, no whitespace inside the body, decode/re-encode equality), the canonical RFC 8410 section 4 SPKI encoding, the decoded-key identity and the committed-fixture-key refusal all still fire, in every spelling.",
+   "source": "MBCX-01-R13-AMENDMENT-2-THREAD-IDENTITY-AND-PEM-TRANSPORT-2026-08-15.md defect 3 (driver-reproduced at the byte: one freshly generated non-committed Ed25519 key yielded ONE identity across LF/CRLF/no-final-EOL while strict_public_key_carrier_ok returned True/False/False and openssl pkey -pubin parsed the CRLF form at exit 0); RFC 7468 sections 2-3; MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md section 3 step 0 (a human hand-writes the anchor document on the operator's Windows box, where CRLF is native)"
+  },
+  "BA-01_ATOMIC_TRANSITION_COMMIT": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing"
+   ],
+   "modules": [
+    "mbcx01_build_state_adapter.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_state_store.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba01_positive_production_transition_discharges_only_the_named_sentinel"
+   ],
+   "requirement": "The writer commits proposal, child, and state atomically according to the approved single-writer model.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' behavioral property 1"
+  },
+  "BA-02_POSTCOMMIT_DURABLE_READBACK": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba21_adversarial_committed_without_readback_mints_nothing",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba37_adversarial_a_second_in_memory_store_cannot_answer_the_first_ones_reader"
+   ],
+   "modules": [
+    "mbcx01_build_state_adapter.py",
+    "mbcx01_build_state_operator_b.py",
+    "mbcx01_build_state_store.py"
+   ],
+   "note": "The positive path is the single end-to-end production transition; it is declared once, in BA-01, so no witness is counted twice. ba37 covers WHICH durable bytes the readback reads: before the codex BUILD acceptance fold every in-memory store shared one ':memory:' routing entry, so a second live store silently answered the first store's independent reader.",
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "Postcommit authority comes from a durable store readback after commit, not from the writer's in-memory object.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' behavioral property 2"
+  },
+  "BA-03_INDEPENDENT_READBACK_IDENTITY": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "The production readback path is independently identified; a writer self-attestation or fixture constructor cannot become production evidence.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' behavioral property 3"
+  },
+  "BA-04_DUAL_REDUCER_REPLAY": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "Both independent reducers replay the exact persisted child from the exact read prestate and reproduce the exact readback state/cut.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' behavioral property 4"
+  },
+  "BA-05_WRONG_BINDING_FAILS_LOUDLY": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba14_adversarial_next_sequence_substitution_is_caught",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "Wrong store, namespace, version, transaction, cut, proposal, child, sequence, state, or hash fails loudly.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' behavioral property 5"
+  },
+  "BA-06_FIXTURE_RECEIPTS_STAY_UNAVAILABLE": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-14_BACKWARD_COMPATIBLE_FAIL_LOUD",
+   "requirement": "Fixture receipts continue to fail scientific admission with STATE_AUTHORITY_UNAVAILABLE.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' behavioral property 6"
+  },
+  "BA-07_BYTE_BINDING_TO_THE_VALIDATED_GRAPH": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "The V2 evidence must byte-bind to the exact transition graph the frozen validator checked; discharge is subtractive and exact.",
+   "source": "MBCX-01-BUILD-DESIGN-NOTES.md section 2 step 3"
+  },
+  "BA-08_CRASH_WINDOW_TERMINALS": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing"
+   ],
+   "modules": [
+    "mbcx01_build_state_adapter.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_state_store.py"
+   ],
+   "note": "The other two crash windows are counted once each in BA-01 (partial persistence, BROKEN) and BA-02 (committed with no readback).",
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "Crash/restart windows cannot produce a receipt for an uncommitted or partially committed transition.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' behavioral property 8"
+  },
+  "BA-09_SIGNER_AND_ROOT_AUTHORITY": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "Signer/key/producer identity, role, algorithm, policy and signature are bound; self-authored signer or envelope-supplied root is not authority.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' receipt binding list; 'Development method' state-authority list"
+  },
+  "BA-10_CUSTODY_SEPARATION": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "The signing-key custodian can neither edit nor approve the trust root, and relabelling a fixture manifest is not a ceremony.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' key-custody paragraph; 'Development method' state-authority list"
+  },
+  "BA-11_KEY_VALIDITY_AND_REVOCATION": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba47_adversarial_the_root_window_comparison_orders_instants_not_text"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "Validity window and revocation state are enforced at verification time from the injected manifest. The _root_errors window comparisons (root validity AND manifest validity against the attested instant) are parsed-instant comparisons \u2014 the enumerated remaining member of the r5 P2 site set; the signer-to-root equality checks stay string identity-of-declaration on purpose.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' receipt binding list (validity/revocation state)"
+  },
+  "BA-12_DURABLE_ANTI_REPLAY_ANCHORS": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba26_adversarial_anchors_matching_their_own_labels_but_not_the_durable_row"
+   ],
+   "modules": [
+    "mbcx01_build_state_adapter.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_state_operator_b.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba27_positive_operator_b_reproduces_the_anchors_from_the_store_alone"
+   ],
+   "requirement": "Anti-replay identity is bound to the durable journal row committed with the transition; receipt replay across scope, scenario, run, subject or transaction is refused, and anchors that merely agree with the receipt's own labels are not anchors.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' receipt binding list (anti-replay identity); BUILD FOLD 1"
+  },
+  "BA-13_OPERATOR_INDEPENDENCE": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_state_operator_b.py",
+    "mbcx01_build_state_store.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba23_positive_operator_b_derives_byte_identical_receipt_content"
+   ],
+   "requirement": "An independent operator derives byte-identical receipt content from the same durable bytes, and a poisoned finalizer surfaces as detected disagreement.",
+   "source": "MBCX-01-R13.1-SHELF-QUERY-LOG.md BUILD prerequisite; design notes section 2"
+  },
+  "BA-14_BACKWARD_COMPATIBLE_FAIL_LOUD": {
+   "adversarial": [],
+   "adversarial_covered_by": "BA-06_FIXTURE_RECEIPTS_STAY_UNAVAILABLE",
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba25_positive_frozen_state_suite_stays_green_alongside_build_modules"
+   ],
+   "requirement": "When no configured production adapter/root exists, behavior remains fail-loud and backward compatible; the frozen r13.2 state suite stays green.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD A - production state-owner adapter' behavioral property 7"
+  },
+  "BA-15_FRESH_PROCESS_DURABLE_VERIFICATION": {
+   "adversarial": [],
+   "adversarial_covered_by": "BA-05_WRONG_BINDING_FAILS_LOUDLY",
+   "modules": [
+    "mbcx01_build_state_adapter.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_state_store.py"
+   ],
+   "note": "The no-locator arm inside ba28 is the adversarial control: with no durable path injected the cold process answers STATE_AUTHORITY_V2_TRANSACTION_IDENTITY_MISMATCH.",
+   "positive": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba28_positive_fresh_process_verifies_a_file_backed_receipt_cold"
+   ],
+   "requirement": "A file-backed production receipt is verifiable in a fresh process with no live store registry, resolving the store read-only from its injected durable path; an unresolvable store is a transaction-identity rejection, never an admission.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'Compatibility and integration' (clean-room reconstruction); BUILD FOLD 2"
+  },
+  "BA-16_JOURNAL_SEQUENCE_ALLOCATED_INSIDE_THE_WRITE_TRANSACTION": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba38_adversarial_two_producer_processes_cannot_mint_the_same_journal_seq"
+   ],
+   "modules": [
+    "mbcx01_build_state_store.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "The journal sequence is allocated inside the same immediate write transaction that records it, and a unique index converts any residual duplicate into a named refusal - two producer processes on one store cannot silently mint the same sequence.",
+   "source": "codex-CLI r3 2026-08-15; log banked with the r3 fold commit"
+  },
+  "BA-17_FOREIGN_DATABASE_REFUSED_BEFORE_DDL": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba39_adversarial_an_unrelated_database_is_refused_before_any_ddl_runs"
+   ],
+   "modules": [
+    "mbcx01_build_state_store.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "Opening a path that holds a pre-existing non-store database refuses by name before any DDL runs; a truly empty file initializes and is stamped with the store application identity.",
+   "source": "codex-CLI r3 2026-08-15; log banked with the r3 fold commit"
+  },
+  "BA-18_VERIFIER_FAILURE_IS_A_CLOSED_VERDICT": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba40_adversarial_unusable_root_material_is_refused_not_raised"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BA-15_FRESH_PROCESS_DURABLE_VERIFICATION",
+   "requirement": "A signature-verifier failure (malformed root material, unavailable runtime, timeout) yields a named error inside the closed verdict list with the sentinel retained - it never escapes the public verifier as a raw exception, and not-checked is never conflated with wrong.",
+   "source": "codex-CLI r3 2026-08-15; log banked with the r3 fold commit"
+  },
+  "BA-19_A_FOREIGN_DATABASE_IS_REFUSED_WITHOUT_BEING_WRITTEN_TO": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba41_adversarial_a_foreign_database_is_refused_without_being_written_to",
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba44_adversarial_a_tableless_database_with_a_user_version_is_not_adopted"
+   ],
+   "modules": [
+    "mbcx01_build_state_store.py"
+   ],
+   "positive": null,
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "Every identity signal (sqlite_master, application_id, user_version) is read through a read-only, query_only connection BEFORE any PRAGMA or DDL, so a database belonging to another application is refused with its bytes UNCHANGED. Previously the persistent journal_mode=WAL pragma ran first, so the refused open had already rewritten someone else's file, and a tableless database carrying only a user_version was silently ADOPTED because schema initialisation overwrote the tell.",
+   "source": "codex-CLI r4 2026-08-16 P2; driver-reproduced (a refused open changed the foreign file's sha256; post-fix unchanged)"
+  },
+  "BA-20_LIVE_STORE_IDENTITY_IS_SINGLE_OCCUPANCY": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba42_adversarial_a_second_store_cannot_take_a_live_stores_identity"
+   ],
+   "modules": [
+    "mbcx01_build_state_adapter.py",
+    "mbcx01_build_state_authority.py",
+    "mbcx01_build_state_store.py"
+   ],
+   "positive": null,
+   "positive_covered_by": "BA-01_ATOMIC_TRANSITION_COMMIT",
+   "requirement": "A second store cannot take the (store_id, namespace, namespace_version) of a store that is still OPEN: the registry refuses by name before sqlite3.connect, so no half-made file is left. Previously the assignment silently replaced the first entry and a transaction durably COMMITTED in the still-live first store then resolved to None - a wrong answer from a live receipt. A CLOSED identity is free again (guard arm).",
+   "source": "codex-CLI r4 2026-08-16 P2; refusal chosen over path-aware resolution because a receipt carries store identity and never a path, and :memory: stores have no path at all"
+  },
+  "BA-21_MALFORMED_CUSTODY_KEY_LIST_IS_A_CLOSED_REFUSAL_AT_THIS_SITE": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba43_adversarial_a_malformed_custody_key_list_is_a_named_refusal"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": null,
+   "positive_covered_by": "BA-15_FRESH_PROCESS_DURABLE_VERIFICATION",
+   "requirement": "SCOPED TO ONE SITE, DELIBERATELY: _custody_errors validates every element of a caller-supplied key list before building a set, so a non-string element is a named code instead of a raw TypeError escaping the public verifier's closed-error-list contract. \u26d4 This row does NOT claim the CLASS is closed - four further sites are enumerated and OPEN at issue #29 (trust_anchor.py:1058 confirmed reachable; measurement_authority.py:285/:333/:399 suspected). The JSON Schema constrains these elements but the Python runtime never runs it, so schema coverage is not runtime coverage.",
+   "source": "codex-CLI r4 2026-08-16 P2; the fold also surfaced a second crash site the finding never named, closed upstream inside the same module"
+  },
+  "BA-22_STATE_SHAPED_NON_STATE_IS_A_CLOSED_REFUSAL_AT_THIS_SITE": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba45_adversarial_a_state_shaped_non_state_returns_the_closed_verdict"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "note": "Sibling of BA-21, same shape, second site: BA-21 is scoped to ONE site by its own wording, so this site carries its own row rather than widening that scope silently. The positive half (an honest receipt verifying clean through the same path) rides BA-15's fresh-process verification.",
+   "positive": [],
+   "positive_covered_by": "BA-15_FRESH_PROCESS_DURABLE_VERIFICATION",
+   "requirement": "verify_state_authority_receipt_v2 answers with a CLOSED error list for every input: state bytes that parse to a dict that is not a STATE (canonical {}, a missing or non-integer next_seq) yield the named schema refusal and sentinel, never a raw KeyError/TypeError out of the public verifier (codex r5 P2).",
+   "source": "codex-CLI r5 fold set (MBCX-01-CODEXCLI-r5-FULL-LOG-2026-08-16.log; four findings + the enumerated _root_errors member, all red-first, 2026-08-16)"
+  },
+  "BA-23_STATE_SCOPE_MAP_VALUES_ARE_SCOPES_AT_THIS_SITE": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba48_adversarial_a_scope_map_whose_values_are_not_scopes_is_named"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "note": "Third site in the BA-21/BA-22 series; the class close is BA-24.",
+   "positive": [],
+   "positive_covered_by": "BA-15_FRESH_PROCESS_DURABLE_VERIFICATION",
+   "requirement": "A state whose scopes map carries non-scope values (null, list, string) is the named schema refusal before reducer replay, never a raw TypeError out of the public verifier (codex r6 P2).",
+   "source": "codex-CLI r6 fold set (MBCX-01-CODEXCLI-r6-FULL-LOG-2026-08-16.log; five findings + the wholesale closed-verdict boundary, all red-first, 2026-08-16)"
+  },
+  "BA-24_MALFORMED_CALLER_INPUT_IS_A_CLOSED_REFUSAL_AT_THE_PUBLIC_BOUNDARY": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba49_adversarial_the_closed_verdict_covers_shapes_nobody_enumerated"
+   ],
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "note": "THE WHOLESALE CLOSE of the closed-list-escape class (third recurrence; tar-pit second-appearance ruling). COMPLEMENT: any caller input that makes the validator raise from the malformed-input tuple is the named schema refusal. HONESTY CARVE-OUT, witnessed: only that tuple - the module's own errors and non-tuple classes (an internal defect) still fault loud and unconverted. Cross-references BC-25, the same class on the cohort plane.",
+   "positive": [],
+   "positive_covered_by": "BA-15_FRESH_PROCESS_DURABLE_VERIFICATION",
+   "requirement": "verify_state_authority_receipt_v2 answers with its closed error list for EVERY caller input: the public boundary converts the malformed-input exception tuple to STATE_AUTHORITY_V2_SCHEMA_INVALID (plus the sentinel where the contract requires it), and ONLY that tuple - a genuine internal defect still faults loud (codex r6 P2 class, wholesale).",
+   "source": "codex-CLI r6 fold set (MBCX-01-CODEXCLI-r6-FULL-LOG-2026-08-16.log; five findings + the wholesale closed-verdict boundary, all red-first, 2026-08-16)"
+  },
+  "BA-25_STORE_URI_ADDRESSES_THE_REQUESTED_FILE": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStoreUriEncodingWitnesses.test_ba50_red_a_metacharacter_in_the_path_never_redirects_the_writer",
+    "test_mbcx01_build_state.BuildAStoreUriEncodingWitnesses.test_ba50_red_a_literal_percent_escape_in_the_name_is_not_decoded",
+    "test_mbcx01_build_state.BuildAStoreUriEncodingWitnesses.test_ba50_red_the_readonly_door_stays_on_the_requested_file_and_stays_readonly"
+   ],
+   "modules": [
+    "mbcx01_build_state_store.py"
+   ],
+   "note": "One encoder, three call sites (writable target, ?mode=ro reader, shared-cache in-memory target) - the enumerated set, not a sampled one. sqlite.org/uri.html steps 4 and 5 deliberately NOT applied, reasons in-module. The red found TWO defects beyond the reported one: ?mode=ro fell inside the discarded fragment (the read-only door was writable) and a legal literal %23 name was decoded. Neighbours BA-17/BA-19: those rows' identity check was green about a file the connection never touched.",
+   "positive": [
+    "test_mbcx01_build_state.BuildAStoreUriEncodingWitnesses.test_ba50_guard_ordinary_paths_and_in_memory_targets_are_untouched"
+   ],
+   "requirement": "Every file: URI handed to sqlite3.connect(uri=True) is percent-encoded per sqlite.org/uri.html section 3.1 (% first, then # and ?), so the connection addresses EXACTLY the requested path - the identity check and the writer can no longer be looking at two different files, and ?mode=ro can no longer fall inside a discarded fragment (codex r8 P1).",
+   "source": "codex-CLI r8 fold set (MBCX-01-CODEXCLI-r8-FULL-LOG-2026-08-17.log; three findings, two of them NEIGHBOURS of the r7 folds, all red-first, 2026-08-17)"
+  },
+  "BA-26_STORE_IDENTITY_IS_SETTLED_BEFORE_ANY_WRITE": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_red_another_stores_bytes_are_identical_after_the_refusal",
+    "test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_red_a_headerless_database_of_this_application_is_never_adopted",
+    "test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_red_an_older_schema_version_is_refused_before_it_is_migrated",
+    "test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_harness_the_bound_module_is_the_one_this_witness_names"
+   ],
+   "modules": [
+    "mbcx01_build_state_store.py"
+   ],
+   "note": "The headerless red was STRONGER than the report: pre-fix the open SUCCEEDED and returned a live store holding another store's committed journal row. Post-DDL checks retained (they cover :memory: and freshly stamped files).",
+   "positive": [
+    "test_mbcx01_build_state.BuildAStoreIdentityBeforeWriteWitnesses.test_ba52_guard_right_paths_are_still_opened_and_still_reopened"
+   ],
+   "requirement": "open_verified settles the persisted store identity THROUGH THE NON-WRITING DOOR before any journal-mode change or DDL: a same-application store with different identity, an older schema version, or a headerless database with rows is refused by name with the file byte-identical after the refusal (codex r9 P2).",
+   "source": "codex-CLI r9 fold set (MBCX-01-CODEXCLI-r9-FULL-LOG-2026-08-17.log; four P2 findings, all red-first; the dispatched IsProcessorFeaturePresent candidate was REFUTED at the Learn byte and WMI HypervisorPresent adopted instead, 2026-08-17)"
+  },
+  "BA-27_READONLY_DOOR_VALIDATES_THE_REQUIRED_SCHEMA": {
+   "adversarial": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba51_red_a_truncated_store_is_a_verdict_not_a_raw_sqlite_error"
+   ],
+   "modules": [
+    "mbcx01_build_state_store.py",
+    "mbcx01_build_state_authority.py"
+   ],
+   "note": "Refused at the store's read-only DOOR (STORE_REQUIRED_TABLES, STATE_STORE_SCHEMA_INCOMPLETE), not by widening the boundary tuple - the boundary's own honesty constraint forbids answering 'your receipt is malformed' when the truth is 'I could not read my own store'. The red found TWO escape sites (:842 journal, :868 transaction_rows); the door closes both. Declared limit: a door, not a TOCTOU shield.",
+   "positive": [
+    "test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba51_guard_the_untruncated_store_is_untouched_by_the_new_door"
+   ],
+   "requirement": "The read-only store view validates the required table set at open, so a truncated database that passes identity signals yields the closed transaction-identity refusal + sentinel from the public verifier, never a raw sqlite3.OperationalError (codex r9 P2).",
+   "source": "codex-CLI r9 fold set (MBCX-01-CODEXCLI-r9-FULL-LOG-2026-08-17.log; four P2 findings, all red-first; the dispatched IsProcessorFeaturePresent candidate was REFUTED at the Learn byte and WMI HypervisorPresent adopted instead, 2026-08-17)"
+  },
+  "BB-01_PRODUCTION_TRUST_ROOT_MANIFEST": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_adversarial_committed_manifest_flipped_to_production_is_refused",
+    "test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_expired_validity_window_is_refused",
+    "test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_adversarial_revoked_root_is_refused",
+    "test_mbcx01_build_measurement.BuildCalendarValidityTests.test_bw64_adversarial_a_non_calendar_validity_window_cannot_extend_production_trust",
+    "test_mbcx01_build_measurement.BuildCalendarValidityTests.test_bw64_adversarial_every_non_calendar_endpoint_shape_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw01_positive_committed_fixture_manifest_is_a_closed_fixture_only_v3",
+    "test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw02_positive_simulated_manifest_authorizes_one_producer_root",
+    "test_mbcx01_build_measurement.BuildCalendarValidityTests.test_bw64_positive_parsed_instants_order_by_time_not_by_text"
+   ],
+   "requirement": "Trust-root manifest structure, activation, validity window and revocation list are enforced; the committed instance stays fixture-only. Every validity endpoint and revocation instant is a real UTC CALENDAR instant, parsed before any comparison; a non-calendar window is refused and cannot extend production trust, and endpoints order by time, never by text (codex r5 P1).",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' signed authority and exactness list"
+  },
+  "BB-02_CUSTODY_SEPARATION_AND_CEREMONY_EVIDENCE": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_and_editor_role_collision_is_refused",
+    "test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_adversarial_signer_key_in_editor_approval_chain_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildTrustRootAuthorityTests.test_bw03_positive_custody_digests_recompute_from_injected_documents"
+   ],
+   "requirement": "The signing-key custodian must not be able to edit or approve the evaluator trust-root manifest; trust-root approval is held by a disjoint authority.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' signed authority and exactness list"
+  },
+  "BB-03_EXACT_64BIT_ABI_DECODING": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_short_basic_and_io_buffer_is_refused",
+    "test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_adversarial_peak_memory_read_at_the_wrong_offset_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildProducerAbiTests.test_bw04_positive_collection_round_trips_the_exact_96_and_144_byte_layout"
+   ],
+   "requirement": "Exact 64-bit ABI decoding: Basic+I/O preimage exactly 96 bytes, extended limit 144 bytes, with authoritative field offsets.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' Job accounting list"
+  },
+  "BB-04_JOB_ACCOUNTING_TERMINATION_GATE": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_adversarial_nonzero_limit_violation_termination_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw05_positive_ordinary_child_exit_with_zero_terminations_is_admitted"
+   ],
+   "requirement": "TotalTerminatedProcesses is the Job-limit-violation count: a clean admitted run requires zero, and a nonzero value is refused.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' Job accounting list"
+  },
+  "BB-05_MEMBERSHIP_PID_AND_START_KEY": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_missing_descendant_is_refused",
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw06_adversarial_pid_reuse_with_a_different_start_key_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BB-04_JOB_ACCOUNTING_TERMINATION_GATE",
+   "requirement": "Every root and descendant is bound to PID plus 64-bit process start key; a missing descendant or a PID reuse with a different start key is refused.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' process-control requirement 6"
+  },
+  "BB-06_SUPERVISOR_OWNED_ENFORCEMENT": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_breakaway_evidence_is_refused",
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_network_broker_and_helper_flags_are_refused",
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw07_adversarial_candidate_owned_enforcement_is_not_evidence"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BB-04_JOB_ACCOUNTING_TERMINATION_GATE",
+   "requirement": "No network egress, external compute broker, preexisting-helper delegation or breakaway, evidenced by supervisor-owned controls established before resume.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' process-control requirement 8"
+  },
+  "BB-07_FINAL_QUERY_ORDERING_AND_ACTIVE_ZERO": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_final_query_before_the_terminal_barrier_is_refused",
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw08_adversarial_active_process_race_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BB-04_JOB_ACCOUNTING_TERMINATION_GATE",
+   "requirement": "Completion is proven with signed terminal lifetimes, a final ActiveProcesses == 0 and final queries taken after the terminal barrier.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' process-control requirement 7"
+  },
+  "BB-08_COMPLETION_MESSAGES_ARE_DIAGNOSTIC": {
+   "adversarial": [],
+   "adversarial_covered_by": "BB-07_FINAL_QUERY_ORDERING_AND_ACTIVE_ZERO",
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw09_positive_completion_message_loss_stays_diagnostic"
+   ],
+   "requirement": "Completion messages are treated as diagnostics; their loss cannot fail or prove a run.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' process-control requirement 7"
+  },
+  "BB-09_RAW_BYTES_VERSUS_SCALARS": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildJobAccountingTests.test_bw10_adversarial_raw_bytes_and_scalar_disagreement_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BB-03_EXACT_64BIT_ABI_DECODING",
+   "requirement": "Recomputed canonical scalars must agree with the retained raw query bytes.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' Job accounting list"
+  },
+  "BB-10_RETIRED_INSTRUCTION_ETW_EVIDENCE": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_unavailable_pmc_source_is_refused",
+    "test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_sampled_backend_is_unsupported",
+    "test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_wrong_event_attachment_is_refused",
+    "test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_multiplexing_conflict_and_loss_are_refused",
+    "test_mbcx01_build_measurement.BuildInstructionAccountingTests.test_bw11_adversarial_incomplete_thread_attribution_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BB-04_JOB_ACCOUNTING_TERMINATION_GATE",
+   "requirement": "Strict ETW_PMC_EVENT_ATTACHED_V1 with InstructionRetired attached to CSwitch; unsupported source, wrong attachment, multiplexing, owner conflict, loss or incomplete attribution is a hard failure, never a guessed metric.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' retired-instruction evidence list"
+  },
+  "BB-11_REPLAY_AND_SUBSTITUTION_REFUSED": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_replay_across_run_and_cell_is_refused",
+    "test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_carrier_artifact_substitution_is_refused",
+    "test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_harness_build_and_host_substitution_is_refused",
+    "test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw12_adversarial_unauthorized_key_or_role_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BB-04_JOB_ACCOUNTING_TERMINATION_GATE",
+   "requirement": "Replay across run, cell, carrier artifact, harness build, host/environment, key or role cannot create production authority.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' signed authority and exactness list"
+  },
+  "BB-12_SELF_AUTHORED_ROOT_AND_FIXTURE_RELABEL": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_self_authored_root_is_refused",
+    "test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_key_absent_from_the_manifest_is_refused",
+    "test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_adversarial_r13_fixture_relabeled_as_physical_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildReplayAndRelabelTests.test_bw13_positive_frozen_r13_evaluator_stays_unavailable_for_everything"
+   ],
+   "requirement": "Self-generated keys, repository edits and relabeling fixture evidence must not create production authority; the frozen r13 evaluator stays unavailable for everything.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' signed authority and exactness list; 'Integration boundary'"
+  },
+  "BB-13_MALFORMED_EVIDENCE_CLOSED_ERRORS": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_wrong_types_return_a_closed_error_list",
+    "test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_missing_and_extra_envelope_keys_are_refused",
+    "test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_manifest_raises_a_typed_error",
+    "test_mbcx01_build_measurement.BuildMalformedEvidenceTests.test_bw14_adversarial_malformed_custody_evidence_is_named_not_thrown"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BB-01_PRODUCTION_TRUST_ROOT_MANIFEST",
+   "requirement": "Malformed evidence returns a closed error list or a typed error instead of throwing unexpectedly.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'Windows/measurement authority' witness list"
+  },
+  "BB-14_MONOTONIC_TIME_CROSS_CHECK": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_elapsed_inconsistent_with_lifetimes_is_refused",
+    "test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_adversarial_forged_qpc_frequency_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildTimingCrossCheckTests.test_bw15_positive_elapsed_matches_the_signed_qpc_lifetimes_span"
+   ],
+   "requirement": "Elapsed monotonic time is cross-checked against the signed QPC lifetimes span at a signed frequency, tightening the frozen '> 0' check.",
+   "source": "MBCX-01-BUILD-DESIGN-NOTES.md section 0 (soft spot inherited from r13)"
+  },
+  "BB-15_PRODUCTION_CARRIER_EXACTNESS_AUTHORITY": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_adversarial_fixture_receipt_relabeled_production_is_refused",
+    "test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw63_adversarial_receipt_edited_after_signing_cannot_rebind_the_carrier"
+   ],
+   "modules": [
+    "mbcx01_build_ceremony_fixture.py",
+    "mbcx01_build_exactness_authority.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildExactnessAuthorityTests.test_bw16_positive_production_exactness_binds_suite_carrier_build_and_grid"
+   ],
+   "requirement": "Production carrier-exactness authority is bound to the pinned suite/witness set, exact carrier artifact, exact harness build and exact grid identity; fixture V2 receipts stay conformance-only.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'BUILD B - Windows Job/ETW evidence producer' signed authority and exactness list"
+  },
+  "BB-16_ETW_PMC_CONSUMER_AND_UNAVAILABLE_POSTURE": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw30_adversarial_etw_abi_drift_is_a_fault_at_verify_time",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw32_adversarial_a_record_missing_a_join_field_is_refused",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw34_adversarial_absent_or_short_pmc_data_is_unavailable_not_zero",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw36_adversarial_an_unterminated_or_keyless_member_is_refused",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw37_adversarial_any_nonzero_loss_counter_makes_evidence_unavailable",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw38_adversarial_ungranted_capability_is_unavailable_never_estimated",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw39_adversarial_multiplexed_counters_are_unavailable",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw40_adversarial_a_virtualization_guest_or_nested_host_aborts",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw42_adversarial_unattached_consumer_seams_stay_faults",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw44_adversarial_ungranted_facts_travel_into_the_receipt_unchanged",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw46_adversarial_an_unattached_trace_finalizer_is_a_fault"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py",
+    "mbcx01_build_win32.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw29_positive_etw_struct_layout_matches_the_pinned_win32_abi",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw31_positive_records_are_emitted_in_per_processor_timestamp_order",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw33_positive_pmc_counters_are_read_from_the_pinned_extended_item",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw35_positive_member_lifetimes_cover_every_member_including_terminated",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw41_positive_the_factory_yields_a_contract_shaped_etwpmcsession",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw43_positive_capability_evidence_and_capability_facts_are_separate",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw45_positive_the_trace_window_closes_at_the_terminal_barrier",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw47_positive_collect_tells_the_session_which_root_it_is_measuring"
+   ],
+   "requirement": "The ETW PMC consumer that `mbcx01_build_win32.collect(etw_session_factory=...)` requires EXISTS and satisfies that contract: the pinned Win32 ETW ABI is re-derived and a drift faults at verify time; the CSwitch stream is emitted in per-processor timestamp order with the reorder count recorded as evidence; InstructionRetired is read from the EVENT_HEADER_EXT_TYPE_PMC_COUNTERS extended item at the pinned counter index, and an absent or malformed item is a fault rather than a counter of zero; member lifetimes are assembled from the Microsoft-Windows-Kernel-Process ProcessStart/ProcessStop stream for EVERY member including terminated descendants the collector never opened a handle to, with an unterminated, keyless, non-monotonic or root-absent roster refused; any nonzero EventsLost/LogBuffersLost/RealTimeBuffersLost, unavailable source, counter-owner conflict, ungranted counter or multiplexing makes the evidence UNAVAILABLE and never a diagnostic success or an estimated instruction count; a virtualization guest or a nested host aborts the smoke cell. Two riders this build had to correct in the collector are covered here because they only become reachable once a session factory exists: `configure()` sent a ZERO-FILLED CLASSIC_EVENT_ID blob (attaching InstructionRetired to GUID_NULL/type 0, i.e. to nothing) and needed `attachment['event_id_blob_size']`, a key EVENT_ATTACHMENT_KEYS cannot carry; and `_trace_facts()` read the granted capability out of the five-key CAPABILITY_QUERY_KEYS evidence record, so a healthy PMU could only ever be signed as `etw_pmc_source_available: False` beside summed PMC deltas. Both are now attached seams that FAULT when unattached, matching the pre-existing record_stream/member_lifetimes posture. Two further riders are covered here because a LIVE session is impossible without them: `collect()` calls the factory BEFORE ResumeThread, when the candidate has not run and the signed roster it must carry does not exist, and `consume_cswitch()` reads `thread_lifetimes` on its first line, so the collector needed (a) a TERMINAL-BARRIER hook, `close_trace_window()`, called after every member is terminal and before any delta is read, where the consumer stops its ProcessTrace pump, reads the loss counters back and completes both rosters, faulting when no finalizer is attached; and (b) a typed ROOT-IDENTITY seam, `session.root_process_id`/`session.root_process_start_key` set by `collect()` right after it queries the start key and before it configures or resumes anything, so a consumer binds the observed ETW roster to the process the collector actually created instead of monkey-patching `query_process_start_key` to eavesdrop on it.",
+   "source": "MBCX-01-OPEN-ISSUES.json MBCX01-BUILD-B-ETW-CONSUMER-UNBUILT discharge_condition; MBCX-01-R13-PHYSICAL-HARNESS-REQUIREMENTS.md sections 1-4; MBCX-01-R13-AUTHORITY-INVARIANT-MATRIX.md rows I11/I12; MBCX-01-BUILD-SMOKE-RUNBOOK.md section 3; mbcx01_build_win32.py EtwPmcSession docstring and the BUILD ITEM seam comment"
+  },
+  "BB-17_ETW_CONSUMER_LIVE_PATH_IS_NOT_A_PURE_LAYER_CLAIM": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw50_adversarial_an_unbindable_thread_event_is_refused_by_name",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw51_adversarial_a_failed_closetrace_is_an_incomplete_drain",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw52_adversarial_a_pump_that_outlives_the_join_is_an_incomplete_drain",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw53_adversarial_loss_is_never_re_queried_after_the_session_stops",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw54_adversarial_a_classic_cswitch_survives_the_header_flag_gate"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw48_positive_flagged_etw_ordinals_match_the_installed_sdk_header",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw49_positive_decoded_thread_events_join_the_signed_member_roster"
+   ],
+   "requirement": "The parts of the ETW consumer that BB-16's pure-layer witnesses could not reach are exercised too, because three defects lived exactly there and each one would have surfaced only on the operator's elevated run. (1) SDK ORDINALS: the `VALUE NOT PUBLISHED` ExtType/Flags pins are re-derived from the installed evntcons.h on every run. EVENT_HEADER_FLAG_CLASSIC_HEADER was pinned at 0x0040, which is EVENT_HEADER_FLAG_64_BIT_HEADER; it is 0x0100. That constant is LIVE in `_on_event_record()`, where a false test takes a bare `return`, so the wrong pin decided the classic-CSwitch branch by pointer width and dropped every non-64-bit-header record with no fault and no count; bw54 shows that drop directly, by decoding a synthetic classic CSwitch whose header flags are written as the SDK's literals rather than as the constant under test. EVENT_HEADER_EXT_TYPE_PROCESS_START_KEY (0x000A -> 0x000D) and EVENT_HEADER_EXT_TYPE_EVENT_KEY (0x000B -> 0x000A) were wrong but DEAD (defined, never read); they are corrected so the error cannot be inherited when a reader binds them. EVENT_HEADER_EXT_TYPE_PMC_COUNTERS = 0x0008 was already correct. (2) THREAD-LIFETIME JOIN: `_decode_kernel_process_event()` hard-coded `process_start_key: None` on every thread event while `assemble_thread_lifetimes()` requires a real key, so the live thread path could never join and every physical run would have died at ETW_PROCESS_START_KEY_INVALID:None after the candidate had already executed. The key is now BOUND from the ProcessStart events the same consumer decoded, by PID and QPC interval so a reused PID cannot borrow the wrong incarnation's key, and a thread no ProcessStart explains is ETW_THREAD_START_KEY_UNBINDABLE rather than a guess or a drop. (3) LOSS COUNTERS AND THE DRAIN: `stop()` discarded the CloseTrace return and the join result and `capture()` re-queried the loss counters on the stopped session's handle. CloseTrace is now checked (ERROR_SUCCESS or the documented ERROR_CTX_CLOSE_PENDING), a pump still alive after a bounded join is an incomplete drain, both make the capture UNAVAILABLE by name instead of a count, the counters read while the session was alive are carried into the capture, and a post-stop query is refused as ETW_LOSS_QUERY_AFTER_SESSION_STOP. Teardown still runs before any drain fault is raised, so a fault never leaves a system logger running.",
+   "source": "MBCX-01-BUILD-ETW-CONSUMER-RED-WITNESS-RUN-2026-08-15.txt; C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\um\\evntcons.h lines 51-69 and 148-158; shared\\winerror.h line 18367 (ERROR_CTX_CLOSE_PENDING 7007); mbcx01_build_etw_consumer.py `_on_event_record`, `_decode_kernel_process_event`, `stop`, `capture`; MBCX-01-BUILD-SMOKE-RUNBOOK.md section 3"
+  },
+  "BB-18_THREAD_IDENTITY_IS_A_TID_AND_AN_INTERVAL": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw59_adversarial_overlapping_lifetimes_for_one_tid_still_fault",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw60_adversarial_a_thread_outside_every_live_incarnation_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py",
+    "mbcx01_build_win32.py"
+   ],
+   "note": "Both directions of one defect. bw58 is the REFUSED-RIGHT-EVIDENCE half (a legal TID reuse faulted the whole capture); bw60 is the ADMITTED-WRONG-EVIDENCE half (a thread bound to an incarnation that had already exited). BB-17's requirement text already CLAIMED the interval bind - 'by PID and QPC interval so a reused PID cannot borrow the wrong incarnation's key' - and so did the binder's docstring; neither was true at the byte until AMENDMENT-2, because the binder read only kind == START events and never consulted ProcessStop. The frozen r13.2 validator is amended on the same two points and carries its own three witnesses in test_mbcx01_r13_measurement.py.",
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw58_positive_a_reused_tid_gets_one_lifetime_per_incarnation"
+   ],
+   "requirement": "A thread is identified by its TID *and* the interval it was alive, never by either alone. Windows reuses a thread id after the thread terminates, so one TID may carry SEVERAL lifetimes in one capture provided they are DISJOINT: they are assembled, and every CSwitch observation is attributed to the lifetime whose interval CONTAINS its QPC, with an observation inside none of them refused as ETW_CSWITCH_UNATTRIBUTED_THREAD rather than joined to the nearest row. Overlapping or touching lifetimes for one TID are the impossible world and fault ETW_THREAD_LIFETIME_OVERLAPPING_REUSE (a second START at the same QPC keeps ETW_THREAD_LIFETIME_DUPLICATE_START). In the other direction, a PID is reused too, so every thread lifetime must NEST inside one live process incarnation: the binder resolves a thread event to the incarnation whose start/stop interval contains its QPC (none -> ETW_THREAD_START_KEY_UNBINDABLE, two -> ETW_PROCESS_INCARNATION_AMBIGUOUS) and the assembler refuses a lifetime that does not nest inside the member's own interval (ETW_THREAD_LIFETIME_OUTSIDE_PROCESS), which also covers thread events that arrive with a start key already set and never pass through the binder. Fault vocabulary of record (r6, SEAT1 F4): a second START at the same QPC is ETW_THREAD_LIFETIME_DUPLICATE_START; overlapping or touching lives are ETW_THREAD_LIFETIME_OVERLAPPING_REUSE; two starts with one stop is ETW_THREAD_LIFETIME_INCOMPLETE (pinned at test_mbcx01_build_measurement.py test_bw59); an unmatched stop keeps ETW_THREAD_LIFETIME_UNMATCHED_STOP.",
+   "source": "MBCX-01-R13-AMENDMENT-2-THREAD-IDENTITY-AND-PEM-TRANSPORT-2026-08-15.md defects 1 and 2 (driver-reproduced at the byte: two disjoint lifetimes for TID 77 inside process 10..100 raised ETW_THREAD_LIFETIME_DUPLICATE_START:77, and thread 303 claiming qpc 50..55 when neither incarnation of PID 5000 was alive was ADMITTED under the exited start key AA); Microsoft Learn PsGetThreadId Remarks and 'Thread Handles and Identifiers' (a thread id may be reused after the thread terminates); mbcx01_build_etw_consumer.py bind_thread_start_keys / assemble_thread_lifetimes; mbcx01_build_win32.py consume_cswitch / resolve_thread_lifetime"
+  },
+  "BB-19_LIVE_MEMBER_POPULATION_IS_THE_JOB_TREE": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw66_adversarial_foreign_host_events_are_out_of_population"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw65_positive_a_live_capture_carries_the_frozen_parent_tuple"
+   ],
+   "requirement": "The live member roster and thread population derive from the measured Job root and its descendants via parent linkage; a live capture carries the parent tuples the physical-evidence validator requires, and machine-wide provider events from foreign host processes are out of population (excluded and counted in provenance), never a fault and never a member; member-evidence inconsistencies keep their named faults.",
+   "source": "codex-CLI r1 2026-08-15 findings P1 (live ProcessStart parent identities) + P1 (machine-wide provider unscoped); MBCX-01-CODEXCLI-r1-FULL-LOG-2026-08-15.log"
+  },
+  "BB-20_RETIRED_INSTRUCTIONS_ARE_THE_SUMMED_ATTRIBUTED_DELTAS": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw70_adversarial_a_zero_or_unreadable_instruction_total_is_named"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw70_positive_retired_instructions_are_the_summed_attributed_deltas"
+   ],
+   "requirement": "The collector populates the signed retired-instruction scalar from the summed member-attributed CSwitch deltas of the same collection; omission is a construction error, and a zero or unreadable total is returned as observed and named at admission, never repaired.",
+   "source": "codex-CLI r2 2026-08-15; log banked with the r2 fold commit"
+  },
+  "BB-21_DIAGNOSTIC_DRAIN_OFF_THE_CRITICAL_PATH": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw71_adversarial_the_drain_states_no_barrier_fact_it_cannot_see",
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw72_adversarial_an_open_barrier_expires_by_name_not_forever"
+   ],
+   "modules": [
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw71_positive_the_completion_drain_never_waits_for_a_message",
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw72_positive_the_barrier_is_the_job_query_under_one_deadline"
+   ],
+   "requirement": "Completion-port messages are diagnostics drained non-blockingly; the load-bearing completion barrier is the Job\u2019s own ActiveProcesses query under one deadline, an open barrier expires by name, and the drain states no barrier fact it cannot see.",
+   "source": "codex-CLI r2 2026-08-15; log banked with the r2 fold commit"
+  },
+  "BB-22_SIGNED_ELAPSED_IS_THE_MEMBER_LIFETIME_INTERVAL": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw73_adversarial_the_collectors_own_window_is_not_the_signed_span"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_win32.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw73_positive_elapsed_derives_from_the_signed_lifetime_endpoints",
+    "test_mbcx01_build_measurement.BuildCollectorLivePathTests.test_bw74_positive_the_observation_window_fences_the_signed_span"
+   ],
+   "requirement": "The signed elapsed values derive from the signed member-lifetime endpoints (earliest ProcessStart to latest ProcessStop), the collector\u2019s own observation window opens before CreateProcessW and fences the signed span, and a span outside the window faults by name.",
+   "source": "codex-CLI r2 2026-08-15; log banked with the r2 fold commit"
+  },
+  "BB-23_PROFILE_SOURCE_NAMES_PARSE_ON_WCHAR_BOUNDARIES": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw81_adversarial_a_malformed_source_list_is_named_not_looped"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py",
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw80_positive_the_pinned_profile_source_is_found_by_its_whole_name"
+   ],
+   "requirement": "Profile-source descriptions parse as UTF-16LE code units with NUL on two-byte boundaries and NextEntryOffset zero ending the buffer; a present source resolves by its whole name and a malformed chain is named, never looped.",
+   "source": "codex-CLI r2 2026-08-15; log banked with the r2 fold commit"
+  },
+  "BB-24_PMC_OWNERSHIP_IS_DECODED_ROWS_NOT_RAW_BYTES": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw82_adversarial_an_unreadable_ownership_answer_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw82_positive_free_pmc_counters_are_not_an_ownership_conflict"
+   ],
+   "requirement": "PMC counter ownership is decided by decoding per-processor ETW_PMC_COUNTER_OWNER rows against the installed SDK header layout: EtwPmcOwnerFree counters are free, an unknown owner type or unreadable answer is refused by name, and a healthy all-free host is not a conflict.",
+   "source": "codex-CLI r2 2026-08-15; log banked with the r2 fold commit"
+  },
+  "BB-25_CSWITCH_ATTRIBUTION_IS_MEMBER_SCOPED": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw84_adversarial_member_cswitch_inconsistencies_keep_their_faults"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py",
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw83_positive_foreign_switches_are_baselines_never_member_deltas"
+   ],
+   "requirement": "Machine-wide CSwitch records are scoped before attribution: foreign switches serve only as per-processor counter baselines and are excluded from member deltas (counted in provenance), while member-record inconsistencies keep their named faults.",
+   "source": "codex-CLI r2 2026-08-15; log banked with the r2 fold commit"
+  },
+  "BB-26_KERNEL_PROCESS_EVENTS_DECODE_BY_VERSIONED_MANIFEST": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw67_adversarial_an_unverified_event_version_is_named_not_guessed",
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw67_adversarial_an_unusable_telemetry_record_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py",
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw67_positive_the_decoder_reads_the_manifest_field_order",
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw67_positive_the_root_identity_is_the_quantity_etw_publishes"
+   ],
+   "requirement": "Kernel-Process ProcessStart/Stop payloads decode by the provider\u2019s versioned manifest layout (ProcessID UINT32 at offset 0; ProcessSequenceNumber UINT64 at offset 4 on versions that carry it), selected by the event record\u2019s own version; versions without a sequence number and unknown versions fault by name, never guess. The known root identity is the quantity the ETW payload actually publishes (ProcessSequenceNumber), read through an OS-sized telemetry query whose unusable answers are refused by name.",
+   "source": "codex-CLI r3 2026-08-15 + driver-accepted riders 1b/1c (root identity is the ETW-published quantity; OS-sized telemetry query); log banked with the r3 fold commit"
+  },
+  "BB-27_SESSION_TEARDOWN_ALWAYS_RUNS": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw68_adversarial_a_failed_teardown_is_secondary_never_a_mask"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw68_positive_an_unreadable_loss_counter_still_stops_the_logger"
+   ],
+   "requirement": "The ETW session logger is always stopped, even when the loss query fails: the unknown-loss fault stays primary, a failed teardown is appended as a named secondary, and neither ever masks the other.",
+   "source": "codex-CLI r3 2026-08-15 + driver-accepted riders 1b/1c (root identity is the ETW-published quantity; OS-sized telemetry query); log banked with the r3 fold commit"
+  },
+  "BB-28_UNASSIGNED_SUSPENDED_CHILDREN_ARE_TERMINATED": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw69_adversarial_an_assigned_child_is_left_to_the_job",
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw69_adversarial_a_failed_termination_is_noted_never_silent"
+   ],
+   "modules": [
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildCodexRound3Tests.test_bw69_positive_an_unassigned_suspended_child_is_terminated"
+   ],
+   "requirement": "A suspended child whose Job assignment fails is explicitly terminated before its handles close (KILL_ON_JOB_CLOSE cannot reach a process no Job holds); an assigned child is left to the Job, and a failed termination is a named secondary note, never silent.",
+   "source": "codex-CLI r3 2026-08-15 + driver-accepted riders 1b/1c (root identity is the ETW-published quantity; OS-sized telemetry query); log banked with the r3 fold commit"
+  },
+  "BB-29_CSWITCH_SCOPE_IS_LIFETIME_AWARE": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw76_adversarial_a_tid_in_no_known_life_still_faults_and_is_counted"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py",
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw75_positive_a_reused_tid_inside_a_known_foreign_life_is_excluded"
+   ],
+   "requirement": "The CSwitch scope classifies by TID AND QPC containment, consuming the partition's already-derived member and foreign lifetimes: a record inside a member lifetime is member evidence; a record inside a known foreign reuse of a member TID is foreign (baseline arithmetic, never kept); a roster-TID record inside NO known lifetime keeps the fail-loud downstream fault and is counted in kept_roster_tid_outside_any_lifetime. An ordinary Windows TID reuse can no longer abort a valid capture.",
+   "source": "council r6 2026-08-16, 3-seat convergent EXECUTED finding (SEAT1 F1 / SEAT2 F1 / SEAT3 F2); FOLD-A, red-first on HEAD blob 154d33d3"
+  },
+  "BB-30_THREAD_EVENT_VERSIONS_ARE_GATED": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw77_adversarial_an_unverified_thread_event_version_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw78_positive_guard_both_verified_thread_versions_still_decode"
+   ],
+   "requirement": "ThreadStart/ThreadStop payloads decode only at versions in KERNEL_THREAD_PAYLOAD_VERSIONS_VERIFIED; an unknown revision faults ETW_KERNEL_THREAD_VERSION_UNVERIFIED by name, mirroring the Process event path, instead of reading eight bytes at unverified offsets into a signable number.",
+   "source": "council r6 2026-08-16, SEAT2 F2 EXECUTED (the omission-attack finding); FOLD-A, red-first on HEAD blob 154d33d3"
+  },
+  "BB-31_SCOPE_PROVENANCE_NAMES_ITS_DENOMINATORS": {
+   "adversarial": null,
+   "adversarial_covered_by": "BB-29_CSWITCH_SCOPE_IS_LIFETIME_AWARE",
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw79_positive_the_foreign_instruction_field_names_its_denominator"
+   ],
+   "requirement": "The scope provenance names what each number counts: excluded_foreign_cswitch_records counts every excluded record, foreign_instructions_excluded_after_first_member accumulates only post-first-member foreign work, and the two are never presented as sharing a denominator.",
+   "source": "council r6 2026-08-16, SEAT1 F5 EXECUTED; FOLD-A leaf, red-first on HEAD blob 154d33d3"
+  },
+  "BB-32_FIRST_MEMBER_INTERVAL_COUNTED_FROM_BASELINE": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw89_adversarial_a_malformed_baseline_faults_by_name",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw90_adversarial_an_omitting_producer_caller_faults_before_signing"
+   ],
+   "modules": [
+    "mbcx01_build_win32.py",
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw87_positive_the_first_member_interval_is_counted",
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw88_positive_capture_start_emits_its_own_counter_as_baseline"
+   ],
+   "requirement": "AMENDMENT-3: the interval ending at a processor's first member switch-out is member work and is counted \u2014 the scope records the predecessor's raw counter as cswitch_first_member_baselines, consume_cswitch and the frozen validator seed their delta rules from it, and a malformed baseline faults ETW_CSWITCH_BASELINE_INVALID. A processor with no predecessor keeps the declared capture-start zero. Pre-amendment the build signed 100 retired instructions where the stream proved 1,000,100 (the r6 NO-GO). r7 totality rule: the scope emits a row for EVERY observed processor (capture-start rows carry the first record's own counter); the frozen validator requires baselined == observed; the producer field has NO default, so an omitting caller faults before signing (three seats convergent at r7; SEAT2 executed the omission through full production admission wrong by 1,000,000).",
+   "source": "council r6 2026-08-16, SEAT3 F1 EXECUTED NO-GO, driver-reproduced on hash-proven bytes; AMENDMENT-3, owner ratification pending; frozen twins are the test_i12 baseline family under FROZEN_TEST_TOTAL 155"
+  },
+  "BB-33_STOP_ONLY_FOREIGN_LIFETIME_IS_A_PREFIX_INTERVAL": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw92_adversarial_member_and_foreign_intervals_cannot_overlap"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw91_positive_a_leading_foreign_stop_is_a_prefix_interval"
+   ],
+   "requirement": "A leading foreign ThreadStop with no observed ThreadStart describes the capture prefix through that stop: a pre-existing host thread whose TID the member later receives is classified foreign instead of aborting the capture. Nothing is guessed - the stop is observed and a TID is reusable only after termination (PsGetThreadId); the member branch wins containment first, so the prefix interval can never move member work out. Only the first leading stop forms the prefix. r8 fold (SEAT2 F1, EXECUTED): a TID claimed alive as BOTH member and foreign at the same instant is an internally contradictory trace and fails loud (ETW_THREAD_MEMBER_FOREIGN_INTERVAL_OVERLAP) rather than being resolved member-first; the disjoint prefix arrangement is unaffected.",
+   "source": "council r7 2026-08-16, SEAT2 ruling 2a CHANGE EXECUTED (Microsoft primaries: PsGetThreadId, Thread_V2 lifecycle model), SEAT1's named alternative concurring; driver fold"
+  },
+  "BB-34_MALFORMED_ROSTER_ROW_FAULTS_BY_NAME": {
+   "adversarial": null,
+   "adversarial_covered_by": "BB-29_CSWITCH_SCOPE_IS_LIFETIME_AWARE",
+   "modules": [
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw93_pin_a_malformed_roster_row_faults_by_name"
+   ],
+   "requirement": "A roster row missing or mistyping its interval fields refuses as ETW_THREAD_ROSTER_ROW_INVALID rather than leaking a raw KeyError/TypeError. Posture unchanged - a malformed roster never attributes anything; only the refusal is now named, and the name is pinned so a refactor cannot drop it silently.",
+   "source": "council r7 (SEAT1 F7, the fold) + council r8 (SEAT1 F6: the name existed unwitnessed). bw93 is a PIN, not a red - driver-verified passing on the pre-r8 bytes; its job is future rename/reversion."
+  },
+  "BB-35_THREAD_LIFETIME_PAIRING_AGREES_ON_THE_PROCESS": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwConsumerTests.test_bw95_adversarial_a_stop_from_another_member_cannot_close_a_lifetime"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "note": "Fourth member of the AMENDMENT-2 thread-identity set: a thread is a TID AND an interval AND the process incarnation BOTH halves belong to. New fault ETW_THREAD_LIFETIME_PROCESS_MISMATCH joins BB-18's fault vocabulary.",
+   "positive": [],
+   "positive_covered_by": "BB-18_THREAD_IDENTITY_IS_A_TID_AND_AN_INTERVAL",
+   "requirement": "A thread lifetime pairs a START and a STOP that agree on the member process identity; a STOP naming another member cannot close a lifetime opened under a different process, so signed lifetime evidence is never misattributed (codex r6 P2).",
+   "source": "codex-CLI r6 fold set (MBCX-01-CODEXCLI-r6-FULL-LOG-2026-08-16.log; five findings + the wholesale closed-verdict boundary, all red-first, 2026-08-16)"
+  },
+  "BB-36_PMC_IS_ATTACHED_BEFORE_THE_CONSUMER_OPENS": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_red_the_pmc_counter_is_attached_before_the_pump_opens",
+    "test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_red_an_early_cswitch_without_pmc_rejects_the_whole_run",
+    "test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_red_the_cswitch_flag_is_not_enabled_until_the_counter_is_attached",
+    "test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_red_the_attach_precedes_every_cswitch_generating_enable"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "note": "The second witness is the CONSEQUENCE half (green both sides by design: one PMC-less CSwitch rejects the whole one-shot run - which is exactly why the ordering matters). configure_pmc is idempotent as of this fold (rider, red-covered by bw98 part a). UNVERIFIED_UNTIL_ELEVATED_RUN: the ControlTraceW UPDATE call has never executed against a live session; its failure mode is loud and early, before any measurement.",
+   "positive": [
+    "test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw98_guard_the_fixes_refuse_nothing_that_was_right_before",
+    "test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw96_guard_the_update_call_carries_what_controltracew_documents"
+   ],
+   "requirement": "The PMC counter list and its sampling event are attached to the session BEFORE OpenTraceW/ProcessTrace opens, so no context switch can be delivered without a PMC extended-data item and no right capture is refused as ETW_PMC_EXTENDED_DATA_ABSENT (codex r7 P1 - the class that would have aborted the owner's one elevated session). [AMENDED 2026-08-17, codex r8 P1: the r7 close was INCOMPLETE - EVENT_TRACE_FLAG_CSWITCH rides StartTraceW itself, so switches were buffered without a counter one call earlier than the pump. start() no longer passes that flag; it is turned on by ControlTraceW(EVENT_TRACE_CONTROL_UPDATE) AFTER configure_pmc(), carrying the whole enable-flag set because a non-zero EnableFlags names the providers to enable or keep enabled.]",
+   "source": "codex-CLI r7 fold set (MBCX-01-CODEXCLI-r7-FULL-LOG-2026-08-16.log; four findings + the CreateProcessW documented-set close incl. one member codex never reported, all red-first, 2026-08-16)"
+  },
+  "BB-37_PROCESS_PARENT_IDENTITY_COMES_FROM_THE_PAYLOAD": {
+   "adversarial": [
+    "test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw97_red_the_parent_identity_comes_from_the_payload_not_the_header",
+    "test_mbcx01_build_measurement.BuildEtwPhysicalPathTests.test_bw97_red_the_scoped_roster_follows_the_payload_parent"
+   ],
+   "modules": [
+    "mbcx01_build_etw_consumer.py"
+   ],
+   "note": "Brokered/explicit-parent creation makes the emitting context differ from the declared parent; the header pid is retained as event_header_process_id, diagnostic only, deciding no membership. Positive half (an honest tree scoping correctly) rides BB-19's live-member-population positive.",
+   "positive": [],
+   "positive_covered_by": "BB-19_LIVE_MEMBER_POPULATION_IS_THE_JOB_TREE",
+   "requirement": "A ProcessStart's parent tuple is decoded from the v3/v4 payload (ParentProcessID @20, ParentProcessSequenceNumber @24, per the TDH-verified layout); EventHeader.ProcessId decides no membership, so the signed member tree can neither omit a legitimate descendant nor admit a foreign process (codex r7 P2).",
+   "source": "codex-CLI r7 fold set (MBCX-01-CODEXCLI-r7-FULL-LOG-2026-08-16.log; four findings + the CreateProcessW documented-set close incl. one member codex never reported, all red-first, 2026-08-16)"
+  },
+  "BC-01_MOTIF_CONTRACTS_BIND_CODES_NOT_ONLY_STATE": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw23_negative_delegation_fresh_duplicates_are_not_duplicate_noop"
+   ],
+   "note": "These pins run against the FROZEN reducers directly and name no cohort module: they are the executable truth the generator is built against, so the generator can never silently redefine a motif.",
+   "positive": [
+    "test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw94_positive_correction_restoration_reasserts_a_prior_value_at_a_later_cut",
+    "test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw95_positive_obligation_lifecycle_transitions_are_observed_off_the_target",
+    "test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw96_positive_dependency_reversal_flips_the_target_on_prerequisite_order",
+    "test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw97_positive_cross_scope_collision_keeps_the_scored_projection_zero_foreign",
+    "test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw98_positive_delegation_duplicates_are_byte_identical_replay_noops",
+    "test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw64_positive_delegation_rejection_is_applied_rejected_and_carries_its_code",
+    "test_mbcx01_build_cohort.BuildCohortMotifContractTests.test_bw99_positive_mixed_delayed_continuity_flips_target_legality_across_cuts"
+   ],
+   "requirement": "Each of the six motifs is a SEMANTIC CONTRACT binding three things at once: the observable postcondition, the legal realization CONSTRUCTION, and the exact result-code sequence both frozen reducers return. DUPLICATE_NOOP is reachable only by BYTE-IDENTICAL event replay and must never absorb PROPOSAL_INVALID, COMMIT_INVALID or IDEMPOTENCY_CONFLICT - all four leave state byte-unchanged, so a state-only clause discriminates nothing. The rejection realization is the TRIPLE result code APPLIED, status REJECTED, terminal_disposition = the payload's rejection_code.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.1 and 4 (W4); r2 seat-1 executed duplicate matrix; r3 seat-1 executed rejection cell"
+  },
+  "BC-02_ELIGIBILITY_IS_DERIVED_NEVER_DECLARED": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw70_red_w2_declared_eligibility_boolean_is_refused_by_name"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py"
+   ],
+   "note": "The positive path is the DERIVED predicate doing real work, declared once in BC-03's quota witness, so no witness is counted twice.",
+   "positive": [],
+   "positive_covered_by": "BC-03_SEQUENCED_TOTAL_ADMISSION_ARITHMETIC",
+   "requirement": "Eligibility is DERIVED through the packet layer's gold predicate (unique gold plus at least one non-gold action) and never read back from a supplied Boolean. Every declared-eligibility key is POPPED by name and refused as DECLARED_ELIGIBILITY_BOOLEAN, at the top level and inside canonical_state_by_cut, and the refusal propagates through provenance validation and selection. The frozen generator writes the Boolean (mbcx01_r13_measurement.py:252) and reads it back under a RECOMPUTED label (:321); this sibling refuses the whole shape.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.3 and 4 (W2)"
+  },
+  "BC-03_SEQUENCED_TOTAL_ADMISSION_ARITHMETIC": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc09_adversarial_thirty_three_unplanned_refusals_refuse_the_plan",
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc20_red_a_placement_shortfall_refuses_the_plan"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_generator.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc08_positive_the_planned_ineligible_quota_is_exact_and_stratified"
+   ],
+   "requirement": "The per-motif plan accounts EVERY refusal class in GENERATION ORDER: render first, measure the envelope and derived-gold refusals e, then place exactly max(0, min(k, 32 - e)) planned ineligibles, stratified across TARGET_NOT_DUE / AMBIGUOUS_GOLD / MISSING_NON_GOLD and at most one per joint census stratum. e > 32 REFUSES the generation plan by name (BUILD_GENERATION_PLAN_REFUSED): a shape whose unplanned refusals alone exceed the floor margin cannot honestly reach 128. Admitted eligible per motif is then 160 - e - placed >= 128 BY ARITHMETIC, and every planned ineligible is ineligible by DERIVATION and absent from the retained set. The placement loop is TOTAL against its own record: len(placements) != placed_total REFUSES the plan (BUILD_GENERATION_PLAN_REFUSED naming requested vs achieved), so the signed plan cannot overstate the achieved stratified placement (cohort-BUILD r1 fold 3).",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.3 and 4 (W3); r3 seats 1+3 (a fixed k plus discovered envelope refusals can otherwise fault)"
+  },
+  "BC-04_GENERATION_IS_DETERMINISTIC_AND_FACTS_ARE_ENDOGENOUS": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw71_red_w6_determinism_and_the_ghost_fact_discriminator"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_generator.py",
+    "mbcx01_build_cohort_packet.py"
+   ],
+   "note": "The byte-identical re-generation half executes inside the same witness; the row's declared positive is BC-03's plan witness, which runs on that same generated population, so no witness is counted twice.",
+   "positive": [],
+   "positive_covered_by": "BC-03_SEQUENCED_TOTAL_ADMISSION_ARITHMETIC",
+   "requirement": "Re-generation is byte-identical (population, provenance, retained root, census and coverage), a post-generation mutation fails authority re-derivation, and a FACT row with no journal ancestry - or a mutated one - is REFUSED by the BUILD packet sibling as BUILD_FACT_ROW_WITHOUT_JOURNAL_ANCESTRY. The frozen projector copies FACT rows unchanged (mbcx01_r13_packets.py:68-95), so generic projection equality is NOT this discriminator and the witness asserts the frozen ACCEPTANCE too.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.2 and 4 (W6, W21); r1 driver reproduction P2"
+  },
+  "BC-05_BUILD_POPULATION_JOINS_THE_BUILD_AUTHORITY": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw72_red_w7_the_build_population_joins_the_build_authority_path"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "The BUILD population joins the BUILD authority path end to end: 960 generated, 768 retained at 6x128 per motif, retained positions 0..767 at both frozen sites, a retained set root that is the population's OWN (never the frozen r13 root), provenance that validates, and position and root riding the served manifest. A candidate that is not a BYTE-EXACT member is refused BUILD_RETAINED_SCENARIO_AUTHORITY_INVALID.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 3 and 4 (W7)"
+  },
+  "BC-06_RETAINED_MEMBERSHIP_DISCRIMINATION": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc07_adversarial_dropping_or_substituting_one_member_fails_the_root"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "A retained cohort authority that drops one member, substitutes one, or reorders two is REFUSED (BUILD_RETAINED_COHORT_AUTHORITY_INVALID) even when it is internally self-consistent - its own root and authority hash recomputed - because the check recomputes from the pinned population rather than checking shape. The same doctored membership lists are refused BUILD_MEMBERSHIP_SUBSTITUTED, and an untouched member still issues authority, so the refusal is about the SET and not the row.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) section 4 (W1); codex design-gate r1 (768 phantom ids reached the frozen numerical core; mbcx01_r13_inference.py:141-165 validates only the supplied list)"
+  },
+  "BC-07_FALSIFICATION_SENTINEL_STRUCTURAL_HALF": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw73_red_w10_the_structural_half_of_the_falsification_sentinel"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_packet.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "Gold read sets take at least the declared number of distinct values and more than one distinct SIZE (the measured quantity may not ride an unvaried input), the BC/OM difference is non-degenerate at both the read-set selection and the served closure, and for the registered coverage class the OM-only evidence is NECESSARY for canonical gold derivation under the registered counterfactual. Both floors gate: a thin census and a collapsed necessity class are refused by name.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) section 4 (W10) and section 5's HONEST LIMIT: the structural half only - statistical power is unknowable until first inference and no pre-run witness can close that"
+  },
+  "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH": {
+   "adversarial": [],
+   "adversarial_covered_by": "BC-05_BUILD_POPULATION_JOINS_THE_BUILD_AUTHORITY",
+   "modules": [
+    "mbcx01_build_cohort_packet.py"
+   ],
+   "note": "The adversarial half of the JOIN is declared once in BC-05, whose witness refuses a non-member on the same authority path, so no witness is counted twice.",
+   "positive": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc05_positive_one_retained_candidate_scores_end_to_end_on_the_build_path"
+   ],
+   "requirement": "One retained BUILD candidate runs the whole scoring seam: supplied-state build_scoring_fixture, the exact-subtractive scorer wrapper (score 1 on honest input, 0 on a corrupted A0 result), the six-ledger episode receipt and scenario-outcome VALIDATION. The same candidate is RED with a NAMED frozen error at each of the three unwrapped frozen doors: the default authoritative state, validate_scorer_input (exactly the declared I01 closure and nothing else), and the frozen scenario-outcome builder (SCENARIO_OUTCOME_AUTHORITY_INVALID).",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2 module 3(d)(e) and 4 (W16); r2 seats 2+3 and r3 seats 2+3 executed the frozen refusals"
+  },
+  "BC-09_JOURNAL_AND_OBSERVATION_BIND_PROVENANCE": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw75_red_w12_a_journal_only_mutation_fails_the_build_provenance_gate"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-11_SEQUENCE_COVERAGE_AGAINST_A_REGISTERED_DENOMINATOR",
+   "requirement": "A JOURNAL-ONLY mutation - one event payload changed while every projected artefact stays byte-identical - fails the BUILD provenance gate, and the failure is localised to EXACTLY the event_program_hash sub-digest. The BUILD provenance manifest therefore binds two sub-digests the frozen shape has no room for (event_program_hash and observation_authority_hash) and carries the sequence-coverage record, because MANIFEST_KEYS is a closed frozen set and all BUILD-side identities ride provenance.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2 module 2, 2.6 and 4 (W12)"
+  },
+  "BC-10_ALL_SIX_RENDERS_ADMIT_THE_RETAINED_POPULATION": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw76_red_w13_all_six_renders_succeed_across_the_retained_population"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_packet.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "Envelope admission DELEGATES to the frozen renderer and requires all six nodes (BC and OM x A0/B/A1) to render for every retained candidate. The frozen renderer pads every FITTING packet to exactly 65,536 bytes and raises only on len(encoded) > ENVELOPE_BYTES (mbcx01_r13_packets.py:302-306), so the legal EXACT FIT is admitted and a 'served < 65,536' comparator is unsatisfiable. A1 is never smaller than its A0, so A0 fitting is not evidence that A1 fits - which is why admission renders all six.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.5 and 4 (W13); r3 seat 3 executed an A1 overflowing at 65,541 while its A0 fit"
+  },
+  "BC-11_SEQUENCE_COVERAGE_AGAINST_A_REGISTERED_DENOMINATOR": {
+   "accepted_residual": "The LTS-CONSTRAINED reduction design section 2.6 asks for is NOT computed. The unconstrained square is a superset of the reducer-legal target set, so the reported ratio can only understate LTS-constrained coverage. Named, accepted, and asserted as DECLARED by the witness rather than left implicit.",
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc22_red_a_false_coverage_record_cannot_bind_into_retained_authority"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py",
+    "mbcx01_build_cohort_generator.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc06_positive_coverage_recomputes_against_the_registered_denominator",
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc21_red_the_coverage_numerator_counts_legal_noop_events"
+   ],
+   "requirement": "The primary coverage number is t-way SEQUENCE coverage over the 17-event alphabet, reported in PROVENANCE with its strength t, its declared floor and its DENOMINATOR IDENTITY beside the number, and recomputing coverage against that registered denominator reproduces the number exactly. A 2-way figure must never read as 'covered', so the strength and floor ride the record and the floor GATES. The registered denominator is the UNCONSTRAINED ordered-pair square, a superset of the reducer-legal set, so the ratio is a LOWER BOUND on LTS-constrained coverage - carried as a named residual, declared in the record itself. The NUMERATOR rule is declared beside the number (covered_pair_rule = ORDERED_PAIRS_OVER_ALL_GATE_CHECKED_PROGRAM_EVENTS): a DUPLICATE_NOOP is a legal executed program event, so pairs are counted over ALL gate-checked events, and a record missing either set rule is refused BUILD_SEQUENCE_COVERAGE_UNREPORTED (cohort-BUILD r1 fold 4). Provenance admission RE-DERIVES the coverage record from the candidate event programs and refuses a divergent one as BUILD_SEQUENCE_COVERAGE_MISMATCH \u2014 a self-consistent false number cannot bind into the retained authority (cohort-BUILD r2 seat-3 F1, driver-reproduced; the measurement law lives in the authority sibling as of this fold, generator re-exports).",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.6 and 4 (W17); NIST sequence covering arrays, LTS-constrained variant; Kuhn/NIST 2-way ~70% / 3-way ~90% lineage"
+  },
+  "BC-12_AUTHORITATIVE_STATE_IS_SUPPLIED_NEVER_DEFAULTED": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw77_red_w18_authoritative_state_is_supplied_never_defaulted"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_packet.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "The BUILD packet SUPPLIES authoritative_state from the replayed generation state, witnessed by project_state_world equality against the BUILD manifest and bound by the recorded state digest, and the frozen fixture default is never REACHED - proved by replacing it with a tripwire and running the whole BUILD scoring path. The frozen default rebuilds from initial_state()'s hard-coded literals and enforces exact obligation-set equality (mbcx01_r13_packets.py:352-376), so it refuses this population outright.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2 module 3(d) and 4 (W18); r2 seat 1 executed both branches"
+  },
+  "BC-13_THE_BUILD_INFERENCE_INGRESS_DERIVES_MEMBERSHIP": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw78_red_w19_the_build_inference_ingress_and_membership_substitution"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_packet.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "A full 768-position BUILD receipt set reaches the FROZEN numerical core through the BUILD ingress - frozen derive_episode_partition and frozen ordered_decision_with_missingness both unmodified - while the SAME receipts stay RED at the unwrapped frozen ingress. Membership is DERIVED from the BUILD pinned retained authority; a caller-supplied list is an ASSERTION only, and a same-length substitution, a reordering or a short list is refused BUILD_MEMBERSHIP_SUBSTITUTED before any numerical work.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2 module 3(f) and 4 (W19); codex design-gate r1 EXECUTED"
+  },
+  "BC-14_CENSUS_STRATUM_FLOORS": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw79_red_w20_a_governed_stratum_below_its_declared_floor_is_red"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_generator.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-03_SEQUENCED_TOTAL_ADMISSION_ARITHMETIC",
+   "requirement": "The census reports JOINT occupancy over declared tuples, not just marginals: a governed stratum with NONZERO occupancy below its declared retained floor fails loud (RETAINED_AXIS_STRATUM_FLOOR - one retained row must not read as represented), and a marginal-preserving deletion of one JOINT tuple fails as RETAINED_AXIS_STRATUM_MISSING. The floor is DECLARED and it is the floor that gates.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.3 and 4 (W20); r3 seats 1+3 executed the marginal blind spot"
+  },
+  "BC-15_MANIFEST_VARIES_WITH_THE_POPULATION": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortRedSkeletonTests.test_bw74_red_w11_different_catalogs_produce_different_served_manifests"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_packet.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "Two retained candidates with different action catalogs produce DIFFERENT served manifests and different served A0 bytes: scope, target, decoys, full catalog, gold, read set and BC selection are all DERIVED from the candidate. The discriminating counter-construction is the frozen builder, which hard-codes decoy/target/NO_ACTION (mbcx01_r13_packets.py:167-174) and therefore renders the SAME catalog for two different frozen candidates.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2 module 3(a) and 4 (W11); r1 3/3 executed the one-world stamp"
+  },
+  "BC-16_OBSERVATION_NON_LEAKAGE_FOUR_CLASS_CHECKLIST": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortObservationNonLeakageWitnesses.test_bc01_adversarial_no_observation_field_carries_an_action_literal",
+    "test_mbcx01_build_cohort.BuildCohortObservationNonLeakageWitnesses.test_bc02_adversarial_perturbing_each_forbidden_input_moves_no_observation",
+    "test_mbcx01_build_cohort.BuildCohortObservationNonLeakageWitnesses.test_bc04_adversarial_observation_families_are_not_a_cardinality_codebook"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_generator.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_cohort.BuildCohortObservationNonLeakageWitnesses.test_bc03_positive_relabelling_identifiers_leaves_the_observation_unchanged"
+   ],
+   "requirement": "The observation grammar is CLOSED and its derivation rule reads an EXPLICIT PROJECTION whose allowed-field set is a declared constant, so a gold-determining field cannot REACH the rule. The witness is the FULL four-class checklist, normatively and never a two-arm subset: LITERAL_LEAK (no observation field on any surface carries the gold or any catalog action id, over the whole retained set and every offered cut) - DERIVABLE_ENCODING (each forbidden input perturbed INDEPENDENTLY with the allowed projection held fixed moves neither family nor value) - RELABEL_DRIFT (a meaning-preserving identifier relabelling leaves family and value unchanged, one candidate per family) - CARDINALITY_OR_ORDER_CODEBOOK (the family is a function of the allowed selector alone, one projection produces one observation even across catalog sizes, and the family/catalog-size and family/event-order cross-tabulations are full).",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.2, 4 (W15) and 6 Item 7(c); r3 seat-1 PROPOSE adopted at r4; r2 seat-2 semantic-noninterference form"
+  },
+  "BC-17_COMMITTED_COHORT_IDENTITY": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc12_adversarial_a_drifted_generator_spec_artifact_is_refused"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py"
+   ],
+   "note": "This row is also the registration of the artifact itself: the engine build carried the spec as an in-code constant and recorded emitting the JSON as an outstanding residual. 2026-08-16 closed it, and the constant is now a snapshot of the artifact.",
+   "positive": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc11_positive_the_committed_identity_equals_the_recomputed_root"
+   ],
+   "requirement": "The BUILD cohort spec is a COMMITTED ARTIFACT (MBCX-01-BUILD-COHORT-GENERATOR-V1.json) read on every call, checked for schema id, generator id and CANONICAL SERIALIZATION, and hashed as the generator_digest that rides provenance. Its committed identity block carries the population's own retained_set_root, retained_total and ordered-membership digest, and they must EQUAL the values recomputed from a live generation. Every drift is refused by name: a drifted root, a non-canonical serialization, a foreign generator id, a missing identity block, and a changed BUILD-time constant (which moves the digest and so fails the provenance gate). The identity block is non-circular by construction - it carries no digest OF the artifact it lives in.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 3 and 4 (W8); frozen twin mbcx01_r13_measurement._generator_spec (:168-173)"
+  },
+  "BC-18_REPLAY_GATE_FAULTS_WITH_THE_REDUCERS_OWN_CODE": {
+   "accepted_residual": "A SHARED legality bug in both frozen reducers is invisible to this gate by construction. Carried, not papered over: the witness pins that the two reducers AGREED, so the fault it demonstrates is a legality fault and not a disagreement.",
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc10_adversarial_an_illegal_event_program_faults_with_the_reducer_code"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_generator.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BC-03_SEQUENCED_TOTAL_ADMISSION_ARITHMETIC",
+   "requirement": "Generation runs reference apply, oracle apply, byte equality and the DoR legality predicate at every step's frontier. An ILLEGAL event program does not quietly produce a smaller population: the gate faults at the offending step with BUILD_PROGRAM_STEP_CODE_MISMATCH carrying THE REDUCER'S OWN code, names the block and the event type, and leaves no event, code or snapshot behind. Dual-reducer agreement is CONSISTENCY (a differential pseudo-oracle), not correctness.",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) sections 2.7 and 4 (W5)"
+  },
+  "BC-19_REGISTRATION_TOTALITY_AT_FOUR_LEVELS": {
+   "accepted_residual": "Level (d) proves every module is NAMED by a row that states a behaviour and carries a passing witness. It cannot prove REPLACEMENT SENSITIVITY - that the declared witness flips when the named module is replaced - because the ledger schema has no field tying a witness to a module code path. That half is carried by the red-first discipline of each witness, and the limit is printed in the bundle's own report section rather than implied.",
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc14_adversarial_every_registration_totality_level_fails_by_name",
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc17_adversarial_a_stray_pin_only_subject_fails_by_name"
+   ],
+   "note": "This row governs the BUNDLE, not a production module, so it declares no `modules`: the four levels are about the registration lists themselves.",
+   "positive": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc13_positive_registration_totality_holds_at_all_four_levels"
+   ],
+   "requirement": "verify-build-bundle.py enforces registration totality at four levels and each fails by its own name: (a) the mbcx01_build_*.py and test_mbcx01_build_*.py globs agree with the registration tuples in BOTH directions; (b) every REQUIRED artifact is registered for pinning in generate-build-pin-manifest.ps1 AND pinned in the manifest, with the only exemption - an artifact that did not exist at the governing commit - decided by git and reported by name; (c) the governed artifact namespace is DERIVED FROM THE UNION OF THE REGISTRATION LISTS, never a filename glob, and every member is on disk; (d) every BUILD_MODULES entry is named by at least one ledger row that states a behaviour and carries a witness. Level (b)'s difference set (pinned beyond REQUIRED) is DECLARED, not free: every such subject is named in PIN_MANIFEST_SUBJECTS_BEYOND_REQUIRED and a stray pin-only subject is refused by name as W14_PIN_MANIFEST_SUBJECT_OUTSIDE_DECLARED_SET (cohort-BUILD r1 adjudication 2).",
+   "source": "MBCX-01-BUILD-COHORT-CONTENT-DESIGN.md r6 FINAL (commit 18d86d44d3a2cf28108022e626ea4bda1b430d86) section 3 (four levels, sharpened at r4) and section 4 (W14); r3 seat 1 (a glob leaves a differently-named artifact unregistered-and-unnoticed)"
+  },
+  "BC-20_THE_SERVING_BOUNDARY_RE_DERIVES_WHAT_IT_SERVES": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc15_adversarial_ghost_fact_cannot_reach_the_serving_boundary",
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc16_adversarial_a_non_derived_observation_record_cannot_serve"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_packet.py"
+   ],
+   "note": "The positive half is the honest serving path succeeding end-to-end, declared once in BC-08's scorer-join witness, so no witness is counted twice. The observation derivation law lives in the packet sibling as of this fold (moved from the generator; the generator re-exports it).",
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "Model-visible evidence must survive independent re-derivation at the serving boundary: build_scoring_fixture_for_candidate runs the full BUILD manifest validation (FACT journal ancestry, observation representation consistency, derivation binding - the observation record must equal derive_observation_authority recomputed from its own stored projection, and the projection must equal a recompute from the replayed state and variation) before the frozen builder is called. A candidate does not become model-visible merely because its candidate/provenance/authority bytes are mutually self-consistent (council r1 seat 2, F1/F2, driver-reproduced R5/R6).",
+   "source": "MBCX-01-COHORTBUILD-ROUND-r1-SYNTHESIS.md (cohort-BUILD acceptance council r1, 2026-08-16; packet @8432132, folds on @af1cc4f)"
+  },
+  "BC-21_THE_RETAINED_ANSWER_KEY_IS_NOT_A_CONSTANT": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc18_red_the_retained_population_carries_distinct_gold_answers"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_generator.py"
+   ],
+   "note": "The single witness carries both halves in one body; the ledger counts it once, on the adversarial axis (a forced constant-gold retained set is refused RETAINED_GOLD_VARIETY_BELOW_FLOOR). The positive half - the census REPORTING the distinct-gold count beside its floor rule - rides BC-22's census-reporting positive, which proves the same reporting path.",
+   "positive": [],
+   "positive_covered_by": "BC-22_OBSERVATION_SIGNATURE_CROSSTAB_MEASURED",
+   "requirement": "The scored target's obligation identity is PER-SCENARIO (TARGET_OBLIGATION_PREFIX + scenario_id, distinct by construction), so the retained population's answer key is not a constant and a positional heuristic cannot score at ceiling in both arms; the census reports the distinct-gold count against the declared floor ONE_DISTINCT_GOLD_ACTION_ID_PER_RETAINED_ROW and refuses below it (council r1 seat 1 finding A, driver-reproduced R1).",
+   "source": "MBCX-01-COHORTBUILD-ROUND-r1-SYNTHESIS.md (cohort-BUILD acceptance council r1, 2026-08-16; packet @8432132, folds on @af1cc4f)"
+  },
+  "BC-22_OBSERVATION_SIGNATURE_CROSSTAB_MEASURED": {
+   "accepted_residual": "DECLARED_SINGLE_MOTIF_SIGNATURE_RESIDUAL = 3: three retained observation signatures identify exactly one motif (15 rows at generation; design section 2.2 carries the number and the discarded reshaping attempt). MEASURED and pinned, not gated: eliminating it requires equalizing per-motif count support, which is machinery the no-adversary rule forbids; the exploitation path requires cross-scenario population statistics a frozen cold-episode subject does not have.",
+   "adversarial": [],
+   "adversarial_covered_by": "BC-16_OBSERVATION_NON_LEAKAGE_FOUR_CLASS_CHECKLIST",
+   "modules": [
+    "mbcx01_build_cohort_generator.py"
+   ],
+   "note": "The adversarial leakage half (literal, derivable-encoding, relabeling, codebook classes) is declared once in BC-16; this row owns the POPULATION-LEVEL cross-tab measurement those per-candidate checks structurally cannot see (council r1 seat 3 F1, driver-reproduced R2).",
+   "positive": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc19_red_the_census_reports_the_signature_motif_crosstab"
+   ],
+   "requirement": "The census cross-tabulates every retained chosen-cut observation signature (family, code, cardinality, order) against motif and REPORTS the single-motif signature count and affected-row count, pinned to the declared residual constant so the number cannot drift silently.",
+   "source": "MBCX-01-COHORTBUILD-ROUND-r1-SYNTHESIS.md (cohort-BUILD acceptance council r1, 2026-08-16; packet @8432132, folds on @af1cc4f)"
+  },
+  "BC-23_PROVENANCE_VALIDATION_IS_A_CLOSED_REFUSAL": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc23_red_an_unhashable_scenario_id_refuses_by_name"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py"
+   ],
+   "note": "The positive half (an honest population validating clean through this same boundary on the way to a scored end-to-end run) rides BC-08's scorer-join positive, which exercises provenance validation en route.",
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "validate_build_source_provenance returns its closed error list for every input: scenario ids are type/grammar-validated (strings) before uniqueness, so an unhashable or non-id value is the named BUILD_CANDIDATE_SCHEMA_INVALID refusal, never a TypeError escape; an all-string population still gets DUPLICATE_SCENARIO_ID by name (codex r5 P2).",
+   "source": "codex-CLI r5 fold set (MBCX-01-CODEXCLI-r5-FULL-LOG-2026-08-16.log; four findings + the enumerated _root_errors member, all red-first, 2026-08-16)"
+  },
+  "BC-24_COHORT_CUT_MAP_IS_A_MAP_AT_BOTH_DOORS": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc24_red_a_cut_map_that_is_not_a_map_refuses_by_name"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py"
+   ],
+   "note": "The falsy spellings ([], null) were previously refused only as an opaque SOURCE_PROVENANCE_MISMATCH; all non-map shapes are now the named schema refusal, at the validator door AND the selection door.",
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "A candidate whose canonical_state_by_cut is not a mapping is BUILD_CANDIDATE_SCHEMA_INVALID by name at both public doors (validate_build_source_provenance and select_build_cohort), never an AttributeError escape (codex r6 P2).",
+   "source": "codex-CLI r6 fold set (MBCX-01-CODEXCLI-r6-FULL-LOG-2026-08-16.log; five findings + the wholesale closed-verdict boundary, all red-first, 2026-08-16)"
+  },
+  "BC-25_MALFORMED_CALLER_INPUT_IS_A_CLOSED_REFUSAL_AT_THE_PUBLIC_BOUNDARY": {
+   "adversarial": [
+    "test_mbcx01_build_cohort.BuildCohortSliceClosingWitnesses.test_bc25_red_the_closed_verdict_covers_shapes_nobody_enumerated"
+   ],
+   "modules": [
+    "mbcx01_build_cohort_authority.py"
+   ],
+   "note": "The cohort-plane half of the wholesale close; cross-references BA-24. Covers BOTH public doors (the validator and select_build_cohort, which reaches pop_declared_eligibility first). Same honesty carve-out, witnessed.",
+   "positive": [],
+   "positive_covered_by": "BC-08_SCORER_JOIN_END_TO_END_ON_THE_BUILD_PATH",
+   "requirement": "validate_build_source_provenance and select_build_cohort answer with the closed vocabulary for EVERY caller input: the malformed-input exception tuple converts to BUILD_CANDIDATE_SCHEMA_INVALID, and only that tuple - internal defects still fault loud (codex r6 P2 class, wholesale).",
+   "source": "codex-CLI r6 fold set (MBCX-01-CODEXCLI-r6-FULL-LOG-2026-08-16.log; five findings + the wholesale closed-verdict boundary, all red-first, 2026-08-16)"
+  },
+  "BI-01_CONNECTED_AUTHORITY_GRAPH": {
+   "adversarial": [],
+   "adversarial_covered_by": "BI-02_FIXTURE_EVIDENCE_CANNOT_CROSS_ADMISSION",
+   "modules": [
+    "mbcx01_build_exactness_authority.py",
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi01_positive_one_connected_flow_admits_state_measurement_and_exactness"
+   ],
+   "requirement": "One connected BUILD integration fixture exercises the complete authority graph without provider/model calls or running the scientific experiment.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'Integration boundary'"
+  },
+  "BI-02_FIXTURE_EVIDENCE_CANNOT_CROSS_ADMISSION": {
+   "adversarial": [
+    "test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi02_adversarial_fixture_evidence_cannot_cross_production_admission"
+   ],
+   "modules": [
+    "mbcx01_build_exactness_authority.py",
+    "mbcx01_build_measurement_authority.py",
+    "mbcx01_build_state_authority.py"
+   ],
+   "positive": [],
+   "positive_covered_by": "BI-01_CONNECTED_AUTHORITY_GRAPH",
+   "requirement": "Simulated/fixture evidence is clearly labelled and cannot cross production admission anywhere in the connected graph.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'Integration boundary'"
+  },
+  "BI-03_NO_EXPERIMENT_PROVIDER_OR_PHYSICAL_EXECUTION": {
+   "adversarial": [],
+   "adversarial_covered_by": "BI-02_FIXTURE_EVIDENCE_CANNOT_CROSS_ADMISSION",
+   "modules": [
+    "mbcx01_build_integration.py",
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi03_positive_the_connected_run_executes_no_network_provider_or_harness_call"
+   ],
+   "requirement": "Tests prove no experiment, provider, route, paid, physical or 100-cell execution occurred.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'Compatibility and integration'; 'Explicit prohibitions'"
+  },
+  "BI-04_CANONICALIZATION_PARITY": {
+   "adversarial": [],
+   "adversarial_covered_by": "BI-02_FIXTURE_EVIDENCE_CANNOT_CROSS_ADMISSION",
+   "modules": [
+    "mbcx01_build_state_authority.py"
+   ],
+   "note": "bi04 carries its own mutation control: one changed byte must move the Node digest, otherwise agreement would prove nothing.",
+   "positive": [
+    "test_mbcx01_build_integration.BuildConnectedAuthorityGraphWitnesses.test_bi04_positive_python_and_node_canonicalization_agree_byte_for_byte"
+   ],
+   "requirement": "JSON and canonicalization parity holds across the Python/Node implementation boundary.",
+   "source": "MBCX-01-PRODUCTION-BUILD-SENIOR-HANDOFF-r13.2.md 'Compatibility and integration'"
+  },
+  "BI-05_PIN_MANIFEST_RECONCILED_AGAINST_CURRENT_BYTES": {
+   "adversarial": [
+    "test_mbcx01_build_integration.BuildPinManifestReconciliationWitnesses.test_bi06_adversarial_drifted_pinned_bytes_fail_by_name_while_the_suite_total_holds",
+    "test_mbcx01_build_integration.BuildPinManifestReconciliationWitnesses.test_bi07_adversarial_an_unreconcilable_pin_manifest_is_never_a_silent_skip"
+   ],
+   "note": "Counting 150 frozen tests says nothing about WHICH bytes ran. The reconciliation is two git-level checks - staleness of every recorded identity against HEAD, and uncommitted drift restricted to the manifest subjects - and neither hashes the working tree, because this repository is checked out with core.autocrlf=true over LF blobs and a working-tree hash would refuse every clean checkout. bi08 is that control. The pinned reconstruction, whose bytes verify-build-pinned.ps1 authenticates blob by blob before this verifier runs, is the one non-reconciling mode and is NAMED in the report with reconciliation_performed:false.",
+   "positive": [
+    "test_mbcx01_build_integration.BuildPinManifestReconciliationWitnesses.test_bi08_positive_a_clean_crlf_work_tree_reconciles_every_pinned_subject"
+   ],
+   "requirement": "verify-build-bundle.py reconciles MBCX-01-BUILD-PIN-MANIFEST.json against the current bytes before it reports the suites as passing: a manifest subject whose bytes have drifted, or whose recorded identity HEAD no longer carries, fails by name, and a reconciliation that cannot be performed fails as unverifiable rather than skipping.",
+   "source": "codex BUILD acceptance finding on verify-build-bundle.py:270-273 (EXECUTED: a frozen subject edited without changing the 150-test total still produced report_id MBCX-01-BUILD-LIVE-NO-PAID-VERIFICATION with every section PASS); MBCX-01-BUILD-PIN-MANIFEST.json governing_commit_binding; generate-build-pin-manifest.ps1 row shape (git_blob/bytes/lf_count/lines/SHA-384)"
+  },
+  "BI-06_CANDIDATE_DIGEST_BINDS_THE_EXECUTED_BINARY": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokeCandidateDigestWitnesses.test_bi10_adversarial_unparseable_or_absent_candidates_abort_by_name"
+   ],
+   "positive": [
+    "test_mbcx01_build_integration.SmokeCandidateDigestWitnesses.test_bi09_positive_a_quoted_spaced_executable_path_digests_the_real_binary"
+   ],
+   "requirement": "The smoke driver derives the candidate artifact digest from the binary CreateProcessW will execute: the executable token follows the documented CommandLineToArgvW first-argument rule (quoted paths with spaces included), and an empty, unparseable, or unlocatable candidate aborts by name rather than digesting a truncated token or the command-line string.",
+   "source": "codex-CLI r2 2026-08-15 finding P2 (quoted executable paths); MBCX-01-CODEXCLI-r2 log, banked with the r2 fold"
+  },
+  "BI-07_SMOKE_PASS_CRITERION_REQUIRES_A_VALID_ENVELOPE": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokePassCriterionWitnesses.test_bi11_adversarial_an_empty_or_hollowed_envelope_is_never_a_pass"
+   ],
+   "modules": [
+    "mbcx01_build_windows_producer.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_integration.SmokePassCriterionWitnesses.test_bi12_positive_a_real_fixture_signed_smoke_envelope_still_meets_the_criterion"
+   ],
+   "requirement": "The smoke pass criterion is a conjunction: the produced envelope is independently valid (structure via the authority\u2019s own validator, signature against the manifest root, evidence-section presence) AND admission refuses it with the expected honest sentinel. An empty or hollowed envelope is never a pass, and a real fixture-signed one-cell envelope still meets the criterion.",
+   "source": "codex-CLI r3 2026-08-15; log banked with the r3 fold commit"
+  },
+  "BI-08_FAILED_SMOKE_PASS_CRITERION_EXITS_NONZERO": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokePassCriterionWitnesses.test_bi13_adversarial_a_failed_pass_criterion_never_exits_zero"
+   ],
+   "positive": [
+    "test_mbcx01_build_integration.SmokePassCriterionWitnesses.test_bi13_positive_a_met_pass_criterion_still_reports_ok_with_exit_zero"
+   ],
+   "requirement": "A smoke run whose declared pass criterion is not met aborts with a named reason and a nonzero exit code, with evidence retained and the session stopped; a met criterion still reports OK with exit zero.",
+   "source": "codex-CLI r3 2026-08-15; log banked with the r3 fold commit"
+  },
+  "BI-09_SMOKE_CRITERION_IS_SEMANTIC": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw80_red_resigned_membership_complete_false_fails_the_smoke_criterion",
+    "test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw81_red_resigned_perturbed_retired_instructions_fails_the_smoke_criterion"
+   ],
+   "modules": [
+    "mbcx01_build_measurement_authority.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw82_guard_the_honest_fixture_envelope_still_meets_the_criterion",
+    "test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw83_guard_the_real_smoke_path_shape_is_not_falsely_refused"
+   ],
+   "requirement": "The smoke conjunction's independent-validity half runs the existing per-receipt semantic validator (authority._receipt_errors), not presence/shape alone: a re-signed envelope with a false membership fact or a perturbed retired-instruction scalar fails the criterion, while the honest envelope and the real smoke path shape (unregistered coordinate, smoke enforcement record) still pass. Exclusions are named (SMOKE_NOT_APPLICABLE_RECEIPT_CODES) and reported, never dropped.",
+   "source": "council r6 2026-08-16, SEAT2 F3 + SEAT3 F4 EXECUTED (one class, two fields); FOLD-B, red-first on HEAD blob 0b3fae01"
+  },
+  "BI-10_SMOKE_TOOLCHAIN_PREFLIGHT": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw84_red_preflight_aborts_when_node_cannot_be_resolved",
+    "test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw86_red_the_launcher_refuses_a_shell_with_no_node_before_elevation"
+   ],
+   "positive": [
+    "test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw84_red_preflight_reports_node_and_the_verifier_and_fails_loudly"
+   ],
+   "requirement": "Preflight probes the node runtime and the frozen verifier script before any ETW/Job work, reports both, and aborts SIGNATURE_VERIFIER_TOOLCHAIN_UNAVAILABLE when either is missing; the launcher additionally refuses a shell with no node before elevation. The one-shot elevated session cannot be burned by a PATH difference.",
+   "source": "council r6 2026-08-16, SEAT1 F2 + SEAT3 F5 EXECUTED; FOLD-B, red-first on HEAD blobs 0b3fae01 / 1e8206ae"
+  },
+  "BI-11_RAW_EVIDENCE_PERSISTS_BEFORE_SIGNING": {
+   "adversarial": null,
+   "adversarial_covered_by": "BI-09_SMOKE_CRITERION_IS_SEMANTIC",
+   "modules": [
+    "mbcx01_build_win32.py"
+   ],
+   "positive": [
+    "test_mbcx01_build_integration.SmokeFoldBWitnesses.test_bw85_red_raw_evidence_is_persisted_before_the_signer_runs"
+   ],
+   "requirement": "The collected raw evidence is written to the destination, clearly labelled UNSIGNED-INCOMPLETE, before the signer runs: a post-collection certification failure cannot destroy a capture, and the unsigned artifacts state on their face they must never be reported as a measurement.",
+   "source": "council r6 2026-08-16, SEAT3 F5 EXECUTED; FOLD-B, red-first on HEAD blob 0b3fae01"
+  },
+  "BI-12_CANDIDATE_IMAGE_RESOLUTION_MIRRORS_CREATEPROCESSW": {
+   "adversarial": null,
+   "adversarial_covered_by": "BI-06_CANDIDATE_DIGEST_BINDS_THE_EXECUTED_BINARY",
+   "positive": [
+    "test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi14_red_an_extensionless_command_resolves_instead_of_being_refused",
+    "test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi16_guard_the_forms_that_already_worked_still_work_and_still_refuse"
+   ],
+   "requirement": "The candidate image is resolved ONCE, before launch, mirroring CreateProcessW's search order and PATHEXT, and the SAME resolved image is both hashed and launched. An extensionless command such as `cmd /c exit 0` - which CreateProcessW launches happily by appending .exe - previously completed a real capture and then threw it away with CANDIDATE_BINARY_NOT_FOUND at certification: right evidence refused, on a one-shot elevated session. Forms that already worked still work (guard). [AMENDED 2026-08-16, codex r6 F1: the earlier text claimed PATHEXT mirroring - FALSE. CreateProcessW appends .exe only; PATHEXT is the shell's rule. Extensionless resolution is .exe-only as of this fold (BI-14 owns the property); this row keeps the resolve-once and hash-what-launches invariant.]",
+   "source": "codex-CLI r4 2026-08-16 P2"
+  },
+  "BI-13_THE_ENVELOPE_BINDS_PRE_LAUNCH_BYTES": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi15_red_the_envelope_binds_the_pre_launch_bytes_not_the_post_run_bytes"
+   ],
+   "modules": [
+    "mbcx01_build_win32.py"
+   ],
+   "positive": null,
+   "positive_covered_by": "BI-06_CANDIDATE_DIGEST_BINDS_THE_EXECUTED_BINARY",
+   "requirement": "The harness identity and candidate digests are read and HELD before launch, so the signed envelope binds the bytes that actually produced the capture. Previously both were first read after collect() returned, so an updater replacing the candidate or a harness source mid-run would have been attested as the measured image - the receipt describing something other than what ran. TOCTOU is narrowed to two adjacent statements, not closed (declared).",
+   "source": "codex-CLI r4 2026-08-16 P2; witness mutates the image mid-collection and asserts the mutation took effect, so it cannot pass vacuously"
+  },
+  "BI-14_EXTENSIONLESS_RESOLUTION_IS_EXE_ONLY": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi17_red_the_hashed_image_is_the_one_createprocessw_would_have_launched"
+   ],
+   "note": "Positive half (resolve-once + hash-what-launches on the honest path) rides BI-12. Governs mbcx01_smoke_cell.py, which is a pinned subject but deliberately OUTSIDE the module registration (it runs on hardware, not in this suite) - the BI-12 convention: no modules field.",
+   "positive": [],
+   "positive_covered_by": "BI-12_CANDIDATE_IMAGE_RESOLUTION_MIRRORS_CREATEPROCESSW",
+   "requirement": "An extensionless candidate resolves by appending .exe and by no other extension, so the hashed and certified image is the one the launch semantics select; PATHEXT is never an input to resolution (codex r6 P1). [AMENDED 2026-08-16, codex r7: the .exe-only rule holds for a BARE extensionless token only - a PATH-CARRYING extensionless token is used VERBATIM with no candidates and no fallback, per CreateProcessW's path-sensitive rule; BI-16 owns the full documented set.]",
+   "source": "codex-CLI r6 fold set (MBCX-01-CODEXCLI-r6-FULL-LOG-2026-08-16.log; five findings + the wholesale closed-verdict boundary, all red-first, 2026-08-16)"
+  },
+  "BI-15_SMOKE_TEARDOWN_NEVER_MASKS_THE_PRIMARY_FAULT": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi18_red_a_failing_session_stop_never_replaces_the_primary_fault"
+   ],
+   "note": "Sibling of BB-27 one layer up: that row is the consumer's own teardown; this is the driver's finally. With nothing in flight the cleanup failure IS the error (the positive/guard witness). Governs mbcx01_smoke_cell.py, which is a pinned subject but deliberately OUTSIDE the module registration (it runs on hardware, not in this suite) - the BI-12 convention: no modules field.",
+   "positive": [
+    "test_mbcx01_build_integration.SmokePreLaunchResolutionWitnesses.test_bi18_guard_a_failing_session_stop_with_nothing_in_flight_is_the_error"
+   ],
+   "requirement": "A failing ETW session stop in the smoke driver's finally never replaces the primary setup/collection fault: it is attached as a note (the collector's own add_note pattern) and surfaces alone only when no exception is in flight (codex r6 P2).",
+   "source": "codex-CLI r6 fold set (MBCX-01-CODEXCLI-r6-FULL-LOG-2026-08-16.log; five findings + the wholesale closed-verdict boundary, all red-first, 2026-08-16)"
+  },
+  "BI-16_CREATEPROCESSW_RESOLUTION_SET_IS_CLOSED": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi19_red_a_path_carrying_extensionless_token_is_used_verbatim",
+    "test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi19_red_a_path_carrying_token_never_falls_back_to_the_exe",
+    "test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi19_red_a_bare_extensionless_name_has_no_bare_fallback",
+    "test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi20_red_an_unquoted_spaced_path_is_refused_by_name",
+    "test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi20_red_an_unquoted_extensionless_path_with_arguments_is_refused",
+    "test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi21_red_every_documented_resolution_rule_is_closed_by_name",
+    "test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi22_red_the_bare_name_search_sequence_has_all_six_documented_steps",
+    "test_mbcx01_build_integration.SmokeRelativeSpacedPathWitnesses.test_bi23_red_a_relative_spaced_path_with_a_pathless_first_token_is_refused",
+    "test_mbcx01_build_integration.SmokeRelativeSpacedPathWitnesses.test_bi23_red_the_extended_prefixes_are_the_documented_possibilities"
+   ],
+   "note": "THE DOCUMENTED-SET CLOSE (four-partial-fixes law): every CreateProcessW (NULL lpApplicationName) resolution rule from the Learn page is implemented or refused by name, in one table-driven witness - including the 16-bit System search step NO review round ever reported (bi22), and the unquoted-whitespace interpretation refused as SMOKE_UNQUOTED_SPACE_PATH_UNSUPPORTED (the harness controls its own command lines; the refusal tells the operator to quote). A live doc ambiguity (path-carrying extensionless with an .exe sibling under the unquoted rule) is refused by name rather than guessed. Governs mbcx01_smoke_cell.py, which is a pinned subject deliberately OUTSIDE the module registration - the BI-12 convention: no modules field.",
+   "positive": [
+    "test_mbcx01_build_integration.SmokeCreateProcessWResolutionSetWitnesses.test_bi20_guard_the_refusal_cannot_eat_a_shape_that_works",
+    "test_mbcx01_build_integration.SmokeRelativeSpacedPathWitnesses.test_bi23_guard_the_wider_refusal_still_cannot_eat_a_shape_that_works"
+   ],
+   "requirement": "Every documented CreateProcessW resolution rule is either implemented or refused by name: .exe appended to a BARE extensionless token only; path-carrying tokens verbatim with no fallback; the six-step bare-name search including the 16-bit System directory; App-Paths never consulted (asserted mechanically); unquoted-whitespace paths refused SMOKE_UNQUOTED_SPACE_PATH_UNSUPPORTED (codex r7 P1/P2 + the set members nobody reported). [AMENDED 2026-08-17, codex r8 P2: the unquoted-whitespace rule is a property of the COMMAND LINE, not of its first token - an unquoted RELATIVE spaced path has a pathless head by construction and was answered CANDIDATE_BINARY_NOT_FOUND. Ambiguity detection now walks the whitespace-extended prefixes and refuses when one NAMES AN EXISTING FILE.]",
+   "source": "codex-CLI r7 fold set (MBCX-01-CODEXCLI-r7-FULL-LOG-2026-08-16.log; four findings + the CreateProcessW documented-set close incl. one member codex never reported, all red-first, 2026-08-16)"
+  },
+  "BI-17_ENVIRONMENT_EVIDENCE_IS_RUNTIME_OR_UNDETERMINED": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokeRuntimeEnvironmentEvidenceWitnesses.test_bi24_red_installed_but_inactive_components_are_not_a_running_hypervisor",
+    "test_mbcx01_build_integration.SmokeRuntimeEnvironmentEvidenceWitnesses.test_bi24_red_a_guest_is_not_a_root_partition_because_the_role_is_installed",
+    "test_mbcx01_build_integration.SmokeRuntimeEnvironmentEvidenceWitnesses.test_bi24_red_an_unanswerable_probe_is_undetermined_not_bare_metal"
+   ],
+   "note": "Split by axis: hypervisor-present = REAL runtime probe (Win32_ComputerSystem.HypervisorPresent, Learn-quoted in-module; IsProcessorFeaturePresent REFUTED - PF_HYPERVISOR_PRESENT does not exist, 21 is PF_VIRT_FIRMWARE_ENABLED); root-vs-guest = honest relabel (INSTALLED_COMPONENT_EVIDENCE, falsifiable by running guest integration services, never provable - residual stated in-module). Live-verified on the build host: the owner's own run classifies HYPER_V_ROOT_PARTITION, nothing walled. Governs mbcx01_smoke_cell.py - BI-12 convention, no modules field. UNVERIFIED_UNTIL_ELEVATED_RUN: the WMI probe adds one abort path (HYPERVISOR_RUNTIME_POSTURE_UNDETERMINED) that has never fired in an elevated session; it aborts before any ETW/Job work.",
+   "positive": [
+    "test_mbcx01_build_integration.SmokeRuntimeEnvironmentEvidenceWitnesses.test_bi24_guard_the_runtime_probe_is_expressible_on_this_host"
+   ],
+   "requirement": "Signed environment evidence is RUNTIME-backed or labelled UNDETERMINED: hypervisor presence comes from a runtime WMI fact, installed-component registry keys are recorded as installed-component evidence by name and used only to REFUSE a root reading, and an unanswerable probe aborts by name rather than signing a bare-metal claim (codex r9 P2).",
+   "source": "codex-CLI r9 fold set (MBCX-01-CODEXCLI-r9-FULL-LOG-2026-08-17.log; four P2 findings, all red-first; the dispatched IsProcessorFeaturePresent candidate was REFUTED at the Learn byte and WMI HypervisorPresent adopted instead, 2026-08-17)"
+  },
+  "BI-18_FIXED_CANDIDATE_ID_CERTIFIES_ONLY_ITS_INVOCATION": {
+   "adversarial": [
+    "test_mbcx01_build_integration.SmokeFixedCandidateIdentityWitnesses.test_bi25_red_a_different_invocation_is_not_this_candidate",
+    "test_mbcx01_build_integration.SmokeFixedCandidateIdentityWitnesses.test_bi25_red_a_different_image_under_the_same_id_is_refused_too"
+   ],
+   "note": "Discriminator audit recorded (the #28 shadow): this refusal stops a LYING RECORD - an envelope certifying a different invocation under the fixed CMD-EXIT-0 identity - and the guard proves all five documented spellings of the owner's real invocation untouched (runbook default, FOLD-3B short form, the resolved absolute form, unquoted absolute, case/space variants). It fires in preflight before elevation and before any probe. Governs mbcx01_smoke_cell.py - BI-12 convention, no modules field.",
+   "positive": [
+    "test_mbcx01_build_integration.SmokeFixedCandidateIdentityWitnesses.test_bi25_guard_the_default_and_the_documented_variants_are_untouched"
+   ],
+   "requirement": "A fixed candidate identity certifies only the invocation it names: a resolved image or argument set inconsistent with SMOKE_CANDIDATE_ID's declared command line is refused SMOKE_COMMAND_INCONSISTENT_WITH_CANDIDATE_IDENTITY before any host work, naming the id and the differing axis (codex r9 P2).",
+   "source": "codex-CLI r9 fold set (MBCX-01-CODEXCLI-r9-FULL-LOG-2026-08-17.log; four P2 findings, all red-first; the dispatched IsProcessorFeaturePresent candidate was REFUTED at the Learn byte and WMI HypervisorPresent adopted instead, 2026-08-17)"
+  }
+ },
+ "schema_id": "MBCX01BuildRepairLedgerV1",
+ "totals": {
+  "invariants": 118,
+  "witnesses": 289
+ },
+ "witness_namespace": [
+  "test_mbcx01_build_state.*",
+  "test_mbcx01_build_measurement.*",
+  "test_mbcx01_build_integration.*",
+  "test_mbcx01_build_cohort.*"
+ ]
+}

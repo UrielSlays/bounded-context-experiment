@@ -1,0 +1,100 @@
+{
+  "contract_id": "MBCX-01-INFERENCE-CONTRACT-v5",
+  "normative": true,
+  "estimands": {
+    "population": "the complete frozen 768-scenario retained manifest in SHA-256 scenario order",
+    "delta": "average conditional mean of BC_i minus OM_i",
+    "om": "average conditional mean of OM_i",
+    "support": {"delta": [-1, 0, 1], "om": [0, 1]},
+    "heterogeneity": "conditional means may vary arbitrarily by scenario and motif",
+    "within_pair_dependence": "unrestricted",
+    "cross_scenario_dependence": "future outcomes and provider randomness are unavailable to the past filtration"
+  },
+  "method": {
+    "name": "exact-mixture empirical-Bernstein confidence sequence",
+    "source": {
+      "title": "Closed-form empirical Bernstein confidence sequences for scalars and matrices",
+      "authors": ["Ben Chugg", "Aaditya Ramdas"],
+      "url": "https://arxiv.org/abs/2512.21300",
+      "deciding_result": "Proposition 3.1"
+    },
+    "family_alpha": 0.05,
+    "stream_alpha": 0.025,
+    "kappa": 0.25,
+    "kappa_source_rule": "source default, not operating-characteristic tuned",
+    "delta_transform": "Y=(BC-OM+1)/2",
+    "predictable_estimate": "xhat_i=(0.5+sum_{j<i}X_j)/i",
+    "self_normalizer": "U_t=1/(2*kappa^2)+sum psi_E(abs(X_i-xhat_i))",
+    "inversion": "the r9 analytic, Simpson, and Decimal parity-checked implementation",
+    "time_uniform": true,
+    "common_mean_assumption": false
+  },
+  "looks": {"768": "TERMINAL_SCIENTIFIC_DECISION"},
+  "decision": {
+    "noninferiority_margin": -0.1,
+    "oracle_floor": 0.8,
+    "PROMOTE_TO_COORDINATION_STAGE": "delta_lower > -0.10 AND om_lower >= 0.80",
+    "MODEL_INTERFACE_FAIL": "delta_upper < -0.10 AND om_lower >= 0.80",
+    "MODEL_OR_INTERFACE_CEILING": "om_upper < 0.80",
+    "INCONCLUSIVE_OR_UNDERFUNDED": "none of the other complete-data branches",
+    "missing_precedence": "if missing completions do not certify one identical substantive branch, TRANSPORT_INCONCLUSIVE"
+  },
+  "missingness": {
+    "pair_rule": "any unresolved transport state in any of the six call positions makes the complete pair missing",
+    "schema_invalid_model_output": "observed condition failure, not missing",
+    "delta_transformed_completion_alphabet": [0, 0.5, 1],
+    "om_completion_alphabet": [0, 1],
+    "algorithm": "EXACT_DYNAMIC_PROGRAMMING_HULL",
+    "state": "at each stream position, key by scaled prefix sum and retain the maximum self-normalizer U; future increments depend only on position and prefix sum and a larger U weakly widens the final interval",
+    "output": "minimum lower and maximum upper endpoint over every legal completion",
+    "maximum_missing_pairs": null,
+    "branch_rule": "report a substantive branch only if certified for every legal completion; otherwise TRANSPORT_INCONCLUSIVE",
+    "no_missing_rule": "preserve ordinary INCONCLUSIVE_OR_UNDERFUNDED",
+    "no_resample_or_substitution": true,
+    "verification": "compare with explicit Cartesian enumeration for small missing sets and a branch-flip witness"
+  },
+  "operating_characteristics": {
+    "synthetic_only": true,
+    "experiment_evidence": false,
+    "n": 768,
+    "replicates_per_cell": 10000,
+    "rng": "SHA-256 counter stream frozen by implementation",
+    "assurance_regions": {
+      "promote": {"delta_min": 0.0, "om_min": 0.9, "minimum_probability": 0.9},
+      "interface_fail": {"delta_max": -0.2, "om_min": 0.9, "minimum_probability": 0.9},
+      "ceiling": {"om_max": 0.7, "minimum_probability": 0.9}
+    },
+    "no_assurance_region": "exact thresholds, delta transition values, and 0.70 < OM < 0.90",
+    "diagnostic_only_cells": ["DELTA_NEG25_OM85", "FLOOR_OM80_EQUAL", "DELTA_NEG10_OM80", "DELTA_NEG10_OM85", "DELTA_NEG10_OM95"]
+  },
+  "sample_size_selection": {
+    "selected_n": 768,
+    "reason": "answers the registered clear alternatives while honestly leaving a numerical indifference region; no resizing to force near-threshold decisions"
+  },
+  "cost": {
+    "scheduled_logical_call_positions_per_pair": 6,
+    "scientific_pairs": 768,
+    "scheduled_scientific_call_positions": 4608,
+    "accepted_responses": "at most scheduled positions and not guaranteed",
+    "raw_attempts": "may exceed scheduled positions only under the separately frozen retry policy and ceiling",
+    "paid_authorization": "separate owner decision"
+  },
+  "transport_readiness": {
+    "unit": "one complete execution of the exact frozen six-call pair route and retry policy",
+    "failure": "any call position lacks one unique route-attested schema-preserving response",
+    "denominator": "every launched logical trial, including DNS, connect, authentication, refusal, timeout, ambiguity, and unclassified failures",
+    "diagnostic_failure_modes": ["DNS_OR_CONNECT", "TLS_OR_PROTOCOL", "AUTHENTICATION", "RATE_OR_CAPACITY", "PROVIDER_5XX", "REFUSAL", "BODY_TRUNCATION", "SCHEMA_TRANSPORT_DAMAGE", "ACCEPTANCE_AMBIGUOUS", "ROUTE_ATTESTATION_MISSING", "OTHER_UNCLASSIFIED"],
+    "bad_pair_failure_probability": 0.02,
+    "good_pair_failure_probability": 0.005,
+    "consumer_risk_max": 0.05,
+    "producer_risk_max": 0.1,
+    "trials": 456,
+    "accept_failures_at_most": 4,
+    "pass_probability_at_bad": 0.049433329807588314,
+    "pass_probability_at_good": 0.9190668746549462,
+    "scheduled_call_positions_before_retries": 2736,
+    "assumption": "representative independent Bernoulli full-route trials under the frozen route and retry policy",
+    "drift": "endpoint, model snapshot, route, auth path, transport setting, or retry-policy drift requires requalification"
+  },
+  "red_witnesses": ["ARBITRARY_MISSING_COUNT_CEILING", "BRANCH_FLIP_HIDDEN", "DELTA_NEG25_OM85_CALLED_POWER_TARGET", "MODE_POSITION_OVERBUDGETED", "ACCEPTED_CALLS_CALLED_GUARANTEED"]
+}

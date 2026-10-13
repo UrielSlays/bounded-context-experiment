@@ -1,0 +1,361 @@
+MBCX-01 BUILD — WIRING-FREEZE REVERT, DIFFERENTIAL WITNESS RUN
+Date: 2026-08-14
+Worktree: <repo>-build
+Branch: codex/mbcx01-production-build
+Pre-revert HEAD when the BEFORE probes ran: 3388715af2c43a16605c85eac35f413cfdcf2200
+HEAD when the AFTER probes ran: 0a76f8603780e61bf3055a396fe41e1fc8814353
+  (the driver landed 0a76f86 "recut(MBCX01-BUILD): the adversary these rounds attacked does not
+   exist" at 17:53:46 -0700, between the two probe runs. It touches exactly two paths —
+   MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md and MBCX-01-OPEN-ISSUES.json —
+   neither of which is imported or read by any probe, BUILD suite or bundle check. The code
+   bytes under differential are therefore identical at 3388715 and 0a76f86, and the comparison
+   below isolates the revert alone.)
+Python: 3.11.9 (`python`)
+Authority for the change: MBCX-01-BUILD-ADVERSARY-PREMISE-CORRECTION-2026-08-14.md (owner-directed);
+ANTI-DRIFT section 1 "revert self-inflicted machinery rather than complete it".
+
+WHAT THIS RUN IS
+----------------
+This is a DELETION, so the witness is DIFFERENTIAL, not red-then-green. Both probes were run
+against the PRE-REVERT bytes and again against the POST-REVERT bytes, in the same worktree, with
+no other change in between. Every refusal must be IDENTICAL across the two runs except where the
+freeze itself spoke.
+
+WHAT WAS DELETED
+----------------
+  mbcx01_build_trust_anchor.py
+    - class AuthorityWiringDuringVerification
+    - _VERIFICATION_DEPTH (module int)
+    - production_verification_scope() context manager
+    - _refuse_wiring_during_verification() and its 4 call sites
+      (configure_owner_trust_anchor, configure_production_verifier_context,
+       installed_production_verifier, clear_owner_trust_anchor)
+  mbcx01_build_measurement_authority.py
+    - PRODUCTION_TRUST_ANCHOR_REWIRED constant, its entry in PRODUCTION_ERROR_CODES,
+      and the scope/except block in evaluate_production_measurement
+  mbcx01_build_state_authority.py
+    - STATE_AUTHORITY_V2_TRUST_ANCHOR_REWIRED constant and the scope/except block in
+      verify_state_authority_receipt_v2
+  mbcx01_build_exactness_authority.py
+    - the scope/except block in verify_production_carrier_exactness
+  test_mbcx01_build_measurement.py
+    - test_bw23_adversarial_mapping_object_cannot_swap_the_anchor_mid_evaluation
+      (the only witness in any BUILD suite that tested the freeze)
+
+WHAT WAS DELIBERATELY KEPT (verified still green below)
+-------------------------------------------------------
+  - the `fixture_only` refusal at production admission at all three doors (DoR I13/I16, section 3)
+  - ProductionVerifierContext, new_/configure_/resolve_production_verifier_context
+  - installed_production_verifier's SAVE-AND-RESTORE of prior wiring on scope exit (r2 F3)
+  - the verifier-controlled clock with a REAL-clock fallback (r2 F4)
+  - binding-only exactness labelling and the refusal of a receipt claiming PASS (r2 F7)
+  - the strict base64 signature carrier and the strict anchor-document parse (r2 F6)
+  - ProductionVerifierContext.__setattr__/__delattr__ guards
+
+THE ACCEPTED THEATER RESIDUAL, STATED PLAINLY AND NOT HIDDEN
+------------------------------------------------------------
+With the freeze gone, the P2 gadget — a dict subclass whose .get/__getitem__ re-wire the process
+anchor — now SUCCEEDS in re-wiring the process. In the post-revert P2 section below the anchor
+reads `after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1` where it previously read
+`after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1`, and swaps_fired rises from 1 (the freeze
+aborted at the first call) to 13/15/27 (the gadget runs to completion).
+
+It buys NO admission. The in-flight decision is still made against the context each door
+snapshotted at entry, so all three doors still REFUSE — the code simply changes from
+`*_REWIRED_DURING_VERIFICATION` to the ordinary authentication refusal
+`PRODUCTION_ACTIVATION_UNAUTHENTICATED` / `STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED`.
+What is genuinely lost is the process being left clean for the NEXT call.
+
+That is accepted, named, and gets zero grind: the actor able to install a behaviour-bearing
+mapping inside this interpreter is the BOX OWNER. MBCX-01 has no API, no production runtime and
+no external submitter; every caller of these authorities is the harness and its own tests. On-box
+walls against the box owner are theatre under the permanent T2 ceiling (DESIGN-SHELF-MAP.md
+section 1), and the MBCX-01 design of record carries no threat model at all:
+
+    grep -niE "threat model|adversary|attacker|untrusted|api-caller|hostile" \
+      MBCX-01-EXPERIMENT-DESIGN-r9.md MBCX-01-R13-CLOSURE-ARCHITECTURE.md \
+      MBCX-01-R13-AUTHORITY-INVARIANT-MATRIX.md
+    -> ZERO hits
+
+The freeze also carried a real reliability cost in a long unattended run: `_VERIFICATION_DEPTH`
+was a plain module int and `threading` was never imported, so it could only ever FALSE-fire.
+
+================================================================================
+SECTION 1 — DIFFERENTIAL, mbcx01_build_fixtureiso_probe.py (unified diff BEFORE -> AFTER)
+================================================================================
+$ diff -u before-fixtureiso.txt after-fixtureiso.txt
+@@ -14,12 +14,12 @@
+   fixture LANE: committed fixture manifest parses, roots=1 fixture_only=[True]
+ 
+ == P2 (F2): a caller-supplied mapping object reconfigures the anchor from inside .get/__getitem__ ==
+-  measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION']
+-     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
+-  exactness door -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION
+-     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
+-  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION']
+-     anchor after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
++  measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_ACTIVATION_UNAUTHENTICATED']
++     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=15
++  exactness door -> MeasurementAuthorityError: PRODUCTION_ACTIVATION_UNAUTHENTICATED
++     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=13
++  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED']
++     anchor after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=27
+ 
+ == P3 (F3): the integration fixture is built and RELEASED by a caller ==
+   operator anchor before: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+@@ -41,4 +41,4 @@
+ 
+ == P6 (F6): an anchor document with a DUPLICATE member ==
+   document carries fixture_only TWICE: true then false
+-  loader -> TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<home>\AppData\Local\Temp\mbcx01-build-fixtureiso-kfle31at\ambiguous-owner-anchor.json
++  loader -> TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<home>\AppData\Local\Temp\mbcx01-build-fixtureiso-nzw85_b4\ambiguous-owner-anchor.json
+
+The ONLY non-P2 hunk is the P6 temp-directory name, which mkdtemp randomises per run
+(mbcx01-build-fixtureiso-kfle31at vs -nzw85_b4). The refusal itself,
+OWNER_TRUST_ANCHOR_AMBIGUOUS, is unchanged.
+
+================================================================================
+SECTION 2 — DIFFERENTIAL, mbcx01_build_trustboot_probe.py
+================================================================================
+$ diff -u before-trustboot.txt after-trustboot.txt
+(empty diff: BYTE-IDENTICAL before and after)
+
+================================================================================
+SECTION 3 — FULL TRANSCRIPT, BEFORE the revert (HEAD 3388715, unmodified bytes)
+================================================================================
+--- $ python mbcx01_build_fixtureiso_probe.py   [exit 0] ---
+MBCX-01 BUILD — FIXTURE-ISOLATION probe (codex r2 F1/F2/F3/F4/F6/F7)
+cwd: <repo>-build
+operator anchor (generated in memory, NOT committed): anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+
+== P1 (F1): the COMMITTED fixture-only owner anchor, whose private half is committed ==
+  configured anchor: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1' fixture_only=True
+  measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY']
+  exactness door   -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY
+  (activation signed by the COMMITTED fixture owner private key)
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  state FIXTURE lane (require_production=False) -> []
+  (same committed fixture owner key, BUILD A)
+  fixture LANE: committed fixture manifest parses, roots=1 fixture_only=[True]
+
+== P2 (F2): a caller-supplied mapping object reconfigures the anchor from inside .get/__getitem__ ==
+  measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION']
+     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
+  exactness door -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION
+     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION']
+     anchor after=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 swaps_fired=1
+
+== P3 (F3): the integration fixture is built and RELEASED by a caller ==
+  operator anchor before: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+  operator anchor after build+release: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+  subsequent production evaluation under the fixture-signed universe -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_ACTIVATION_UNAUTHENTICATED']
+
+== P4 (F4): a manifest whose validity window closed in 2001 ==
+  manifest validity={'not_before': '2000-01-01T00:00:00Z', 'not_after': '2001-01-01T00:00:00Z'} revocation.published_at=2000-06-01T00:00:00Z
+  measurement door (verifier default instant) -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'TRUST_ROOT_VALIDITY_EXPIRED']
+  structural validator at 2026-08-14T00:00:00Z -> TRUST_ROOT_VALIDITY_EXPIRED
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED']
+  state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED']
+  state FIXTURE lane (require_production=False) -> []
+  (state trust root stale at the verifier's clock, valid at the receipt's own knowledge_time)
+
+== P5 (F7): a binding-only exactness evaluation (the suite is NOT executed) ==
+  emitted receipt result='AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED' authority_mode='PRODUCTION_MEASUREMENT_AUTHORITY'
+  a receipt CLAIMING result='PASS' -> MeasurementAuthorityError: CARRIER_EXACTNESS_SUITE_NOT_EXECUTED
+
+== P6 (F6): an anchor document with a DUPLICATE member ==
+  document carries fixture_only TWICE: true then false
+  loader -> TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<home>\AppData\Local\Temp\mbcx01-build-fixtureiso-kfle31at\ambiguous-owner-anchor.json
+--- $ python mbcx01_build_trustboot_probe.py    [exit 0] ---
+== PROBE A: BUILD B, fully self-authored measurement universe (SEAT2 + SEAT3 F2) ==
+evaluate_production_measurement -> ['MEASUREMENT_CUSTODY_EVIDENCE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+
+== PROBE B: BUILD A, fully self-authored state universe (SEAT3 F1) ==
+verify_state_authority_receipt_v2 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+verify_production_scorer_input    -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+
+== PROBE C: BUILD A, the ceremony spec's own production-shaped manifest (ChatGPT corollary) ==
+verify_state_authority_receipt_v2 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_UNAVAILABLE']
+
+== PROBE D: signature carrier malleability (SEAT3 F6) ==
+canonical carrier                 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED']
+whitespace-injected carrier       -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED', 'STATE_AUTHORITY_V2_SIGNATURE_CARRIER_INVALID']
+
+================================================================================
+SECTION 4 — FULL TRANSCRIPT, AFTER the revert
+================================================================================
+--- $ python mbcx01_build_fixtureiso_probe.py   [exit 0] ---
+MBCX-01 BUILD — FIXTURE-ISOLATION probe (codex r2 F1/F2/F3/F4/F6/F7)
+cwd: <repo>-build
+operator anchor (generated in memory, NOT committed): anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+
+== P1 (F1): the COMMITTED fixture-only owner anchor, whose private half is committed ==
+  configured anchor: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.FIXTURE.1' fixture_only=True
+  measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY']
+  exactness door   -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY
+  (activation signed by the COMMITTED fixture owner private key)
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  state FIXTURE lane (require_production=False) -> []
+  (same committed fixture owner key, BUILD A)
+  fixture LANE: committed fixture manifest parses, roots=1 fixture_only=[True]
+
+== P2 (F2): a caller-supplied mapping object reconfigures the anchor from inside .get/__getitem__ ==
+  measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_ACTIVATION_UNAUTHENTICATED']
+     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=15
+  exactness door -> MeasurementAuthorityError: PRODUCTION_ACTIVATION_UNAUTHENTICATED
+     anchor before=MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1 after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=13
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED']
+     anchor after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=27
+
+== P3 (F3): the integration fixture is built and RELEASED by a caller ==
+  operator anchor before: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+  operator anchor after build+release: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+  subsequent production evaluation under the fixture-signed universe -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_ACTIVATION_UNAUTHENTICATED']
+
+== P4 (F4): a manifest whose validity window closed in 2001 ==
+  manifest validity={'not_before': '2000-01-01T00:00:00Z', 'not_after': '2001-01-01T00:00:00Z'} revocation.published_at=2000-06-01T00:00:00Z
+  measurement door (verifier default instant) -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'TRUST_ROOT_VALIDITY_EXPIRED']
+  structural validator at 2026-08-14T00:00:00Z -> TRUST_ROOT_VALIDITY_EXPIRED
+  state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED']
+  state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED']
+  state FIXTURE lane (require_production=False) -> []
+  (state trust root stale at the verifier's clock, valid at the receipt's own knowledge_time)
+
+== P5 (F7): a binding-only exactness evaluation (the suite is NOT executed) ==
+  emitted receipt result='AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED' authority_mode='PRODUCTION_MEASUREMENT_AUTHORITY'
+  a receipt CLAIMING result='PASS' -> MeasurementAuthorityError: CARRIER_EXACTNESS_SUITE_NOT_EXECUTED
+
+== P6 (F6): an anchor document with a DUPLICATE member ==
+  document carries fixture_only TWICE: true then false
+  loader -> TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<home>\AppData\Local\Temp\mbcx01-build-fixtureiso-nzw85_b4\ambiguous-owner-anchor.json
+--- $ python mbcx01_build_trustboot_probe.py    [exit 0] ---
+== PROBE A: BUILD B, fully self-authored measurement universe (SEAT2 + SEAT3 F2) ==
+evaluate_production_measurement -> ['MEASUREMENT_CUSTODY_EVIDENCE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+
+== PROBE B: BUILD A, fully self-authored state universe (SEAT3 F1) ==
+verify_state_authority_receipt_v2 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+verify_production_scorer_input    -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+
+== PROBE C: BUILD A, the ceremony spec's own production-shaped manifest (ChatGPT corollary) ==
+verify_state_authority_receipt_v2 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_UNAVAILABLE']
+
+== PROBE D: signature carrier malleability (SEAT3 F6) ==
+canonical carrier                 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED']
+whitespace-injected carrier       -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED', 'STATE_AUTHORITY_V2_SIGNATURE_CARRIER_INVALID']
+
+================================================================================
+SECTION 5 — INVARIANTS REQUIRED UNCHANGED, quoted from the two runs
+================================================================================
+Each pair is BEFORE then AFTER, verbatim from the transcripts above.
+
+[P1] committed fixture anchor + committed fixture private key, all three doors:
+  BEFORE:   measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY']
+  AFTER:    measurement door -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY']
+  BEFORE:   exactness door   -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY
+  AFTER:    exactness door   -> MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_FIXTURE_ONLY
+  BEFORE:   state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  AFTER:    state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  BEFORE:   state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+  AFTER:    state scorer door -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_FIXTURE_ONLY']
+
+[P1] fixture LANE stays green (require_production=False):
+  BEFORE:   state FIXTURE lane (require_production=False) -> []
+  AFTER:    state FIXTURE lane (require_production=False) -> []
+  BEFORE:   fixture LANE: committed fixture manifest parses, roots=1 fixture_only=[True]
+  AFTER:    fixture LANE: committed fixture manifest parses, roots=1 fixture_only=[True]
+
+[P3] the assembler still restores the operator wiring on scope exit (r2 F3, KEPT):
+  BEFORE:   operator anchor after build+release: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+  AFTER:    operator anchor after build+release: anchor_id='MBCX01.BUILD.OWNER.ANCHOR.PROBE.OPERATOR.1' fixture_only=False
+  BEFORE:   subsequent production evaluation under the fixture-signed universe -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_ACTIVATION_UNAUTHENTICATED']
+  AFTER:    subsequent production evaluation under the fixture-signed universe -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_ACTIVATION_UNAUTHENTICATED']
+
+[P4] expired manifest refused at the verifier clock (r2 F4, KEPT):
+  BEFORE:   measurement door (verifier default instant) -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'TRUST_ROOT_VALIDITY_EXPIRED']
+  AFTER:    measurement door (verifier default instant) -> ['PHYSICAL_HARNESS_UNAVAILABLE', 'TRUST_ROOT_VALIDITY_EXPIRED']
+  BEFORE:   structural validator at 2026-08-14T00:00:00Z -> TRUST_ROOT_VALIDITY_EXPIRED
+  AFTER:    structural validator at 2026-08-14T00:00:00Z -> TRUST_ROOT_VALIDITY_EXPIRED
+  BEFORE:   state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED']
+  AFTER:    state verify door -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_KEY_REVOKED_OR_EXPIRED']
+
+[P5] binding-only exactness is not PASS (r2 F7, KEPT):
+  BEFORE:   emitted receipt result='AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED' authority_mode='PRODUCTION_MEASUREMENT_AUTHORITY'
+  AFTER:    emitted receipt result='AUTHORITY_BINDING_ONLY_SUITE_NOT_EXECUTED' authority_mode='PRODUCTION_MEASUREMENT_AUTHORITY'
+  BEFORE:   a receipt CLAIMING result='PASS' -> MeasurementAuthorityError: CARRIER_EXACTNESS_SUITE_NOT_EXECUTED
+  AFTER:    a receipt CLAIMING result='PASS' -> MeasurementAuthorityError: CARRIER_EXACTNESS_SUITE_NOT_EXECUTED
+
+[P6] strict anchor-document parse (r2 F6, KEPT):
+  BEFORE:   loader -> TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<tmp>\ambiguous-owner-anchor.json
+  AFTER:    loader -> TrustAnchorError: OWNER_TRUST_ANCHOR_AMBIGUOUS:<tmp>\ambiguous-owner-anchor.json
+  (only the mkdtemp-randomised directory component differs; it differs between any two runs)
+
+[trustboot PROBE D] all carrier spellings still refused (KEPT):
+  BEFORE:   whitespace-injected carrier       -> [..., 'STATE_AUTHORITY_V2_SIGNATURE_CARRIER_INVALID']
+  AFTER:    whitespace-injected carrier       -> [..., 'STATE_AUTHORITY_V2_SIGNATURE_CARRIER_INVALID']
+  (the full trustboot diff is EMPTY: byte-identical)
+
+================================================================================
+SECTION 6 — EVERY OUTCOME THAT CHANGED (complete list: 6 lines, all inside P2)
+================================================================================
+1. P2 measurement door verdict
+     -  ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION']
+     +  ['PHYSICAL_HARNESS_UNAVAILABLE', 'PRODUCTION_ACTIVATION_UNAUTHENTICATED']
+2. P2 measurement door process state
+     -  anchor before=...PROBE.OPERATOR.1 after=...PROBE.OPERATOR.1 swaps_fired=1
+     +  anchor before=...PROBE.OPERATOR.1 after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=15
+3. P2 exactness door verdict
+     -  MeasurementAuthorityError: PRODUCTION_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION
+     +  MeasurementAuthorityError: PRODUCTION_ACTIVATION_UNAUTHENTICATED
+4. P2 exactness door process state
+     -  anchor before=...PROBE.OPERATOR.1 after=...PROBE.OPERATOR.1 swaps_fired=1
+     +  anchor before=...PROBE.OPERATOR.1 after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=13
+5. P2 state verify door verdict
+     -  ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_REWIRED_DURING_VERIFICATION']
+     +  ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_ACTIVATION_UNAUTHENTICATED']
+6. P2 state door process state
+     -  anchor after=...PROBE.OPERATOR.1 swaps_fired=1
+     +  anchor after=ATTACKER.SELF.AUTHORED.OWNER.ANCHOR.1 swaps_fired=27
+
+Nothing outside P2 changed. Every *_REWIRED_DURING_VERIFICATION outcome disappeared, and no
+refusal became an admission: an empty verdict list never appears where a refusal stood.
+
+================================================================================
+SECTION 7 — SUITES AND BUNDLE, before and after
+================================================================================
+BEFORE  python -m unittest test_mbcx01_build_state test_mbcx01_build_measurement test_mbcx01_build_integration
+          Ran 95 tests ... OK
+AFTER   python -m unittest test_mbcx01_build_state test_mbcx01_build_measurement test_mbcx01_build_integration
+          Ran 94 tests ... OK        (delta -1 = test_bw23, the only freeze witness)
+
+AFTER   python verify-build-bundle.py   -> exit 0
+          frozen_suites: PASS         (145 tests, expected 145)
+          build_suites: PASS          (94 tests)
+          ledger: PASS                (42 invariants, 94 witnesses, two_way_total true)
+          schemas: PASS
+          canonical_parity: PASS
+          no_production_activation: PASS
+          execution_posture: PASS
+          top_level_readiness: BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED
+
+MBCX-01-BUILD-REPAIR-LEDGER.json row AB-04_INSTANCE_SCOPED_IMMUTABLE_VERIFIER_CONTEXT dropped
+test_bw23 from its adversarial list (bi05 remains, bw27 remains as its positive) and
+totals.witnesses went 95 -> 94, which is what keeps two-way totality PASS. The row also gained
+an accepted_residual field naming the in-process bypass and a note recording the revert.
+
+================================================================================
+SECTION 8 — POSTURE
+================================================================================
+ZERO frozen r13.2 files touched. Verified per changed path with
+
+    git cat-file -e 91329b2:<path>      (non-zero exit = not in the frozen tree = editable)
+
+All changed paths returned non-zero: every one is a BUILD-lane file created after the r13.2
+freeze commit 91329b272faf38695d8a7c2699e0e14d1835edd3.
+
+No experiment, no provider or model call, no network call, no physical grid, no
+mbcx01_build_win32.py collection and no signing ceremony ran. The probes only ever spawn node,
+for in-memory Ed25519 key generation and canonicalization parity. Nothing was committed and
+nothing was staged; the tree is left dirty for the driver byte-audit.

@@ -1,0 +1,292 @@
+MBCX-01 BUILD - AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP - GREEN WITNESS RUN
+Date: 2026-08-14
+Fix class: AUTHENTICATED_PRODUCTION_TRUST_BOOTSTRAP (discharges MBCX01-BUILD-R1-TRUST-BOOTSTRAP)
+Leaf folded alongside: MBCX01-BUILD-R1-SIGNATURE-CARRIER
+<personal folder listing redacted from this log>
+Branch: codex/mbcx01-production-build  HEAD: 4e58f9b545c0546fd53132da71500cc5be04280c  (working tree, NOT committed)
+Python: Python 3.11.9  Node: v24.17.0
+
+Pre-fix RED evidence for these same probes and witnesses:
+  MBCX-01-BUILD-TRUSTBOOT-RED-WITNESS-RUN-2026-08-14.txt
+
+No experiment, provider/model call, network call, physical collection or signing
+ceremony ran. Every key is a labelled FIXTURE/attacker test key; every manifest with
+production shape is built IN MEMORY and never written to disk.
+
+================================================================================
+1. THE r1 ATTACKS, RE-RUN ON THE FOLDED BYTES (same probe file, same constructions)
+================================================================================
+
+=== COMMAND: python mbcx01_build_trustboot_probe.py ===
+
+== PROBE A: BUILD B, fully self-authored measurement universe (SEAT2 + SEAT3 F2) ==
+evaluate_production_measurement -> ['MEASUREMENT_CUSTODY_EVIDENCE_INVALID', 'PHYSICAL_HARNESS_UNAVAILABLE']
+
+== PROBE B: BUILD A, fully self-authored state universe (SEAT3 F1) ==
+verify_state_authority_receipt_v2 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+verify_production_scorer_input    -> ['A0_PACKET_INVALID', 'I02_INVARIANT_INVALID', 'STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED']
+
+== PROBE C: BUILD A, the ceremony spec's own production-shaped manifest (ChatGPT corollary) ==
+verify_state_authority_receipt_v2 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED', 'STATE_AUTHORITY_V2_TRUST_ANCHOR_UNAVAILABLE']
+
+== PROBE D: signature carrier malleability (SEAT3 F6) ==
+canonical carrier                 -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED']
+whitespace-injected carrier       -> ['STATE_AUTHORITY_UNAVAILABLE', 'STATE_AUTHORITY_V2_CUSTODY_SEPARATION_INVALID', 'STATE_AUTHORITY_V2_ROOT_NOT_TRUSTED', 'STATE_AUTHORITY_V2_ROOT_SELF_AUTHORED', 'STATE_AUTHORITY_V2_SIGNATURE_CARRIER_INVALID']
+
+READ THIS AS (compare with the RED bank, where A/B/D all answered []):
+  A - the self-authored measurement universe is refused before any grid analysis.
+      (This probe presents the PRE-FOLD four-document custody set, so the named
+      cause is MEASUREMENT_CUSTODY_EVIDENCE_INVALID: there is no owner activation
+      in it at all. bw17 runs the STRONGER case - the attacker also writes and
+      signs an activation statement - and gets PRODUCTION_ACTIVATION_UNAUTHENTICATED.)
+  B - the self-authored state universe is refused, and the frozen production
+      verdict (A0_PACKET_INVALID, I02_INVARIANT_INVALID, STATE_AUTHORITY_UNAVAILABLE)
+      is preserved in full: nothing was discharged.
+  C - the ceremony spec's production-shaped manifest no longer fails for its SHAPE.
+      This probe process configures no anchor, so it fails closed with
+      STATE_AUTHORITY_V2_TRUST_ANCHOR_UNAVAILABLE. ba31 shows the same manifest
+      admitting with [] once the operator anchor is wired and has signed it.
+  D - the whitespace-injected carrier now yields STATE_AUTHORITY_V2_SIGNATURE_CARRIER
+      _INVALID, which the canonical carrier does not.
+
+================================================================================
+2. THE TEN NEW WITNESSES (ba29-ba33, bw17-bw21)
+================================================================================
+
+=== COMMAND: python -m unittest -v <the ten new witnesses> ===
+
+test_ba29_adversarial_fully_self_authored_state_universe_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba29_adversarial_fully_self_authored_state_universe_is_refused)
+Invariant: a fresh attacker Ed25519 key + an attacker-authored manifest + ... ok
+test_ba30_adversarial_production_manifest_without_owner_signature_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba30_adversarial_production_manifest_without_owner_signature_is_refused)
+Invariant: PRODUCTION shape is not authority. The same production-shaped ... ok
+test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba31_positive_anchored_ceremony_manifest_admits_and_takes_no_anchor_param)
+Invariant: the LEGITIMATE authenticated ceremony path is green. The ceremony ... ok
+test_ba32_adversarial_unconfigured_anchor_fails_closed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba32_adversarial_unconfigured_anchor_fails_closed)
+Invariant: "nobody configured a root of trust" must never read as "no root of ... ok
+test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba33_adversarial_whitespace_injected_signature_carrier_is_refused)
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... ok
+test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw17_adversarial_fully_self_authored_universe_fails_before_grid_analysis)
+Invariant: a fresh attacker key + attacker manifest + attacker custody ... ok
+test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw18_positive_operator_anchored_ceremony_activation_admits_the_grid)
+Invariant: the LEGITIMATE authenticated ceremony path is green — a manifest ... ok
+test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw19_adversarial_anchor_absent_wrong_signer_wrong_binding_or_rolled_back)
+Invariant: every way of reaching admission without THIS owner anchor having ... ok
+test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw20_adversarial_whitespace_injected_signature_carrier_is_refused)
+Invariant (MBCX01-BUILD-R1-SIGNATURE-CARRIER / codex F6): one signature has ... ok
+test_bw21_adversarial_exactness_authority_requires_the_anchored_activation (test_mbcx01_build_measurement.BuildAuthenticatedTrustBootstrapTests.test_bw21_adversarial_exactness_authority_requires_the_anchored_activation)
+Invariant: the exactness authority is the THIRD production door and takes the ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 11.094s
+
+OK
+
+================================================================================
+3. THE THREE BUILD SUITES (76 before this fold -> 86 with the ten new witnesses)
+================================================================================
+
+=== COMMAND: python -m unittest test_mbcx01_build_state ===
+.................................
+----------------------------------------------------------------------
+Ran 33 tests in 8.173s
+
+OK
+
+=== COMMAND: python -m unittest test_mbcx01_build_measurement ===
+.................................................
+----------------------------------------------------------------------
+Ran 49 tests in 18.233s
+
+OK
+
+=== COMMAND: python -m unittest test_mbcx01_build_integration ===
+....
+----------------------------------------------------------------------
+Ran 4 tests in 5.472s
+
+OK
+
+=== COMMAND: python -m unittest test_mbcx01_build_state test_mbcx01_build_measurement test_mbcx01_build_integration ===
+......................................................................................
+----------------------------------------------------------------------
+Ran 86 tests in 27.608s
+
+OK
+
+================================================================================
+4. THE FROZEN r13.2 SUITES - 145/145, UNTOUCHED
+================================================================================
+
+=== COMMAND: python -m unittest test_mbcx01_r13_state test_mbcx01_r13_packets test_mbcx01_r13_measurement test_mbcx01_r13_inference test_mbcx01_r13_integration ===
+.................................................................................................................................................
+----------------------------------------------------------------------
+Ran 145 tests in 25.259s
+
+OK
+
+================================================================================
+5. THE BUILD BUNDLE VERIFIER (working-tree proof mode; report written OUTSIDE the
+   repository, as the verifier requires)
+================================================================================
+
+=== COMMAND: python verify-build-bundle.py --output-report <temp> ===
+Ran 145 tests in 25.048s
+OK
+frozen_suites: PASS
+Ran 86 tests in 26.695s
+OK
+build_suites: PASS
+ledger: PASS
+schemas: PASS
+canonical_parity: PASS
+no_production_activation: PASS
+execution_posture: PASS
+report written: <home>\AppData\Local\Temp\claude\C--Users-<user>-source-agentvault-mcp-bridge\<id>\scratchpad\MBCX-01-BUILD-VERIFICATION-REPORT.json
+
+--- report sections (fresh runtime output) ---
+top_level_readiness : BUILD_IMPLEMENTED_PRODUCTION_AUTHORITY_NOT_ACTIVATED
+experiment_executed : False  paid_calls: 0  provider_calls: 0
+physical_harness_executed: False  production_activation: False
+build_suites             {"modules": ["test_mbcx01_build_state", "test_mbcx01_build_measurement", "test_mbcx01_build_integration"], "status": "PASS", "tests": 86}
+canonical_parity         {"boundary": "python:mbcx01_r13_common vs node:verify-build-canonical-parity.mjs", "documents": 5, "hash_algorithm": "SHA-384", "out_of_domain_control_refused": "MBCX-01-R13.2-NO-PAID-VERIFICATION-REPORT.json", "status": "PASS", "value_domain": "object/array/string/boolean/null/safe-integer"}
+execution_posture        {"permitted_executables": ["node", "python.exe"], "spawned_processes": 695, "status": "PASS"}
+frozen_suites            {"expected": 145, "modules": ["test_mbcx01_r13_state", "test_mbcx01_r13_packets", "test_mbcx01_r13_measurement", "test_mbcx01_r13_inference", "test_mbcx01_r13_integration"], "status": "PASS", "tests": 145}
+ledger                   {"invariants": 37, "status": "PASS", "two_way_total": true, "witnesses": 86}
+no_production_activation {"committed_manifests_production_ready": false, "committed_owner_trust_anchor_fixture_only": true, "physical_collection_env_flag_present": false, "signing_ceremony_performed": false, "status": "PASS", "trust_root_activated": false}
+schemas                  {"mutants_rejected": 12, "status": "PASS", "strict_compile": true, "subjects": 2}
+
+================================================================================
+6. FROZEN-FILE CHECK - zero files committed at/under the council base 91329b2
+   were modified, staged or deleted
+================================================================================
+
+=== git status --short ===
+ M MBCX-01-BUILD-DESIGN-NOTES.md
+ M MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md
+ M MBCX-01-BUILD-REPAIR-LEDGER.json
+ M mbcx01_build_exactness_authority.py
+ M mbcx01_build_integration.py
+ M mbcx01_build_measurement_authority.py
+ M mbcx01_build_state_adapter.py
+ M mbcx01_build_state_authority.py
+ M mbcx01_build_state_operator_b.py
+ M test_mbcx01_build_integration.py
+ M test_mbcx01_build_measurement.py
+ M test_mbcx01_build_state.py
+ M verify-build-bundle.py
+?? MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json
+?? MBCX-01-BUILD-TRUSTBOOT-GREEN-WITNESS-RUN-2026-08-14.txt
+?? MBCX-01-BUILD-TRUSTBOOT-RED-WITNESS-RUN-2026-08-14.txt
+?? mbcx01_build_ceremony_fixture.py
+?? mbcx01_build_trust_anchor.py
+?? mbcx01_build_trustboot_probe.py
+?? verify-build-receipt-signature.mjs
+
+=== git diff --stat (tracked, unstaged) ===
+ MBCX-01-BUILD-DESIGN-NOTES.md         |  75 ++++++++
+ MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md |  49 ++++-
+ MBCX-01-BUILD-REPAIR-LEDGER.json      |  40 ++++-
+ mbcx01_build_exactness_authority.py   |  25 ++-
+ mbcx01_build_integration.py           |  30 +++-
+ mbcx01_build_measurement_authority.py | 117 +++++++++++-
+ mbcx01_build_state_adapter.py         |  19 +-
+ mbcx01_build_state_authority.py       | 182 +++++++++++++++++--
+ mbcx01_build_state_operator_b.py      |  33 +++-
+ test_mbcx01_build_integration.py      |   3 +-
+ test_mbcx01_build_measurement.py      | 330 +++++++++++++++++++++++++++++++++-
+ test_mbcx01_build_state.py            | 322 +++++++++++++++++++++++++++++++--
+ verify-build-bundle.py                |  22 +++
+ 13 files changed, 1175 insertions(+), 72 deletions(-)
+
+=== per-file frozen classification (does the path exist in the base tree 91329b2?) ===
+  post-base (editable)  MBCX-01-BUILD-DESIGN-NOTES.md
+  post-base (editable)  MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md
+  post-base (editable)  MBCX-01-BUILD-REPAIR-LEDGER.json
+  post-base (editable)  mbcx01_build_exactness_authority.py
+  post-base (editable)  mbcx01_build_integration.py
+  post-base (editable)  mbcx01_build_measurement_authority.py
+  post-base (editable)  mbcx01_build_state_adapter.py
+  post-base (editable)  mbcx01_build_state_authority.py
+  post-base (editable)  mbcx01_build_state_operator_b.py
+  post-base (editable)  test_mbcx01_build_integration.py
+  post-base (editable)  test_mbcx01_build_measurement.py
+  post-base (editable)  test_mbcx01_build_state.py
+  post-base (editable)  verify-build-bundle.py
+
+=== staged changes (must be empty; nothing was committed or added) ===
+(no output above = nothing staged)
+
+=== the frozen r13/r13.2 surface, explicitly ===
+(no output above = not one frozen artifact touched; verify-r13-receipt-signature.mjs included)
+
+=== verify-r13-receipt-signature.mjs is byte-identical to its committed blob ===
+  UNCHANGED (git diff --exit-code returned 0)
+  last commit touching it: ec58383 mbcx01: close r13 cross-artifact authority invariants
+  that commit IS an ancestor of the base 91329b2 => the file is FROZEN and was NOT touched
+
+=== COMMAND: pwsh ./verify-build-pinned.ps1 -WorkingTree ===
+  (the lane's clean-room launcher in PROOF mode; no pin is authenticated in this
+   mode and it says so itself. Result: WORKING-TREE PROOF COMPLETE, report written
+   to the system temp directory and deleted after reading.)
+
+================================================================================
+7. WHAT CHANGED, AND THE ONE INVARIANT
+================================================================================
+
+THE ONE INVARIANT: no unauthenticated trust graph reaches production admission -
+activation of either authority requires an owner-signed OwnerCeremonyActivationV1
+statement, verified against an anchor the VERIFIER loads from operator wiring or OS
+configuration and that no request can supply, binding the EXACT canonical SHA-384
+digest of the manifest under evaluation together with its validity window, the
+authorized signing-key identity, the trust-root editor key set, the build-provenance
+digest, the four custody-evidence digests and the activation generation.
+
+NEW FILES
+  mbcx01_build_trust_anchor.py            anchor loading/config (object, dict, path,
+                                          or MBCX01_BUILD_OWNER_TRUST_ANCHOR env),
+                                          activation authentication, strict carrier.
+  verify-build-receipt-signature.mjs      BUILD-side strict-carrier Ed25519 verifier
+                                          (identical closed contract to the FROZEN
+                                          verify-r13-receipt-signature.mjs, which is
+                                          untouched).
+  MBCX-01-BUILD-OWNER-TRUST-ANCHOR.fixture.json   committed FIXTURE anchor, public
+                                          key only, fixture_only:true.
+  mbcx01_build_ceremony_fixture.py        FIXTURE-ONLY ceremony evidence builder;
+                                          imported by no production module.
+  mbcx01_build_trustboot_probe.py         the r1 attack reproducer (RED bank).
+
+MODIFIED
+  mbcx01_build_measurement_authority.py   fifth custody item OWNER_CEREMONY_ACTIVATION;
+                                          production_activation_binding();
+                                          authenticated_activation_errors() called
+                                          BEFORE any grid analysis; named carrier
+                                          refusal in _envelope_errors (subsumes the
+                                          old len(signature)!=64 check); three new
+                                          closed error codes.
+  mbcx01_build_state_authority.py         manifest_shape() FIXTURE|PRODUCTION split;
+                                          _activation_errors() on every production
+                                          verification; owner_ceremony_activation in
+                                          the closed custody key set; strict carrier
+                                          before signature verification; verifier
+                                          switched to the BUILD-side strict .mjs;
+                                          three new named rejections.
+  mbcx01_build_exactness_authority.py     same authentication at the third production
+                                          door + strict carrier.
+  mbcx01_build_state_adapter.py           optional injected trust_root_manifest (the
+  mbcx01_build_state_operator_b.py        ceremony's manifest of record is delivered
+                                          outside the repository, section 3.6).
+  mbcx01_build_integration.py             operator wiring of the anchor at graph
+                                          construction; production-shaped state
+                                          manifest + activation through the graph.
+  test_mbcx01_build_state.py              ba29-ba33 + production-shaped fixture stack.
+  test_mbcx01_build_measurement.py        bw17-bw21 + attacker universe + activation.
+  test_mbcx01_build_integration.py        exactness call passes custody evidence.
+  MBCX-01-BUILD-REPAIR-LEDGER.json        AB-01/AB-02/AB-03 rows; totals 37/86.
+  verify-build-bundle.py                  new artifacts required; the committed owner
+                                          anchor must be fixture_only and key-free.
+  MBCX-01-BUILD-KEY-CUSTODY-CEREMONY.md   section 0 (the anchor) + ceremony steps 0/5/6.
+  MBCX-01-BUILD-DESIGN-NOTES.md           FOLD 3.
+
+NOT CHANGED BY THIS FOLD: MBCX-01-OPEN-ISSUES.json (the issue rows are closed by the
+driver's byte-audit and BUILD acceptance r2, not by the implementer), and nothing was
+committed, staged or added to git.

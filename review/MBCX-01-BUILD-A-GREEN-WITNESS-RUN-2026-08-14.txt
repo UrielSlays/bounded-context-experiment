@@ -1,0 +1,153 @@
+MBCX-01 BUILD A - GREEN WITNESS RUN (TDD green stage)
+Date: 2026-08-14
+Worktree: <repo>-build
+Branch: codex/mbcx01-production-build  HEAD: 6c3bc2a9f240e9dc7d22dabda15e0b11b980c155 (BUILD A modules modified in the working tree, uncommitted)
+Python: Python 3.11.9  Node: v24.17.0
+
+Red bank for the same suite: MBCX-01-BUILD-A-RED-WITNESS-RUN-2026-08-14.txt (25 witnesses,
+24 RED + test_ba25 green by construction). This bank is the same 25 witnesses, unchanged
+byte-for-byte (test_mbcx01_build_state.py is NOT modified: `git status --short` below shows
+no entry for it), now GREEN against the implemented BUILD A modules:
+  mbcx01_build_state_store.py     - sqlite3 single-writer durable store, crash-window law
+  mbcx01_build_state_adapter.py   - operator 1: mints StateAuthorityReceiptV2 from a
+                                    COMMITTED terminal via a custody-injected signer
+  mbcx01_build_state_operator_b.py- operator B: independent derivation of receipt CONTENT
+  mbcx01_build_state_authority.py - V2 verifier + non-weakening production admission
+
+=== COMMAND: python -m unittest test_mbcx01_build_state -v ===
+
+test_ba01_positive_production_transition_discharges_only_the_named_sentinel (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba01_positive_production_transition_discharges_only_the_named_sentinel)
+Invariant: store commit -> independent readback -> V2 receipt is the ONLY way ... ok
+test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba02_adversarial_fixture_v1_receipt_without_v2_leaves_admission_unchanged)
+Invariant: a fixture `StateAuthorityReceiptV1` can never express production ... ok
+test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba03_adversarial_self_authored_signer_key_is_not_a_trusted_root)
+Invariant: a cryptographically valid signature from a key absent from the ... ok
+test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba04_adversarial_envelope_supplied_trust_root_cannot_authorize_itself)
+Invariant: a trust root named only by the receipt envelope is self-authored; ... ok
+test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba05_adversarial_signature_over_mutated_bytes_fails_before_any_semantics)
+Invariant: the signature covers the whole receipt content; a repaired inner ... ok
+test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba06_adversarial_signer_and_trust_root_editor_must_be_disjoint)
+Invariant (I13): the signing-key custodian cannot edit or approve the trust ... ok
+test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba07_adversarial_fixture_manifest_relabelled_production_ready_is_refused)
+Invariant: relabeling fixture evidence never creates production authority — ... ok
+test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba08_adversarial_revoked_or_expired_key_cannot_sign_production_authority)
+Invariant: validity window and revocation list are enforced at verification ... ok
+test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence)
+Invariant (r13.2 Opus residual): postcommit authority requires an independently ... ok
+test_ba10_adversarial_store_namespace_version_and_transaction_are_injected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba10_adversarial_store_namespace_version_and_transaction_are_injected)
+Invariant: store id, namespace, namespace version, and the transaction commit ... ok
+test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba11_adversarial_stale_and_fabricated_cuts_are_rejected)
+Invariant: the readback cut must be the exact `current_cut` of the readback ... ok
+test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba12_adversarial_child_substitution_with_repaired_hashes_is_caught)
+Invariant: a substituted applied child with every attacker-controlled hash and ... ok
+test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba13_adversarial_proposal_substitution_with_repaired_hashes_is_caught)
+Invariant: the proposal must be the exact event persisted in the read prestate ... ok
+test_ba14_adversarial_next_sequence_substitution_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba14_adversarial_next_sequence_substitution_is_caught)
+Invariant: `applied_child.next_sequence` is bound to the readback state's ... ok
+test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba15_adversarial_poststate_substitution_with_repaired_hashes_is_caught)
+Invariant: substituted readback bytes with `state_hash` and `cut` repaired and ... ok
+test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba16_adversarial_foreign_graph_receipt_fails_byte_binding_to_the_packet)
+Invariant: a fully self-consistent production receipt minted over a DIFFERENT ... ok
+test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba17_adversarial_prestate_substitution_with_repaired_hashes_is_caught)
+Invariant: the read prestate bytes are load bearing — substituting them and ... ok
+test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba18_adversarial_receipt_replay_across_identity_axes_is_rejected)
+Invariant: the anti-replay block (nonce, scope, scenario, run, transaction) is ... ok
+test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba19_adversarial_crash_before_commit_leaves_pending_and_mints_nothing)
+Invariant (crash-window law): a crash before the commit fsync leaves a PENDING ... ok
+test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba20_adversarial_partial_persistence_is_broken_and_mints_nothing)
+Invariant: a proposal row with no applied-child row and no poststate snapshot ... ok
+test_ba21_adversarial_committed_without_readback_mints_nothing (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba21_adversarial_committed_without_readback_mints_nothing)
+Invariant: postcommit authority is a durable readback, not the writer's ... ok
+test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba22_adversarial_reducer_disagreement_is_fatal_and_never_discharges)
+Invariant: reference/oracle reducer independence is load bearing. If the two ... ok
+test_ba23_positive_operator_b_derives_byte_identical_receipt_content (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba23_positive_operator_b_derives_byte_identical_receipt_content)
+Invariant: operator B, sharing only schema and frozen hashing, must derive ... ok
+test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba24_adversarial_poisoned_operator_b_finalizer_is_detected_not_absorbed)
+Invariant: a poisoned operator-B finalizer must surface as DETECTED operator ... ok
+test_ba25_positive_frozen_state_suite_stays_green_alongside_build_modules (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba25_positive_frozen_state_suite_stays_green_alongside_build_modules)
+Invariant: the BUILD-A modules are purely additive. The frozen r13.2 state ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 3.514s
+
+OK
+
+================================================================================
+DISCRIMINATION-PROBE (git stash FORBIDDEN; break-and-revert in place instead)
+================================================================================
+
+A green suite is not evidence without a gate. To show these witnesses discriminate on the
+implementation and not on the harness, ONE line of production-verifier logic was disabled
+in place - the reader-independence check in
+`mbcx01_build_state_authority._reader_errors` (the check that refuses a postcommit
+readback whose `reader_identity` is the writer's own `producer_id`, i.e. a writer
+self-attestation wearing a readback label) - the suite was re-run, and the break was then
+reverted exactly.
+
+--- BREAK (working-tree edit, mbcx01_build_state_authority.py, _reader_errors) ---
+
+-    if reader == producer or reader_root is None:
++    if False:  # DISCRIMINATION PROBE: reader-independence check deliberately disabled
+         return [STATE_AUTHORITY_V2_READER_NOT_INDEPENDENT]
+     return []
+
+--- RED under the break: python -m unittest test_mbcx01_build_state -v (exit 1) ---
+
+test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence)
+FAIL: test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence (test_mbcx01_build_state.BuildAStateAuthorityWitnesses.test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence)
+  File "<repo>-build\test_mbcx01_build_state.py", line 410, in test_ba09_adversarial_writer_owned_readback_is_not_independent_evidence
+AssertionError: 'STATE_AUTHORITY_V2_READER_NOT_INDEPENDENT' not found in []
+Ran 25 tests in 3.429s
+FAILED (failures=1)
+
+Note the empty list in that assertion: with the one check disabled, the writer-owned
+readback receipt verified CLEAN (`[]`) - i.e. the sentinel would have been discharged by a
+writer self-attestation. The witness is load bearing, and it names exactly the defect.
+
+--- REVERT (exact restoration of the original line) + re-run ---
+
+
+----------------------------------------------------------------------
+Ran 25 tests in 3.450s
+
+OK
+
+================================================================================
+FROZEN SWEEP (r13.2 suites must stay untouched-green alongside the BUILD A modules)
+================================================================================
+
+=== COMMAND: python -m unittest test_mbcx01_r13_state test_mbcx01_r13_packets
+             test_mbcx01_r13_measurement test_mbcx01_r13_inference
+             test_mbcx01_r13_integration -v 2>&1 | tail ===
+
+test_cross_artifact_manifest_substitution_fails (test_mbcx01_r13_integration.R13IntegrationTests.test_cross_artifact_manifest_substitution_fails) ... ok
+test_full_valid_authoritative_transition_join (test_mbcx01_r13_integration.R13IntegrationTests.test_full_valid_authoritative_transition_join) ... ok
+test_packet_child_must_equal_actually_applied_integration_event (test_mbcx01_r13_integration.R13IntegrationTests.test_packet_child_must_equal_actually_applied_integration_event) ... ok
+
+----------------------------------------------------------------------
+Ran 145 tests in 25.039s
+
+OK
+
+================================================================================
+WORKING-TREE SCOPE (BUILD A files only; BUILD B files belong to a concurrent worker)
+================================================================================
+
+=== git status --short -- <BUILD A files> <this bank file> ===
+ M mbcx01_build_state_adapter.py
+ M mbcx01_build_state_authority.py
+ M mbcx01_build_state_operator_b.py
+ M mbcx01_build_state_store.py
+?? MBCX-01-BUILD-A-GREEN-WITNESS-RUN-2026-08-14.txt
+
+=== git diff --stat -- <BUILD A files> ===
+ mbcx01_build_state_adapter.py    | 220 ++++++++++++++-
+ mbcx01_build_state_authority.py  | 595 +++++++++++++++++++++++++++++++++++++--
+ mbcx01_build_state_operator_b.py | 163 ++++++++++-
+ mbcx01_build_state_store.py      | 491 ++++++++++++++++++++++++++++++--
+ 4 files changed, 1390 insertions(+), 79 deletions(-)
+
+No frozen r13 file (mbcx01_r13_*, test_mbcx01_r13_*, verify-*, r13.2 design/contract
+artifacts) was edited, staged, or deleted. `test_mbcx01_build_state.py` was NOT edited:
+every witness passed against the red-stage bytes of the spec.
+
